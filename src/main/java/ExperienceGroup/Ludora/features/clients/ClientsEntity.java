@@ -2,8 +2,10 @@ package ExperienceGroup.Ludora.features.clients;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import lombok.*;
 import org.jspecify.annotations.Nullable;
+
 import java.time.LocalDate;
 
 @Entity
@@ -19,12 +21,14 @@ public class ClientsEntity {
     private Long id;
 
     @NotNull
+    @
     private int Phone;
 
-    @Column(NotNull = )
+   @NotNull
     private String street;
-
+   @NotNull
     private int numberStreet;
 
+   @Past ( message = "Fecha de nacimiento incorrecta")
     private LocalDate birhdate;
 }
