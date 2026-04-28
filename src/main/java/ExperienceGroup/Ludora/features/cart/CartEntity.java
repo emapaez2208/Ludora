@@ -32,7 +32,7 @@ public class CartEntity {
     )
     private List<GameEntity> games;
 
-    @Column (name = total_price)
+    @Column (name = "total_price")
     private Double total_price= 0.0;
 
 }
