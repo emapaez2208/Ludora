@@ -1,11 +1,9 @@
 package ExperienceGroup.Ludora.features.cart;
 
-
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import ExperienceGroup.Ludora.features.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 
 import java.util.List;
 
@@ -15,8 +13,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-
 
 public class CartEntity {
 
