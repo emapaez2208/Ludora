@@ -1,7 +1,7 @@
 package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.features.ageRange.AgeRangeEntity;
-import ExperienceGroup.Ludora.features.cart.CartEntity;
+import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.genre.GenreEntity;
 import ExperienceGroup.Ludora.features.review.ReviewEntity;
 import ExperienceGroup.Ludora.features.sale.SaleEntity;
