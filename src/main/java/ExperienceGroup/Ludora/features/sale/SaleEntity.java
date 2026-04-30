@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.sale;
 
-import ExperienceGroup.Ludora.features.client.ClientEntity;
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
