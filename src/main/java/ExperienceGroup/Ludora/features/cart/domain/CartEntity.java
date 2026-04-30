@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.cart;
+package ExperienceGroup.Ludora.features.cart.domain;
 
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
@@ -32,7 +32,7 @@ public class CartEntity {
     )
     private List<GameEntity> games;
 
-    @Column (name = "total_price")
-    private Double total_price= 0.0;
+    @Column (name = "total_price", columnDefinition = "bigint DEFAULT 0")
+    private Double totalPrice;
 
 }
