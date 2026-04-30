@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,6 +24,7 @@ public class SaleEntity{
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private LocalDateTime date;
 
     @Column(nullable = false)
@@ -42,5 +44,12 @@ public class SaleEntity{
             inverseJoinColumns = @JoinColumn(name = "game_id")
     )
     private List<GameEntity> games;
+
+    @PrePersist
+    void OnCreate(){
+        if (date == null)
+            date = LocalDateTime.now();
+
+    }
 
 }
