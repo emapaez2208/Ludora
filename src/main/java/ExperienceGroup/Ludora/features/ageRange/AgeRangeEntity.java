@@ -29,7 +29,7 @@ public class AgeRangeEntity {
     private int ageLimit;
 
 
-    @OneToMany(mappedBy = "age_range")
+    @OneToMany(mappedBy = "ageRange")
     private List<GameEntity> games;
 
 }
