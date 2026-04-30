@@ -2,10 +2,13 @@ package ExperienceGroup.Ludora.features.user.domain;
 
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
+import ExperienceGroup.Ludora.features.game.GameEntity;
 import ExperienceGroup.Ludora.features.role.RoleEntity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -47,6 +50,14 @@ public class UserEntity {
     @Column(nullable = false)
     private Boolean statusBlocked;
 
+    @ManyToMany
+    @JoinTable(
+            name= "users_games",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name="game_id")
+    )
+    private List<GameEntity> games;
+
     @PrePersist
     void OnCreate(){
         if (externalId == null)
@@ -55,5 +66,7 @@ public class UserEntity {
         if(statusBlocked == null)
             statusBlocked = true;
     }
+
+
 
 }

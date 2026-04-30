@@ -23,7 +23,7 @@ import java.util.UUID;
 public class SaleEntity{
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDateTime date;
