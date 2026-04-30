@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.client;
 
-import ExperienceGroup.Ludora.features.user.UserEntity;
+import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import lombok.*;

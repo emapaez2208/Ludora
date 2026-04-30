@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.sale;
 
+import ExperienceGroup.Ludora.features.client.ClientEntity;
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.UUID;
 public class SaleEntity{
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDateTime date;

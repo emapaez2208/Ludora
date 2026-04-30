@@ -3,6 +3,8 @@ package ExperienceGroup.Ludora.features.game;
 import ExperienceGroup.Ludora.features.ageRange.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.cart.CartEntity;
 import ExperienceGroup.Ludora.features.genre.GenreEntity;
+import ExperienceGroup.Ludora.features.review.ReviewEntity;
+import ExperienceGroup.Ludora.features.sale.SaleEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,7 @@ public class GameEntity {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long game_id;
+    private Long id;
 
     @Column(name = "external_id", nullable = false, unique = true, updatable = false)
     private UUID externalId;
@@ -40,16 +42,16 @@ public class GameEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "age_range_id", nullable = false)
-    private AgeRangeEntity age_range;
+    private AgeRangeEntity ageRange;
 
     @Column (length = 200)
     private String description;
 
-    @Column (nullable = false)
-    private LocalDate release_date;
+    @Column (name = "release_date", nullable = false)
+    private LocalDate releaseDate;
 
-    @Column (nullable = false)
-    private boolean status_blocked;
+    @Column (name = "status_blocked", nullable = false)
+    private Boolean statusBlocked;
 
     
     @ManyToMany(mappedBy = "gameEntities")
@@ -71,6 +73,8 @@ public class GameEntity {
     void onCreate() {
         if (externalId == null)
             externalId = UUID.randomUUID();
+        if (statusBlocked == null)
+            statusBlocked = true;
     }
 
 
