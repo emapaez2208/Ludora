@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.client;
+package ExperienceGroup.Ludora.features.client.domain;
 
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
