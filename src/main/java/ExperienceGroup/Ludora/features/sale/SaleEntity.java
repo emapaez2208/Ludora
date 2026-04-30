@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.sale;
 
+import ExperienceGroup.Ludora.features.client.ClientEntity;
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
