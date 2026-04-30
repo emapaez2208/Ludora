@@ -20,8 +20,7 @@ public class ClientsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @
+    @Column
     private int Phone;
 
    @NotNull
