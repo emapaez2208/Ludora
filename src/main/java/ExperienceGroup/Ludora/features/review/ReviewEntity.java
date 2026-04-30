@@ -1,14 +1,15 @@
 package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.features.game.GameEntity;
-import ExperienceGroup.Ludora.features.user.UserEntity;
+import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,9 +28,8 @@ public class ReviewEntity {
 
     private String comment;
 
-    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date date;
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "game_id")
