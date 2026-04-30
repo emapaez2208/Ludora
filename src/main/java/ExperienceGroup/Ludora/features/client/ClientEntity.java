@@ -1,12 +1,9 @@
-package ExperienceGroup.Ludora.features.clients;
+package ExperienceGroup.Ludora.features.client;
 
 import ExperienceGroup.Ludora.features.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import lombok.*;
-import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDate;
 
@@ -16,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientsEntity {
+public class ClientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
