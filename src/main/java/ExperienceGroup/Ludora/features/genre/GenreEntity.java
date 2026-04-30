@@ -27,11 +27,11 @@ public class GenreEntity {
 
     @ManyToMany
     @JoinTable(
-            name= " Genre_Game",
+            name= "genre_game",
             joinColumns = @JoinColumn(name = "genre_id"),
             inverseJoinColumns = @JoinColumn(name="game_id")
 
     )
-    private List<GameEntity> gameEntities ;
+    private List<GameEntity> games;
 
 }

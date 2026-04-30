@@ -60,7 +60,7 @@ public class GameEntity {
     @OneToMany(mappedBy = "game")
     private List<ReviewEntity> reviews;
 
-    @ManyToMany(mappedBy = "gameEntities")
+    @ManyToMany(mappedBy = "games")
     private List<CartEntity> carts;
 
     @ManyToMany(mappedBy = "games")
