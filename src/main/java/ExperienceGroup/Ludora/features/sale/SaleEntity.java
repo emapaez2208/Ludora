@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,8 +23,7 @@ public class SaleEntity{
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    private LocalDateTime date;
 
     @Column(nullable = false)
     private String status;
