@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.Developers;
+package ExperienceGroup.Ludora.features.developer;
 
 
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class DevelopersEntity {
+public class DeveloperEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
