@@ -1,6 +1,8 @@
 package ExperienceGroup.Ludora.features.clients;
 
+import ExperienceGroup.Ludora.features.user.UserEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.*;
@@ -20,14 +22,19 @@ public class ClientsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false )
     private int Phone;
 
-   @NotNull
+   @Column(nullable = false , length = 20)
     private String street;
-   @NotNull
+
+   @Column(nullable = false)
     private int numberStreet;
 
-   @Past ( message = "Fecha de nacimiento incorrecta")
+   @FutureOrPresent(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
     private LocalDate birhdate;
+
+   @OneToOne
+   @JoinColumn(name= "user_id")
+    private UserEntity userEntity;
 }
