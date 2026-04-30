@@ -33,7 +33,7 @@ public class ReviewEntity {
 
     @ManyToOne
     @JoinColumn(name = "game_id")
-    private GameEntity game;
+    private GameEntity games;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

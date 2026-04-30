@@ -54,10 +54,10 @@ public class GameEntity {
     private Boolean statusBlocked;
 
     
-    @ManyToMany(mappedBy = "gameEntities")
+    @ManyToMany(mappedBy = "games")
     private List<GenreEntity> genres;
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "games")
     private List<ReviewEntity> reviews;
 
     @ManyToMany(mappedBy = "games")
