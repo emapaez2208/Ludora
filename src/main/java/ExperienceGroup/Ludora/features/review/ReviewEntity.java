@@ -3,8 +3,17 @@ package ExperienceGroup.Ludora.features.review;
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import ExperienceGroup.Ludora.features.user.UserEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
 @Table(name = "reviews")
