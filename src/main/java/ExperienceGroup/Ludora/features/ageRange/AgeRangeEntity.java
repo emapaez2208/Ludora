@@ -20,13 +20,13 @@ public class AgeRangeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long age_range_id;
+    private Long id;
 
-    @Column(nullable = false, length = 50)
-    private String age_range;
+    @Column(name = "age_range", nullable = false, length = 50)
+    private String ageRange;
 
-    @Column (nullable = false)
-    private int age_limit;
+    @Column (name = "age_limit", nullable = false)
+    private int ageLimit;
 
 
     @OneToMany(mappedBy = "age_range")
