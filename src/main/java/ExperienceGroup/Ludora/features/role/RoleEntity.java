@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.roles;
+package ExperienceGroup.Ludora.features.role;
 
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
