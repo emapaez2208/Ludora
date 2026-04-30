@@ -11,7 +11,7 @@ import org.jspecify.annotations.Nullable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Clients")
+@Table(name = "clients")
 @Setter
 @Getter
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class ClientsEntity {
     private Long id;
 
     @Column(nullable = false )
-    private int Phone;
+    private int phone;
 
    @Column(nullable = false , length = 20)
     private String street;
@@ -32,9 +32,9 @@ public class ClientsEntity {
     private int numberStreet;
 
    @FutureOrPresent(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
-    private LocalDate birhdate;
+    private LocalDate birhDate;
 
    @OneToOne
    @JoinColumn(name= "user_id")
-    private UserEntity userEntity;
+    private UserEntity user;
 }
