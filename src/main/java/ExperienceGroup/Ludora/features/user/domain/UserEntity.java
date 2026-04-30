@@ -30,7 +30,7 @@ public class UserEntity {
     private String name;
 
     @Column(nullable = false)
-    private String last_name;
+    private String lastName;
 
     @Column(nullable = false, unique = true)
     private String userName;
