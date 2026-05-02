@@ -10,6 +10,7 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,7 +22,10 @@ import java.time.LocalDateTime;
 public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int reviewId;
+    private Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private UUID externalId;
 
     @Column(nullable = false)
     private int rating;
@@ -38,4 +42,14 @@ public class ReviewEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @PrePersist
+    void OnCreate(){
+        if (externalId == null)
+            externalId = UUID.randomUUID();
+
+        if(date == null)
+            date = LocalDateTime.now();
+
+    }
 }
