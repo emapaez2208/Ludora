@@ -2,7 +2,7 @@ package ExperienceGroup.Ludora.features.user.domain;
 
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
-import ExperienceGroup.Ludora.features.game.GameEntity;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.role.RoleEntity;
 
 import jakarta.persistence.*;
@@ -36,7 +36,7 @@ public class UserEntity {
     private String userName;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "email_adress", unique = true, nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "email_address", unique = true, nullable = false))
     private Email email;
 
     @Embedded
@@ -66,7 +66,5 @@ public class UserEntity {
         if(statusBlocked == null)
             statusBlocked = true;
     }
-
-
 
 }
