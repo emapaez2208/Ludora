@@ -2,7 +2,7 @@ package ExperienceGroup.Ludora.features.user.domain;
 
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
-import ExperienceGroup.Ludora.features.game.GameEntity;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.role.RoleEntity;
 
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.game;
+package ExperienceGroup.Ludora.features.game.domain;
 
 import ExperienceGroup.Ludora.features.ageRange.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
