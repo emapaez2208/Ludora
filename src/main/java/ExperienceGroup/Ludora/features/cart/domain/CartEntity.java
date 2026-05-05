@@ -22,7 +22,7 @@ public class CartEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity users;
+    private UserEntity user;
 
     @ManyToMany
     @JoinTable(
@@ -32,7 +32,7 @@ public class CartEntity {
     )
     private List<GameEntity> games;
 
-    @Column (name = "total_price", columnDefinition = "bigint DEFAULT 0")
+    @Column (name = "total_price", columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private Double totalPrice;
 
 }

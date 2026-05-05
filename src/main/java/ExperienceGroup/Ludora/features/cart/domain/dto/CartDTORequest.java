@@ -1,13 +1,8 @@
 package ExperienceGroup.Ludora.features.cart.domain.dto;
 
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-
-
-public class CartDTORequest {
-
+public record CartDTORequest(
+        Long userId,
+        Long gameId) {
 }

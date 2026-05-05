@@ -1,4 +1,9 @@
 package ExperienceGroup.Ludora.features.cart.domain.dto;
 
-public class CartDTOResponse {
-}
+import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
+
+public record CartDTOResponse(
+        UserDTOResponse user,
+        List<GameDTOResponse> games,
+        Double totalPrice
+) {}
