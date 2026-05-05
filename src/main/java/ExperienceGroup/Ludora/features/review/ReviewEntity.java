@@ -24,9 +24,6 @@ public class ReviewEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, updatable = false)
-    private UUID externalId;
-
     @Column(nullable = false)
     private int rating;
 
@@ -45,9 +42,6 @@ public class ReviewEntity {
 
     @PrePersist
     void OnCreate(){
-        if (externalId == null)
-            externalId = UUID.randomUUID();
-
         if(date == null)
             date = LocalDateTime.now();
 

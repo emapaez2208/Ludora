@@ -13,7 +13,7 @@ public record ReviewDTORequest(
 
                         @Schema(description = "Comentario u opinion del juego", example = "Este juego es una joyita")
                         @Size(max = 255, message = "El comentario no puede superar los 255 caracteres")
-                        @NotBlank String comment,
+                        @NotEmpty String comment,
 
                         @Schema(description = "ID externo del juego al que le pertenece la reseña", required = true)
                         @NotNull UUID gameExternalId,
