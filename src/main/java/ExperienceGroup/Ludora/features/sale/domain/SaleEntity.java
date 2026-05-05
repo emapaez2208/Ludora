@@ -33,7 +33,7 @@ public class SaleEntity{
     private ESaleStatus status;
 
     @Column(nullable = false)
-    private double totalPrice;
+    private Double totalPrice;
 
     @ManyToOne
     @JoinColumn (name = "client_id")

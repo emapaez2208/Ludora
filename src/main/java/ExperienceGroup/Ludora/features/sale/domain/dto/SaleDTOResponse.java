@@ -10,7 +10,7 @@ import java.util.List;
 
 public record SaleDTOResponse (LocalDateTime date,
                                 ESaleStatus status,
-                                double totalPrice,
+                                Double totalPrice,
                                 ClientDTOResponse client,
                                 List<GameDTOResponse> games
 ){
