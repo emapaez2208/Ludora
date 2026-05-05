@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.admin;
+package ExperienceGroup.Ludora.features.admin.domain;
 
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
@@ -24,5 +24,5 @@ public class AdminEntity {
     private UserEntity user;
 
     @Column(nullable = false, unique = true)
-    private Long employee_id;
+    private Long employeeId;
 }
