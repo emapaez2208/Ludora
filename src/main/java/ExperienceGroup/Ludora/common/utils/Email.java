@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.common.utils;
 
+import ExperienceGroup.Ludora.common.exception.IllegalEmailException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
@@ -15,7 +16,7 @@ public record Email(String value) {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public Email(String value) {
         if (value == null || !EMAIL_PATTERN.matcher(value).matches()) {
-            throw new IllegalArgumentException("Invalid email format: " + value);
+            throw new IllegalEmailException("Invalid email format: " + value);
         }
         this.value = value;
     }
