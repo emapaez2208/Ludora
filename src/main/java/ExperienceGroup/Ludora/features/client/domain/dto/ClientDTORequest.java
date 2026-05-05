@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.features.client.domain.dto;
 
 
+import ExperienceGroup.Ludora.features.user.domain.dto.UserDTORequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,8 @@ public record ClientDTORequest (@Schema(description = "Numero de telefono",examp
                                 @Positive(message = "No puede ser numero negativo")
                                 @NotBlank int numberStreet,
                                 @Schema(description = "Fecha de nacimiento", example = "10/10/10", required = true)
-                                @NotNull LocalDate birhdate
+                                @NotNull LocalDate birhdate ,
+                                @NotNull UserDTORequest user
                                 ){
 
 }
