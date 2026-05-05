@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.game;
 
-import ExperienceGroup.Ludora.features.ageRange.AgeRangeEntity;
+import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.genre.GenreEntity;
 import ExperienceGroup.Ludora.features.review.ReviewEntity;
@@ -14,7 +14,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

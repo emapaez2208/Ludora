@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.ageRange;
+package ExperienceGroup.Ludora.features.ageRange.domain;
 
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import jakarta.persistence.*;
