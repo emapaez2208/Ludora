@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.sale.domain.dto;
 
+import ExperienceGroup.Ludora.features.sale.ESaleStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ public record SaleDTORequest(
         @Schema(description = "Lista de IDs de los juegos comprados", example = "[10, 22, 5]", required = true)
         @NotEmpty List<Long> gameIds,
 
-        @Schema(description = "Estado inicial de la venta", example = "Pendiente", required = true)
-        @NotNull String status
+        @Schema(description = "Estado inicial de la venta", example = "PENDING", required = true)
+        @NotNull ESaleStatus status
 ) {
 }
