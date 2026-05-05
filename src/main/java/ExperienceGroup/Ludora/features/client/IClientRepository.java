@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface    IClientRepository extends JpaRepository<ClientEntity,Long> {
+public interface IClientRepository extends JpaRepository<ClientEntity,Long> {
     
 }
