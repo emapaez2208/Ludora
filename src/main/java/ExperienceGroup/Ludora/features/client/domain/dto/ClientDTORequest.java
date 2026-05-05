@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public record ClientDTORequest (@Schema(description = "Numero de telefono",example = "123" , required = true)
-                                @Size(min = 0 , max =15 , message = "El numero tiene q ten")
+                                @Size(min = 0 , max =15 , message = "El numero tiene una longuitud de 15")
                                 @Positive (message = "No puede ser un numero negativo")
                                 @NotNull int phone ,
                                 @Schema(description = "Nombre de la calle", example = "Luro" , required = true)
