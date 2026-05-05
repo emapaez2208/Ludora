@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.sale;
+package ExperienceGroup.Ludora.features.sale.domain;
 
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.game.GameEntity;
