@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.genre;
 
-import ExperienceGroup.Ludora.features.game.GameEntity;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
