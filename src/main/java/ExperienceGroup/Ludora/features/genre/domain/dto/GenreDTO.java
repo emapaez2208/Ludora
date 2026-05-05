@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record GenreDTORequest (@Schema(description = "Nombre del genero" , example = "shooter" , required = true)
+public record GenreDTO (@Schema(description = "Nombre del genero" , example = "shooter" , required = true)
                                @Size (min = 0 , max = 20, message = "La longuitud maxima del nombre tiene que ser 20 caracteres")
                                @NotBlank String name ,
                                @Schema(description = "Descripcion del genero",required = true)
