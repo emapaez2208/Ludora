@@ -1,7 +1,7 @@
 package ExperienceGroup.Ludora.features.role.domain.Mapper;
 
 import ExperienceGroup.Ludora.common.utils.IMapper;
-import ExperienceGroup.Ludora.features.role.RoleEntity;
+import ExperienceGroup.Ludora.features.role.domain.RoleEntity;
 import ExperienceGroup.Ludora.features.role.domain.dto.RoleDTO;
 import org.mapstruct.Mapper;
 
