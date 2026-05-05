@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.genre;
+package ExperienceGroup.Ludora.features.genre.domain;
 
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import jakarta.persistence.*;
@@ -23,7 +23,7 @@ public class GenreEntity {
     private String name;
 
     @Column(nullable = false)
-    private String descripcion;
+    private String description;
 
     @ManyToMany
     @JoinTable(
