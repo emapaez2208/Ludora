@@ -1,6 +1,7 @@
-package ExperienceGroup.Ludora.features.sale;
+package ExperienceGroup.Ludora.features.sale.domain;
 
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.sale.ESaleStatus;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,11 +28,12 @@ public class SaleEntity{
     @Column(nullable = false)
     private LocalDateTime date;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private ESaleStatus status;
 
     @Column(nullable = false)
-    private double totalPrice = 0.0;
+    private Double totalPrice;
 
     @ManyToOne
     @JoinColumn (name = "client_id")

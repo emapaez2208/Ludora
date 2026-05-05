@@ -4,7 +4,7 @@ import ExperienceGroup.Ludora.features.ageRange.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import ExperienceGroup.Ludora.features.review.ReviewEntity;
-import ExperienceGroup.Ludora.features.sale.SaleEntity;
+import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
