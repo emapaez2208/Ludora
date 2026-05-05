@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.features.game;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface IGameRepository extends JpaRepository<GameEntity, Long> {
 
     Optional<GameEntity> findByNameIgnoreCase(String name);
