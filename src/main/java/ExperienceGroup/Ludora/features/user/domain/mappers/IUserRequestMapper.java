@@ -11,19 +11,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface IUserRequestMapper extends IMapper<UserEntity, UserDTORequest> {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "externalId", ignore = true)
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "statusBlocked", ignore = true)
-    @Mapping(target = "games", ignore = true)
     UserEntity toEntity(UserDTORequest userDTORequest);
     UserDTORequest toDTO(UserEntity userEntity);
 
-    default Email mapEmail(String email){
-        return email != null ? new Email(email) : null;
-    }
-
-    default Password mapPassword(String password){
-        return password != null ? new Password(password) : null;
-    }
 }

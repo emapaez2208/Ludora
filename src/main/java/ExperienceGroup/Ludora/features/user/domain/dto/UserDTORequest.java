@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.user.domain.dto;
 
+import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -20,13 +21,12 @@ public record UserDTORequest(@Schema(description = "El nombre del usuario", exam
                              String userName,
 
                              @Schema(description = "El email debe tener un formato email valido", example = "JohnDoe@email.com", required = true)
-                             @Email
-                             @NotBlank
-                             String email,
+                             @NotNull
+                             Email email,
 
                              @Schema(description = "La contraseña para poder ingresar a la cuenta, debe tener un formato valido, " +
                                      "usar minimo una minuscula, una mayuscula, un numero y un caracter especial." +
                                      "La longitud debe ser entre 8 y 16 caracteres")
-                             @NotBlank
-                             String password) {
+                             @NotNull
+                             Password password) {
 }
