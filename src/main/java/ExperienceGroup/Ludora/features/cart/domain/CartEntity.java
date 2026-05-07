@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.cart.domain;
 
-import ExperienceGroup.Ludora.features.game.GameEntity;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
