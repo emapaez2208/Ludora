@@ -5,7 +5,6 @@ import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
 import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface IAdminService {
 
@@ -13,5 +12,5 @@ public interface IAdminService {
 
     AdminDTOResponse save(AdminDTORequest adminDTO);
 
-    void delete(UUID externalId);
+    void delete(Long employeeId);
 }

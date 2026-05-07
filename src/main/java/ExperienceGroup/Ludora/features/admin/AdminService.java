@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.admin;
 
+import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
@@ -11,7 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -55,7 +55,12 @@ public class AdminService implements IAdminService{
     }
 
     @Override
-    public void delete(UUID externalId) {
+    @Transactional
+    public void delete(Long employeeId) {
+        AdminEntity adminEntity = adminRepository.findByEmployeeId(employeeId)
+                .orElseThrow(() -> new UserNotFoundException("Admin not found"));
 
+        userService.delete(adminEntity.getUser().getExternalId());
+        adminRepository.delete(adminEntity);
     }
 }

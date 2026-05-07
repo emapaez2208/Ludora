@@ -10,7 +10,5 @@ public interface IAdminRepository extends JpaRepository<AdminEntity, Long> {
 
     Optional<AdminEntity> findByEmployeeId (Long employeeId);
 
-    Optional<AdminEntity> findByUser(Long user);
 
-    void deleteByUser(UserEntity userEntity);
 }
