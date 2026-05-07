@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.developer;
+package ExperienceGroup.Ludora.features.developer.domain;
 
 
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
