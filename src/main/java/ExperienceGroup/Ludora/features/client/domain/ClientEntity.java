@@ -1,11 +1,13 @@
 package ExperienceGroup.Ludora.features.client.domain;
 
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "clients")
@@ -34,4 +36,12 @@ public class ClientEntity {
    @OneToOne
    @JoinColumn(name= "user_id")
     private UserEntity user;
+
+    @ManyToMany
+    @JoinTable(
+            name= "clients_games",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name="game_id")
+    )
+    private List<GameEntity> games;
 }

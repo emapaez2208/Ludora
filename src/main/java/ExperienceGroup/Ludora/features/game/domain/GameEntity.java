@@ -1,7 +1,9 @@
 package ExperienceGroup.Ludora.features.game.domain;
 
-import ExperienceGroup.Ludora.features.ageRange.AgeRangeEntity;
+import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import ExperienceGroup.Ludora.features.review.ReviewEntity;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
@@ -40,6 +42,10 @@ public class GameEntity {
     private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "developer_id", nullable = false)
+    private DeveloperEntity developer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "age_range_id", nullable = false)
     private AgeRangeEntity ageRange;
 
@@ -66,7 +72,7 @@ public class GameEntity {
     private List<SaleEntity> sales;
 
     @ManyToMany (mappedBy = "games")
-    private List<UserEntity> users;
+    private List<ClientEntity> clients;
 
     @PrePersist
     void onCreate() {

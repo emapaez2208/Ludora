@@ -8,8 +8,6 @@ import java.util.UUID;
 
 public interface IDeveloperRepository extends JpaRepository<DeveloperEntity, Long>{
 
-    Optional<DeveloperEntity> findByName(String name);
-
     Optional<DeveloperEntity> findById(UUID externalId);
 
     Optional<DeveloperEntity> findBycompany(String company);
