@@ -12,9 +12,10 @@ public interface IUserService {
 
     List<UserDTOResponse> getAllUsers(String name,
                                       String lastName,
-                                      RoleDTO role,
-                                      Boolean statusBlocked,
-                                      List<GameDTOResponse> game);
+                                      String userName,
+                                      String role,
+                                      String email,
+                                      Boolean statusBlocked);
 
     UserDTOResponse getByExternalId(UUID externalId);
 

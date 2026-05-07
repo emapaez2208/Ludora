@@ -11,22 +11,10 @@ public class UserSpecification {
                 : cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%");
     }
 
-    public static PredicateSpecification<UserEntity> nameEquals(String name){
-        return (root, cb) -> name == null || name.isBlank()
-                ? cb.conjunction()
-                : cb.equal(cb.lower(root.get("name")), name.toLowerCase());
-    }
-
     public static PredicateSpecification<UserEntity> lastNameContains(String lastName){
         return (root, cb) -> lastName == null || lastName.isBlank()
                 ? cb.conjunction()
                 : cb.like(cb.lower(root.get("lastName")), "%" + lastName.toLowerCase() + "%");
-    }
-
-    public static PredicateSpecification<UserEntity> lastNameEquals(String lastName){
-        return (root, cb) -> lastName == null || lastName.isBlank()
-                ? cb.conjunction()
-                : cb.equal(cb.lower(root.get("lastName")), lastName.toLowerCase());
     }
 
     public static PredicateSpecification<UserEntity> userNameEquals(String userName){
