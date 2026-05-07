@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public record DeveloperDtoRequest(
 
         @NotNull(message = "El usuario no puede estar vacío")
-        UserDTORequest userDTORequest,
+        UserDTOResponse userDTOResponse,
 
         @NotEmpty(message = "La compañía no puede estar vacía")
         String company
