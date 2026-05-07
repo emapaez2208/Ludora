@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.user;
 
-import ExperienceGroup.Ludora.features.role.RoleEntity;
+import ExperienceGroup.Ludora.features.role.domain.RoleEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

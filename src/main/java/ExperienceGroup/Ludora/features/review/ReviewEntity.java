@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.review;
 
-import ExperienceGroup.Ludora.features.game.GameEntity;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int reviewId;
+    private Long id;
 
     @Column(nullable = false)
     private int rating;
@@ -38,4 +39,11 @@ public class ReviewEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @PrePersist
+    void OnCreate(){
+        if(date == null)
+            date = LocalDateTime.now();
+
+    }
 }
