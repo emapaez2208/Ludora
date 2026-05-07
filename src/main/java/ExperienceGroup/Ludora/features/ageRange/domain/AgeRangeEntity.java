@@ -22,11 +22,14 @@ public class AgeRangeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "age_range", nullable = false, length = 50)
-    private String ageRange;
+    @Column(name = "range_name", nullable = false, length = 50)
+    private String rangeName;
 
-    @Column (name = "age_limit", nullable = false)
-    private int ageLimit;
+    @Column (name = "min_age", nullable = false)
+    private Integer minAge;
+
+    @Column(name = "description", length = 100)
+    private String description;
 
 
     @OneToMany(mappedBy = "ageRange")
