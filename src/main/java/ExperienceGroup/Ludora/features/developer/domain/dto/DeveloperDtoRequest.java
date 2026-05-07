@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.developer.domain.dto;
 
-import ExperienceGroup.Ludora.features.user.domain.dto.UserDTORequest;
+import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
