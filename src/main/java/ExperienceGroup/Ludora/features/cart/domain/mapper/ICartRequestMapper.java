@@ -5,6 +5,8 @@ import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTORequest;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTOResponse;
+import ExperienceGroup.Ludora.features.client.domain.mappers.IClientResponseMapper;
+import ExperienceGroup.Ludora.features.game.domain.mappers.IGameResponseMapper;
 import ExperienceGroup.Ludora.features.user.domain.mappers.IUserRequestMapper;
 import ExperienceGroup.Ludora.features.user.domain.mappers.IUserResponseMapper;
 import org.mapstruct.Mapper;
