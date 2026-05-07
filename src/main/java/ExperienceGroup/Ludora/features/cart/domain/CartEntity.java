@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.cart.domain;
 
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.game.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
@@ -21,8 +22,8 @@ public class CartEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @JoinColumn(name = "client_id", nullable = false)
+    private ClientEntity client;
 
     @ManyToMany
     @JoinTable(
