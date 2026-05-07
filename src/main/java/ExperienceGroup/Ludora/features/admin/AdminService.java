@@ -6,7 +6,6 @@ import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
 import ExperienceGroup.Ludora.features.user.IUserService;
-import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,13 @@ public class AdminService implements IAdminService{
     private final IUserService userService;
 
     @Override
-    public List<AdminDTOResponse> getAllAdmins(UserDTOResponse user, Long employeeId) {
+    public List<AdminDTOResponse> getAllAdmins(String name,
+                                               String lastName,
+                                               String userName,
+                                               String role,
+                                               String email,
+                                               Boolean statusBlocked,
+                                               Long employeeId) {
         List<AdminEntity> admins = adminRepository.findAll();
 
         if(employeeId != null){
@@ -32,11 +37,10 @@ public class AdminService implements IAdminService{
                     .toList();
         }
 
-        if(user != null){
-            admins.stream()
-                    .filter((entity -> entity.getUser().getExternalId().equals(user.externalId())))
-                    .toList();
-        }
+        admins.stream()
+                .filter((entity) -> entity.getUser().getExternalId().equals(
+                        userService.getAllUsers(name, lastName, userName, role, email, statusBlocked)
+                )).toList();
 
         return admins.stream()
                 .map(responseMapper::toDTO)
