@@ -8,7 +8,13 @@ import java.util.List;
 
 public interface IAdminService {
 
-    List<AdminDTOResponse> getAllAdmins(UserDTOResponse user, Long employeeId);
+    List<AdminDTOResponse> getAllAdmins(String name,
+                                        String lastName,
+                                        String userName,
+                                        String role,
+                                        String email,
+                                        Boolean statusBlocked,
+                                        Long employeeId);
 
     AdminDTOResponse save(AdminDTORequest adminDTO);
 
