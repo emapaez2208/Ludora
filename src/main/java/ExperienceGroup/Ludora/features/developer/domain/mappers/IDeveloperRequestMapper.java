@@ -8,7 +8,7 @@ import ExperienceGroup.Ludora.features.user.domain.mappers.IUserRequestMapper;
 import ExperienceGroup.Ludora.features.user.domain.mappers.IUserResponseMapper;
 import org.mapstruct.Mapper;
 
-@Mapper (componentModel ="spring",uses ={IUserRequestMapper.class})
+@Mapper (componentModel ="spring",uses ={IUserResponseMapper.class})
 public interface IDeveloperRequestMapper extends IMapper<DeveloperEntity, DeveloperDtoRequest> {
 
 
