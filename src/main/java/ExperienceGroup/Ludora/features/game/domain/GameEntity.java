@@ -1,10 +1,10 @@
-package ExperienceGroup.Ludora.features.game;
+package ExperienceGroup.Ludora.features.game.domain;
 
 import ExperienceGroup.Ludora.features.ageRange.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
-import ExperienceGroup.Ludora.features.genre.GenreEntity;
+import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import ExperienceGroup.Ludora.features.review.ReviewEntity;
-import ExperienceGroup.Ludora.features.sale.SaleEntity;
+import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

@@ -10,4 +10,5 @@ public interface IUserRequestMapper extends IMapper<UserEntity, UserDTORequest> 
 
     UserEntity toEntity(UserDTORequest userDTORequest);
     UserDTORequest toDTO(UserEntity userEntity);
+
 }
