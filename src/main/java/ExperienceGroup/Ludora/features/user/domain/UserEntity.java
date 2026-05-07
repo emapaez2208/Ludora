@@ -49,14 +49,6 @@ public class UserEntity {
     @Column(nullable = false)
     private Boolean statusBlocked;
 
-    @ManyToMany
-    @JoinTable(
-            name= "users_games",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name="game_id")
-    )
-    private List<GameEntity> games;
-
     @PrePersist
     void OnCreate(){
         if (externalId == null)
