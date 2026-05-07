@@ -3,7 +3,8 @@ package ExperienceGroup.Ludora.features.review.domain.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record ReviewDTOResponse(int rating,
+public record ReviewDTOResponse(UUID externalID,
+                                int rating,
                                 String comment,
                                 LocalDateTime date,
                                 String username,

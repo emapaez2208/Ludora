@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.features.review;
+package ExperienceGroup.Ludora.features.review.domain;
 
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
@@ -23,6 +23,9 @@ public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "external_id", nullable = false, unique = true, updatable = false)
+    private UUID externalId;
 
     @Column(nullable = false)
     private int rating;
