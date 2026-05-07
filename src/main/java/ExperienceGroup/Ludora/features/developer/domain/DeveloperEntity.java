@@ -25,7 +25,7 @@ public class DeveloperEntity {
     @JoinColumn(name = "user_id",  nullable = false)
     private UserEntity user;
 
-    @ManyToOne (mappedBy = "developers")
+    @OneToMany (mappedBy = "developer")
     private List<GameEntity> games;
 
     @Column(nullable = false)

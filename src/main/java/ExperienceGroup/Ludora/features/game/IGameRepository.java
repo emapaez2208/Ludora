@@ -22,7 +22,7 @@ public interface IGameRepository extends JpaRepository<GameEntity, Long> {
 
     List<GameEntity> findByAgeRange_RangeNameIgnoreCase(String ageRange);
 
-    List<GameEntity> findByUsers_UserNameIgnoreCase(String userName);
+    //List<GameEntity> findByUsers_UserNameIgnoreCase(String userName);
 
     List<GameEntity> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
 
