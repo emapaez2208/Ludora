@@ -1,20 +1,22 @@
 package ExperienceGroup.Ludora.features.cart.domain;
 
+import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTORequest;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTOResponse;
+
 
 
 public interface ICartService {
 
+    CartDTOResponse save(CartDTORequest cartDTORequest);
 
-    CartDTOResponse getByClient(Long Client);
-
-    CartDTOResponse addGameToCart(Long Client, Long gameId);
+    void addGameToCart(Long Client, Long gameId);
 
     Double PrecioTotal();
 
     void removeGameFromCart(Long Client, Long gameId);
 
-    void removeCart(Long Client);
+    void deleteByClientId(Long clientId);
+
 
 
 

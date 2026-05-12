@@ -6,6 +6,8 @@ import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -31,7 +33,7 @@ public class CartEntity {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id")
     )
-    private List<GameEntity> games;
+    private List<GameEntity> games = new ArrayList<>();
 
     @Column (name = "total_price", columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private Double totalPrice;
