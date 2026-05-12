@@ -5,7 +5,6 @@ import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
 
 @Entity
@@ -15,15 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class DeveloperEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "user_id",  nullable = false)
-    private UserEntity user;
+public class DeveloperEntity extends UserEntity {
 
     @OneToMany (mappedBy = "developer")
     private List<GameEntity> games;
