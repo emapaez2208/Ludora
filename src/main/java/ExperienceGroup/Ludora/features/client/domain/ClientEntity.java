@@ -15,11 +15,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ClientEntity extends UserEntity {
 
     @Column(nullable = false )
     private int phone;
@@ -32,10 +28,6 @@ public class ClientEntity {
 
    @FutureOrPresent(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
     private LocalDate birhDate;
-
-   @OneToOne
-   @JoinColumn(name= "user_id")
-    private UserEntity user;
 
     @ManyToMany
     @JoinTable(

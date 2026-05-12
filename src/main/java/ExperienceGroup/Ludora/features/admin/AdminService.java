@@ -38,7 +38,7 @@ public class AdminService implements IAdminService{
         }
 
         admins.stream()
-                .filter((entity) -> entity.getUser().getExternalId().equals(
+                .filter((entity) -> entity.getExternalId().equals(
                         userService.getAllUsers(name, lastName, userName, role, email, statusBlocked)
                 )).toList();
 
@@ -64,7 +64,7 @@ public class AdminService implements IAdminService{
         AdminEntity adminEntity = adminRepository.findByEmployeeId(employeeId)
                 .orElseThrow(() -> new UserNotFoundException("Admin not found"));
 
-        userService.delete(adminEntity.getUser().getExternalId());
+        userService.delete(adminEntity.getExternalId());
         adminRepository.delete(adminEntity);
     }
 }
