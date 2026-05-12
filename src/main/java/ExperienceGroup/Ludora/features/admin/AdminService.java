@@ -51,22 +51,6 @@ public class AdminService implements IAdminService{
     }
 
     @Override
-    public AdminDTOResponse getByUserName(String userName) {
-         return adminRepository.findByUserName(userName).stream()
-                .findFirst()
-                .map(responseMapper::toDTO)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-    }
-
-    @Override
-    public AdminDTOResponse getByEmployeeId(Long employeeId) {
-        return adminRepository.findByEmployeeId(employeeId).stream()
-                .findFirst()
-                .map(responseMapper::toDTO)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-    }
-
-    @Override
     public AdminDTOResponse save(AdminDTORequest adminDTO) {
         AdminEntity entity = requestMapper.toEntity(adminDTO);
 

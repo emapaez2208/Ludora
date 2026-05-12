@@ -18,10 +18,6 @@ public interface IAdminService {
 
     AdminDTOResponse getByExternalId(UUID externalId);
 
-    AdminDTOResponse getByUserName(String userName);
-
-    AdminDTOResponse getByEmployeeId(Long employeeId);
-
     AdminDTOResponse save(AdminDTORequest adminDTO);
 
     void delete(UUID externalId);
