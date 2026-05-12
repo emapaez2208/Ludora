@@ -1,11 +1,8 @@
 package ExperienceGroup.Ludora.features.genre;
 
 import ExperienceGroup.Ludora.common.utils.IMapper;
-import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
-import ExperienceGroup.Ludora.features.genre.domain.Mappers.IGenreDTOMapper;
 import ExperienceGroup.Ludora.features.genre.domain.dto.GenreDTO;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,5 +44,20 @@ public class GenreService  implements IGenreService{
         GenreEntity entity = mapper.toEntity(genreDTO);
         GenreEntity entityGuardar = iGenreRepository.save(entity);
        return mapper.toDTO(entityGuardar);
+    }
+
+    @Override
+    public GenreDTO update(GenreDTO genreDTO) {
+        GenreEntity entity = iGenreRepository.findByName(genreDTO.name())
+                        .orElse(iGenreRepository.findByDescription(genreDTO.description())
+                                .orElseThrow(() -> new EntityNotFoundException("Genre not found with name = " + genreDTO.name()
+                                + " description = " + genreDTO.description())));
+
+        entity.setName(genreDTO.name());
+        entity.setDescription(genreDTO.description());
+
+        GenreEntity saved = iGenreRepository.save(entity);
+
+        return mapper.toDTO(saved);
     }
 }

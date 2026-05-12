@@ -33,5 +33,10 @@ public class GenreController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping()
+    public ResponseEntity<GenreDTO> update(@RequestBody GenreDTO genreDTO){
+        return ResponseEntity.ok(genreService.update(genreDTO));
+    }
+
 
 }
