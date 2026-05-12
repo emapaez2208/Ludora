@@ -32,6 +32,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getByExternalId(id));
     }
 
+    @PostMapping
+    ResponseEntity<AdminDTOResponse> create(@Valid @RequestBody AdminDTORequest adminDTORequest){
+        return ResponseEntity.ok(adminService.save(adminDTORequest));
+    }
+
     @PutMapping("/{id}")
     ResponseEntity<AdminDTOResponse> update(@PathVariable UUID id,
                                             @Valid @RequestBody AdminDTORequest adminDTORequest){
