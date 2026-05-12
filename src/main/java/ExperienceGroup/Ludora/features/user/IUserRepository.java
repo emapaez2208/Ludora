@@ -1,6 +1,5 @@
 package ExperienceGroup.Ludora.features.user;
 
-import ExperienceGroup.Ludora.features.role.domain.RoleEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -17,8 +16,6 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long>, JpaSpe
     Optional<UserEntity> findByExternalId(UUID externalId);
 
     Optional<UserEntity> findByNameAndLastName(String name, String lastName);
-
-    Optional<UserEntity> findByRole(RoleEntity role);
 
     Optional<UserEntity> findByStatusBlocked(Boolean statusBlocked);
 }
