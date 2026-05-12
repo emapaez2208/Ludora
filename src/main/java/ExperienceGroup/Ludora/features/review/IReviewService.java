@@ -12,9 +12,10 @@ public interface IReviewService {
 
     List<ReviewDTOResponse> getAllReviewsByGameID(UUID gameID);
 
-    List<ReviewDTOResponse> getAllReviewsByUserID(UUID id);
+    List<ReviewDTOResponse> getAllReviewsByUserID(UUID userID);
 
     List<ReviewDTOResponse> getAllReviewsByGameIDAndUserID(UUID gameID, UUID id);
 
-    void delete(UUID id);
+    void delete(UUID reviewID);
+
 }

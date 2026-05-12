@@ -1,25 +1,37 @@
 package ExperienceGroup.Ludora.features.review;
 
-import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/reviews")
-
 @AllArgsConstructor
 public class ReviewController {
 
-    @GetMapping
-    public List<ReviewEntity> findAllByGame(@RequestParam UUID gameId) {
-        System.out.println("Obteniendo reviews del juego de ID: " + gameId);
+    private IReviewService reviewService;
 
-
+    @GetMapping("/game/{gameID}")
+    ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByUserID(@PathVariable UUID userID) {
+        return ResponseEntity.ok(reviewService.getAllReviewsByUserID(userID));
     }
+
+    @PostMapping
+    ReviewDTOResponse save(@RequestBody ReviewDTORequest reviewDTORequest){
+        ReviewDTOResponse reviewDTOResponse = reviewService.save(reviewDTORequest);
+        return reviewDTOResponse;
+    }
+
+    List<ReviewDTOResponse> getAllReviewsByGameID(UUID gameID);
+
+    List<ReviewDTOResponse> getAllReviewsByGameIDAndUserID(UUID gameID, UUID id);
+
+    @DeleteMapping("{reviewID}")
+    void delete(UUID reviewID){};
+
 }
