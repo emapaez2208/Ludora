@@ -18,16 +18,16 @@ import java.util.List;
 public class ClientEntity extends UserEntity {
 
     @Column(nullable = false )
-    private int phone;
+    private Integer phone;
 
    @Column(nullable = false , length = 20)
     private String street;
 
    @Column(nullable = false)
-    private int numberStreet;
+    private Integer numberStreet;
 
    @FutureOrPresent(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
-    private LocalDate birhDate;
+    private LocalDate birthDate;
 
     @ManyToMany
     @JoinTable(
