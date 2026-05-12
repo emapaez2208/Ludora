@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.genre;
 
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import ExperienceGroup.Ludora.features.genre.domain.dto.GenreDTO;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class GenreController {
     }
 
     @PostMapping
-    public ResponseEntity<GenreDTO> save(@RequestBody GenreDTO genreDTO){
+    public ResponseEntity<GenreDTO> save(@Valid @RequestBody GenreDTO genreDTO){
         return ResponseEntity.ok(genreService.save(genreDTO));
     }
 
@@ -34,7 +35,7 @@ public class GenreController {
     }
 
     @PutMapping()
-    public ResponseEntity<GenreDTO> update(@RequestBody GenreDTO genreDTO){
+    public ResponseEntity<GenreDTO> update(@Valid @RequestBody GenreDTO genreDTO){
         return ResponseEntity.ok(genreService.update(genreDTO));
     }
 
