@@ -21,7 +21,16 @@ public class GenreService  implements IGenreService{
 
     @Override
     public List<GenreDTO> getAllGenre(String name) {
-        return List.of();
+        if(name == null){
+           return iGenreRepository.findAll().stream()
+                    .map(mapper::toDTO)
+                    .toList();
+        }else {
+            return iGenreRepository.findAll().stream()
+                    .filter(a -> a.getName().equals(name))
+                    .map(mapper::toDTO)
+                    .toList();
+        }
     }
 
     @Override
