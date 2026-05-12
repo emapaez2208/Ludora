@@ -20,5 +20,7 @@ public interface IAdminService {
 
     AdminDTOResponse save(AdminDTORequest adminDTO);
 
+    AdminDTOResponse update(UUID externalId, AdminDTORequest adminDTO);
+
     void delete(UUID externalId);
 }

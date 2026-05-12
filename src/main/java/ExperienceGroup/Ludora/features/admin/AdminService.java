@@ -60,6 +60,23 @@ public class AdminService implements IAdminService{
     }
 
     @Override
+    public AdminDTOResponse update(UUID externalId, AdminDTORequest adminDTO) {
+        AdminEntity entity = adminRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
+
+        entity.setName(adminDTO.name());
+        entity.setLastName(adminDTO.lastName());
+        entity.setEmail(adminDTO.email());
+        entity.setUserName(adminDTO.userName());
+        entity.setPassword(adminDTO.password());
+        entity.setEmployeeId(adminDTO.employeeId());
+
+        AdminEntity saved = adminRepository.save(entity);
+
+        return responseMapper.toDTO(saved);
+    }
+
+    @Override
     public void delete(UUID externalId) {
         AdminEntity toBeDeleted = adminRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
