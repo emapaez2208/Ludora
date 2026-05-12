@@ -47,7 +47,7 @@ public class AdminService implements IAdminService{
         return adminRepository.findByExternalId(externalId).stream()
                 .map(responseMapper::toDTO)
                 .findFirst()
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found, UserID: " + externalId));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class AdminService implements IAdminService{
     @Override
     public void delete(UUID externalId) {
         AdminEntity toBeDeleted = adminRepository.findByExternalId(externalId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
 
         adminRepository.delete(toBeDeleted);
     }

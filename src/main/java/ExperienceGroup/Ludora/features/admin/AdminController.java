@@ -1,14 +1,14 @@
 package ExperienceGroup.Ludora.features.admin;
 
+import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -27,5 +27,22 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllAdmins(name, lastName, userName, email, statusBlocked, employeeId));
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<AdminDTOResponse> getById(@PathVariable UUID id){
+        return ResponseEntity.ok(adminService.getByExternalId(id));
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<AdminDTOResponse> update(@PathVariable UUID id,
+                                            @Valid @RequestBody AdminDTORequest adminDTORequest){
+
+        return ResponseEntity.ok(adminService.update(id, adminDTORequest));
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> delete(@PathVariable UUID id){
+        adminService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
     
 }
