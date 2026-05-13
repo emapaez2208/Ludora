@@ -12,7 +12,6 @@ public interface IDeveloperService {
     List<DeveloperDtoResponse> getAllDevelopers(String name,
                                                 String lastName,
                                                 String userName,
-                                                String role,
                                                 String email,
                                                 Boolean statusBlocked,
                                                 String company);

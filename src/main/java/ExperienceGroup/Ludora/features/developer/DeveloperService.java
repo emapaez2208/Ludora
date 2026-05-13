@@ -27,7 +27,6 @@ public class DeveloperService implements IDeveloperService {
     public List<DeveloperDtoResponse> getAllDevelopers(String name,
                                                        String lastName,
                                                        String userName,
-                                                       String role,
                                                        String email,
                                                        Boolean statusBlocked,
                                                        String company) {
