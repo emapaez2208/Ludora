@@ -2,7 +2,9 @@ package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +18,32 @@ public class ReviewController {
 
     private IReviewService reviewService;
 
-    @GetMapping("/game/{gameID}")
-    ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByUserID(@PathVariable UUID userID) {
-        return ResponseEntity.ok(reviewService.getAllReviewsByUserID(userID));
-    }
-
     @PostMapping
-    ReviewDTOResponse save(@RequestBody ReviewDTORequest reviewDTORequest){
-        ReviewDTOResponse reviewDTOResponse = reviewService.save(reviewDTORequest);
-        return reviewDTOResponse;
+    public ResponseEntity<ReviewDTOResponse> save(@Valid @RequestBody ReviewDTORequest reviewDTORequest){
+        ReviewDTOResponse reviewResponse = reviewService.save(reviewDTORequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewResponse);
     }
 
-    List<ReviewDTOResponse> getAllReviewsByGameID(UUID gameID);
+    @GetMapping("/game/{gameId}")
+    public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByUserID(@PathVariable UUID clientId) {
+        List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByClientId(clientId);
+        return ResponseEntity.ok(reviews);
+    }
 
-    List<ReviewDTOResponse> getAllReviewsByGameIDAndUserID(UUID gameID, UUID id);
+    @GetMapping("/game/{gameId}/client/{clientId}")
+    public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByGameIdAndClientId(@PathVariable UUID gameId, @PathVariable UUID clientId){
+        List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameIdAndClientId(gameId, clientId);
 
-    @DeleteMapping("{reviewID}")
-    void delete(UUID reviewID){};
+        return ResponseEntity.ok(reviews);
+    }
+
+
+
+    @DeleteMapping("/{reviewID}")
+    public ResponseEntity<Void> delete (@PathVariable UUID reviewId){
+        reviewService.delete(reviewId);
+
+        return ResponseEntity.noContent().build();
+    }
 
 }

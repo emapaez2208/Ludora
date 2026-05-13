@@ -10,11 +10,11 @@ public interface IReviewService {
 
     ReviewDTOResponse save(ReviewDTORequest reviewDTORequest);
 
-    List<ReviewDTOResponse> getAllReviewsByGameID(UUID gameID);
+    List<ReviewDTOResponse> getAllReviewsByGameId(UUID gameId);
 
-    List<ReviewDTOResponse> getAllReviewsByUserID(UUID userID);
+    List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId);
 
-    List<ReviewDTOResponse> getAllReviewsByGameIDAndUserID(UUID gameID, UUID id);
+    List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId);
 
     void delete(UUID reviewID);
 

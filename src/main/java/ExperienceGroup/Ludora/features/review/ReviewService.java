@@ -18,17 +18,27 @@ public class ReviewService implements IReviewService {
     private final IMapper<ReviewEntity, ReviewDTOResponse> responseMapper;
     private final IMapper<ReviewEntity, ReviewDTORequest> requestMapper;
 
+    // servicios IGameService gameService;
+    // servicios IClientService clientService;
+
     @Override
     public ReviewDTOResponse save(ReviewDTORequest reviewDTORequest) {
+        //buscar el juego usando findbyexternalid de servicio juego
+        //buscar el cliente usando findbyexternalid de servicio cliente
+
         ReviewEntity reviewEntity = requestMapper.toEntity(reviewDTORequest);
+
+        //setear game usando setGame()
+        //setear cliente usando setClient()
+
         ReviewEntity savedReviewEntity = reviewRepository.save(reviewEntity);
 
         return responseMapper.toDTO(savedReviewEntity);
     }
 
     @Override
-    public List<ReviewDTOResponse> getAllReviewsByGameID(UUID gameID) {
-        List<ReviewEntity> reviews = reviewRepository.findByGameID(gameID);
+    public List<ReviewDTOResponse> getAllReviewsByGameId(UUID gameId) {
+        List<ReviewEntity> reviews = reviewRepository.findByGameExternalId(gameId);
 
         return reviews.stream()
                 .map(responseMapper::toDTO)
@@ -36,8 +46,8 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public List<ReviewDTOResponse> getAllReviewsByUserID(UUID userID) {
-        List<ReviewEntity> reviews = reviewRepository.findByUserID(userID);
+    public List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId) {
+        List<ReviewEntity> reviews = reviewRepository.findByClientExternalId(clientId);
 
         return reviews.stream()
                 .map(responseMapper::toDTO)
@@ -45,8 +55,8 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public List<ReviewDTOResponse> getAllReviewsByGameIDAndUserID(UUID gameID, UUID userID) {
-        List<ReviewEntity> reviews = reviewRepository.findByGameIDAndUserID(gameID, userID);
+    public List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId) {
+        List<ReviewEntity> reviews = reviewRepository.findByGameExternalIdAndClientExternalId(gameId, clientId);
 
         return reviews.stream()
                 .map(responseMapper::toDTO)
