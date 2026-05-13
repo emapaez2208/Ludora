@@ -13,15 +13,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminEntity {
+public class AdminEntity extends UserEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
 
     @Column(nullable = false, unique = true)
     private Long employeeId;

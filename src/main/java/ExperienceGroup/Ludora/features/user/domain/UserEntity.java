@@ -2,21 +2,19 @@ package ExperienceGroup.Ludora.features.user.domain;
 
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
-import ExperienceGroup.Ludora.features.role.domain.RoleEntity;
-import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,10 +39,6 @@ public class UserEntity {
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "password",nullable = false))
     private Password password;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private RoleEntity role;
 
     @Column(nullable = false)
     private Boolean statusBlocked;

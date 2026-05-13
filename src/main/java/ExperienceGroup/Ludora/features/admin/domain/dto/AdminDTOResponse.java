@@ -5,8 +5,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record AdminDTOResponse(
-                              UserDTOResponse user,
-                              Long employeeId
+import java.util.UUID;
+
+public record AdminDTOResponse(UUID externalId,
+                               String name,
+                               String lastName,
+                               String userName,
+                               Long employeeId
                             ) {
 }

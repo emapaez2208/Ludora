@@ -1,7 +1,5 @@
 package ExperienceGroup.Ludora.features.user;
 
-import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
-import ExperienceGroup.Ludora.features.role.domain.dto.RoleDTO;
 import ExperienceGroup.Ludora.features.user.domain.dto.UserDTORequest;
 import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
 
