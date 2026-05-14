@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ISaleService {
+
     SaleDTOResponse create(SaleDTORequest saleDTORequest);
 
     SaleDTOResponse getByExternalId(UUID externalId);
