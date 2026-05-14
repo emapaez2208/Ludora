@@ -49,11 +49,8 @@ public class GenreService  implements IGenreService{
     @Override
     public GenreDTO update(GenreDTO genreDTO) {
         GenreEntity entity = iGenreRepository.findByName(genreDTO.name())
-                        .orElse(iGenreRepository.findByDescription(genreDTO.description())
-                                .orElseThrow(() -> new EntityNotFoundException("Genre not found with name = " + genreDTO.name()
-                                + " description = " + genreDTO.description())));
+                .orElseThrow(() -> new EntityNotFoundException("Genre not found with name = " + genreDTO.name()));
 
-        entity.setName(genreDTO.name());
         entity.setDescription(genreDTO.description());
 
         GenreEntity saved = iGenreRepository.save(entity);
