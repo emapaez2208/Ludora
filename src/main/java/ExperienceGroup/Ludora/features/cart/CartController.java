@@ -15,9 +15,9 @@ public class CartController {
     private final ICartService cartService;
 
     @GetMapping("/{clientId}")
-    ResponseEntity<CartDTOResponse> getCartByClient(@PathVariable UUID clientExternalId){
+    ResponseEntity<CartDTOResponse> getCartByClient(@PathVariable UUID clientId){
 
-        return ResponseEntity.ok( cartService.getCartByClient(clientExternalId));
+        return ResponseEntity.ok( cartService.getCartByClient(clientId));
     }
 
     @PostMapping("/{clientId}/games/{gameId}")

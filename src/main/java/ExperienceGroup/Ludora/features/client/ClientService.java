@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.client;
 
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
+import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
@@ -18,6 +19,7 @@ public class ClientService implements IClientService{
     private IClientRepository repository;
     private IMapper<ClientEntity,ClientDTOResponse> mapperResponse;
     private IMapper<ClientEntity,ClientDTORequest> mapperRequest;
+    private ICartService cartService;
 
     @Override
     public List<ClientDTOResponse> getAllClient(String name,
@@ -67,6 +69,7 @@ public class ClientService implements IClientService{
 
         ClientEntity entity = mapperRequest.toEntity(clientDTORequest);
         repository.save(entity);
+        cartService.crearCarrito(entity.getExternalId());
 
         return mapperResponse.toDTO(entity);
     }
