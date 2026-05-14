@@ -23,7 +23,6 @@ public class DeveloperController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String lastName,
             @RequestParam(required = false) String userName,
-            @RequestParam(required = false) String role,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) Boolean statusBlocked,
             @RequestParam(required = false) String company
