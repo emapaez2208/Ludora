@@ -1,8 +1,14 @@
 package ExperienceGroup.Ludora.features.review;
 
+import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.common.exception.ReviewNotFoundException;
+import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
+import ExperienceGroup.Ludora.features.client.IClientRepository;
+import ExperienceGroup.Ludora.features.client.IClientService;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.game.IGameRepository;
+import ExperienceGroup.Ludora.features.game.IGameService;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
@@ -21,14 +27,16 @@ public class ReviewService implements IReviewService {
     private final IMapper<ReviewEntity, ReviewDTOResponse> responseMapper;
     private final IMapper<ReviewEntity, ReviewDTORequest> requestMapper;
 
-    private final IGameService gameService;
-    private final IClientService clientService;
+    private final IGameRepository gameRepository;
+    private final IClientRepository clientRepository;
 
     @Transactional
     @Override
     public ReviewDTOResponse save(ReviewDTORequest reviewDTORequest) {
-        GameEntity game = gameService.getByExternalId(reviewDTORequest.gameExternalId());
-        ClientEntity client = clientService.getByExternalID(reviewDTORequest.clientExternalId());
+        GameEntity game = gameRepository.findByExternalId(reviewDTORequest.gameExternalId())
+                .orElseThrow(() -> new GameNotFoundException("Game not found"));
+        ClientEntity client = clientRepository.findByExternalId(reviewDTORequest.clientExternalId())
+                .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
         ReviewEntity reviewEntity = requestMapper.toEntity(reviewDTORequest);
 
@@ -42,8 +50,8 @@ public class ReviewService implements IReviewService {
 
     @Override
     public List<ReviewDTOResponse> getAllReviewsByGameId(UUID gameId) {
-
-        GameEntity game = gameService.getByExternalId(gameId);
+        GameEntity game = gameRepository.findByExternalId(gameId)
+                .orElseThrow(() -> new RuntimeException("Game not found"));
         List<ReviewEntity> reviews = reviewRepository.findByGame(game);
 
         return reviews.stream()
@@ -53,7 +61,8 @@ public class ReviewService implements IReviewService {
 
     @Override
     public List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId) {
-        ClientEntity client = clientService.getByExternalID(clientId);
+        ClientEntity client = clientRepository.findByExternalId(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
         List<ReviewEntity> reviews = reviewRepository.findByClient(client);
 
         return reviews.stream()
@@ -63,8 +72,10 @@ public class ReviewService implements IReviewService {
 
     @Override
     public List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId) {
-        GameEntity game = gameService.getByExternalId(gameId);
-        ClientEntity client = clientService.getByExternalID(clientId);
+        GameEntity game = gameRepository.findByExternalId(gameId)
+                .orElseThrow(() -> new RuntimeException("Game not found"));
+        ClientEntity client = clientRepository.findByExternalId(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
 
         List<ReviewEntity> reviews = reviewRepository.findByGameAndClient(game, client);
 
