@@ -1,9 +1,11 @@
 package ExperienceGroup.Ludora.features.client.domain;
 
+import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Past;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -26,7 +28,7 @@ public class ClientEntity extends UserEntity {
    @Column(nullable = false)
     private Integer numberStreet;
 
-   @FutureOrPresent(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
+   @Past(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
     private LocalDate birthDate;
 
     @ManyToMany
@@ -36,4 +38,10 @@ public class ClientEntity extends UserEntity {
             inverseJoinColumns = @JoinColumn(name="game_id")
     )
     private List<GameEntity> games;
+
+    @OneToOne(mappedBy="client",
+                cascade=CascadeType.ALL,
+              orphanRemoval = true)
+    private CartEntity cart;
+
 }

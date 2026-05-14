@@ -3,8 +3,6 @@ package ExperienceGroup.Ludora.features.client.domain.dto;
 
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
-import ExperienceGroup.Ludora.features.user.domain.dto.UserDTORequest;
-import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
@@ -36,10 +34,9 @@ public record ClientDTORequest (@Schema(description = "El nombre del usuario", e
                                 Password password ,
 
                                 @Schema(description = "Numero de telefono",example = "123" , required = true)
-                                @Size(min = 0 , max =15 , message = "El numero tiene una longuitud de 15")
                                 @Positive (message = "No puede ser un numero negativo")
                                 @NotNull
-                                int phone ,
+                                Integer phone ,
 
                                 @Schema(description = "Nombre de la calle", example = "Luro" , required = true)
                                 @Size(max = 25 , message = "Tiene que tener como maximo 25 caracteres")
@@ -48,8 +45,8 @@ public record ClientDTORequest (@Schema(description = "El nombre del usuario", e
 
                                 @Schema (description = "numero de la calle",example = "123",required = true)
                                 @Positive(message = "No puede ser numero negativo")
-                                @NotBlank
-                                int numberStreet,
+                                @NotNull
+                                Integer numberStreet,
 
                                 @Schema(description = "Fecha de nacimiento", example = "10/10/10", required = true)
                                 @NotNull LocalDate birthDate
