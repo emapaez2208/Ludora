@@ -1,7 +1,9 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
+import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.common.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.common.exception.IllegalPasswordException;
+import ExperienceGroup.Ludora.common.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -29,7 +31,22 @@ public class GlobalHandlerException {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handlerUserNotFound(UserNotFoundException ex){
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<String> handlerReviewNotFound(ReviewNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(GameNotFoundException.class)
+    public ResponseEntity<String> handlerGameNotFound(GameNotFoundException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
 }

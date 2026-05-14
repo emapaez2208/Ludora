@@ -19,7 +19,7 @@ public record ReviewDTORequest(
                         @NotNull UUID gameExternalId,
 
                         @Schema(description = "ID externo del usuario al que le pertenece la reseña", required = true)
-                        @NotNull UUID userExternalId
+                        @NotNull UUID clientExternalId
 
 ){
 }

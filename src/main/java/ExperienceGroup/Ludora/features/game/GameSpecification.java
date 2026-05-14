@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.PredicateSpecification;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class GameSpecification {
 
@@ -70,12 +71,12 @@ public class GameSpecification {
                 : cb.equal(root.get("statusBlocked"), status);
     }
 
-    public static PredicateSpecification<GameEntity> hasGenreName(String genreName) {
+    public static PredicateSpecification<GameEntity> hasGenreNames(List<String> genreNames) {
         return (root, cb) -> {
-            if (genreName == null || genreName.isBlank()) {
+            if (genreNames == null || genreNames.isEmpty()) {
                 return cb.conjunction();
             }
-            return cb.equal(cb.lower(root.join("genres").get("name")), genreName.toLowerCase());
+            return root.join("genres").get("name").in(genreNames);
         };
     }
 
