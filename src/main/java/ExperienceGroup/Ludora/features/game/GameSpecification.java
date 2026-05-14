@@ -15,11 +15,13 @@ public class GameSpecification {
     }
 
     public static PredicateSpecification<GameEntity> priceLesserThan(BigDecimal max) {
-        return priceBetween(null, max);
+        return (root, cb) ->
+                max == null ? null : cb.lessThanOrEqualTo(root.get("price"), max);
     }
 
     public static PredicateSpecification<GameEntity> priceGreaterThan(BigDecimal min) {
-        return priceBetween(min, null);
+        return (root, cb) ->
+                min == null ? null : cb.greaterThanOrEqualTo(root.get("price"), min);
     }
 
     public static PredicateSpecification<GameEntity> priceBetween(BigDecimal min, BigDecimal max) {
@@ -35,6 +37,16 @@ public class GameSpecification {
 
             return cb.between(root.get("price"), min, max);
         };
+    }
+
+    public static PredicateSpecification<GameEntity> releaseDateAfter(LocalDate minReleaseDate) {
+        return (root, cb) ->
+                minReleaseDate == null ? null : cb.greaterThanOrEqualTo(root.get("releaseDate"), minReleaseDate);
+    }
+
+    public static PredicateSpecification<GameEntity> releaseDateBefore(LocalDate maxReleaseDate) {
+        return (root, cb) ->
+                maxReleaseDate == null ? null : cb.lessThanOrEqualTo(root.get("releaseDate"), maxReleaseDate);
     }
 
     public static PredicateSpecification<GameEntity> releaseDateBetween(LocalDate min, LocalDate max) {
