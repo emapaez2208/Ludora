@@ -81,4 +81,24 @@ public class ClientService implements IClientService{
         repository.delete(entityDelete);
 
     }
+
+    @Override
+    public ClientDTOResponse update(UUID id, ClientDTORequest dto) {
+        ClientEntity clientEntity = repository.findByExternalId(id)
+                .orElseThrow(()-> new UserNotFoundException("CLien not found"));
+
+        clientEntity.setName(dto.name());
+        clientEntity.setLastName(dto.lastName());
+        clientEntity.setUserName(dto.userName());
+        clientEntity.setEmail(dto.email());
+        clientEntity.setPassword(dto.password());
+        clientEntity.setPhone(dto.phone());
+        clientEntity.setStreet(dto.street());
+        clientEntity.setNumberStreet(dto.numberStreet());
+        clientEntity.setBirthDate(dto.birthDate());
+
+        repository.save(clientEntity);
+
+        return mapperResponse.toDTO(clientEntity);
+    }
 }

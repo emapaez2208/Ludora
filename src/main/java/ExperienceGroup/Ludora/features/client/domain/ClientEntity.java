@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.client.domain;
 
+import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
@@ -36,4 +37,9 @@ public class ClientEntity extends UserEntity {
             inverseJoinColumns = @JoinColumn(name="game_id")
     )
     private List<GameEntity> games;
+
+    @OneToOne(mappedBy="clients",
+                cascade=CascadeType.ALL,
+              orphanRemoval = true)
+    private CartEntity cart;
 }
