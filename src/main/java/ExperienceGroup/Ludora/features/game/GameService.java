@@ -38,11 +38,9 @@ public class GameService implements IGameService{
                                              LocalDate minReleaseDate,
                                              LocalDate maxReleaseDate,
                                              Boolean statusBlocked,
-                                             List<String> genreName,
+                                             List<String> genreNames,
                                              String rangeName,
                                              String developerCompany) {
-
-        /*
 
         PredicateSpecification<GameEntity> spec = PredicateSpecification.allOf(
                 GameSpecification.nameContains(name),
@@ -51,18 +49,16 @@ public class GameService implements IGameService{
                 GameSpecification.releaseDateAfter(minReleaseDate),
                 GameSpecification.releaseDateBefore(maxReleaseDate),
                 GameSpecification.statusBlockedEquals(statusBlocked),
-                GameSpecification.hasGenreName(genreName),
+                GameSpecification.hasGenreNames(genreNames),
                 GameSpecification.hasAgeRangeName(rangeName),
                 GameSpecification.hasDeveloperName(developerCompany)
         );
 
         return gameRepository.findAll(spec).stream()
+                .distinct()
                 .map(responseMapper::toDTO)
                 .toList();
 
-         */
-
-        return List.of();
     }
 
     @Override
@@ -77,13 +73,10 @@ public class GameService implements IGameService{
 
         GameEntity entity = requestMapper.toEntity(gameDTORequest);
 
-        /*
-        DeveloperEntity developer = developerRepository.findById(gameDTORequest.developerId())
+        DeveloperEntity developer = developerRepository.findByExternalId(gameDTORequest.developerExternalId())
                 .orElseThrow(() -> new RuntimeException("Developer no encontrado"));
 
         entity.setDeveloper(developer);
-
-        */
 
         AgeRangeEntity ageRange = ageRangeRepository.findById(gameDTORequest.ageRangeId())
                 .orElseThrow(() -> new RuntimeException("Rango de edad no encontrado"));
@@ -121,11 +114,9 @@ public class GameService implements IGameService{
         List<GenreEntity> genres = genreRepository.findAllById(gameDTORequest.genreIds());
         existingGame.setGenres(genres);
 
-        /*
-        DeveloperEntity developer = developerRepository.findById(gameDTORequest.developerId())
+        DeveloperEntity developer = developerRepository.findByExternalId(gameDTORequest.developerExternalId())
                 .orElseThrow(() -> new RuntimeException("Developer no encontrado"));
         existingGame.setDeveloper(developer);
-        */
 
         GameEntity savedGame = gameRepository.save(existingGame);
 

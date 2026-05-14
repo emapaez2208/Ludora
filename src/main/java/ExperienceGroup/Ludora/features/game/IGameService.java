@@ -15,7 +15,7 @@ public interface IGameService {
                                       LocalDate minReleaseDate,
                                       LocalDate maxReleaseDate,
                                       Boolean statusBlocked,
-                                      List<String> genreName,
+                                      List<String> genreNames,
                                       String rangeName,
                                       String developerCompany);
     GameDTOResponse getByExternalId (UUID externalId);
