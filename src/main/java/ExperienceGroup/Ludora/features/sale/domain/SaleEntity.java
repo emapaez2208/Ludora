@@ -1,8 +1,8 @@
 package ExperienceGroup.Ludora.features.sale.domain;
 
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
-import ExperienceGroup.Ludora.features.sale.ESaleStatus;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
+import ExperienceGroup.Ludora.features.sale.ESaleStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
