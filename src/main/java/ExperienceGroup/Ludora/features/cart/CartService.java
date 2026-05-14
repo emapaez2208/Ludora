@@ -50,7 +50,7 @@ public class CartService implements ICartService {
 
         cart.setTotalPrice(
                         cart.getGames().stream()
-                                        .mapToDouble(games -> game.getPrice().doubleValue())
+                                        .mapToDouble(g -> g.getPrice().doubleValue())
                                         .sum()
         );
 
@@ -72,7 +72,7 @@ public class CartService implements ICartService {
         }
 
         cart.setTotalPrice(cart.getGames().stream()
-                .mapToDouble(games -> game.getPrice().doubleValue())
+                .mapToDouble(g -> g.getPrice().doubleValue())
                 .sum());
 
         return cartResponseMapper.toDTO(cartRepository.save(cart));
@@ -98,7 +98,8 @@ public class CartService implements ICartService {
     ///  se le setean los atributos
     ///  1% logica 99% FE
 
-   /* public CartDTOResponse crearCarrito(UUID clientExternalId) {
+
+   public CartDTOResponse crearCarrito(UUID clientExternalId) {
         ClientEntity client = clientRepository.findByExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado con id: " + clientExternalId));
 
@@ -108,7 +109,7 @@ public class CartService implements ICartService {
         cart.setTotalPrice(0.0);
 
         return cartResponseMapper.toDTO(cartRepository.save(cart));
-    }*/
+    }
 }
 
 
