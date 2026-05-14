@@ -5,8 +5,6 @@ import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
-import ExperienceGroup.Ludora.features.user.UserSpecification;
-import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Service;
