@@ -8,7 +8,7 @@ import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {IGameResponseMapper.class, IClientResponseMapper.class})
+@Mapper(componentModel = "spring")
 public interface ISaleRequestMapper extends IMapper<SaleEntity, SaleDTORequest> {
     @Mapping(target = "client", ignore = true)
     @Mapping(target = "games", ignore = true)
