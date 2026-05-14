@@ -2,8 +2,6 @@ package ExperienceGroup.Ludora.features.cart.domain.dto;
 
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
-import ExperienceGroup.Ludora.features.user.domain.dto.UserDTORequest;
-import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
