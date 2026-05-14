@@ -18,6 +18,10 @@ public record GameDTORequest(
     @PositiveOrZero(message = "El precio no puede ser negativo")
     BigDecimal price,
 
+    @Schema(description = "ID del desarrollador", example = "1", required = true)
+    @NotNull(message = "Debe existir un desarrollador para el juego")
+    Long developerId,
+
     @Schema(description = "Descripción del juego", example = "Juego de simulación de vida donde diseñas hogares, gestionas relaciones y cumples aspiraciones.")
     @Size(max = 200, message = "La descripción no puede superar los 200 caracteres")
     String description,

@@ -11,6 +11,7 @@ public record GameDTOResponse(
         UUID externalId,
         String name,
         BigDecimal price,
+        String developer,
         String description,
         LocalDate releaseDate,
         String ageRange,
