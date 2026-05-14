@@ -2,9 +2,12 @@ package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.common.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +21,19 @@ public class ReviewService implements IReviewService {
     private final IMapper<ReviewEntity, ReviewDTOResponse> responseMapper;
     private final IMapper<ReviewEntity, ReviewDTORequest> requestMapper;
 
-    // servicios IGameService gameService;
-    // servicios IClientService clientService;
+    private final IGameService gameService;
+    private final IClientService clientService;
 
+    @Transactional
     @Override
     public ReviewDTOResponse save(ReviewDTORequest reviewDTORequest) {
-        //buscar el juego usando findbyexternalid de servicio juego
-        //buscar el cliente usando findbyexternalid de servicio cliente
+        GameEntity game = gameService.getByExternalId(reviewDTORequest.gameExternalId());
+        ClientEntity client = clientService.getByExternalID(reviewDTORequest.clientExternalId());
 
         ReviewEntity reviewEntity = requestMapper.toEntity(reviewDTORequest);
 
-        //setear game usando setGame()
-        //setear cliente usando setClient()
+        reviewEntity.setGame(game);
+        reviewEntity.setClient(client);
 
         ReviewEntity savedReviewEntity = reviewRepository.save(reviewEntity);
 
@@ -38,7 +42,9 @@ public class ReviewService implements IReviewService {
 
     @Override
     public List<ReviewDTOResponse> getAllReviewsByGameId(UUID gameId) {
-        List<ReviewEntity> reviews = reviewRepository.findByGameExternalId(gameId);
+
+        GameEntity game = gameService.getByExternalId(gameId);
+        List<ReviewEntity> reviews = reviewRepository.findByGame(game);
 
         return reviews.stream()
                 .map(responseMapper::toDTO)
@@ -47,7 +53,8 @@ public class ReviewService implements IReviewService {
 
     @Override
     public List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId) {
-        List<ReviewEntity> reviews = reviewRepository.findByClientExternalId(clientId);
+        ClientEntity client = clientService.getByExternalID(clientId);
+        List<ReviewEntity> reviews = reviewRepository.findByClient(client);
 
         return reviews.stream()
                 .map(responseMapper::toDTO)
@@ -56,7 +63,10 @@ public class ReviewService implements IReviewService {
 
     @Override
     public List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId) {
-        List<ReviewEntity> reviews = reviewRepository.findByGameExternalIdAndClientExternalId(gameId, clientId);
+        GameEntity game = gameService.getByExternalId(gameId);
+        ClientEntity client = clientService.getByExternalID(clientId);
+
+        List<ReviewEntity> reviews = reviewRepository.findByGameAndClient(game, client);
 
         return reviews.stream()
                 .map(responseMapper::toDTO)

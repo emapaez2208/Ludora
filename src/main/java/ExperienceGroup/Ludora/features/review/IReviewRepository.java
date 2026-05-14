@@ -1,5 +1,7 @@
 package ExperienceGroup.Ludora.features.review;
 
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,11 +15,11 @@ public interface IReviewRepository extends JpaRepository <ReviewEntity, Long> {
 
     Optional<ReviewEntity> findByExternalId(UUID externalId);
 
-    List<ReviewEntity> findByClientExternalId(UUID clientId);
+    List<ReviewEntity> findByClient(ClientEntity client);
 
-    List<ReviewEntity> findByGameExternalId(UUID gameId);
+    List<ReviewEntity> findByGame(GameEntity game);
 
-    List<ReviewEntity> findByGameExternalIdAndClientExternalId(UUID gameId, UUID clientId);
+    List<ReviewEntity> findByGameAndClient(GameEntity game, ClientEntity client);
 
     List<ReviewEntity> findByRatingGreaterThan(int minRating);
 
