@@ -6,12 +6,16 @@ import ExperienceGroup.Ludora.features.game.domain.mappers.IGameResponseMapper;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {IGameResponseMapper.class, IClientResponseMapper.class})
 public interface ISaleRequestMapper extends IMapper<SaleEntity, SaleDTORequest> {
-
+    @Mapping(target = "client", ignore = true)
+    @Mapping(target = "games", ignore = true)
     SaleEntity toEntity(SaleDTORequest saleDTORequest);
 
+    @Mapping(target = "clientExternalId", ignore = true)
+    @Mapping(target = "gameExternalId", ignore = true)
     SaleDTORequest toDTO(SaleEntity saleEntity);
 }
 

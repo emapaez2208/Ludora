@@ -7,8 +7,10 @@ import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-public record SaleDTOResponse (LocalDateTime date,
+public record SaleDTOResponse ( UUID externalId,
+                                LocalDateTime date,
                                 ESaleStatus status,
                                 Double totalPrice,
                                 ClientDTOResponse client,
