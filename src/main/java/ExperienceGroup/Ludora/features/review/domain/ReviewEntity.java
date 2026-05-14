@@ -1,7 +1,7 @@
-package ExperienceGroup.Ludora.features.review;
+package ExperienceGroup.Ludora.features.review.domain;
 
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
-import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +24,9 @@ public class ReviewEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "external_id", nullable = false, unique = true, updatable = false)
+    private UUID externalId;
+
     @Column(nullable = false)
     private int rating;
 
@@ -34,16 +37,18 @@ public class ReviewEntity {
 
     @ManyToOne
     @JoinColumn(name = "game_id")
-    private GameEntity games;
+    private GameEntity game;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
 
     @PrePersist
     void OnCreate(){
         if(date == null)
             date = LocalDateTime.now();
 
+        if(externalId == null)
+            externalId = UUID.randomUUID();
     }
 }
