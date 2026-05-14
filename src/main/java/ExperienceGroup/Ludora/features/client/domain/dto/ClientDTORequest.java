@@ -3,8 +3,6 @@ package ExperienceGroup.Ludora.features.client.domain.dto;
 
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
-import ExperienceGroup.Ludora.features.user.domain.dto.UserDTORequest;
-import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
