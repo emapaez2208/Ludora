@@ -24,18 +24,18 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewResponse);
     }
 
-    @GetMapping("/game/{gameId}")
+    @GetMapping("/games/{gameId}")
     public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByGameID(@PathVariable UUID gameId) {
         List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameId(gameId);
         return ResponseEntity.ok(reviews);
     }
-    @GetMapping("/client/{clientId}")
+    @GetMapping("/clients/{clientId}")
     public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByClientID(@PathVariable UUID clientId) {
         List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByClientId(clientId);
         return ResponseEntity.ok(reviews);
     }
 
-    @GetMapping("/game/{gameId}/client/{clientId}")
+    @GetMapping("/games/{gameId}/client/{clientId}")
     public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByGameIdAndClientId(@PathVariable UUID gameId, @PathVariable UUID clientId){
         List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameIdAndClientId(gameId, clientId);
 

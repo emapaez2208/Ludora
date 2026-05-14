@@ -2,7 +2,7 @@ package ExperienceGroup.Ludora.common.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 
-public class ReviewNotFoundException extends RuntimeException {
+public class ReviewNotFoundException extends EntityNotFoundException {
     public ReviewNotFoundException(String message) {
         super(message);
     }
