@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.features.cart;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTOResponse;
 import ExperienceGroup.Ludora.features.cart.domain.mapper.ICartResponseMapper;
+import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
@@ -20,6 +21,7 @@ public class CartService implements ICartService {
     private final ICartRepository cartRepository;
     private final IGameRepository gameRepository;
     private final ICartResponseMapper cartResponseMapper;
+    private final IClientRepository clientRepository;
 
 ///-----------------------------------------------------------------------------------------///
 /// Logica
