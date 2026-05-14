@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.sale;
 
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,5 +20,6 @@ public interface ISaleRepository extends JpaRepository<SaleEntity, Long> {
 
     List<SaleEntity> findByDateBetween(LocalDateTime start, LocalDateTime end);
 
-    List<SaleEntity> findByClientExternalId(UUID clientExternalId);
+    List<SaleEntity> findByClient(ClientEntity client);
+
 }

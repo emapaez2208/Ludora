@@ -16,19 +16,22 @@ public interface IGameResponseMapper extends IMapper<GameEntity, GameDTOResponse
     @Override
     @Mapping(target = "genres", ignore = true)
     @Mapping(target = "ageRange", ignore = true)
+    @Mapping(target = "externalId", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "developer", ignore = true)
     GameEntity toEntity(GameDTOResponse gameDTOResponse);
 
     @Override
     @Mapping(target = "ageRange", source = "ageRange.rangeName")
     @Mapping(target = "genres", source = "genres", qualifiedByName = "mapGenres")
+    @Mapping(target = "developer", source = "developer.company")
     GameDTOResponse toDTO(GameEntity gameEntity);
 
     @Named("mapGenres")
     default List<String> mapGenres(List<GenreEntity> genres) {
         if (genres == null) return null;
         return genres.stream()
-                .map(GenreEntity::getName) // Asumiendo que Genre tiene getName()
+                .map(GenreEntity::getName)
                 .toList();
     }
 }

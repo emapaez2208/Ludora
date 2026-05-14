@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -24,6 +25,9 @@ public class SaleEntity{
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "external_id", nullable = false, unique = true, updatable = false)
+    private UUID externalId;
 
     @Column(nullable = false)
     private LocalDateTime date;
@@ -51,6 +55,9 @@ public class SaleEntity{
     void OnCreate(){
         if (date == null)
             date = LocalDateTime.now();
+
+        if(externalId == null)
+            externalId = UUID.randomUUID();
 
     }
 
