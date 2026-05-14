@@ -25,7 +25,7 @@ public interface IClientService {
 
     ClientDTOResponse save (ClientDTORequest clientDTORequest);
 
-    ClientDTOResponse update (UUID id , ClientDTORequest clientDTORequest)
+    ClientDTOResponse update (UUID id , ClientDTORequest clientDTORequest);
 
     void delete (UUID externalID);
 }

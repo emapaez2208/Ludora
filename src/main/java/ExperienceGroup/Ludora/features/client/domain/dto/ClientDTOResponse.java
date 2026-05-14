@@ -6,7 +6,8 @@ import ExperienceGroup.Ludora.features.user.domain.dto.UserDTOResponse;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record ClientDTOResponse (String name,
+public record ClientDTOResponse (UUID externdID ,
+                                 String name,
                                  String lastName,
                                  String userName,
                                  Email email ,
