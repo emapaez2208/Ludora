@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
+import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.common.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.common.exception.IllegalPasswordException;
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
@@ -28,6 +29,13 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handlerUserNotFound(UserNotFoundException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(GameNotFoundException.class)
+    public ResponseEntity<String> handlerGameNotFound(GameNotFoundException ex){
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
