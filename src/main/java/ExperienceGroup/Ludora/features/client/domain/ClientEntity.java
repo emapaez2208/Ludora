@@ -5,6 +5,7 @@ import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Past;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class ClientEntity extends UserEntity {
    @Column(nullable = false)
     private Integer numberStreet;
 
-   @FutureOrPresent(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
+   @Past(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
     private LocalDate birthDate;
 
     @ManyToMany
