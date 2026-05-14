@@ -38,8 +38,9 @@ public class ClientEntity extends UserEntity {
     )
     private List<GameEntity> games;
 
-    @OneToOne(mappedBy="clients",
+    @OneToOne(mappedBy="client",
                 cascade=CascadeType.ALL,
               orphanRemoval = true)
     private CartEntity cart;
+
 }
