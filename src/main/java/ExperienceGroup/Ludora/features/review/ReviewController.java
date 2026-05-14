@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ReviewController {
 
-    private IReviewService reviewService;
+    private final IReviewService reviewService;
 
     @PostMapping
     public ResponseEntity<ReviewDTOResponse> save(@Valid @RequestBody ReviewDTORequest reviewDTORequest){
@@ -25,7 +25,12 @@ public class ReviewController {
     }
 
     @GetMapping("/game/{gameId}")
-    public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByUserID(@PathVariable UUID clientId) {
+    public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByGameID(@PathVariable UUID gameId) {
+        List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameId(gameId);
+        return ResponseEntity.ok(reviews);
+    }
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByClientID(@PathVariable UUID clientId) {
         List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByClientId(clientId);
         return ResponseEntity.ok(reviews);
     }
@@ -37,9 +42,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-
-
-    @DeleteMapping("/{reviewID}")
+    @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> delete (@PathVariable UUID reviewId){
         reviewService.delete(reviewId);
 
