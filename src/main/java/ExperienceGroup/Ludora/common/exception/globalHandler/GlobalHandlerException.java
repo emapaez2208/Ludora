@@ -36,10 +36,11 @@ public class GlobalHandlerException {
     }
 
     @ExceptionHandler(ReviewNotFoundException.class)
-    public ResponseEntity<String> handlerReviewNotFound(ReviewNotFoundException ex){
+    public ResponseEntity<String> handlerReviewNotFound(ReviewNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
+    }
 
     @ExceptionHandler(GameNotFoundException.class)
     public ResponseEntity<String> handlerGameNotFound(GameNotFoundException ex){
@@ -47,4 +48,5 @@ public class GlobalHandlerException {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
+
 }
