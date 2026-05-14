@@ -12,6 +12,7 @@ import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import ExperienceGroup.Ludora.features.genre.IGenreRepository;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -41,7 +42,25 @@ public class GameService implements IGameService{
                                              String rangeName,
                                              String developerCompany) {
 
-        //FALTA SPECIFICATIONS
+        /*
+
+        PredicateSpecification<GameEntity> spec = PredicateSpecification.allOf(
+                GameSpecification.nameContains(name),
+                GameSpecification.priceLesserThan(maxPrice),
+                GameSpecification.priceGreaterThan(minPrice),
+                GameSpecification.releaseDateAfter(minReleaseDate),
+                GameSpecification.releaseDateBefore(maxReleaseDate),
+                GameSpecification.statusBlockedEquals(statusBlocked),
+                GameSpecification.hasGenreName(genreName),
+                GameSpecification.hasAgeRangeName(rangeName),
+                GameSpecification.hasDeveloperName(developerCompany)
+        );
+
+        return gameRepository.findAll(spec).stream()
+                .map(responseMapper::toDTO)
+                .toList();
+
+         */
 
         return List.of();
     }
