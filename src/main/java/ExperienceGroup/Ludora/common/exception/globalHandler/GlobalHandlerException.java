@@ -5,7 +5,6 @@ import ExperienceGroup.Ludora.common.exception.IllegalPasswordException;
 import ExperienceGroup.Ludora.common.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
