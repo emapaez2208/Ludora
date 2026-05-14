@@ -59,8 +59,9 @@ public class DeveloperService implements IDeveloperService {
     @Override
     public DeveloperDtoResponse save(DeveloperDtoRequest developerDtoRequest) {
 
-        DeveloperEntity entity =
-                requestMapper.toEntity(developerDtoRequest);
+
+        DeveloperEntity entity = requestMapper.toEntity(developerDtoRequest);
+
 
         developerRepository.save(entity);
 
@@ -71,11 +72,8 @@ public class DeveloperService implements IDeveloperService {
     public DeveloperDtoResponse update(UUID externalId,
                                        DeveloperDtoRequest developerDtoRequest) {
 
-        DeveloperEntity entity =
-                developerRepository.findByExternalId(externalId)
-                        .orElseThrow(() ->
-                                new UserNotFoundException(
-                                        "User not found, userID: " + externalId));
+        DeveloperEntity entity = developerRepository.findByExternalId(externalId)
+                                .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
 
         entity.setName(developerDtoRequest.name());
         entity.setLastName(developerDtoRequest.lastName());
@@ -93,11 +91,8 @@ public class DeveloperService implements IDeveloperService {
     @Override
     public List<GameDTOResponse> getGamesByDeveloper(UUID externalId) {
 
-        DeveloperEntity entity =
-                developerRepository.findByExternalId(externalId)
-                        .orElseThrow(() ->
-                                new UserNotFoundException(
-                                        "User not found, userID: " + externalId));
+        DeveloperEntity entity = developerRepository.findByExternalId(externalId)
+                        .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
 
         return entity.getGames()
                 .stream()
@@ -108,11 +103,8 @@ public class DeveloperService implements IDeveloperService {
     @Override
     public void delete(UUID externalId) {
 
-        DeveloperEntity toBeDeleted =
-                developerRepository.findByExternalId(externalId)
-                        .orElseThrow(() ->
-                                new UserNotFoundException(
-                                        "User not found, userID: " + externalId));
+        DeveloperEntity toBeDeleted = developerRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
 
         developerRepository.delete(toBeDeleted);
     }
