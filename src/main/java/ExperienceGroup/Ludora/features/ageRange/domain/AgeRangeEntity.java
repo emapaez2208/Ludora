@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -22,6 +23,9 @@ public class AgeRangeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "external_id", nullable = false, unique = true, updatable = false)
+    private UUID externalId;
+
     @Column(name = "range_name", nullable = false, length = 50)
     private String rangeName;
 
@@ -34,5 +38,11 @@ public class AgeRangeEntity {
 
     @OneToMany(mappedBy = "ageRange")
     private List<GameEntity> games;
+
+    @PrePersist
+    void onCreate() {
+        if (externalId == null)
+            externalId = UUID.randomUUID();
+    }
 
 }

@@ -78,7 +78,7 @@ public class GameService implements IGameService{
 
         entity.setDeveloper(developer);
 
-        AgeRangeEntity ageRange = ageRangeRepository.findById(gameDTORequest.ageRangeId())
+        AgeRangeEntity ageRange = ageRangeRepository.findByExternalId(gameDTORequest.ageRangeExternalId())
                 .orElseThrow(() -> new RuntimeException("Rango de edad no encontrado"));
 
         entity.setAgeRange(ageRange);
@@ -107,7 +107,7 @@ public class GameService implements IGameService{
         existingGame.setDescription(updatedData.getDescription());
         existingGame.setStatusBlocked(updatedData.getStatusBlocked());
 
-        AgeRangeEntity ageRange = ageRangeRepository.findById(gameDTORequest.ageRangeId())
+        AgeRangeEntity ageRange = ageRangeRepository.findByExternalId(gameDTORequest.ageRangeExternalId())
                 .orElseThrow(() -> new RuntimeException("Rango de edad no encontrado"));
         existingGame.setAgeRange(ageRange);
 
