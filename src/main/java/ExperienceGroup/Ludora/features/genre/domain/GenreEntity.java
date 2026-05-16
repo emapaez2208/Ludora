@@ -28,13 +28,7 @@ public class GenreEntity {
     @Column(nullable = false)
     private String description;
 
-    @ManyToMany
-    @JoinTable(
-            name= "genre_game",
-            joinColumns = @JoinColumn(name = "genre_id"),
-            inverseJoinColumns = @JoinColumn(name="game_id")
-
-    )
+    @ManyToMany(mappedBy = "genres")
     private List<GameEntity> games;
 
 }

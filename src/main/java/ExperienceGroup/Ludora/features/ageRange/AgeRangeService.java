@@ -1,13 +1,14 @@
 package ExperienceGroup.Ludora.features.ageRange;
 
+import ExperienceGroup.Ludora.common.exception.InvalidAgeRangeException;
 import ExperienceGroup.Ludora.common.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.ageRange.domain.dto.AgeRangeDTORequest;
 import ExperienceGroup.Ludora.features.ageRange.domain.dto.AgeRangeDTOResponse;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,6 +43,10 @@ public class AgeRangeService implements IAgeRangeService{
     @Transactional
     public AgeRangeDTOResponse save(AgeRangeDTORequest ageRangeDTORequest) {
 
+        if (ageRangeRepository.existsByRangeName(ageRangeDTORequest.rangeName())){
+            throw new InvalidAgeRangeException("Age range name '" + ageRangeDTORequest.rangeName() + "' already exists.");
+        }
+
         AgeRangeEntity entity = requestMapper.toEntity(ageRangeDTORequest);
         AgeRangeEntity savedEntity = ageRangeRepository.save(entity);
 
@@ -53,6 +58,11 @@ public class AgeRangeService implements IAgeRangeService{
     public AgeRangeDTOResponse update(UUID externalId, AgeRangeDTORequest ageRangeDTORequest) {
         AgeRangeEntity existingAgeRange = ageRangeRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new AgeRangeNotFoundException("Age range not found"));
+
+        if (ageRangeRepository.existsByRangeName(ageRangeDTORequest.rangeName()) &&
+        !existingAgeRange.getRangeName().equals(ageRangeDTORequest.rangeName())){
+            throw new InvalidAgeRangeException("Age range name '" + ageRangeDTORequest.rangeName() + "' already exists.");
+        }
 
         existingAgeRange.setRangeName(ageRangeDTORequest.rangeName());
         existingAgeRange.setMinAge(ageRangeDTORequest.minAge());

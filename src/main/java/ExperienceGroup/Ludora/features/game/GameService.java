@@ -1,6 +1,8 @@
 package ExperienceGroup.Ludora.features.game;
 
+import ExperienceGroup.Ludora.common.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.ageRange.IAgeRangeRepository;
 import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;
@@ -11,9 +13,11 @@ import ExperienceGroup.Ludora.features.game.domain.dto.GameDTORequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import ExperienceGroup.Ludora.features.genre.IGenreRepository;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -51,7 +55,7 @@ public class GameService implements IGameService{
                 GameSpecification.statusBlockedEquals(statusBlocked),
                 GameSpecification.hasGenreNames(genreNames),
                 GameSpecification.hasAgeRangeName(rangeName),
-                GameSpecification.hasDeveloperName(developerCompany)
+                GameSpecification.hasDeveloperCompany(developerCompany)
         );
 
         return gameRepository.findAll(spec).stream()
@@ -69,23 +73,24 @@ public class GameService implements IGameService{
     }
 
     @Override
+    @Transactional
     public GameDTOResponse save(GameDTORequest gameDTORequest) {
 
         GameEntity entity = requestMapper.toEntity(gameDTORequest);
 
         DeveloperEntity developer = developerRepository.findByExternalId(gameDTORequest.developerExternalId())
-                .orElseThrow(() -> new RuntimeException("Developer no encontrado"));
+                .orElseThrow(() -> new UserNotFoundException("Developer not found"));
 
         entity.setDeveloper(developer);
 
         AgeRangeEntity ageRange = ageRangeRepository.findByExternalId(gameDTORequest.ageRangeExternalId())
-                .orElseThrow(() -> new RuntimeException("Rango de edad no encontrado"));
+                .orElseThrow(() -> new AgeRangeNotFoundException("Age range not found"));
 
         entity.setAgeRange(ageRange);
 
         List<GenreEntity> genres = genreRepository.findAllById(gameDTORequest.genreIds());
-        if (genres.isEmpty()) {
-            throw new RuntimeException("No se encontraron géneros válidos");
+        if (genres.size() != gameDTORequest.genreIds().size()) {
+            throw new EntityNotFoundException("One or more genres were not found");
         }
         entity.setGenres(genres);
 
@@ -95,6 +100,7 @@ public class GameService implements IGameService{
     }
 
     @Override
+    @Transactional
     public GameDTOResponse update(UUID externalId, GameDTORequest gameDTORequest) {
         GameEntity existingGame = gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
@@ -108,14 +114,18 @@ public class GameService implements IGameService{
         existingGame.setStatusBlocked(updatedData.getStatusBlocked());
 
         AgeRangeEntity ageRange = ageRangeRepository.findByExternalId(gameDTORequest.ageRangeExternalId())
-                .orElseThrow(() -> new RuntimeException("Rango de edad no encontrado"));
+                .orElseThrow(() -> new AgeRangeNotFoundException("Age range not found"));
         existingGame.setAgeRange(ageRange);
 
         List<GenreEntity> genres = genreRepository.findAllById(gameDTORequest.genreIds());
-        existingGame.setGenres(genres);
+        if (genres.size() != gameDTORequest.genreIds().size()){
+            throw new EntityNotFoundException("One or more genres were not found");
+        }
+        existingGame.getGenres().clear();
+        existingGame.getGenres().addAll(genres);
 
         DeveloperEntity developer = developerRepository.findByExternalId(gameDTORequest.developerExternalId())
-                .orElseThrow(() -> new RuntimeException("Developer no encontrado"));
+                .orElseThrow(() -> new UserNotFoundException("Developer not found"));
         existingGame.setDeveloper(developer);
 
         GameEntity savedGame = gameRepository.save(existingGame);
@@ -124,6 +134,7 @@ public class GameService implements IGameService{
     }
 
     @Override
+    @Transactional
     public void delete(UUID externalId) {
         GameEntity toBeDeleted = gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));

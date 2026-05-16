@@ -26,7 +26,7 @@ public class AgeRangeEntity {
     @Column(name = "external_id", nullable = false, unique = true, updatable = false)
     private UUID externalId;
 
-    @Column(name = "range_name", nullable = false, length = 50)
+    @Column(name = "range_name", nullable = false, length = 50, unique = true)
     private String rangeName;
 
     @Column (name = "min_age", nullable = false)

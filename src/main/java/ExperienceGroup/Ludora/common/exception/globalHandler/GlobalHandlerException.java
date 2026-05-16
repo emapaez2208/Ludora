@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
 import ExperienceGroup.Ludora.common.exception.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +49,20 @@ public class GlobalHandlerException {
     public ResponseEntity<String> handlerAgeRangeNotFound(AgeRangeNotFoundException ex){
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handlerEntityNotFound(EntityNotFoundException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidAgeRangeException.class)
+    public ResponseEntity<String> handlerInvalidAgeRange(InvalidAgeRangeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
 

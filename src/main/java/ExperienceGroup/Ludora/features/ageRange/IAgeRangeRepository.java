@@ -11,6 +11,8 @@ public interface IAgeRangeRepository extends JpaRepository<AgeRangeEntity, Long>
 
     Optional<AgeRangeEntity> findByExternalId(UUID externalId);
 
+    boolean existsByRangeName(String rangeName);
+
     List<AgeRangeEntity> findByRangeName(String rangeName);
 
     List<AgeRangeEntity> findByMinAge(Integer minAge);
