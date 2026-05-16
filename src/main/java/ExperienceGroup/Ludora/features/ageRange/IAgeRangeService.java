@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IAgeRangeService {
-    List<AgeRangeDTOResponse> getAllAgeRange(String rangeName, Integer minAge, String description);
+    List<AgeRangeDTOResponse> getAllAgeRange();
     AgeRangeDTOResponse getByExternalId (UUID externalId);
     AgeRangeDTOResponse save (AgeRangeDTORequest ageRangeDTORequest);
     AgeRangeDTOResponse update(UUID externalId, AgeRangeDTORequest ageRangeDTORequest);

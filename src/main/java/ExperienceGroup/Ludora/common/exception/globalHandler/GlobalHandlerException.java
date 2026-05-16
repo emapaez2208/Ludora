@@ -1,11 +1,6 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
-import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
-import ExperienceGroup.Ludora.common.exception.IllegalEmailException;
-import ExperienceGroup.Ludora.common.exception.IllegalPasswordException;
-import ExperienceGroup.Ludora.common.exception.ReviewNotFoundException;
-import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
+import ExperienceGroup.Ludora.common.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,6 +39,13 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(GameNotFoundException.class)
     public ResponseEntity<String> handlerGameNotFound(GameNotFoundException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(AgeRangeNotFoundException.class)
+    public ResponseEntity<String> handlerAgeRangeNotFound(AgeRangeNotFoundException ex){
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());

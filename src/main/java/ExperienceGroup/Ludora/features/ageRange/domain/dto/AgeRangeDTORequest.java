@@ -1,10 +1,7 @@
 package ExperienceGroup.Ludora.features.ageRange.domain.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record AgeRangeDTORequest(
         @Schema(description = "Categoría de edad", example = "Apto para todos", required = true)
@@ -15,6 +12,7 @@ public record AgeRangeDTORequest(
         @Schema(description = "Mínimo de edad requerido", example = "11", required = true)
         @NotNull(message = "El mínimo de edad no puede ser nula")
         @PositiveOrZero(message = "El mínimo de edad no puede ser un número negativo")
+        @Max(value = 21, message = "La edad mínima permitida no puede ser mayor a 21 años")
         Integer minAge,
 
         @Schema(description = "Descripción de la categoría de edad", example = "Contiene contenido violento")
