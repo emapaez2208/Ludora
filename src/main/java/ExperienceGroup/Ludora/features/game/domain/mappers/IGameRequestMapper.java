@@ -10,13 +10,13 @@ import org.mapstruct.Mapping;
 public interface IGameRequestMapper extends IMapper<GameEntity, GameDTORequest> {
 
     @Override
-    @Mapping(target = "ageRange.id", source = "ageRangeId")
+    @Mapping(target = "ageRange", ignore = true)
     @Mapping(target = "developer", ignore = true)
     @Mapping(target = "genres", ignore = true)
     GameEntity toEntity(GameDTORequest gameDTORequest);
 
     @Override
-    @Mapping(target = "ageRangeId", source = "ageRange.id")
+    @Mapping(target = "ageRangeExternalId", source = "ageRange.externalId")
     @Mapping(target = "developerExternalId", source = "developer.externalId")
     GameDTORequest toDTO(GameEntity gameEntity);
     }

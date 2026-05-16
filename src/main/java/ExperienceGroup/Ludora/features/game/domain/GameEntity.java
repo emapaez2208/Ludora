@@ -56,9 +56,13 @@ public class GameEntity {
 
     @Column (name = "status_blocked", nullable = false)
     private Boolean statusBlocked;
-
     
-    @ManyToMany(mappedBy = "games")
+    @ManyToMany
+    @JoinTable(
+            name = "games_genres",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
     private List<GenreEntity> genres;
 
     @OneToMany(mappedBy = "game")

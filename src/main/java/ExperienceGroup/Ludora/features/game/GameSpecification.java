@@ -86,7 +86,7 @@ public class GameSpecification {
                 : cb.equal(cb.lower(root.get("ageRange").get("rangeName")), rangeName.toLowerCase());
     }
 
-    public static PredicateSpecification<GameEntity> hasDeveloperName(String developerCompany) {
+    public static PredicateSpecification<GameEntity> hasDeveloperCompany(String developerCompany) {
         return (root, cb) -> (developerCompany == null || developerCompany.isBlank())
                 ? cb.conjunction()
                 : cb.equal(cb.lower(root.get("developer").get("company")), developerCompany.toLowerCase());
