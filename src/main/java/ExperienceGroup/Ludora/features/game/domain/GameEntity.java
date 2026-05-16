@@ -61,7 +61,7 @@ public class GameEntity {
     @ManyToMany(mappedBy = "games")
     private List<GenreEntity> genres;
 
-    @OneToMany(mappedBy = "games")
+    @OneToMany(mappedBy = "game")
     private List<ReviewEntity> reviews;
 
     @ManyToMany(mappedBy = "games")
