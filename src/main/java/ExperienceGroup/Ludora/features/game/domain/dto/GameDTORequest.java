@@ -32,12 +32,15 @@ public record GameDTORequest(
     @PastOrPresent(message = "La fecha no puede ser futura")
     LocalDate releaseDate,
 
-    @Schema(description = "ID del rango de edad", example = "1", required = true)
+    @Schema(description = "ID externo del rango de edad", example = "550e8400-e29b-41d4-a716-446655440000", required = true)
     @NotNull(message = "Debe existir un rango de edad para el juego")
-    Long ageRangeId,
+    UUID ageRangeExternalId,
 
     @Schema(description = "Lista de los ID de los géneros del juego", example = "[1, 4]", required = true)
     @NotEmpty(message = "El juego debe tener al menos un género")
-    List<Long> genreIds
+    List<Long> genreIds,
+
+    @Schema(description = "Indica si el juego se encuentra bloqueado para los usuarios", example = "false")
+    Boolean statusBlocked
     ) {
 }
