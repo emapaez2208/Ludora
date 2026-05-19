@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,19 @@ public class ReviewController {
     public ResponseEntity<ReviewDTOResponse> save(@Valid @RequestBody ReviewDTORequest reviewDTORequest){
         ReviewDTOResponse reviewResponse = reviewService.save(reviewDTORequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReviewDTOResponse>> getAllReviews(
+            @RequestParam(required = false) UUID gameId,
+            @RequestParam(required = false) UUID clientId,
+            @RequestParam(required = false) Integer minRating,
+            @RequestParam(required = false) Integer maxRating,
+            @RequestParam(required = false) LocalDateTime minDate,
+            @RequestParam(required = false) LocalDateTime maxDate) {
+
+        List<ReviewDTOResponse> reviews = reviewService.getAllReviews(gameId, clientId, minRating, maxRating, minDate, maxDate);
+        return ResponseEntity.ok(reviews);
     }
 
     @GetMapping("/games/{gameId}")
