@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class SaleEntity{
     private ESaleStatus status;
 
     @Column(nullable = false)
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @ManyToOne
     @JoinColumn (name = "client_id")

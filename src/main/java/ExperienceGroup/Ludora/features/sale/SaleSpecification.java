@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.features.sale;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -33,13 +34,13 @@ public class SaleSpecification {
                 : cb.equal(root.get("status"), status);
     }
 
-    public static PredicateSpecification<SaleEntity> totalPriceGreaterThan(Double minPrice){
+    public static PredicateSpecification<SaleEntity> totalPriceGreaterThan(BigDecimal minPrice){
         return (root, cb) -> minPrice == null
                 ? cb.conjunction()
                 : cb.greaterThanOrEqualTo(root.get("totalPrice"), minPrice);
     }
 
-    public static PredicateSpecification<SaleEntity> totalPriceLessThan(Double maxPrice){
+    public static PredicateSpecification<SaleEntity> totalPriceLessThan(BigDecimal maxPrice){
         return (root, cb) -> maxPrice == null
                 ? cb.conjunction()
                 : cb.lessThanOrEqualTo(root.get("totalPrice"), maxPrice);
