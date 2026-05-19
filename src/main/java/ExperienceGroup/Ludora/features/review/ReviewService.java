@@ -5,18 +5,18 @@ import ExperienceGroup.Ludora.common.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
-import ExperienceGroup.Ludora.features.client.IClientService;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.game.IGameRepository;
-import ExperienceGroup.Ludora.features.game.IGameService;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +29,28 @@ public class ReviewService implements IReviewService {
 
     private final IGameRepository gameRepository;
     private final IClientRepository clientRepository;
+
+    @Override
+    public List<ReviewDTOResponse> getAllReviews(UUID gameId,
+                                                 UUID clientId,
+                                                 Integer minRating,
+                                                 Integer maxRating,
+                                                 LocalDateTime minDate,
+                                                 LocalDateTime maxDate) {
+
+        PredicateSpecification<ReviewEntity> spec = PredicateSpecification.allOf(
+                ReviewSpecification.gameEquals(gameId),
+                ReviewSpecification.clientEquals(clientId),
+                ReviewSpecification.ratingBetween(minRating, maxRating),
+                ReviewSpecification.dateBetween(minDate, maxDate)
+        );
+
+        List<ReviewEntity> reviews = reviewRepository.findAll(spec);
+
+        return reviews.stream()
+                .map(responseMapper::toDTO)
+                .toList();
+    }
 
     @Transactional
     @Override
