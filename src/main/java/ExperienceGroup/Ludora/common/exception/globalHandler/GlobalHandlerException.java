@@ -66,4 +66,11 @@ public class GlobalHandlerException {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(GenreExistsException.class)
+    public ResponseEntity<String> handlerGenreExistsException ( GenreExistsException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
 }
