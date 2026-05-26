@@ -22,13 +22,10 @@ public class GenreEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false , unique = true)
     private String name;
 
     @Column(nullable = false)
     private String description;
-
-    @ManyToMany(mappedBy = "genres")
-    private List<GameEntity> games;
 
 }
