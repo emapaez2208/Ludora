@@ -1,8 +1,8 @@
 package ExperienceGroup.Ludora.features.sale.domain;
 
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
-import ExperienceGroup.Ludora.features.sale.ESaleStatus;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
+import ExperienceGroup.Ludora.features.sale.ESaleStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class SaleEntity{
     private ESaleStatus status;
 
     @Column(nullable = false)
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @ManyToOne
     @JoinColumn (name = "client_id")
