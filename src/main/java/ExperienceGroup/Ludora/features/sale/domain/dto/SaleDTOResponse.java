@@ -14,7 +14,7 @@ public record SaleDTOResponse ( UUID externalId,
                                 LocalDateTime date,
                                 ESaleStatus status,
                                 BigDecimal totalPrice,
-                                ClientDTOResponse client,
-                                List<GameDTOResponse> games
+                                String userName,
+                                List<InfoGamesResponse> games
 ){
 }
