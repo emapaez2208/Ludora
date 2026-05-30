@@ -19,7 +19,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public class JwtService {
+public class JwtService implements IJwtService {
     @Value("${jwt.secret}")
     private String jwtSecretKey;
     @Value("${jwt.expiration}")
@@ -46,12 +46,12 @@ public class JwtService {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
-    private <T> T extractClaim(String token, Function<Claims, T>
+    public  <T> T extractClaim(String token, Function<Claims, T>
             claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
                 .verifyWith(getSignInKey())
@@ -66,7 +66,7 @@ public class JwtService {
                 && userDetails.isAccountNonLocked()
                 && userDetails.isEnabled();
     }
-    private String buildToken(
+    public String buildToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails,
             long expiration
@@ -80,12 +80,12 @@ public class JwtService {
                 .signWith(getSignInKey())
                 .compact();
     }
-    private SecretKey getSignInKey() {
+    public SecretKey getSignInKey() {
         byte[] keyBytes =
                 this.jwtSecretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         Date expiration = extractClaim(token, Claims::getExpiration);
         return expiration.before(new Date());
     }

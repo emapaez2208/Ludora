@@ -1,5 +1,8 @@
 package ExperienceGroup.Ludora.auth;
 
+import ExperienceGroup.Ludora.auth.dto.AuthRequest;
+import ExperienceGroup.Ludora.auth.dto.AuthResponse;
+import ExperienceGroup.Ludora.auth.dto.NewAccountRequest;
 import ExperienceGroup.Ludora.auth.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
