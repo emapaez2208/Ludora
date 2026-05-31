@@ -34,13 +34,13 @@ public class AuthController {
         return new AuthResponse(token);
     }
 
-    @PostMapping("/clients/register")
+    @PostMapping("/register/client")
     @ResponseStatus(HttpStatus.CREATED)
     public ClientDTOResponse registerClient(@Valid @RequestBody ClientDTORequest clientRequest){
         return clientService.save(clientRequest);
     }
 
-    @PostMapping("/developers/register")
+    @PostMapping("/register/developer")
     @ResponseStatus(HttpStatus.CREATED)
     public DeveloperDtoResponse registerDeveloper(@Valid @RequestBody DeveloperDtoRequest developerRequest) {
         return developerService.save(developerRequest);

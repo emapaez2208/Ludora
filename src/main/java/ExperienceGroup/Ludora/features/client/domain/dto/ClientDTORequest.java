@@ -36,8 +36,8 @@ public record ClientDTORequest (@Schema(description = "El nombre del usuario", e
                                 @Schema(description = "Numero de telefono",example = "123" , required = true)
                                 @Positive (message = "No puede ser un numero negativo")
                                 @NotNull
-                                @Max(value = 11, message = "El maximo de numeros permitidos es 11")
-                                @Min(value = 7, message = "El minimo de numeros permitidos es 7")
+                                @Min(value = 1000000L, message = "El teléfono debe tener al menos 7 dígitos")
+                                @Max(value = 99999999999L, message = "El teléfono no puede superar los 11 dígitos")
                                 Long phone ,
 
                                 @Schema(description = "Nombre de la calle", example = "Luro" , required = true)
@@ -48,7 +48,7 @@ public record ClientDTORequest (@Schema(description = "El nombre del usuario", e
                                 @Schema (description = "numero de la calle",example = "123",required = true)
                                 @Positive(message = "No puede ser numero negativo")
                                 @NotNull
-                                @Max(value = 5, message = "El maximo de numeros permitidos es 5")
+                                @Digits(integer = 5, fraction = 0, message = "El maximo de caracteres permitidos es 5")
                                 Integer numberStreet,
 
                                 @Schema(description = "Fecha de nacimiento, formato = YYYY-MM-DD", example = "2010-05-27", required = true)
