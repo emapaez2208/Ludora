@@ -7,8 +7,8 @@ public record ClientDTOResponse (UUID externalId,
                                  String name,
                                  String lastName,
                                  String userName,
-                                 int phone,
+                                 Long phone,
                                  String street,
-                                 int numberStreet,
+                                 Integer numberStreet,
                                  LocalDate birthDate)
 { }
