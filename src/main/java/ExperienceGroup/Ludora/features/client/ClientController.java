@@ -22,7 +22,6 @@ public class ClientController {
     @GetMapping
     ResponseEntity<List<ClientDTOResponse>> getAll(@RequestParam(required = false) String name,
                                                          @RequestParam(required = false) String lastName,
-                                                         @RequestParam(required = false) String userName,
                                                          @RequestParam(required = false) String email,
                                                          @RequestParam(required = false) Boolean statusBlocked,
                                                          @RequestParam(required = false) Integer phone,
@@ -33,7 +32,6 @@ public class ClientController {
         return ResponseEntity.ok(clientService.getAllClient(
                 name,
                 lastName,
-                userName,
                 email,
                 statusBlocked,
                 phone,

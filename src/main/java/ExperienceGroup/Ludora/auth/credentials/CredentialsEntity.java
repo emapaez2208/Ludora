@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.auth.credentials;
 
 import ExperienceGroup.Ludora.auth.permissions.RoleEntity;
+import ExperienceGroup.Ludora.common.utils.Password;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity

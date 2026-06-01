@@ -29,16 +29,9 @@ public abstract class UserEntity {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false, unique = true)
-    private String userName;
-
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "email_address", unique = true, nullable = false))
     private Email email;
-
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "password",nullable = false))
-    private Password password;
 
     @Column(nullable = false)
     private Boolean statusBlocked;

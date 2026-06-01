@@ -10,7 +10,6 @@ import java.util.UUID;
 public interface IClientService {
     List<ClientDTOResponse> getAllClient (String name,
                                           String lastName,
-                                          String userName,
                                           String email,
                                           Boolean statusBlocked,
                                           Integer phone,
