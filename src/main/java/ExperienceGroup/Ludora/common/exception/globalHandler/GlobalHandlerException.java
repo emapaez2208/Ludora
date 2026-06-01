@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
+import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.features.ageRange.exception.InvalidAgeRangeException;
@@ -85,10 +86,8 @@ public class GlobalHandlerException {
     }
 
     @ExceptionHandler(GenreExistsException.class)
-    public ResponseEntity<String> handlerGenreExistsException ( GenreExistsException ex){
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+    public ResponseEntity<ErrorResponseDTO> handlerGenreExistsException (GenreExistsException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
 }
