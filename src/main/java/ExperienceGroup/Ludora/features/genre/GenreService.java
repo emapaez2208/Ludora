@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.genre;
 
+import ExperienceGroup.Ludora.common.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import ExperienceGroup.Ludora.features.genre.domain.dto.GenreDTO;
@@ -42,8 +43,12 @@ public class GenreService  implements IGenreService{
     public GenreDTO save(GenreDTO genreDTO)
     {
         GenreEntity entity = mapper.toEntity(genreDTO);
-        GenreEntity entityGuardar = iGenreRepository.save(entity);
-       return mapper.toDTO(entityGuardar);
+        if(iGenreRepository.findByName(entity.getName()).isEmpty()) {
+
+            GenreEntity entityGuardar = iGenreRepository.save(entity);
+            return mapper.toDTO(entityGuardar);
+        }
+        throw new GenreExistsException("Genre already exists");
     }
 
     @Override

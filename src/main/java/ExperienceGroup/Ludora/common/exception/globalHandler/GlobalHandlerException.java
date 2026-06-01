@@ -84,4 +84,11 @@ public class GlobalHandlerException {
         return new ResponseEntity<>(error, status);
     }
 
+    @ExceptionHandler(GenreExistsException.class)
+    public ResponseEntity<String> handlerGenreExistsException ( GenreExistsException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
 }
