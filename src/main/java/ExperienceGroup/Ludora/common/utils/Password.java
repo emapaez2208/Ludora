@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.common.utils;
 
-import ExperienceGroup.Ludora.common.exception.IllegalPasswordException;
+import ExperienceGroup.Ludora.features.user.exception.IllegalPasswordException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;

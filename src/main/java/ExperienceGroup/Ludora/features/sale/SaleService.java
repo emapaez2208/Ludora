@@ -1,8 +1,8 @@
 package ExperienceGroup.Ludora.features.sale;
 
-import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
-import ExperienceGroup.Ludora.common.exception.SaleNotFoundException;
-import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
+import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;

@@ -1,7 +1,7 @@
 package ExperienceGroup.Ludora.features.ageRange;
 
-import ExperienceGroup.Ludora.common.exception.InvalidAgeRangeException;
-import ExperienceGroup.Ludora.common.exception.AgeRangeNotFoundException;
+import ExperienceGroup.Ludora.features.ageRange.exception.InvalidAgeRangeException;
+import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.ageRange.domain.dto.AgeRangeDTORequest;
