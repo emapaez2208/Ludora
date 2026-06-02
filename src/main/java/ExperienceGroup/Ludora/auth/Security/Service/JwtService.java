@@ -18,5 +18,5 @@ public class JwtService {
        return extractClaim(token, Claims::getSubject);
    }
 
-   
+
 }
