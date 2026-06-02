@@ -5,7 +5,7 @@ import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
-import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoRequest;

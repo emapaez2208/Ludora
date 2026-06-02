@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.common.utils;
 
-import ExperienceGroup.Ludora.common.exception.IllegalEmailException;
+import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;

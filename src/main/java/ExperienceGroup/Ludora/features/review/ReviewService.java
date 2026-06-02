@@ -1,8 +1,8 @@
 package ExperienceGroup.Ludora.features.review;
 
-import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
-import ExperienceGroup.Ludora.common.exception.ReviewNotFoundException;
-import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
+import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;

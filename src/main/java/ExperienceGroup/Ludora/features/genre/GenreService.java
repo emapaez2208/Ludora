@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.genre;
 
-import ExperienceGroup.Ludora.common.exception.GenreExistsException;
+import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import ExperienceGroup.Ludora.features.genre.domain.dto.GenreDTO;

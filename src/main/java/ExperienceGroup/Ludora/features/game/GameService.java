@@ -1,8 +1,8 @@
 package ExperienceGroup.Ludora.features.game;
 
-import ExperienceGroup.Ludora.common.exception.AgeRangeNotFoundException;
-import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
-import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
+import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
+import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.ageRange.IAgeRangeRepository;
 import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;
