@@ -7,7 +7,7 @@ public enum PermitsEnum {
     DELETE_USERS,
     SEE_MY_PROFILE,
     SEE_GAMES,
-    BUY_GAME,
+    BUY_GAMES,
     GAME_AGREE_CART,
     CREATE_GAMES,
     UPDATE_GAMES,
