@@ -22,6 +22,7 @@ public class DeveloperController {
     ResponseEntity<List<DeveloperDtoResponse>> getAll(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String userName,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) Boolean statusBlocked,
             @RequestParam(required = false) String company
@@ -30,6 +31,7 @@ public class DeveloperController {
         return ResponseEntity.ok(developerService.getAllDevelopers(
                         name,
                         lastName,
+                        userName,
                         email,
                         statusBlocked,
                         company
