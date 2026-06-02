@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.client;
 
 import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
 import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
+import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
@@ -10,7 +11,9 @@ import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
+import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
+import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -38,15 +41,18 @@ public class ClientService implements IClientService{
     @Override
     public List<ClientDTOResponse> getAllClient(String name,
                                                 String lastName,
+                                                String userName,
                                                 String email,
                                                 Boolean statusBlocked,
                                                 Integer phone,
                                                 String street,
                                                 Integer numberStreet,
                                                 LocalDate birthDate) {
+
         PredicateSpecification<ClientEntity> spec = PredicateSpecification.allOf(
                 ClientSpecification.nameContains(name),
                 ClientSpecification.lastNameContains(lastName),
+                ClientSpecification.userNameEquals(userName),
                 ClientSpecification.emailEquals(email),
                 ClientSpecification.statusBlockedEquals(statusBlocked),
                 ClientSpecification.phoneEquals(phone),
@@ -70,19 +76,20 @@ public class ClientService implements IClientService{
 
     @Override
     public ClientDTOResponse getByUserName(String userName) {
-        CredentialsEntity credentials = credentialsRepository.findByUsername(userName)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-        UserEntity user = credentials.getUser();
 
-        if(user instanceof ClientEntity){
-            return mapperResponse.toDTO((ClientEntity) user);
-        }
-        throw new UserNotFoundException("El usuario no corresponde a un cliente");
+        ClientEntity entity = repository.findByUserName(userName)
+                .orElseThrow(() -> new UserNotFoundException("Client not found"));
+
+        return mapperResponse.toDTO(entity);
     }
 
     @Override
     @Transactional
     public ClientDTOResponse save(ClientDTORequest clientDTORequest) {
+
+        if(repository.existsByEmail(clientDTORequest.email().value())){
+            throw new UserExistsWithEmailException("User exists with this email");
+        }
 
         ClientEntity saved = repository.save(mapperRequest.toEntity(clientDTORequest));
         cartService.crearCarrito(saved.getExternalId());
@@ -91,7 +98,7 @@ public class ClientService implements IClientService{
                 .enabled(true)
                 .username(clientDTORequest.userName())
                 .password(passwordEncoder.encode(clientDTORequest.password().value()))
-                .user(saved)  // <- esta bien ??
+                .user(saved)
                 .build();
 
         credentialsRepository.save(credentials);
@@ -104,18 +111,19 @@ public class ClientService implements IClientService{
         ClientEntity entityDelete = repository.findByExternalId(externalID).
                 orElseThrow(()->new UserNotFoundException ("Client not found"));
 
-        repository.delete(entityDelete);
+        CredentialsEntity credentials = searchCredentials(entityDelete.getUserName());
 
+        credentials.setEnabled(false);
+        credentialsRepository.save(credentials);
     }
 
     @Override
-    public ClientDTOResponse update(UUID id, ClientDTORequest dto) {
+    public ClientDTOResponse update(UUID id, ClientUpdateRequest dto) {
         ClientEntity clientEntity = repository.findByExternalId(id)
-                .orElseThrow(()-> new UserNotFoundException("CLien not found"));
+                .orElseThrow(()-> new UserNotFoundException("CLient not found"));
 
         clientEntity.setName(dto.name());
         clientEntity.setLastName(dto.lastName());
-        clientEntity.setEmail(dto.email());  // Habria que sacarlo y crear un endpoint especifico , para username y password igual
         clientEntity.setPhone(dto.phone());
         clientEntity.setStreet(dto.street());
         clientEntity.setNumberStreet(dto.numberStreet());
@@ -124,5 +132,10 @@ public class ClientService implements IClientService{
         repository.save(clientEntity);
 
         return mapperResponse.toDTO(clientEntity);
+    }
+
+    private CredentialsEntity searchCredentials(String username){
+        return credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new CredentialsNotFoundException("Credentials to user not found"));
     }
 }
