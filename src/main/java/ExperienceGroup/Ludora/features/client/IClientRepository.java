@@ -16,7 +16,7 @@ public interface IClientRepository extends JpaRepository<ClientEntity,Long>, Jpa
 
     Optional<ClientEntity> findByExternalId(UUID externalId);
 
-    Optional<ClientEntity> findByNameAndLastName(String name, String lastName);
+    Boolean existsByEmail(String email);
 
     Optional<ClientEntity> findByStatusBlocked(Boolean statusBlocked);
     
