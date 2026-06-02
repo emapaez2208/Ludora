@@ -85,14 +85,16 @@ public class ClientService implements IClientService{
     @Transactional
     public ClientDTOResponse save(ClientDTORequest clientDTORequest) {
 
-        if(repository.existsByEmail(clientDTORequest.email().value())){
+        if(repository.existsByEmail(clientDTORequest.email())){
             throw new UserExistsWithEmailException("User exists with this email");
         }
 
         ClientEntity saved = repository.save(mapperRequest.toEntity(clientDTORequest));
+
         cartService.crearCarrito(saved.getExternalId());
+
         CredentialsEntity credentials = CredentialsEntity.builder()
-                .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_CLIENT.toString()).orElseThrow(() -> new EntityNotFoundException("Role not found"))))
+                .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_CLIENT).orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
                 .username(clientDTORequest.userName())
                 .password(passwordEncoder.encode(clientDTORequest.password().value()))

@@ -74,13 +74,13 @@ public class DeveloperService implements IDeveloperService {
     @Transactional
     public DeveloperDtoResponse save(DeveloperDtoRequest developerDtoRequest) {
 
-        if(developerRepository.existsByEmail(developerDtoRequest.email().value())){
+        if(developerRepository.existsByEmail(developerDtoRequest.email())){
             throw new UserExistsWithEmailException("User exists with email register");
         }
 
         DeveloperEntity saved = developerRepository.save(requestMapper.toEntity(developerDtoRequest));
         CredentialsEntity credentials = CredentialsEntity.builder()
-                .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_DEVELOPER.toString())
+                .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_DEVELOPER)
                         .orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
                 .username(developerDtoRequest.userName())

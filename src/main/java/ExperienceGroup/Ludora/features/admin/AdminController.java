@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.admin;
 
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
+import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class AdminController {
 
     @PutMapping("/{id}")
     ResponseEntity<AdminDTOResponse> update(@PathVariable UUID id,
-                                            @Valid @RequestBody AdminDTORequest adminDTORequest){
+                                            @Valid @RequestBody AdminUpdateRequest adminDTORequest){
 
         return ResponseEntity.ok(adminService.update(id, adminDTORequest));
     }

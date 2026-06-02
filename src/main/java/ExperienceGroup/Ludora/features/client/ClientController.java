@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.features.client;
 
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
+import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ClientDTOResponse> update (@PathVariable UUID id , @Valid @RequestBody ClientDTORequest dtoRequest){
+    ResponseEntity<ClientDTOResponse> update (@PathVariable UUID id , @Valid @RequestBody ClientUpdateRequest dtoRequest){
         return ResponseEntity.ok(clientService.update(id,dtoRequest));
     }
 
