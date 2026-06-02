@@ -41,7 +41,7 @@ public class JwtService {
    }
 
    public List<GrantedAuthority> extractAutorities (String token) {
-       Claims claims = extractAllClaims ( token);
+       Claims claims = extractAllClaim(token);
        List<?> rawRoles = claims.get("roles",List.class);
        if(rawRoles == null){
            return Collections.emptyList();
@@ -58,12 +58,12 @@ public class JwtService {
        return  claimsResolver.apply(claims);
    }
 
-   private Claims extractAllClaims(String token) {
+   private Claims extractAllClaim(String token) {
        return Jwts
                .parser()
                .verifyWith(getSignInKey())
                .build()
-               .perseSignedClaim(token)
+               .parseSignedClaims(token)
                .getPayload();
    }
 
