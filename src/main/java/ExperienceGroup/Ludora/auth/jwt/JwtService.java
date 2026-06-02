@@ -3,7 +3,7 @@ package ExperienceGroup.Ludora.auth.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,13 +20,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
+
     @Value("${jwt.secret}")
     private String jwtSecretKey;
+
     @Value("${jwt.expiration}")
     private Long jwtExpiration;
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         List<String> roles = userDetails.getAuthorities().stream()
@@ -35,6 +39,7 @@ public class JwtService {
         claims.put("roles", roles);
         return buildToken(claims, userDetails, jwtExpiration);
     }
+
     public List<GrantedAuthority> extractAuthorities(String token) {
         Claims claims = extractAllClaims(token);
         List<?> rawRoles = claims.get("roles", List.class);
@@ -46,11 +51,13 @@ public class JwtService {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
     private <T> T extractClaim(String token, Function<Claims, T>
             claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
@@ -59,6 +66,7 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
+
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()))
@@ -66,6 +74,7 @@ public class JwtService {
                 && userDetails.isAccountNonLocked()
                 && userDetails.isEnabled();
     }
+
     private String buildToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails,
@@ -80,6 +89,7 @@ public class JwtService {
                 .signWith(getSignInKey())
                 .compact();
     }
+
     private SecretKey getSignInKey() {
         byte[] keyBytes =
                 this.jwtSecretKey.getBytes(StandardCharsets.UTF_8);

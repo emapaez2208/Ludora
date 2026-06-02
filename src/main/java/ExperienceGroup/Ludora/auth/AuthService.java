@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.auth;
 
-import com.eduardomango.pricetracker.auth.credentials.CredentialsRepository;
+
+import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
 import ExperienceGroup.Ludora.auth.dto.AuthRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,8 +23,8 @@ public class AuthService {
                         input.password()
                 )
         );
-        return credentialsRepository.findByUsername(input.username()).orElseThrow(
-                () -> new UsernameNotFoundException("Usuario no encontrado")
+        return credentialsRepository.findByUsername(input.username())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found")
         );
     }
 
