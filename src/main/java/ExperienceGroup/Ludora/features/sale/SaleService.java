@@ -4,6 +4,9 @@ import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.common.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
+import ExperienceGroup.Ludora.features.cart.ICartRepository;
+import ExperienceGroup.Ludora.features.cart.ICartService;
+import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.game.IGameRepository;
@@ -11,12 +14,14 @@ import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,27 +34,29 @@ public class SaleService  implements ISaleService{
 
     private final IClientRepository clientRepository;
     private final IGameRepository gameRepository;
+    private final ICartRepository iCartRepository;
+    private final ICartService cartService;
 
     @Override
+    @Transactional
     public SaleDTOResponse create(SaleDTORequest saleDTORequest) {
         ClientEntity client = clientRepository.findByExternalId(saleDTORequest.clientExternalId())
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
-        List<GameEntity> games = saleDTORequest.gameExternalId().stream()
-                .map(gameUuid -> gameRepository.findByExternalId(gameUuid)
-                        .orElseThrow(() -> new GameNotFoundException("Game not found")))
-                .toList();
+        CartEntity cart = client.getCart();
+        if (cart.getGames().isEmpty()) {
+            throw new CartNotFoundException("Empty cart");
+        }
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
 
         saleEntity.setClient(client);
-        saleEntity.setGames(games);
+        saleEntity.setGames(new ArrayList<>(cart.getGames()));
 
-        BigDecimal precio = games.stream()
-                .map(GameEntity::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        saleEntity.setTotalPrice(BigDecimal.valueOf(cart.getTotalPrice()));
 
-        saleEntity.setTotalPrice(precio);
+        cartService.clearCart(client.getExternalId());
+
         return responseMapper.toDTO(saleRepository.save(saleEntity));
     }
 
