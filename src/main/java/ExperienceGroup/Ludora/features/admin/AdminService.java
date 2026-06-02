@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.features.admin;
 
-import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;

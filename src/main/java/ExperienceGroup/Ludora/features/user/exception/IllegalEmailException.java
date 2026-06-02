@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.common.exception;
+package ExperienceGroup.Ludora.features.user.exception;
 
 public class IllegalEmailException extends IllegalArgumentException{
     public IllegalEmailException() {

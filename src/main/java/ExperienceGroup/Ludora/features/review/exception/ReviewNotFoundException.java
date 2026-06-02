@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.common.exception;
+package ExperienceGroup.Ludora.features.review.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 

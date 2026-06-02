@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.common.exception;
+package ExperienceGroup.Ludora.features.ageRange.exception;
 
 public class InvalidAgeRangeException extends RuntimeException {
     public InvalidAgeRangeException(String message) {super(message);}
