@@ -14,6 +14,7 @@ import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -53,6 +54,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('CREATE_REVIEW')")
     @Override
     public ReviewDTOResponse save(ReviewDTORequest reviewDTORequest) {
         GameEntity game = gameRepository.findByExternalId(reviewDTORequest.gameExternalId())
@@ -82,6 +84,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') or #clientId == authentication.principal.externalId")
     public List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId) {
         ClientEntity client = clientRepository.findByExternalId(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
@@ -93,6 +96,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') or #clientId == authentication.principal.externalId")
     public List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId) {
         GameEntity game = gameRepository.findByExternalId(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found"));
@@ -107,6 +111,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('DELETE_REVIEW')")
     public void delete(UUID reviewID) {
         ReviewEntity review = reviewRepository.findByExternalId(reviewID)
                 .orElseThrow(() -> new ReviewNotFoundException("Review not found"));

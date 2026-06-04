@@ -47,7 +47,7 @@ public class DatabaseInitializerConfig {
             PermitEntity createReview = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.CREATE_REVIEW).build());
             PermitEntity updateReview = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.UPDATE_REVIEW).build());
             PermitEntity deleteReview = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.DELETE_REVIEW).build());
-
+            PermitEntity crudAgeRange = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.CRUD_AGERANGE).build());
 
 
             // 3. Crear y guardar Roles asignando los permisos correspondientes
@@ -70,6 +70,7 @@ public class DatabaseInitializerConfig {
             roleAdmin.getPermits().add(seeGames);
             roleAdmin.getPermits().add(deleteGames);
             roleAdmin.getPermits().add(deleteReview);
+            roleAdmin.getPermits().add(crudAgeRange);
             roleRepository.save(roleAdmin);
 
             RoleEntity roleDeveloper = new RoleEntity(RolesEnum.ROLE_DEVELOPER);

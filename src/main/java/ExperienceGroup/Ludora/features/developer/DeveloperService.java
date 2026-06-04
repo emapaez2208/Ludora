@@ -18,6 +18,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,7 @@ public class DeveloperService implements IDeveloperService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @PreAuthorize("hasAuthority('SEE_USERS')")
     public List<DeveloperDtoResponse> getAllDevelopers(String name,
                                                        String lastName,
                                                        String userName,
@@ -60,6 +62,7 @@ public class DeveloperService implements IDeveloperService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SEE_USERS') or #externalId == authentication.principal.externalId")
     public DeveloperDtoResponse getByExternalId(UUID externalId) {
 
         return developerRepository.findByExternalId(externalId).stream()
@@ -84,6 +87,7 @@ public class DeveloperService implements IDeveloperService {
                         .orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
                 .username(developerDtoRequest.userName())
+                .externalId(saved.getExternalId())
                 .password(passwordEncoder.encode(developerDtoRequest.password().value()))
                 .user(saved)
                 .build();
@@ -94,6 +98,7 @@ public class DeveloperService implements IDeveloperService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('UPDATE_USERS') or #externalId == authentication.principal.externalId")
     public DeveloperDtoResponse update(UUID externalId,
                                        DeveloperUpdateRequest request) {
 
@@ -111,6 +116,7 @@ public class DeveloperService implements IDeveloperService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SEE_USERS') or #externalId == authentication.principal.externalId")
     public List<GameDTOResponse> getGamesByDeveloper(UUID externalId) {
 
         DeveloperEntity entity = developerRepository.findByExternalId(externalId)
@@ -123,6 +129,7 @@ public class DeveloperService implements IDeveloperService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('DELETE_USERS') or #externalId == authentication.principal.externalId")
     public void delete(UUID externalId) {
 
         DeveloperEntity toBeDeleted = developerRepository.findByExternalId(externalId)

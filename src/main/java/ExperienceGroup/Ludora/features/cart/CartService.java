@@ -9,6 +9,7 @@ import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class CartService implements ICartService {
 /// Logica
  ///--------------------------------------------------------------------------------------------------///
     @Override
+    @PreAuthorize("hasRole('ADMIN') or #clientExternalId == authentication.principal.externalId")
     public CartDTOResponse getCartByClient(UUID clientExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado para el cliente: " + clientExternalId));
@@ -34,9 +36,10 @@ public class CartService implements ICartService {
         return cartResponseMapper.toDTO(cart);
     }
 
-    /// agrego juego al karrito
+    /// agrego juego al carrito
 
     @Override
+    @PreAuthorize("#clientExternalId == authentication.principal.externalId")
     public CartDTOResponse addGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId)) ;
@@ -62,6 +65,7 @@ public class CartService implements ICartService {
     /// quito 1 juego del carrito
 
     @Override
+    @PreAuthorize("#clientExternalId == authentication.principal.externalId")
     public CartDTOResponse removeGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId));
@@ -83,6 +87,7 @@ public class CartService implements ICartService {
 
 
     @Override
+    @PreAuthorize("#clientExternalId == authentication.principal.externalId or hasRole('ADMIN')")
     public void clearCart(UUID clientExternalId) {   /// este sirve para despues de la ventaa
 
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
@@ -100,8 +105,8 @@ public class CartService implements ICartService {
     ///  se le setean los atributos
     ///  1% logica 99% FE
 
-
-   public CartDTOResponse crearCarrito(UUID clientExternalId) {
+    @PreAuthorize("#clientExternalId == authentication.principal.externalId or hasRole('ADMIN')")
+    public CartDTOResponse crearCarrito(UUID clientExternalId) {
         ClientEntity client = clientRepository.findByExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado con id: " + clientExternalId));
 

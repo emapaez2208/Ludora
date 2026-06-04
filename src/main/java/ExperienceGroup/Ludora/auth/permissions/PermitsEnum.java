@@ -14,5 +14,6 @@ public enum PermitsEnum {
     DELETE_GAMES,
     CREATE_REVIEW,
     UPDATE_REVIEW,
-    DELETE_REVIEW
+    DELETE_REVIEW,
+    CRUD_AGERANGE
 }

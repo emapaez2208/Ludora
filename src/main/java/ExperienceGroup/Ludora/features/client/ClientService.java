@@ -17,6 +17,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class ClientService implements IClientService{
 
 
     @Override
+    @PreAuthorize("hasAuthority('SEE_USERS')")
     public List<ClientDTOResponse> getAllClient(String name,
                                                 String lastName,
                                                 String userName,
@@ -65,6 +67,7 @@ public class ClientService implements IClientService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SEE_USERS') or #externalID == authentication.principal.externalId")
     public ClientDTOResponse getByExternalID(UUID externalID) {
         return repository.findByExternalId(externalID).stream()
                 .map(mapperResponse::toDTO)
@@ -73,6 +76,7 @@ public class ClientService implements IClientService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SEE_USERS')")
     public ClientDTOResponse getByUserName(String userName) {
 
         ClientEntity entity = repository.findByUserName(userName)
@@ -97,6 +101,7 @@ public class ClientService implements IClientService{
                 .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_CLIENT).orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
                 .username(clientDTORequest.userName())
+                .externalId(saved.getExternalId())
                 .password(passwordEncoder.encode(clientDTORequest.password().value()))
                 .user(saved)
                 .build();
@@ -107,6 +112,7 @@ public class ClientService implements IClientService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority('DELETE_USERS') or #externalID == authentication.principal.externalId")
     public void delete(UUID externalID) {
         ClientEntity entityDelete = repository.findByExternalId(externalID).
                 orElseThrow(()->new UserNotFoundException ("Client not found"));
@@ -118,6 +124,7 @@ public class ClientService implements IClientService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority('UPDATE_USERS') or #id == authentication.principal.externalId")
     public ClientDTOResponse update(UUID id, ClientUpdateRequest dto) {
         ClientEntity clientEntity = repository.findByExternalId(id)
                 .orElseThrow(()-> new UserNotFoundException("CLient not found"));
