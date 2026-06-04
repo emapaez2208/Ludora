@@ -65,5 +65,11 @@ public class GlobalHandlerException {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
+    @ExceptionHandler(CartEmptyException.class)
+    public ResponseEntity<String> handlerCartEmpty(CartEmptyException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
 
 }

@@ -1,16 +1,13 @@
 package ExperienceGroup.Ludora.features.sale;
 
-import ExperienceGroup.Ludora.common.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.common.exception.CartEmptyException;
 import ExperienceGroup.Ludora.common.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
-import ExperienceGroup.Ludora.features.cart.ICartRepository;
 import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
-import ExperienceGroup.Ludora.features.game.IGameRepository;
-import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
@@ -33,8 +30,6 @@ public class SaleService  implements ISaleService{
     private final IMapper<SaleEntity, SaleDTORequest> requestMapper;
 
     private final IClientRepository clientRepository;
-    private final IGameRepository gameRepository;
-    private final ICartRepository iCartRepository;
     private final ICartService cartService;
 
     @Override
@@ -45,7 +40,7 @@ public class SaleService  implements ISaleService{
 
         CartEntity cart = client.getCart();
         if (cart.getGames().isEmpty()) {
-            throw new CartNotFoundException("Empty cart");
+            throw new CartEmptyException("Empty cart");
         }
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
@@ -55,9 +50,11 @@ public class SaleService  implements ISaleService{
 
         saleEntity.setTotalPrice(BigDecimal.valueOf(cart.getTotalPrice()));
 
+        SaleEntity saved = saleRepository.save(saleEntity);
+
         cartService.clearCart(client.getExternalId());
 
-        return responseMapper.toDTO(saleRepository.save(saleEntity));
+        return responseMapper.toDTO(saved);
     }
 
     @Override
