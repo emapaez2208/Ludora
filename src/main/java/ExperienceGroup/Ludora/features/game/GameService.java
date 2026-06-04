@@ -74,7 +74,8 @@ public class GameService implements IGameService{
     }
 
     @Override
-    @PreAuthorize("hasAuthority('CREATE_GAMES')")
+    @PreAuthorize("hasAuthority('CREATE_GAMES') and " +
+                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId")
     @Transactional
     public GameDTOResponse save(GameDTORequest gameDTORequest) {
 
@@ -102,7 +103,8 @@ public class GameService implements IGameService{
     }
 
     @Override
-    @PreAuthorize("hasAuthority('UPDATE_GAMES')")
+    @PreAuthorize("hasAuthority('UPDATE_GAMES') and " +
+                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId\"")
     @Transactional
     public GameDTOResponse update(UUID externalId, GameDTORequest gameDTORequest) {
         GameEntity existingGame = gameRepository.findByExternalId(externalId)

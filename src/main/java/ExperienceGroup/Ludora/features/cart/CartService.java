@@ -39,7 +39,7 @@ public class CartService implements ICartService {
     /// agrego juego al carrito
 
     @Override
-    @PreAuthorize("#clientExternalId == authentication.principal.externalId")
+    @PreAuthorize("#clientExternalId == authentication.principal.externalId and hasAuthority('GAME_AGREE_CART')")
     public CartDTOResponse addGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId)) ;
@@ -65,7 +65,7 @@ public class CartService implements ICartService {
     /// quito 1 juego del carrito
 
     @Override
-    @PreAuthorize("#clientExternalId == authentication.principal.externalId")
+    @PreAuthorize("#clientExternalId == authentication.principal.externalId or hasRole('ADMIN')")
     public CartDTOResponse removeGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId));
