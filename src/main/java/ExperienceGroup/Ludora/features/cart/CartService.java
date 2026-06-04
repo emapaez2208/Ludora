@@ -105,7 +105,7 @@ public class CartService implements ICartService {
     ///  se le setean los atributos
     ///  1% logica 99% FE
 
-    @PreAuthorize("#clientExternalId == authentication.principal.externalId or hasRole('ADMIN')")
+    //@PreAuthorize("#clientExternalId == authentication.principal.externalId or hasRole('ADMIN')")
     public CartDTOResponse crearCarrito(UUID clientExternalId) {
         ClientEntity client = clientRepository.findByExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado con id: " + clientExternalId));
