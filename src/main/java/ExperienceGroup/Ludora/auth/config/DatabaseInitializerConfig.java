@@ -70,7 +70,7 @@ public class DatabaseInitializerConfig {
             RoleEntity roleDeveloper = new RoleEntity(RolesEnum.ROLE_DEVELOPER);
             roleDeveloper.getPermits().add(createGames);
             roleDeveloper.getPermits().add(updateGames);
-
+            roleRepository.save(roleDeveloper);
 
             String passwordPlano = "password123";
             String passwordEncriptada = passwordEncoder.encode(passwordPlano); // <-- ACÁ SUCEDE LA MAGIA
