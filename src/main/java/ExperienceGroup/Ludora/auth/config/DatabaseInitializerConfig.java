@@ -88,6 +88,7 @@ public class DatabaseInitializerConfig {
 
             CredentialsEntity adminCreds = new CredentialsEntity();
             adminCreds.setUsername("admin123");
+            adminCreds.setExternalId(adminUser.getExternalId());
             adminCreds.setPassword(passwordEncriptada); // Guardamos el hash generado en vivo
             adminCreds.setEnabled(true);
             adminCreds.getRoles().add(roleAdmin);
