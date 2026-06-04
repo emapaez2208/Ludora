@@ -4,7 +4,6 @@ import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Past;
 import lombok.*;
 
@@ -19,8 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ClientEntity extends UserEntity {
 
-    @Column(nullable = false )
-    private Integer phone;
+    @Column(nullable = false)
+    private Long phone;
 
    @Column(nullable = false , length = 20)
     private String street;

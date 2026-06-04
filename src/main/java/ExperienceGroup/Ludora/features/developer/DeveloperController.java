@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.developer;
 
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoRequest;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoResponse;
+import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperUpdateRequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -58,7 +59,7 @@ public class DeveloperController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<DeveloperDtoResponse> update(@PathVariable UUID id,@Valid @RequestBody DeveloperDtoRequest developerDtoRequest){
+    ResponseEntity<DeveloperDtoResponse> update(@PathVariable UUID id,@Valid @RequestBody DeveloperUpdateRequest developerDtoRequest){
 
         return ResponseEntity.ok(
                 developerService.update(id, developerDtoRequest)

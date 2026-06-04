@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.developer;
 
+import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,5 @@ public interface IDeveloperRepository extends JpaRepository<DeveloperEntity, Lon
 
     Optional<DeveloperEntity> findBycompany(String company);
 
+    Boolean existsByEmail(Email email);
 }
