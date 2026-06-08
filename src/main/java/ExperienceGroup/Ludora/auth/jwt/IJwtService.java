@@ -7,10 +7,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.crypto.SecretKey;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 public interface IJwtService {
     String extractUsername(String token);
+
+    UUID extractExternalId(String token);
 
     String generateToken(UserDetails userDetails);
 

@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.auth.filters;
 
+import ExperienceGroup.Ludora.auth.dto.AuthUser;
 import ExperienceGroup.Ludora.auth.jwt.IJwtService;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -39,13 +41,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt = authHeader.substring(7);
         try{
             final String username = jwtService.extractUsername(jwt);
+            final UUID externalId = jwtService.extractExternalId(jwt);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            AuthUser user = new AuthUser(externalId, username);
 
             if(username != null && authentication == null){
                 List<GrantedAuthority> authorities = jwtService.extractAuthorities(jwt);
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
-                                username, null, authorities);
+                                user, null, authorities);
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
