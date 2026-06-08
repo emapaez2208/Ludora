@@ -16,4 +16,6 @@ public interface IDeveloperRepository extends JpaRepository<DeveloperEntity, Lon
     Optional<DeveloperEntity> findBycompany(String company);
 
     Boolean existsByEmail(Email email);
+
+    Boolean existsByUserName(String userName);
 }

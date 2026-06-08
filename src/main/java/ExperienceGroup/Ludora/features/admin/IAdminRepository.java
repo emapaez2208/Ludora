@@ -13,4 +13,6 @@ public interface IAdminRepository extends JpaRepository<AdminEntity, Long>, JpaS
     Optional<AdminEntity> findByExternalId(UUID externalId);
 
     Boolean existsByEmail(Email email);
+
+    Boolean existsByUserName(String userName);
 }
