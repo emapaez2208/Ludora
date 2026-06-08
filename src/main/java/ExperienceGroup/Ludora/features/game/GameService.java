@@ -16,6 +16,7 @@ import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +74,8 @@ public class GameService implements IGameService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority('CREATE_GAMES') and " +
+                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId")
     @Transactional
     public GameDTOResponse save(GameDTORequest gameDTORequest) {
 
@@ -100,6 +103,8 @@ public class GameService implements IGameService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority('UPDATE_GAMES') and " +
+                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId\"")
     @Transactional
     public GameDTOResponse update(UUID externalId, GameDTORequest gameDTORequest) {
         GameEntity existingGame = gameRepository.findByExternalId(externalId)
@@ -134,6 +139,7 @@ public class GameService implements IGameService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority(DELETE_GAMES')")
     @Transactional
     public void delete(UUID externalId) {
         GameEntity toBeDeleted = gameRepository.findByExternalId(externalId)

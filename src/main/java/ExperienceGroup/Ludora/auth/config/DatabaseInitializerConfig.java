@@ -37,8 +37,6 @@ public class DatabaseInitializerConfig {
             PermitEntity createUsers = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.CREATE_USERS).build());
             PermitEntity updateUsers = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.UPDATE_USERS).build());
             PermitEntity deleteUsers = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.DELETE_USERS).build());
-            PermitEntity seeMyProfile = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.SEE_MY_PROFILE).build());
-            PermitEntity seeGames = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.SEE_GAMES).build());
             PermitEntity buyGames = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.BUY_GAMES).build());
             PermitEntity gameAgreeCart = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.GAME_AGREE_CART).build());
             PermitEntity createGames = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.CREATE_GAMES).build());
@@ -47,13 +45,11 @@ public class DatabaseInitializerConfig {
             PermitEntity createReview = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.CREATE_REVIEW).build());
             PermitEntity updateReview = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.UPDATE_REVIEW).build());
             PermitEntity deleteReview = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.DELETE_REVIEW).build());
-
+            PermitEntity crudAgeRange = permitRepository.save(PermitEntity.builder().permits(PermitsEnum.CRUD_AGERANGE).build());
 
 
             // 3. Crear y guardar Roles asignando los permisos correspondientes
             RoleEntity roleClient = new RoleEntity(RolesEnum.ROLE_CLIENT);
-            roleClient.getPermits().add(seeMyProfile);
-            roleClient.getPermits().add(seeGames);
             roleClient.getPermits().add(buyGames);
             roleClient.getPermits().add(gameAgreeCart);
             roleClient.getPermits().add(createReview);
@@ -66,19 +62,15 @@ public class DatabaseInitializerConfig {
             roleAdmin.getPermits().add(createUsers);
             roleAdmin.getPermits().add(updateUsers);
             roleAdmin.getPermits().add(deleteUsers);
-            roleAdmin.getPermits().add(seeMyProfile);
-            roleAdmin.getPermits().add(seeGames);
             roleAdmin.getPermits().add(deleteGames);
             roleAdmin.getPermits().add(deleteReview);
+            roleAdmin.getPermits().add(crudAgeRange);
             roleRepository.save(roleAdmin);
 
             RoleEntity roleDeveloper = new RoleEntity(RolesEnum.ROLE_DEVELOPER);
-            roleDeveloper.getPermits().add(seeMyProfile);
-            roleDeveloper.getPermits().add(seeGames);
             roleDeveloper.getPermits().add(createGames);
             roleDeveloper.getPermits().add(updateGames);
-            roleDeveloper.getPermits().add(deleteGames);
-
+            roleRepository.save(roleDeveloper);
 
             String passwordPlano = "password123";
             String passwordEncriptada = passwordEncoder.encode(passwordPlano); // <-- ACÁ SUCEDE LA MAGIA
@@ -96,6 +88,7 @@ public class DatabaseInitializerConfig {
 
             CredentialsEntity adminCreds = new CredentialsEntity();
             adminCreds.setUsername("admin123");
+            adminCreds.setExternalId(adminUser.getExternalId());
             adminCreds.setPassword(passwordEncriptada); // Guardamos el hash generado en vivo
             adminCreds.setEnabled(true);
             adminCreds.getRoles().add(roleAdmin);

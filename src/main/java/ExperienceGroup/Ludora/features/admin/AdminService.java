@@ -82,6 +82,7 @@ public class AdminService implements IAdminService{
                 .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_ADMIN).orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
                 .username(adminDTO.userName())
+                .externalId(entity.getExternalId())
                 .password(passwordEncoder.encode(adminDTO.password().value()))
                 .user(entity)
                 .build();
@@ -92,7 +93,7 @@ public class AdminService implements IAdminService{
     }
 
     @Override
-    @PreAuthorize("#id == authentication.principal.id")
+    @PreAuthorize("#externalId == authentication.principal.externalId or hasRole('ADMIN')")
     public AdminDTOResponse update(UUID externalId, AdminUpdateRequest adminDTO) {
         AdminEntity entity = adminRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
@@ -107,7 +108,7 @@ public class AdminService implements IAdminService{
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    @PreAuthorize("hasRole('ADMIN') or #externalId == authentication.principal.externalId")
     public void delete(UUID externalId) {
         AdminEntity toBeDeleted = adminRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
