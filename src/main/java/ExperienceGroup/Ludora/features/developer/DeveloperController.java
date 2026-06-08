@@ -50,6 +50,11 @@ public class DeveloperController {
         );
     }
 
+    @GetMapping("/perfil")
+    ResponseEntity<DeveloperDtoResponse> getMyPerfil(){
+        return ResponseEntity.ok(developerService.getMyPerfil());
+    }
+
     @PostMapping
     ResponseEntity<DeveloperDtoResponse> create(@Valid @RequestBody DeveloperDtoRequest developerDtoRequest){
 

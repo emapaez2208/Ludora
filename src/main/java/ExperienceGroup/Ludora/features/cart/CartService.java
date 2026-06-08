@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.cart;
 
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTOResponse;
 import ExperienceGroup.Ludora.features.cart.domain.mapper.ICartResponseMapper;
@@ -9,6 +10,7 @@ import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +18,14 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CartService implements ICartService {
 
     private final ICartRepository cartRepository;
     private final IGameRepository gameRepository;
     private final ICartResponseMapper cartResponseMapper;
     private final IClientRepository clientRepository;
+    private final AuthenticatedUserProvider authenticatedUser;
 
 ///-----------------------------------------------------------------------------------------///
 /// Logica
@@ -34,6 +37,11 @@ public class CartService implements ICartService {
                 .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado para el cliente: " + clientExternalId));
         ;
         return cartResponseMapper.toDTO(cart);
+    }
+
+    @Override
+    public CartDTOResponse getMyCart(){
+        return getCartByClient(authenticatedUser.getCurrentUser().externalId());
     }
 
     /// agrego juego al carrito

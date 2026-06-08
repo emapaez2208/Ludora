@@ -44,6 +44,11 @@ public class ClientController {
         );
     }
 
+    @GetMapping("/perfil")
+    ResponseEntity<ClientDTOResponse> getMyPerfil(){
+        return ResponseEntity.ok(clientService.getMyPerfil());
+    }
+
    @GetMapping("/{id}")
     ResponseEntity<ClientDTOResponse> getById (@PathVariable UUID id ){
         return ResponseEntity.ok(clientService.getByExternalID(id));

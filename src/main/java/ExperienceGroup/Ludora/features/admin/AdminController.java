@@ -33,6 +33,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getByExternalId(id));
     }
 
+    @GetMapping("/perfil")
+    ResponseEntity<AdminDTOResponse> getMyPerfil(){
+        return ResponseEntity.ok(adminService.getMyPerfil());
+    }
+
     @PostMapping
     ResponseEntity<AdminDTOResponse> create(@Valid @RequestBody AdminDTORequest adminDTORequest){
         return ResponseEntity.ok(adminService.save(adminDTORequest));

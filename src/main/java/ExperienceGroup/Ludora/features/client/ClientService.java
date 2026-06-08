@@ -5,6 +5,7 @@ import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.cart.ICartService;
@@ -35,6 +36,7 @@ public class ClientService implements IClientService{
     private final CredentialsRepository credentialsRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticatedUserProvider authenticatedUser;
 
 
     @Override
@@ -83,6 +85,11 @@ public class ClientService implements IClientService{
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
         return mapperResponse.toDTO(entity);
+    }
+
+    @Override
+    public ClientDTOResponse getMyPerfil(){
+        return getByExternalID(authenticatedUser.getCurrentUser().externalId());
     }
 
     @Override
