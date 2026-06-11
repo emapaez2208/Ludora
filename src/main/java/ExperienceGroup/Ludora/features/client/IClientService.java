@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.client;
 
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
+import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,9 +24,11 @@ public interface IClientService {
 
     ClientDTOResponse getByUserName (String userName);
 
+    ClientDTOResponse getMyPerfil();
+
     ClientDTOResponse save (ClientDTORequest clientDTORequest);
 
-    ClientDTOResponse update (UUID id , ClientDTORequest clientDTORequest);
+    ClientDTOResponse update (UUID id , ClientUpdateRequest request);
 
     void delete (UUID externalID);
 }

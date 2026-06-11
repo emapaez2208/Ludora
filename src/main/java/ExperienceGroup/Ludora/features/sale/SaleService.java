@@ -14,6 +14,9 @@ import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,6 +37,7 @@ public class SaleService  implements ISaleService{
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('BUY_GAMES') and #saleDTORequest.clientExternalId() == authentication.principal.externalId")
     public SaleDTOResponse create(SaleDTORequest saleDTORequest) {
         ClientEntity client = clientRepository.findByExternalId(saleDTORequest.clientExternalId())
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
@@ -59,6 +63,7 @@ public class SaleService  implements ISaleService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public SaleDTOResponse getByExternalId(UUID externalId) {
         return saleRepository.findByExternalId(externalId)
                 .map(responseMapper::toDTO)
@@ -66,6 +71,7 @@ public class SaleService  implements ISaleService{
     }
 
     @Override
+    @PreAuthorize("#clientExternalId == authentication.principal.externalId")
     public List<SaleDTOResponse> getSalesByClient(UUID clientExternalId) {
         ClientEntity client = clientRepository.findByExternalId(clientExternalId)
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
@@ -76,6 +82,7 @@ public class SaleService  implements ISaleService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public List<SaleDTOResponse> getAllSales(UUID externalId,
                                              LocalDateTime minDate,
                                              LocalDateTime maxDate,

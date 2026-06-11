@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.admin;
 
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
+import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,9 +18,11 @@ public interface IAdminService {
 
     AdminDTOResponse getByExternalId(UUID externalId);
 
+    AdminDTOResponse getMyPerfil();
+
     AdminDTOResponse save(AdminDTORequest adminDTO);
 
-    AdminDTOResponse update(UUID externalId, AdminDTORequest adminDTO);
+    AdminDTOResponse update(UUID externalId, AdminUpdateRequest adminDTO);
 
     void delete(UUID externalId);
 }

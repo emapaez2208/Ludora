@@ -36,10 +36,6 @@ public abstract class UserEntity {
     @AttributeOverride(name = "value", column = @Column(name = "email_address", unique = true, nullable = false))
     private Email email;
 
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "password",nullable = false))
-    private Password password;
-
     @Column(nullable = false)
     private Boolean statusBlocked;
 

@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.client;
 
+import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,9 @@ public interface IClientRepository extends JpaRepository<ClientEntity,Long>, Jpa
 
     Optional<ClientEntity> findByExternalId(UUID externalId);
 
-    Optional<ClientEntity> findByNameAndLastName(String name, String lastName);
+    Boolean existsByEmail(Email email);
+
+    Boolean existsByUserName(String userName);
 
     Optional<ClientEntity> findByStatusBlocked(Boolean statusBlocked);
     

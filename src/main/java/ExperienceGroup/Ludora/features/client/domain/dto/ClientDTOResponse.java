@@ -6,9 +6,9 @@ import java.util.UUID;
 public record ClientDTOResponse (UUID externalId,
                                  String name,
                                  String lastName,
-                                 String userName,
-                                 int phone,
+                                 Long phone,
                                  String street,
-                                 int numberStreet,
-                                 LocalDate birthDate)
+                                 Integer numberStreet,
+                                 LocalDate birthDate,
+                                 Integer points)
 { }

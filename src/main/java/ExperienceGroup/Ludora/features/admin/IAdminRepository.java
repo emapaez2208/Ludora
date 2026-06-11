@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.admin;
 
+import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -11,4 +12,7 @@ public interface IAdminRepository extends JpaRepository<AdminEntity, Long>, JpaS
 
     Optional<AdminEntity> findByExternalId(UUID externalId);
 
+    Boolean existsByEmail(Email email);
+
+    Boolean existsByUserName(String userName);
 }
