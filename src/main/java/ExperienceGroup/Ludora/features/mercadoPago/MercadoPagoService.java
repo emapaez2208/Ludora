@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.mercadoPago;
 
 import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
+import ExperienceGroup.Ludora.features.mercadoPago.exception.MercadoPagoFailedException;
 import ExperienceGroup.Ludora.features.sale.ISaleRepository;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
@@ -26,36 +27,40 @@ public class MercadoPagoService {
     private final IGameRepository gameRepository;
 
     @Transactional
-    public String createPay(List<GameEntity> games, UUID saleId) throws MPException, MPApiException {
+    public String createPay(List<GameEntity> games, UUID saleId) {
 
-        List<PreferenceItemRequest> items = new ArrayList<>();
+        try {
+            List<PreferenceItemRequest> items = new ArrayList<>();
 
-        for(GameEntity game : games){
-            items.add(PreferenceItemRequest.builder()
-                            .title(game.getName())
-                            .quantity(1)
-                            .unitPrice(game.getPrice())
-                            .currencyId("ARS")
-                            .build());
+            for (GameEntity game : games) {
+                items.add(PreferenceItemRequest.builder()
+                        .title(game.getName())
+                        .quantity(1)
+                        .unitPrice(game.getPrice())
+                        .currencyId("ARS")
+                        .build());
+            }
+
+            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
+                    .items(items)
+                    .backUrls(
+                            PreferenceBackUrlsRequest.builder()     // mercado pago redirigue al usuario a estas url para mostrarles nuestro msj correspondiente
+                                    .success("http://localhost:8080/pay/success")
+                                    .failure("http://localhost:8080/pay/failure")
+                                    .pending("http://localhost:8080/pay/pending")
+                                    .build()
+                    )
+                    .autoReturn("aproved")
+                    .notificationUrl("http://localhost:8080/pay/webhook") // mercado pago envia notificacion de estado de pago a esta url
+                    .externalReference(saleId.toString())
+                    .build();
+
+            PreferenceClient client = new PreferenceClient();
+            Preference preference = client.create(preferenceRequest);
+
+            return preference.getInitPoint();
+        } catch (MPApiException | MPException ex) {
+            throw new MercadoPagoFailedException();
         }
-
-        PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .items(items)
-                .backUrls(
-                        PreferenceBackUrlsRequest.builder()     // mercado pago redirigue al usuario a estas url para mostrarles nuestro msj correspondiente
-                                .success("http://localhost:8080/pays/success")
-                                .failure("http://localhost:8080/pays/failure")
-                                .pending("http://localhost:8080/pays/pending")
-                                .build()
-                )
-                .autoReturn("aproved")
-                .notificationUrl("http://localhost:8080/pays/webhook") // mercado pago envia notificacion de estado de pago a esta url
-                .externalReference(saleId.toString())
-                .build();
-
-        PreferenceClient client = new PreferenceClient();
-        Preference preference = client.create(preferenceRequest);
-
-        return preference.getInitPoint();
     }
 }

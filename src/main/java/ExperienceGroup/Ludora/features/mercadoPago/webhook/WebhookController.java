@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/pays/webhook")
+@RequestMapping("/pay/webhook")
 public class WebhookController {
+
+    private final WebhookService webhookService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
@@ -15,6 +17,7 @@ public class WebhookController {
             @RequestParam(required = false) String type,
             @RequestParam(name = "data.id", required = false) String paymentId){
 
+        webhookService.processWebhook(type, paymentId);
     }
 
 }
