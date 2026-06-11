@@ -30,6 +30,8 @@ public class CartService implements ICartService {
 ///-----------------------------------------------------------------------------------------///
 /// Logica
  ///--------------------------------------------------------------------------------------------------///
+
+
     @Override
     @PreAuthorize("hasRole('ADMIN') or #clientExternalId == authentication.principal.externalId")
     public CartDTOResponse getCartByClient(UUID clientExternalId) {
@@ -74,6 +76,7 @@ public class CartService implements ICartService {
 
     @Override
     @PreAuthorize("#clientExternalId == authentication.principal.externalId or hasRole('ADMIN')")
+
     public CartDTOResponse removeGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId));

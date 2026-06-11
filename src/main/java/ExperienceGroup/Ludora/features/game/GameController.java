@@ -20,6 +20,7 @@ import java.util.UUID;
 public class GameController {
     private final IGameService gameService;
 
+    /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) -----------------------------
     @GetMapping
     ResponseEntity<List<GameDTOResponse>> getAll(
             @RequestParam(required = false) String name,
@@ -44,16 +45,19 @@ public class GameController {
                 developerCompany));
     }
 
+    /// -------------------- TRAEMOS UN JUEGO EXTERNAL----------------------
     @GetMapping("/{externalId}")
     ResponseEntity<GameDTOResponse> getByExternalId(@PathVariable UUID externalId) {
         return ResponseEntity.ok(gameService.getByExternalId(externalId));
     }
 
+    /// -------------------CREACION DE JUEGO PARA DEVELOPERS ---------------------
     @PostMapping
     ResponseEntity<GameDTOResponse> create(@Valid @RequestBody GameDTORequest gameDTORequest) {
         return new ResponseEntity<>(gameService.save(gameDTORequest), HttpStatus.CREATED);
     }
 
+    /// -------------------------UPDATE GAME DEVELOPER------------
     @PutMapping("/{externalId}")
     ResponseEntity<GameDTOResponse> update(
             @PathVariable UUID externalId,
@@ -62,9 +66,22 @@ public class GameController {
         return ResponseEntity.ok(gameService.update(externalId, gameDTORequest));
     }
 
-    @DeleteMapping("/{externalId}")
-    ResponseEntity<Void> delete(@PathVariable UUID externalId) {
-        gameService.delete(externalId);
-        return ResponseEntity.noContent().build();
+    /// ------------------AUTHORIZAR JUEGO CON ADMIN------------
+
+    @PatchMapping("/{externalId}/AuthorizedGame")
+    ResponseEntity<GameDTOResponse> autorizedGame(@PathVariable UUID externalId){
+
+        return ResponseEntity.ok(gameService.authorized(externalId));
     }
+
+    /// ------------------DESAUTHORIZAR JUEGO CON ADMIN------------
+
+    @DeleteMapping("/{externalId}/DesAuthorizedGame")
+    ResponseEntity<Void> desautorizedGame(@PathVariable UUID externalId){
+
+        gameService.desauthorized(externalId);
+
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -21,6 +21,7 @@ public interface IGameService {
     GameDTOResponse getByExternalId (UUID externalId);
     GameDTOResponse save (GameDTORequest gameDTORequest);
     GameDTOResponse update (UUID externalId, GameDTORequest gameDTORequest);
-    void delete (UUID externalId);
+    GameDTOResponse authorized(UUID externalId);
+    void desauthorized(UUID externalId);
 
 }
