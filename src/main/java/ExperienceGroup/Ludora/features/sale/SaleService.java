@@ -1,8 +1,7 @@
 package ExperienceGroup.Ludora.features.sale;
 
 import ExperienceGroup.Ludora.common.exception.CartEmptyException;
-import ExperienceGroup.Ludora.common.exception.SaleNotFoundException;
-import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
+
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
@@ -11,6 +10,8 @@ import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
+import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
