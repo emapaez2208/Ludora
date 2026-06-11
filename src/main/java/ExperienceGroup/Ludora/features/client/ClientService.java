@@ -1,17 +1,22 @@
 package ExperienceGroup.Ludora.features.client;
 
+import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
+import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
 import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
+import ExperienceGroup.Ludora.common.utils.Password;
 import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 @Service
 @AllArgsConstructor
@@ -20,6 +25,9 @@ public class ClientService implements IClientService{
     private IMapper<ClientEntity,ClientDTOResponse> mapperResponse;
     private IMapper<ClientEntity,ClientDTORequest> mapperRequest;
     private ICartService cartService;
+
+    private final PasswordEncoder passwordEncoder;
+    private final CredentialsRepository credentialsRepository;
 
     @Override
     public List<ClientDTOResponse> getAllClient(String name,
@@ -68,8 +76,22 @@ public class ClientService implements IClientService{
     public ClientDTOResponse save(ClientDTORequest clientDTORequest) {
 
         ClientEntity entity = mapperRequest.toEntity(clientDTORequest);
+
+        String passwordClean = clientDTORequest.password().value();
+        String passwordEncoded = passwordEncoder.encode(passwordClean);
+
         repository.save(entity);
         cartService.crearCarrito(entity.getExternalId());
+
+        CredentialsEntity credentials = CredentialsEntity.builder()
+                .username(clientDTORequest.userName())
+                .password(passwordEncoded)
+                .enabled(true)
+                .usuario(entity)
+                .roles(new java.util.HashSet<>())
+                .build();
+
+        credentialsRepository.save(credentials);
 
         return mapperResponse.toDTO(entity);
     }
