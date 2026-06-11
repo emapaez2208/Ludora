@@ -5,6 +5,7 @@ import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -38,6 +39,7 @@ public class DeveloperService implements IDeveloperService {
     private final CredentialsRepository credentialsRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticatedUserProvider authenticatedUser;
 
     @Override
     @PreAuthorize("hasAuthority('SEE_USERS')")
@@ -72,6 +74,11 @@ public class DeveloperService implements IDeveloperService {
                 .orElseThrow(() ->
                         new UserNotFoundException(
                                 "User not found, UserID: " + externalId));
+    }
+
+    @Override
+    public DeveloperDtoResponse getMyPerfil(){
+        return getByExternalId(authenticatedUser.getCurrentUser().externalId());
     }
 
     @Override

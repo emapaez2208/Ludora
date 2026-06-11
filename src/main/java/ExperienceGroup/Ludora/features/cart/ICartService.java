@@ -8,6 +8,8 @@ public interface ICartService {
 
     CartDTOResponse getCartByClient(UUID clientExternalId);
 
+    CartDTOResponse getMyCart();
+
     CartDTOResponse addGame(UUID clientExternalId, UUID gameExternalId); /// agrego 1 juego al carrito
 
     CartDTOResponse removeGame(UUID clientExternalId, UUID gameExternalId);  ///borro 1 juego del carrito

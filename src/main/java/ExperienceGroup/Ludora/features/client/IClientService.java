@@ -24,6 +24,8 @@ public interface IClientService {
 
     ClientDTOResponse getByUserName (String userName);
 
+    ClientDTOResponse getMyPerfil();
+
     ClientDTOResponse save (ClientDTORequest clientDTORequest);
 
     ClientDTOResponse update (UUID id , ClientUpdateRequest request);

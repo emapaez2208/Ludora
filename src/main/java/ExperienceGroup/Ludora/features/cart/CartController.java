@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/Cart")
+@RequestMapping("/clients/cart")
 public class CartController {
 
     private final ICartService cartService;
@@ -18,6 +18,11 @@ public class CartController {
     ResponseEntity<CartDTOResponse> getCartByClient(@PathVariable UUID clientId){
 
         return ResponseEntity.ok( cartService.getCartByClient(clientId));
+    }
+
+    @GetMapping
+    ResponseEntity<CartDTOResponse> getMyCart(){
+        return ResponseEntity.ok(cartService.getMyCart());
     }
 
     @PostMapping("/{clientId}/games/{gameId}")
