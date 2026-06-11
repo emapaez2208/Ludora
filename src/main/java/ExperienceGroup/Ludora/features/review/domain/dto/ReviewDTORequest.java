@@ -9,11 +9,12 @@ public record ReviewDTORequest(
                         @Schema(description = "Calificacion del juego del 1 al 5", example = "5", required = true )
                         @Min(value = 1, message = "La calificacion minima es 1")
                         @Max(value = 5, message = "La calificacion maxima es 5")
-                        @NotNull int rating,
+                        @NotNull (message = "La calificacion es obligatoria")
+                        Integer rating,
 
                         @Schema(description = "Comentario u opinion del juego", example = "Este juego es una joyita")
                         @Size(max = 255, message = "El comentario no puede superar los 255 caracteres")
-                        @NotEmpty String comment,
+                        String comment,
 
                         @Schema(description = "ID externo del juego al que le pertenece la reseña", required = true)
                         @NotNull UUID gameExternalId,

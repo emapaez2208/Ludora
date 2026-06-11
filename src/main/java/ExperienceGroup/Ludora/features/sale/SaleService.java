@@ -1,18 +1,17 @@
 package ExperienceGroup.Ludora.features.sale;
 
-import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
-import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
-import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
-import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
-import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
+import ExperienceGroup.Ludora.common.exception.CartEmptyException;
+import ExperienceGroup.Ludora.common.exception.SaleNotFoundException;
+import ExperienceGroup.Ludora.common.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
+import ExperienceGroup.Ludora.features.cart.ICartService;
+import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
-import ExperienceGroup.Ludora.features.game.IGameRepository;
-import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,30 +33,33 @@ public class SaleService  implements ISaleService{
     private final IMapper<SaleEntity, SaleDTORequest> requestMapper;
 
     private final IClientRepository clientRepository;
-    private final IGameRepository gameRepository;
+    private final ICartService cartService;
 
     @Override
+    @Transactional
     @PreAuthorize("hasAuthority('BUY_GAMES') and #saleDTORequest.clientExternalId() == authentication.principal.externalId")
     public SaleDTOResponse create(SaleDTORequest saleDTORequest) {
         ClientEntity client = clientRepository.findByExternalId(saleDTORequest.clientExternalId())
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
-        List<GameEntity> games = saleDTORequest.gameExternalId().stream()
-                .map(gameUuid -> gameRepository.findByExternalId(gameUuid)
-                        .orElseThrow(() -> new GameNotFoundException("Game not found")))
-                .toList();
+        CartEntity cart = client.getCart();
+        if (cart.getGames().isEmpty()) {
+            throw new CartEmptyException("Empty cart");
+        }
+
+        BigDecimal precioTotal = BigDecimal.valueOf(cart.getTotalPrice());
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
 
         saleEntity.setClient(client);
-        saleEntity.setGames(games);
+        saleEntity.setGames(new ArrayList<>(cart.getGames()));
+        saleEntity.setTotalPrice(precioTotal);
 
-        BigDecimal precio = games.stream()
-                .map(GameEntity::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        SaleEntity saved = saleRepository.save(saleEntity);
 
-        saleEntity.setTotalPrice(precio);
-        return responseMapper.toDTO(saleRepository.save(saleEntity));
+        cartService.clearCart(client.getExternalId());
+
+        return responseMapper.toDTO(saved);
     }
 
     @Override

@@ -22,10 +22,4 @@ public interface IReviewRepository extends JpaRepository <ReviewEntity, Long>, J
 
     List<ReviewEntity> findByGameAndClient(GameEntity game, ClientEntity client);
 
-    List<ReviewEntity> findByRatingGreaterThan(int minRating);
-
-    List<ReviewEntity> findByRatingLessThan(int maxRating);
-
-    List<ReviewEntity> findByDate(LocalDateTime date);
-
 }

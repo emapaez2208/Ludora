@@ -98,5 +98,11 @@ public class GlobalHandlerException {
     public ResponseEntity<ErrorResponseDTO> handlerGenreExistsException (GenreExistsException ex){
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
+    @ExceptionHandler(CartEmptyException.class)
+    public ResponseEntity<String> handlerCartEmpty(CartEmptyException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
 
 }

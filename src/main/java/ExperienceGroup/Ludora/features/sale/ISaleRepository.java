@@ -17,12 +17,6 @@ import java.util.UUID;
 public interface ISaleRepository extends JpaRepository<SaleEntity, Long>, JpaSpecificationExecutor<SaleEntity> {
     Optional<SaleEntity> findByExternalId(UUID externalId);
 
-    List<SaleEntity> findByStatus(ESaleStatus status);
-
-    List<SaleEntity> findByDate(LocalDateTime date);
-
-    List<SaleEntity> findByDateBetween(LocalDateTime start, LocalDateTime end);
-
     List<SaleEntity> findByClient(ClientEntity client);
 
 }

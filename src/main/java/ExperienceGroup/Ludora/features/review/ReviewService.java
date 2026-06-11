@@ -75,7 +75,7 @@ public class ReviewService implements IReviewService {
     @Override
     public List<ReviewDTOResponse> getAllReviewsByGameId(UUID gameId) {
         GameEntity game = gameRepository.findByExternalId(gameId)
-                .orElseThrow(() -> new RuntimeException("Game not found"));
+                .orElseThrow(() -> new GameNotFoundException("Game not found"));
         List<ReviewEntity> reviews = reviewRepository.findByGame(game);
 
         return reviews.stream()
@@ -87,7 +87,7 @@ public class ReviewService implements IReviewService {
     @PreAuthorize("hasRole('ADMIN') or #clientId == authentication.principal.externalId")
     public List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId) {
         ClientEntity client = clientRepository.findByExternalId(clientId)
-                .orElseThrow(() -> new RuntimeException("Client not found"));
+                .orElseThrow(() -> new UserNotFoundException("Client not found"));
         List<ReviewEntity> reviews = reviewRepository.findByClient(client);
 
         return reviews.stream()
@@ -99,9 +99,9 @@ public class ReviewService implements IReviewService {
     @PreAuthorize("hasRole('ADMIN') or #clientId == authentication.principal.externalId")
     public List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId) {
         GameEntity game = gameRepository.findByExternalId(gameId)
-                .orElseThrow(() -> new RuntimeException("Game not found"));
+                .orElseThrow(() -> new GameNotFoundException("Game not found"));
         ClientEntity client = clientRepository.findByExternalId(clientId)
-                .orElseThrow(() -> new RuntimeException("Client not found"));
+                .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
         List<ReviewEntity> reviews = reviewRepository.findByGameAndClient(game, client);
 
@@ -110,6 +110,7 @@ public class ReviewService implements IReviewService {
                 .toList();
     }
 
+    @Transactional
     @Override
     @PreAuthorize("hasAuthority('DELETE_REVIEW')")
     public void delete(UUID reviewID) {
