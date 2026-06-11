@@ -19,6 +19,8 @@ public interface IClientRepository extends JpaRepository<ClientEntity,Long>, Jpa
 
     Boolean existsByEmail(Email email);
 
+    Boolean existsByUserName(String userName);
+
     Optional<ClientEntity> findByStatusBlocked(Boolean statusBlocked);
     
 }

@@ -1,8 +1,12 @@
 package ExperienceGroup.Ludora.auth.jwt;
 
+import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
+import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
+import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +20,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService implements IJwtService{
+
+    private final CredentialsRepository credentialsRepository;
 
     @Value("${jwt.secret}")
     private String jwtSecretKey;
@@ -29,6 +36,15 @@ public class JwtService implements IJwtService{
         return extractClaim(token, Claims::getSubject);
     }
 
+    public UUID extractExternalId(String token) {
+        return extractClaim(
+                token,
+                claims -> UUID.fromString(
+                        claims.get("externalId", String.class)
+                )
+        );
+    }
+
     @Override
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -37,6 +53,10 @@ public class JwtService implements IJwtService{
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
+        CredentialsEntity credentials = credentialsRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new CredentialsNotFoundException("Credentials not found"));
+
+        claims.put("externalId", credentials.getExternalId());
         claims.put("roles", roles);
 
         return buildToken(claims, userDetails, jwtExpiration);

@@ -19,6 +19,8 @@ public interface IDeveloperService {
 
     DeveloperDtoResponse getByExternalId(UUID externalId);
 
+    DeveloperDtoResponse getMyPerfil();
+
     DeveloperDtoResponse save(DeveloperDtoRequest developerDtoRequest);
 
     DeveloperDtoResponse update(UUID externalId, DeveloperUpdateRequest developerDtoRequest);

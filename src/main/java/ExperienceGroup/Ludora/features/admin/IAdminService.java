@@ -18,6 +18,8 @@ public interface IAdminService {
 
     AdminDTOResponse getByExternalId(UUID externalId);
 
+    AdminDTOResponse getMyPerfil();
+
     AdminDTOResponse save(AdminDTORequest adminDTO);
 
     AdminDTOResponse update(UUID externalId, AdminUpdateRequest adminDTO);

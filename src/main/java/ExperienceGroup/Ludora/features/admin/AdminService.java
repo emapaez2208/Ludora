@@ -5,8 +5,10 @@ import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailException;
+import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
@@ -35,6 +37,7 @@ public class AdminService implements IAdminService{
     private final CredentialsRepository credentialsRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticatedUserProvider authenticatedUser;
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -69,12 +72,21 @@ public class AdminService implements IAdminService{
     }
 
     @Override
+    public AdminDTOResponse getMyPerfil(){
+        return getByExternalId(authenticatedUser.getCurrentUser().externalId());
+    }
+
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public AdminDTOResponse save(AdminDTORequest adminDTO) {
 
         if(adminRepository.existsByEmail(adminDTO.email())){
             throw new UserExistsWithEmailException("User with this email exists");
+        }
+
+        if(adminRepository.existsByUserName(adminDTO.userName())){
+            throw new UserExistsWithUsernameException("User exists with this Username");
         }
 
         AdminEntity entity = adminRepository.save(requestMapper.toEntity(adminDTO));

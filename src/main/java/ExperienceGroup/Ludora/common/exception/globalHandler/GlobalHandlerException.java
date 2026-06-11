@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
+import ExperienceGroup.Ludora.common.exception.CartEmptyException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
@@ -10,8 +11,7 @@ import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.features.user.exception.IllegalPasswordException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
-import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.exceptions.MPException;
+import ExperienceGroup.Ludora.features.user.exception.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,6 +78,17 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.BAD_REQUEST, errors);
     }
 
+    @ExceptionHandler(UserExistsWithEmailException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerUserExistsEmail(UserExistsWithEmailException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(UserExistsWithUsernameException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerUserExistsEmail(UserExistsWithUsernameException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+
     private ResponseEntity<ErrorResponseDTO> buildResponse(HttpStatus status, String message){
         ErrorResponseDTO error = new ErrorResponseDTO(
                 LocalDateTime.now(),
@@ -91,6 +102,12 @@ public class GlobalHandlerException {
     @ExceptionHandler(GenreExistsException.class)
     public ResponseEntity<ErrorResponseDTO> handlerGenreExistsException (GenreExistsException ex){
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+    @ExceptionHandler(CartEmptyException.class)
+    public ResponseEntity<String> handlerCartEmpty(CartEmptyException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
     }
 
 @ExceptionHandler(MercadoPagoFailedException.class)

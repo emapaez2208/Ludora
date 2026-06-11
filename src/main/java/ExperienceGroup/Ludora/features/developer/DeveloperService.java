@@ -5,6 +5,8 @@ import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
@@ -37,6 +39,7 @@ public class DeveloperService implements IDeveloperService {
     private final CredentialsRepository credentialsRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticatedUserProvider authenticatedUser;
 
     @Override
     @PreAuthorize("hasAuthority('SEE_USERS')")
@@ -74,11 +77,20 @@ public class DeveloperService implements IDeveloperService {
     }
 
     @Override
+    public DeveloperDtoResponse getMyPerfil(){
+        return getByExternalId(authenticatedUser.getCurrentUser().externalId());
+    }
+
+    @Override
     @Transactional
     public DeveloperDtoResponse save(DeveloperDtoRequest developerDtoRequest) {
 
         if(developerRepository.existsByEmail(developerDtoRequest.email())){
             throw new UserExistsWithEmailException("User exists with email register");
+        }
+
+        if(developerRepository.existsByUserName(developerDtoRequest.userName())){
+            throw new UserExistsWithUsernameException("User exists with username register");
         }
 
         DeveloperEntity saved = developerRepository.save(requestMapper.toEntity(developerDtoRequest));
