@@ -50,9 +50,9 @@ public class MercadoPagoService {
                     .items(items)
                     .backUrls(
                             PreferenceBackUrlsRequest.builder()     // mercado pago redirigue al usuario a estas url para mostrarles nuestro msj correspondiente
-                                    .success("http://localhost:8080/pay/success")
-                                    .failure("http://localhost:8080/pay/failure")
-                                    .pending("http://localhost:8080/pay/pending")
+                                    .success(baseUrl + "/pay/success")
+                                    .failure(baseUrl + "/pay/failure")
+                                    .pending(baseUrl + "/pay/pending")
                                     .build()
                     )
                     .autoReturn("aproved")
