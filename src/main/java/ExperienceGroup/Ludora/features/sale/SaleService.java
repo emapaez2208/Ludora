@@ -43,20 +43,12 @@ public class SaleService  implements ISaleService{
             throw new CartEmptyException("Empty cart");
         }
 
+        BigDecimal precioTotal = BigDecimal.valueOf(cart.getTotalPrice());
+
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
 
         saleEntity.setClient(client);
         saleEntity.setGames(new ArrayList<>(cart.getGames()));
-
-        BigDecimal precioTotal = BigDecimal.valueOf(cart.getTotalPrice());
-
-        // int puntos = getPuntos;
-
-        // int puntosGanados = puntos * ?????????
-
-        // saleEntity.setPuntos(puntosGanados)
-        
-
         saleEntity.setTotalPrice(precioTotal);
 
         SaleEntity saved = saleRepository.save(saleEntity);
