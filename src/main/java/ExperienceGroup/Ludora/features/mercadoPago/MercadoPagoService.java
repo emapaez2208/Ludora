@@ -27,7 +27,7 @@ public class MercadoPagoService {
     private final IGameRepository gameRepository;
 
     @Transactional
-    public String crearPago(List<GameEntity> games) throws MPException, MPApiException {
+    public String createPay(List<GameEntity> games) throws MPException, MPApiException {
 
         List<PreferenceItemRequest> items = new ArrayList<>();
 
