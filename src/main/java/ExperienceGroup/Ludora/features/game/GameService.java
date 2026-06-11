@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.game;
 
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
@@ -16,6 +17,7 @@ import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +37,10 @@ public class GameService implements IGameService{
     private final IDeveloperRepository developerRepository;
     private final IAgeRangeRepository ageRangeRepository;
     private final IGenreRepository genreRepository;
+    private final AuthenticatedUserProvider authenticatedUserProvider;
 
+
+    /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) ------------------------------
     @Override
     public List<GameDTOResponse> getAllGames(String name,
                                              BigDecimal maxPrice,
@@ -66,6 +71,9 @@ public class GameService implements IGameService{
 
     }
 
+
+    /// -------------------- TRAEMOS UN JUEGO EXTERNAL----------------------
+
     @Override
     public GameDTOResponse getByExternalId(UUID externalId) {
         return gameRepository.findByExternalId(externalId)
@@ -73,15 +81,18 @@ public class GameService implements IGameService{
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
     }
 
+    /// -------------------CREACION DE JUEGO PARA DEVELOPERS ---------------------
+
     @Override
     @PreAuthorize("hasAuthority('CREATE_GAMES') and " +
                     "#gameDTORequest.developerExternalId() == authentication.principal.externalId")
     @Transactional
     public GameDTOResponse save(GameDTORequest gameDTORequest) {
 
+
         GameEntity entity = requestMapper.toEntity(gameDTORequest);
 
-        DeveloperEntity developer = developerRepository.findByExternalId(gameDTORequest.developerExternalId())
+        DeveloperEntity developer = developerRepository.findByExternalId(authenticatedUserProvider.getCurrentUser().externalId())
                 .orElseThrow(() -> new UserNotFoundException("Developer not found"));
 
         entity.setDeveloper(developer);
@@ -102,11 +113,14 @@ public class GameService implements IGameService{
         return responseMapper.toDTO(savedEntity);
     }
 
+    /// -------------------------UPDATE GAME DEVELOPER------------
+
     @Override
     @PreAuthorize("hasAuthority('UPDATE_GAMES') and " +
                     "#gameDTORequest.developerExternalId() == authentication.principal.externalId\"")
     @Transactional
     public GameDTOResponse update(UUID externalId, GameDTORequest gameDTORequest) {
+
         GameEntity existingGame = gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
@@ -116,7 +130,6 @@ public class GameService implements IGameService{
         existingGame.setPrice(updatedData.getPrice());
         existingGame.setReleaseDate(updatedData.getReleaseDate());
         existingGame.setDescription(updatedData.getDescription());
-        existingGame.setStatusBlocked(updatedData.getStatusBlocked());
 
         AgeRangeEntity ageRange = ageRangeRepository.findByExternalId(gameDTORequest.ageRangeExternalId())
                 .orElseThrow(() -> new AgeRangeNotFoundException("Age range not found"));
@@ -129,22 +142,46 @@ public class GameService implements IGameService{
         existingGame.getGenres().clear();
         existingGame.getGenres().addAll(genres);
 
-        DeveloperEntity developer = developerRepository.findByExternalId(gameDTORequest.developerExternalId())
+        DeveloperEntity developer = developerRepository.findByExternalId(authenticatedUserProvider.getCurrentUser().externalId())
                 .orElseThrow(() -> new UserNotFoundException("Developer not found"));
         existingGame.setDeveloper(developer);
+
+
 
         GameEntity savedGame = gameRepository.save(existingGame);
 
         return responseMapper.toDTO(savedGame);
     }
 
+    /// ------------------AUTHORIZAR JUEGO CON ADMIN------------
+
     @Override
-    @PreAuthorize("hasAuthority(DELETE_GAMES')")
-    @Transactional
-    public void delete(UUID externalId) {
-        GameEntity toBeDeleted = gameRepository.findByExternalId(externalId)
+    @PreAuthorize("hasRole('ADMIN')")
+    public GameDTOResponse authorized(UUID externalId) {
+
+        GameEntity habilitarGame= gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
-        gameRepository.delete(toBeDeleted);
+        habilitarGame.setStatusBlocked(false);
+        gameRepository.save(habilitarGame);
+
+        return responseMapper.toDTO(habilitarGame);
     }
+
+
+    /// ------------------DESAUTHORIZAR JUEGO CON ADMIN------------
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void desauthorized(UUID externalId) {
+
+        GameEntity habilitarGame= gameRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new GameNotFoundException("Game not found"));
+
+        habilitarGame.setStatusBlocked(true);
+        gameRepository.save(habilitarGame);
+
+    }
+
+
 }

@@ -17,6 +17,5 @@ public interface IGameRequestMapper extends IMapper<GameEntity, GameDTORequest> 
 
     @Override
     @Mapping(target = "ageRangeExternalId", source = "ageRange.externalId")
-    @Mapping(target = "developerExternalId", source = "developer.externalId")
     GameDTORequest toDTO(GameEntity gameEntity);
     }
