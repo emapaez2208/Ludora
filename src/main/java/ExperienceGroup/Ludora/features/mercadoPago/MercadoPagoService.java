@@ -13,6 +13,7 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class MercadoPagoService {
 
     private final ISaleRepository saleRepository;
     private final IGameRepository gameRepository;
+
+    @Value("${app.base.url}")
+    private String baseUrl;
+
 
     @Transactional
     public String createPay(List<GameEntity> games, UUID saleId) {
@@ -51,7 +56,7 @@ public class MercadoPagoService {
                                     .build()
                     )
                     .autoReturn("aproved")
-                    .notificationUrl("http://localhost:8080/pay/webhook") // mercado pago envia notificacion de estado de pago a esta url
+                    .notificationUrl(baseUrl + "/pay/webhook") // mercado pago envia notificacion de estado de pago a esta url
                     .externalReference(saleId.toString())
                     .build();
 
