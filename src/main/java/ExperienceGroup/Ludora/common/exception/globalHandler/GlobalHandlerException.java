@@ -5,6 +5,7 @@ import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.features.ageRange.exception.InvalidAgeRangeException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.mercadoPago.exception.MercadoPagoFailedException;
 import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.features.user.exception.IllegalPasswordException;
@@ -92,20 +93,10 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    @ExceptionHandler({ MPApiException.class,MPException.class})
-    public ResponseEntity<ErrorResponseDTO> handlerMPExeption (Exception ex){
-        String mensajeError;
-
-        if(ex instanceof MPApiException){
-            MPApiException apiException = (MPApiException) ex;
-            mensajeError= apiException.getApiResponse().getContent();
-        }else
-        {
-            mensajeError=ex.getMessage();
-
-        }
-        return buildResponse(HttpStatus.BAD_REQUEST,mensajeError);
-    }
+@ExceptionHandler(MercadoPagoFailedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerMercadoPagoFailedException ( MercadoPagoFailedException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST , ex.getMessage());
+}
 
 
 }
