@@ -9,5 +9,6 @@ public record ClientDTOResponse (UUID externalId,
                                  Long phone,
                                  String street,
                                  Integer numberStreet,
-                                 LocalDate birthDate)
+                                 LocalDate birthDate,
+                                 Integer points)
 { }

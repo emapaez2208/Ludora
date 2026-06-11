@@ -98,7 +98,10 @@ public class ClientService implements IClientService{
             throw new UserExistsWithUsernameException("User exists with this Username");
         }
 
-        ClientEntity saved = repository.save(mapperRequest.toEntity(clientDTORequest));
+        ClientEntity saved = mapperRequest.toEntity(clientDTORequest);
+        saved.setPoints(0);
+
+        repository.save(saved);
 
         cartService.crearCarrito(saved.getExternalId());
 
@@ -110,6 +113,7 @@ public class ClientService implements IClientService{
                 .password(passwordEncoder.encode(clientDTORequest.password().value()))
                 .user(saved)
                 .build();
+
 
         credentialsRepository.save(credentials);
 
