@@ -5,6 +5,7 @@ import ExperienceGroup.Ludora.auth.credentials.CredentialsRepository;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
+import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.cart.ICartService;
@@ -91,6 +92,10 @@ public class ClientService implements IClientService{
 
         if(repository.existsByEmail(clientDTORequest.email())){
             throw new UserExistsWithEmailException("User exists with this email");
+        }
+
+        if(repository.existsByUserName(clientDTORequest.userName())){
+            throw new UserExistsWithUsernameException("User exists with this Username");
         }
 
         ClientEntity saved = mapperRequest.toEntity(clientDTORequest);

@@ -6,9 +6,7 @@ import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundExcept
 import ExperienceGroup.Ludora.features.ageRange.exception.InvalidAgeRangeException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
-import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
-import ExperienceGroup.Ludora.features.user.exception.IllegalPasswordException;
-import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,6 +72,17 @@ public class GlobalHandlerException {
                 .collect(Collectors.joining(", "));
         return buildResponse(HttpStatus.BAD_REQUEST, errors);
     }
+
+    @ExceptionHandler(UserExistsWithEmailException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerUserExistsEmail(UserExistsWithEmailException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(UserExistsWithUsernameException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerUserExistsEmail(UserExistsWithUsernameException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
 
     private ResponseEntity<ErrorResponseDTO> buildResponse(HttpStatus status, String message){
         ErrorResponseDTO error = new ErrorResponseDTO(
