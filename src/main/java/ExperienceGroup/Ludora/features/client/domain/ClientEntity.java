@@ -43,4 +43,6 @@ public class ClientEntity extends UserEntity {
               orphanRemoval = true)
     private CartEntity cart;
 
+    private Integer points;
+
 }

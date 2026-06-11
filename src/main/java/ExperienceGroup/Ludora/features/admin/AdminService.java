@@ -8,6 +8,7 @@ import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailException;
+import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
@@ -82,6 +83,10 @@ public class AdminService implements IAdminService{
 
         if(adminRepository.existsByEmail(adminDTO.email())){
             throw new UserExistsWithEmailException("User with this email exists");
+        }
+
+        if(adminRepository.existsByUserName(adminDTO.userName())){
+            throw new UserExistsWithUsernameException("User exists with this Username");
         }
 
         AdminEntity entity = adminRepository.save(requestMapper.toEntity(adminDTO));
