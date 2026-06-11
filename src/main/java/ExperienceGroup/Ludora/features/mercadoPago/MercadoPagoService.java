@@ -55,7 +55,7 @@ public class MercadoPagoService {
                                     .pending(baseUrl + "/pay/pending")
                                     .build()
                     )
-                    .autoReturn("aproved")
+                    .autoReturn("approved")
                     .notificationUrl(baseUrl + "/pay/webhook") // mercado pago envia notificacion de estado de pago a esta url
                     .externalReference(saleId.toString())
                     .build();
