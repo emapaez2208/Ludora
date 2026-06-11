@@ -40,6 +40,9 @@ public class SaleEntity{
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
+    @Column
+    private Integer earnedPoints;
+
     @ManyToOne
     @JoinColumn (name = "client_id")
     private ClientEntity client;

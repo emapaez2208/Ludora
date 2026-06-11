@@ -16,8 +16,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -36,6 +34,11 @@ public class SaleService  implements ISaleService{
     private final IClientRepository clientRepository;
     private final ICartService cartService;
 
+    private static final BigDecimal REWARD_POINTS_PERCENTAGE = BigDecimal.valueOf(0.08);
+    private static final Integer POINTS_THRESHOLD = 10000;
+    private static final BigDecimal MAX_PRICE_FOR_DISCOUNT = BigDecimal.valueOf(6000);
+    private static final BigDecimal DISCOUNT_PERCENTAGE = BigDecimal.valueOf(0.10);
+
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('BUY_GAMES') and #saleDTORequest.clientExternalId() == authentication.principal.externalId")
@@ -48,13 +51,17 @@ public class SaleService  implements ISaleService{
             throw new CartEmptyException("Empty cart");
         }
 
-        BigDecimal precioTotal = BigDecimal.valueOf(cart.getTotalPrice());
+        BigDecimal totalPrice = BigDecimal.valueOf(cart.getTotalPrice());
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
 
         saleEntity.setClient(client);
         saleEntity.setGames(new ArrayList<>(cart.getGames()));
-        saleEntity.setTotalPrice(precioTotal);
+        saleEntity.setTotalPrice(totalPrice);
+
+        Integer earnedPoints = calculateEarnedPoints(totalPrice);
+
+        saleEntity.setEarnedPoints(earnedPoints);
 
         SaleEntity saved = saleRepository.save(saleEntity);
 
@@ -109,4 +116,18 @@ public class SaleService  implements ISaleService{
                 .map(responseMapper::toDTO)
                 .toList();
     }
+
+    // CÁLCULO DE PUNTOS
+
+    public Integer calculateEarnedPoints(BigDecimal totalPrice){
+
+        if (totalPrice == null || totalPrice.compareTo(BigDecimal.ZERO) <= 0) {
+            return 0;
+        }
+
+        Integer earnedPoints = totalPrice.multiply(REWARD_POINTS_PERCENTAGE).intValue();
+
+        return earnedPoints;
+    }
+
 }
