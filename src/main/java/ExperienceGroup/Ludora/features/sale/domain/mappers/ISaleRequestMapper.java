@@ -13,7 +13,6 @@ public interface ISaleRequestMapper extends IMapper<SaleEntity, SaleDTORequest> 
     SaleEntity toEntity(SaleDTORequest saleDTORequest);
 
     @Mapping(target = "clientExternalId", ignore = true)
-    @Mapping(target = "gameExternalId", ignore = true)
     SaleDTORequest toDTO(SaleEntity saleEntity);
 }
 

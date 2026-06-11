@@ -1,8 +1,8 @@
-package ExperienceGroup.Ludora.features.sale.domain.dto;
+package ExperienceGroup.Ludora.features.game.domain.dto;
 
 import java.math.BigDecimal;
 
-public record InfoGamesResponse(
+public record InfoGameDTOResponse(
         String name,
         BigDecimal price,
         String company

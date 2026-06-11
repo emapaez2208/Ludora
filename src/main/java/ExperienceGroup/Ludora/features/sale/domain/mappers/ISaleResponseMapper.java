@@ -4,7 +4,7 @@ import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.client.domain.mappers.IClientResponseMapper;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
-import ExperienceGroup.Ludora.features.sale.domain.dto.InfoGamesResponse;
+import ExperienceGroup.Ludora.features.game.domain.dto.InfoGameDTOResponse;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
 
 import ExperienceGroup.Ludora.features.game.domain.mappers.IGameResponseMapper;
@@ -20,11 +20,10 @@ public interface ISaleResponseMapper extends IMapper<SaleEntity, SaleDTOResponse
     @Mapping(source = "games", target = "games")
     SaleDTOResponse toDTO(SaleEntity saleEntity);
 
-    default InfoGamesResponse mappInfoGame(GameEntity game) {
+    default InfoGameDTOResponse mappInfoGame(GameEntity game) {
         if (game == null) return null;
-        String companyName = (game.getDeveloper() != null) ? game.getDeveloper().getCompany() : "Independiente";
-
-        return new InfoGamesResponse(
+        String companyName = game.getDeveloper().getCompany();
+        return new InfoGameDTOResponse(
                 game.getName(),
                 game.getPrice(),
                 companyName
