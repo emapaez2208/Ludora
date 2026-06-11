@@ -64,6 +64,7 @@ public class MercadoPagoService {
             Preference preference = client.create(preferenceRequest);
 
             return preference.getInitPoint();
+
         } catch (MPApiException | MPException ex) {
             throw new MercadoPagoFailedException();
         }

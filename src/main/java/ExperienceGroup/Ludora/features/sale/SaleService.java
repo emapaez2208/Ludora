@@ -1,8 +1,7 @@
 package ExperienceGroup.Ludora.features.sale;
 
-import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
-import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.mercadoPago.MercadoPagoService;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -16,8 +15,6 @@ import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,6 +31,8 @@ public class SaleService  implements ISaleService{
 
     private final IClientRepository clientRepository;
     private final IGameRepository gameRepository;
+
+    private final MercadoPagoService mercadoPago;
 
     @Override
     @PreAuthorize("hasAuthority('BUY_GAMES') and #saleDTORequest.clientExternalId() == authentication.principal.externalId")
@@ -57,6 +56,13 @@ public class SaleService  implements ISaleService{
 
         saleEntity.setTotalPrice(precio);
         return responseMapper.toDTO(saleRepository.save(saleEntity));
+    }
+
+    public String paySaleMP(UUID externalId){
+        SaleEntity sale = saleRepository.findByExternalId(externalId)
+                .orElseThrow(SaleNotFoundException::new);
+
+        return mercadoPago.createPay(sale.getGames(), sale.getExternalId());
     }
 
     @Override

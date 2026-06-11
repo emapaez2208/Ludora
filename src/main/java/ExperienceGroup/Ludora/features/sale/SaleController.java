@@ -26,6 +26,11 @@ public class SaleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping("/pay/{externalId}")
+    public ResponseEntity<String> paySale(@PathVariable UUID externalId){
+        return ResponseEntity.ok(saleService.paySaleMP(externalId));
+    }
+
     @GetMapping
     public ResponseEntity<List<SaleDTOResponse>> getAllSales(
             @RequestParam(required = false) UUID externalId,
