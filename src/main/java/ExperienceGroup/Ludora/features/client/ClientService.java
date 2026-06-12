@@ -7,8 +7,9 @@ import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
-import ExperienceGroup.Ludora.common.exception.dto.ChangePasswordDTO;
-import ExperienceGroup.Ludora.common.utils.Password;
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
+import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -173,6 +174,27 @@ public class ClientService implements IClientService{
         }else{
             throw new PasswordInvalidException("The old password is invalid");
         }
+    }
+
+    @Override
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public void changeEmail(ChangeEmailDTO emailDTO) {
+
+        if(repository.existsByEmail(emailDTO.newEmail())){
+            throw new UserExistsWithEmailException("User exists with this email");
+        }
+
+        ClientEntity client = repository.findByExternalId(authenticatedUser.getCurrentUser().externalId())
+                .orElseThrow(UserNotFoundException::new);
+
+        if(client.getEmail().value().equals(emailDTO.oldEmail().value())){
+            client.setEmail(emailDTO.newEmail());
+            repository.save(client);
+        }else{
+            throw new IllegalEmailException("The old email is incorrect");
+        }
+
     }
 
     private CredentialsEntity searchCredentials(String username){

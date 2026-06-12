@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.features.developer;
 
-import ExperienceGroup.Ludora.common.exception.dto.ChangePasswordDTO;
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoRequest;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoResponse;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperUpdateRequest;
@@ -89,6 +90,12 @@ public class DeveloperController {
     @PutMapping("/profile/changePassword")
     ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordDTO passwordDTO){
         developerService.changePassword(passwordDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/profile/changeEmail")
+    ResponseEntity<Void> changeEmail(@Valid @RequestBody ChangeEmailDTO emailDTO){
+        developerService.changeEmail(emailDTO);
         return ResponseEntity.ok().build();
     }
 }

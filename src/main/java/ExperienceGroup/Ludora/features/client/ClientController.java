@@ -1,7 +1,8 @@
 package ExperienceGroup.Ludora.features.client;
 
 
-import ExperienceGroup.Ludora.common.exception.dto.ChangePasswordDTO;
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
@@ -75,6 +76,12 @@ public class ClientController {
     @PutMapping("/profile/changePassword")
     ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordDTO passwordDTO){
         clientService.changePassword(passwordDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/profile/changeEmail")
+    ResponseEntity<Void> changeEmail(@Valid @RequestBody ChangeEmailDTO emailDTO){
+        clientService.changeEmail(emailDTO);
         return ResponseEntity.ok().build();
     }
 }

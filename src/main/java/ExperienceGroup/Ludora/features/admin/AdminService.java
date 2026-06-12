@@ -7,8 +7,11 @@ import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
-import ExperienceGroup.Ludora.common.exception.dto.ChangePasswordDTO;
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailException;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
@@ -18,7 +21,6 @@ import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -145,6 +147,27 @@ public class AdminService implements IAdminService{
         }else{
             throw new PasswordInvalidException("The old password is invalid");
         }
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void changeEmail(ChangeEmailDTO emailDTO) {
+
+        if(adminRepository.existsByEmail(emailDTO.newEmail())){
+            throw new UserExistsWithEmailException("User exists with this email");
+        }
+
+        AdminEntity admin = adminRepository.findByExternalId(authenticatedUser.getCurrentUser().externalId())
+                .orElseThrow(UserNotFoundException::new);
+
+        if(admin.getEmail().value().equals(emailDTO.oldEmail().value())){
+            admin.setEmail(emailDTO.newEmail());
+            adminRepository.save(admin);
+        }else{
+            throw new IllegalEmailException("The old email is incorrect");
+        }
+
     }
 
     private CredentialsEntity searchCredentials(String username){

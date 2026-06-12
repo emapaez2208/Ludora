@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.features.developer;
 
-import ExperienceGroup.Ludora.common.exception.dto.ChangePasswordDTO;
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoRequest;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoResponse;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperUpdateRequest;
@@ -31,4 +32,6 @@ public interface IDeveloperService {
     void delete(UUID externalId);
 
     void changePassword(ChangePasswordDTO passwordDTO);
+
+    void changeEmail(ChangeEmailDTO emailDTO);
 }
