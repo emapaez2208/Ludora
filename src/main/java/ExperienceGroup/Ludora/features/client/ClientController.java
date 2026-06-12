@@ -50,7 +50,7 @@ public class ClientController {
         return ResponseEntity.ok(clientService.getMyPerfil());
     }
 
-    @GetMapping("/myGames")
+    @GetMapping("/library")
     ResponseEntity<List<GameDTOResponse>> getMyGames(){
         return ResponseEntity.ok(clientService.getMyGames());
     }
