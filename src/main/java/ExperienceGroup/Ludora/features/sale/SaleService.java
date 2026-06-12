@@ -67,6 +67,7 @@ public class SaleService  implements ISaleService{
         SaleEntity sale = saleRepository.findByExternalId(externalId)
                 .orElseThrow(SaleNotFoundException::new);
 
+        cartService.clearCart(sale.getClient().getExternalId());
         return mercadoPago.createPay(sale.getGames(), sale.getExternalId());
     }
 

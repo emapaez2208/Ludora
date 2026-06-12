@@ -49,7 +49,7 @@ public class MercadoPagoService {
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .backUrls(
-                            PreferenceBackUrlsRequest.builder()     // mercado pago redirigue al usuario a estas url para mostrarles nuestro msj correspondiente
+                            PreferenceBackUrlsRequest.builder()     // mercado pago redirige al usuario a estas url para mostrarles nuestro msj correspondiente
                                     .success(baseUrl + "/pay/success")
                                     .failure(baseUrl + "/pay/failure")
                                     .pending(baseUrl + "/pay/pending")
