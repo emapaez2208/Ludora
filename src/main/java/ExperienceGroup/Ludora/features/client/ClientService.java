@@ -200,6 +200,7 @@ public class ClientService implements IClientService{
         }else{
             throw new IllegalEmailException("The old email is incorrect");
         }
+    }
 
     // No hace falta PreAuthorize porque busca los juegos del cliente logueado
     public List<GameDTOResponse> getMyGames(){
