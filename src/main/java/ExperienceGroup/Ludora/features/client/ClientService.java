@@ -10,6 +10,10 @@ import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
+import ExperienceGroup.Ludora.features.game.IGameRepository;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
+import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -35,8 +39,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ClientService implements IClientService{
     private final IClientRepository repository;
+    private final IGameRepository gameRepository;
     private final IMapper<ClientEntity,ClientDTOResponse> mapperResponse;
     private final IMapper<ClientEntity,ClientDTORequest> mapperRequest;
+    private final IMapper<GameEntity, GameDTOResponse> mapperGamesResponse;
     private final ICartService cartService;
     private final CredentialsRepository credentialsRepository;
     private final RoleRepository roleRepository;
@@ -195,6 +201,14 @@ public class ClientService implements IClientService{
             throw new IllegalEmailException("The old email is incorrect");
         }
 
+    // No hace falta PreAuthorize porque busca los juegos del cliente logueado
+    public List<GameDTOResponse> getMyGames(){
+        return  gameRepository.findAllByClients_ExternalId(
+                authenticatedUser.getCurrentUser().externalId()
+                ).orElseThrow(() -> new GameNotFoundException("The user not contain games"))
+                    .stream()
+                    .map(mapperGamesResponse::toDTO)
+                    .toList();
     }
 
     private CredentialsEntity searchCredentials(String username){

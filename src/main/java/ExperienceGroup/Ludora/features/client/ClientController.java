@@ -6,6 +6,7 @@ import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
+import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,11 @@ public class ClientController {
     @GetMapping("/profile")
     ResponseEntity<ClientDTOResponse> getMyPerfil(){
         return ResponseEntity.ok(clientService.getMyPerfil());
+    }
+
+    @GetMapping("/library")
+    ResponseEntity<List<GameDTOResponse>> getMyGames(){
+        return ResponseEntity.ok(clientService.getMyGames());
     }
 
    @GetMapping("/{id}")
