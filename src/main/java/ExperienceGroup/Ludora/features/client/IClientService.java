@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.features.client;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
+import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,4 +32,6 @@ public interface IClientService {
     ClientDTOResponse update (UUID id , ClientUpdateRequest request);
 
     void delete (UUID externalID);
+
+    List<GameDTOResponse> getMyGames();
 }

@@ -4,6 +4,7 @@ package ExperienceGroup.Ludora.features.client;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
+import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,11 @@ public class ClientController {
     @GetMapping("/perfil")
     ResponseEntity<ClientDTOResponse> getMyPerfil(){
         return ResponseEntity.ok(clientService.getMyPerfil());
+    }
+
+    @GetMapping("/myGames")
+    ResponseEntity<List<GameDTOResponse>> getMyGames(){
+        return ResponseEntity.ok(clientService.getMyGames());
     }
 
    @GetMapping("/{id}")
