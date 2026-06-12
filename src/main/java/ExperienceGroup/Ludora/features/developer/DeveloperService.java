@@ -6,6 +6,11 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -147,13 +152,48 @@ public class DeveloperService implements IDeveloperService {
         DeveloperEntity toBeDeleted = developerRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
 
-        CredentialsEntity credentials = searchCreadentials(toBeDeleted.getUserName());
+        CredentialsEntity credentials = searchCredentials(toBeDeleted.getUserName());
 
         credentials.setEnabled(false);
         credentialsRepository.save(credentials);
     }
 
-    private CredentialsEntity searchCreadentials(String username){
+    @Override
+    @PreAuthorize("hasRole('DEVELOPER')")
+    @Transactional
+    public void changePassword(ChangePasswordDTO passwordDTO) {
+        CredentialsEntity credentials = searchCredentials(authenticatedUser.getCurrentUser().username());
+
+        if(passwordEncoder.matches(passwordDTO.oldPass().value(), credentials.getPassword())){ // verifica si son la misma password
+            credentials.setPassword(passwordEncoder.encode(passwordDTO.newPass().value()));
+            credentialsRepository.save(credentials);
+        }else{
+            throw new PasswordInvalidException("The old password is invalid");
+        }
+    }
+
+    @Override
+    @PreAuthorize("hasRole('DEVELOPER')")
+    @Transactional
+    public void changeEmail(ChangeEmailDTO emailDTO) {
+
+        if(developerRepository.existsByEmail(emailDTO.newEmail())){
+            throw new UserExistsWithEmailException("User exists with this email");
+        }
+
+        DeveloperEntity developer = developerRepository.findByExternalId(authenticatedUser.getCurrentUser().externalId())
+                .orElseThrow(UserNotFoundException::new);
+
+        if(developer.getEmail().value().equals(emailDTO.oldEmail().value())){
+            developer.setEmail(emailDTO.newEmail());
+            developerRepository.save(developer);
+        }else{
+            throw new IllegalEmailException("The old email is incorrect");
+        }
+
+    }
+
+    private CredentialsEntity searchCredentials(String username){
         return credentialsRepository.findByUsername(username)
                 .orElseThrow(() -> new CredentialsNotFoundException("Credentials not found"));
     }

@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
 import ExperienceGroup.Ludora.common.exception.CartEmptyException;
+import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
@@ -80,12 +81,12 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(UserExistsWithEmailException.class)
     public ResponseEntity<ErrorResponseDTO> handlerUserExistsEmail(UserExistsWithEmailException ex){
-        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(UserExistsWithUsernameException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerUserExistsEmail(UserExistsWithUsernameException ex){
-        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    public ResponseEntity<ErrorResponseDTO> handlerUserExistsUsername(UserExistsWithUsernameException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
 
@@ -110,10 +111,15 @@ public class GlobalHandlerException {
                 .body(ex.getMessage());
     }
 
-@ExceptionHandler(MercadoPagoFailedException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerMercadoPagoFailedException ( MercadoPagoFailedException ex){
-        return buildResponse(HttpStatus.BAD_REQUEST , ex.getMessage());
-}
+    @ExceptionHandler(MercadoPagoFailedException.class)
+        public ResponseEntity<ErrorResponseDTO> handlerMercadoPagoFailedException ( MercadoPagoFailedException ex){
+            return buildResponse(HttpStatus.BAD_REQUEST , ex.getMessage());
+    }
+
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerPasswordInvalid(PasswordInvalidException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 
 
 }
