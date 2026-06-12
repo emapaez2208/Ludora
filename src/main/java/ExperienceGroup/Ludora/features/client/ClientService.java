@@ -6,6 +6,10 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.features.game.IGameRepository;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
+import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -31,8 +35,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ClientService implements IClientService{
     private final IClientRepository repository;
+    private final IGameRepository gameRepository;
     private final IMapper<ClientEntity,ClientDTOResponse> mapperResponse;
     private final IMapper<ClientEntity,ClientDTORequest> mapperRequest;
+    private final IMapper<GameEntity, GameDTOResponse> mapperGamesResponse;
     private final ICartService cartService;
     private final CredentialsRepository credentialsRepository;
     private final RoleRepository roleRepository;
@@ -155,6 +161,17 @@ public class ClientService implements IClientService{
         repository.save(clientEntity);
 
         return mapperResponse.toDTO(clientEntity);
+    }
+
+    @Override
+    // No hace falta PreAuthorize porque busca los juegos del cliente logueado
+    public List<GameDTOResponse> getMyGames(){
+        return  gameRepository.findAllByClients_ExternalId(
+                authenticatedUser.getCurrentUser().externalId()
+                ).orElseThrow(() -> new GameNotFoundException("The user not contain games"))
+                    .stream()
+                    .map(mapperGamesResponse::toDTO)
+                    .toList();
     }
 
     private CredentialsEntity searchCredentials(String username){
