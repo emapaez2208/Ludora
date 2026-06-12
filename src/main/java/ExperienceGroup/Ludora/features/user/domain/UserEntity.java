@@ -2,22 +2,19 @@ package ExperienceGroup.Ludora.features.user.domain;
 
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
-import ExperienceGroup.Ludora.features.game.GameEntity;
-import ExperienceGroup.Ludora.features.role.RoleEntity;
-
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,27 +33,11 @@ public class UserEntity {
     private String userName;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "email_adress", unique = true, nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "email_address", unique = true, nullable = false))
     private Email email;
-
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "password",nullable = false))
-    private Password password;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private RoleEntity role;
 
     @Column(nullable = false)
     private Boolean statusBlocked;
-
-    @ManyToMany
-    @JoinTable(
-            name= "users_games",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name="game_id")
-    )
-    private List<GameEntity> games;
 
     @PrePersist
     void OnCreate(){
@@ -66,7 +47,5 @@ public class UserEntity {
         if(statusBlocked == null)
             statusBlocked = true;
     }
-
-
 
 }

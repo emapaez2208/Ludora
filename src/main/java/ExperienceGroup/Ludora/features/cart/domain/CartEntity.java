@@ -1,10 +1,12 @@
 package ExperienceGroup.Ludora.features.cart.domain;
 
-import ExperienceGroup.Ludora.features.game.GameEntity;
-import ExperienceGroup.Ludora.features.user.domain.UserEntity;
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,8 +23,9 @@ public class CartEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity users;
+    @JoinColumn(name = "client_id", nullable = false)
+    private ClientEntity client;
+
 
     @ManyToMany
     @JoinTable(
@@ -30,9 +33,9 @@ public class CartEntity {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id")
     )
-    private List<GameEntity> games;
+    private List<GameEntity> games = new ArrayList<>();
 
-    @Column (name = "total_price", columnDefinition = "bigint DEFAULT 0")
+    @Column (name = "total_price", columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private Double totalPrice;
 
 }

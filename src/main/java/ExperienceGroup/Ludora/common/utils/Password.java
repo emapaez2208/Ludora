@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.common.utils;
 
+import ExperienceGroup.Ludora.features.user.exception.IllegalPasswordException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
@@ -14,7 +15,7 @@ public record Password(String value) {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public Password(String value){
         if(value == null || !PASSWORD_PATTERN.matcher(value).matches()){
-            throw new IllegalArgumentException("Invalid Password format: " + value);
+            throw new IllegalPasswordException("Invalid Password format: " + value);
         }
         this.value = value;
     }
