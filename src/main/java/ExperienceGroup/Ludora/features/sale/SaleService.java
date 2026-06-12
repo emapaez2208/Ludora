@@ -62,6 +62,7 @@ public class SaleService  implements ISaleService{
         return responseMapper.toDTO(saved);
     }
 
+    @PreAuthorize("hasAuthority('BUY_GAMES')")
     public String paySaleMP(UUID externalId){
         SaleEntity sale = saleRepository.findByExternalId(externalId)
                 .orElseThrow(SaleNotFoundException::new);
