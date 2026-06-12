@@ -6,6 +6,9 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.common.exception.dto.ChangePasswordDTO;
+import ExperienceGroup.Ludora.common.utils.Password;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -89,6 +92,7 @@ public class ClientService implements IClientService{
     }
 
     @Override
+    @PreAuthorize("hasRole('CLIENT')")
     public ClientDTOResponse getMyPerfil(){
         return getByExternalID(authenticatedUser.getCurrentUser().externalId());
     }
@@ -155,6 +159,20 @@ public class ClientService implements IClientService{
         repository.save(clientEntity);
 
         return mapperResponse.toDTO(clientEntity);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public void changePassword(ChangePasswordDTO passwordDTO) {
+        CredentialsEntity credentials = searchCredentials(authenticatedUser.getCurrentUser().username());
+
+        if(passwordEncoder.matches(passwordDTO.oldPass().value(), credentials.getPassword())){ // verifica si son la misma password
+            credentials.setPassword(passwordEncoder.encode(passwordDTO.newPass().value()));
+            credentialsRepository.save(credentials);
+        }else{
+            throw new PasswordInvalidException("The old password is invalid");
+        }
     }
 
     private CredentialsEntity searchCredentials(String username){

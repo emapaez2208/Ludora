@@ -1,5 +1,7 @@
 package ExperienceGroup.Ludora.features.client;
 
+import ExperienceGroup.Ludora.common.exception.dto.ChangePasswordDTO;
+import ExperienceGroup.Ludora.common.utils.Password;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
@@ -31,4 +33,6 @@ public interface IClientService {
     ClientDTOResponse update (UUID id , ClientUpdateRequest request);
 
     void delete (UUID externalID);
+
+    void changePassword(ChangePasswordDTO passwordDTO);
 }

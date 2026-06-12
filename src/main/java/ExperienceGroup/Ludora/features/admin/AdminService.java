@@ -6,6 +6,8 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.common.exception.dto.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailException;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
@@ -129,6 +131,20 @@ public class AdminService implements IAdminService{
 
         credentials.setEnabled(false);
         credentialsRepository.save(credentials);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void changePassword(ChangePasswordDTO passwordDTO) {
+        CredentialsEntity credentials = searchCredentials(authenticatedUser.getCurrentUser().username());
+
+        if(passwordEncoder.matches(passwordDTO.oldPass().value(), credentials.getPassword())){ // verifica si son la misma password
+            credentials.setPassword(passwordEncoder.encode(passwordDTO.newPass().value()));
+            credentialsRepository.save(credentials);
+        }else{
+            throw new PasswordInvalidException("The old password is invalid");
+        }
     }
 
     private CredentialsEntity searchCredentials(String username){
