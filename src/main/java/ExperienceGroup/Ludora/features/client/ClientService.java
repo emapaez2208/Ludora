@@ -6,6 +6,10 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
+import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
@@ -95,6 +99,7 @@ public class ClientService implements IClientService{
     }
 
     @Override
+    @PreAuthorize("hasRole('CLIENT')")
     public ClientDTOResponse getMyPerfil(){
         return getByExternalID(authenticatedUser.getCurrentUser().externalId());
     }
@@ -164,6 +169,38 @@ public class ClientService implements IClientService{
     }
 
     @Override
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public void changePassword(ChangePasswordDTO passwordDTO) {
+        CredentialsEntity credentials = searchCredentials(authenticatedUser.getCurrentUser().username());
+
+        if(passwordEncoder.matches(passwordDTO.oldPass().value(), credentials.getPassword())){ // verifica si son la misma password
+            credentials.setPassword(passwordEncoder.encode(passwordDTO.newPass().value()));
+            credentialsRepository.save(credentials);
+        }else{
+            throw new PasswordInvalidException("The old password is invalid");
+        }
+    }
+
+    @Override
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public void changeEmail(ChangeEmailDTO emailDTO) {
+
+        if(repository.existsByEmail(emailDTO.newEmail())){
+            throw new UserExistsWithEmailException("User exists with this email");
+        }
+
+        ClientEntity client = repository.findByExternalId(authenticatedUser.getCurrentUser().externalId())
+                .orElseThrow(UserNotFoundException::new);
+
+        if(client.getEmail().value().equals(emailDTO.oldEmail().value())){
+            client.setEmail(emailDTO.newEmail());
+            repository.save(client);
+        }else{
+            throw new IllegalEmailException("The old email is incorrect");
+        }
+
     // No hace falta PreAuthorize porque busca los juegos del cliente logueado
     public List<GameDTOResponse> getMyGames(){
         return  gameRepository.findAllByClients_ExternalId(

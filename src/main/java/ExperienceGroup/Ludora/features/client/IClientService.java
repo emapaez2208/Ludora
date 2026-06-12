@@ -1,5 +1,7 @@
 package ExperienceGroup.Ludora.features.client;
 
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
@@ -33,5 +35,8 @@ public interface IClientService {
 
     void delete (UUID externalID);
 
+    void changePassword(ChangePasswordDTO passwordDTO);
+
+    void changeEmail(ChangeEmailDTO emailDTO);
     List<GameDTOResponse> getMyGames();
 }
