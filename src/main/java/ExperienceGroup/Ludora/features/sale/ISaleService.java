@@ -25,4 +25,5 @@ public interface ISaleService {
                                       List<UUID> clientIds,
                                       List<UUID> gameIds);
 
+    String paySaleMP(UUID externalId);
 }

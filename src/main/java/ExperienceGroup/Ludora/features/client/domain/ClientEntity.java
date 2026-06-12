@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Past;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -44,5 +45,12 @@ public class ClientEntity extends UserEntity {
     private CartEntity cart;
 
     private Integer points;
+
+    @PrePersist
+    void onCreate(){
+        if(games == null){
+            games = new ArrayList<>();
+        }
+    }
 
 }

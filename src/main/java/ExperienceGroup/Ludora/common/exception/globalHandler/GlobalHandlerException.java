@@ -6,7 +6,11 @@ import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.features.ageRange.exception.InvalidAgeRangeException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.mercadoPago.exception.MercadoPagoFailedException;
 import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
+import ExperienceGroup.Ludora.features.user.exception.IllegalPasswordException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -61,10 +65,10 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorResponseDTO> handleUnexpected(Exception ex){
-//        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error inesperado en el servidor.");
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDTO> handleUnexpected(Exception ex){
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error inesperado en el servidor.");
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleValidationExceptions(MethodArgumentNotValidException ex){
@@ -105,5 +109,11 @@ public class GlobalHandlerException {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
+
+@ExceptionHandler(MercadoPagoFailedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerMercadoPagoFailedException ( MercadoPagoFailedException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST , ex.getMessage());
+}
+
 
 }
