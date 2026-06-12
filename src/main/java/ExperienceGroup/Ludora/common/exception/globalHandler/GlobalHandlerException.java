@@ -65,10 +65,10 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorResponseDTO> handleUnexpected(Exception ex){
-//        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error inesperado en el servidor.");
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDTO> handleUnexpected(Exception ex){
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error inesperado en el servidor.");
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleValidationExceptions(MethodArgumentNotValidException ex){
