@@ -32,12 +32,9 @@ public class SaleService  implements ISaleService{
 
     private final IClientRepository clientRepository;
     private final ICartService cartService;
+    private final MercadoPagoService mercadoPago;
 
     private static final BigDecimal REWARD_POINTS_PERCENTAGE = BigDecimal.valueOf(0.08);
-    private static final Integer POINTS_THRESHOLD = 10000;
-    private static final BigDecimal MAX_PRICE_FOR_DISCOUNT = BigDecimal.valueOf(6000);
-    private static final BigDecimal DISCOUNT_PERCENTAGE = BigDecimal.valueOf(0.10);
-    private final MercadoPagoService mercadoPago;
 
     @Override
     @Transactional
@@ -51,7 +48,7 @@ public class SaleService  implements ISaleService{
             throw new CartEmptyException("Empty cart");
         }
 
-        BigDecimal totalPrice = BigDecimal.valueOf(cart.getTotalPrice());
+        BigDecimal totalPrice = cart.getTotalPrice();
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
 

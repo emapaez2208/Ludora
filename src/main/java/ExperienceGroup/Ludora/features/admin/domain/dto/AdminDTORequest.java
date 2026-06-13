@@ -7,12 +7,12 @@ import jakarta.validation.constraints.*;
 
 public record AdminDTORequest(@Schema(description = "El nombre del usuario", example = "John", required = true)
                               @Size(min = 3, max = 32, message = "El nombre tiene una longitud minima de 3 y maxima de 32 caracteres")
-                              @NotEmpty
+                              @NotBlank
                               String name,
 
                               @Schema(description = "El apellido del usuario", example = "Doe", required = true)
                               @Size(min = 3, max = 32, message = "El nombre tiene una longitud minima de 3 y maxima de 32 caracteres")
-                              @NotEmpty
+                              @NotBlank
                               String lastName,
 
                               @Schema(description = "El usuario para poder registrarse o iniciar sesion", example = "JohnDoe", required = true)

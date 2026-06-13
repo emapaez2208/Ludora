@@ -22,13 +22,13 @@ public class ClientEntity extends UserEntity {
     @Column(nullable = false)
     private Long phone;
 
-   @Column(nullable = false , length = 20)
+    @Column(nullable = false , length = 20)
     private String street;
 
-   @Column(nullable = false)
+    @Column(nullable = false)
     private Integer numberStreet;
 
-   @Past(message = "La fecha de cumpleanios no puede ser pasada a la fecha actual")
+    @Column(nullable = false)
     private LocalDate birthDate;
 
     @ManyToMany

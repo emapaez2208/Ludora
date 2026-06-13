@@ -11,12 +11,12 @@ import java.time.LocalDate;
 
 public record ClientDTORequest (@Schema(description = "El nombre del usuario", example = "John", required = true)
                                 @Size(min = 3, max = 32, message = "El nombre tiene una longitud minima de 3 y maxima de 32 caracteres")
-                                @NotEmpty
+                                @NotBlank
                                 String name,
 
                                 @Schema(description = "El apellido del usuario", example = "Doe", required = true)
                                 @Size(min = 3, max = 32, message = "El nombre tiene una longitud minima de 3 y maxima de 32 caracteres")
-                                @NotEmpty
+                                @NotBlank
                                 String lastName,
 
                                 @Schema(description = "El usuario para poder registrarse o iniciar sesion", example = "JohnDoe", required = true)
@@ -53,6 +53,7 @@ public record ClientDTORequest (@Schema(description = "El nombre del usuario", e
                                 Integer numberStreet,
 
                                 @Schema(description = "Fecha de nacimiento, formato = YYYY-MM-DD", example = "2010-05-27", required = true)
+                                @Past(message = "La fecha de nacimiento debe ser una fecha pasada")
                                 @NotNull LocalDate birthDate
 
                                 ){

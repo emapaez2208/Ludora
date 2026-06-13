@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -27,7 +28,11 @@ public class CartService implements ICartService {
     private final IClientRepository clientRepository;
     private final AuthenticatedUserProvider authenticatedUser;
 
-///-----------------------------------------------------------------------------------------///
+    private static final Integer POINTS_THRESHOLD = 10000;
+    private static final BigDecimal DISCOUNT_PERCENTAGE = BigDecimal.valueOf(0.10);
+
+
+    ///-----------------------------------------------------------------------------------------///
 /// Logica
  ///--------------------------------------------------------------------------------------------------///
 
@@ -52,10 +57,10 @@ public class CartService implements ICartService {
     @PreAuthorize("#clientExternalId == authentication.principal.externalId and hasAuthority('GAME_AGREE_CART')")
     public CartDTOResponse addGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId)) ;
+                .orElseThrow(() -> new EntityNotFoundException("Client not found with id: " + clientExternalId)) ;
 
         GameEntity game = gameRepository.findByExternalId(gameExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Juego no encontrado con id: " + gameExternalId));
+                .orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + gameExternalId));
 
         if (cart.getGames().contains(game)) {
             throw new IllegalStateException("El juego ya está en el carrito");
@@ -65,8 +70,8 @@ public class CartService implements ICartService {
 
         cart.setTotalPrice(
                         cart.getGames().stream()
-                                        .mapToDouble(g -> g.getPrice().doubleValue())
-                                        .sum()
+                                .map(GameEntity::getPrice)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add)
         );
 
         return cartResponseMapper.toDTO(cartRepository.save(cart));
@@ -89,8 +94,8 @@ public class CartService implements ICartService {
         }
 
         cart.setTotalPrice(cart.getGames().stream()
-                .mapToDouble(g -> g.getPrice().doubleValue())
-                .sum());
+                .map(GameEntity::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
 
         return cartResponseMapper.toDTO(cartRepository.save(cart));
     }
@@ -106,7 +111,7 @@ public class CartService implements ICartService {
 
 
         cart.setGames(new ArrayList<>());
-        cart.setTotalPrice(0.0);
+        cart.setTotalPrice(BigDecimal.ZERO);
         cartRepository.save(cart);
     }
 
@@ -123,7 +128,7 @@ public class CartService implements ICartService {
         CartEntity cart = new CartEntity();
         cart.setClient(client);
         cart.setGames(new ArrayList<>());
-        cart.setTotalPrice(0.0);
+        cart.setTotalPrice(BigDecimal.ZERO);
 
         return cartResponseMapper.toDTO(cartRepository.save(cart));
     }
