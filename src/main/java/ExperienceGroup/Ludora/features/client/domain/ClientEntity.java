@@ -44,12 +44,17 @@ public class ClientEntity extends UserEntity {
               orphanRemoval = true)
     private CartEntity cart;
 
+    @Column (nullable = false)
     private Integer points;
 
     @PrePersist
     void onCreate(){
         if(games == null){
             games = new ArrayList<>();
+        }
+
+        if (points == null) {
+            points = 0;
         }
     }
 
