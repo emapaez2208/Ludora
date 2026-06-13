@@ -124,7 +124,7 @@ public class ClientService implements IClientService{
 
         repository.save(saved);
 
-        cartService.crearCarrito(saved.getExternalId());
+        cartService.createCart(saved.getExternalId());
 
         CredentialsEntity credentials = CredentialsEntity.builder()
                 .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_CLIENT).orElseThrow(() -> new EntityNotFoundException("Role not found"))))

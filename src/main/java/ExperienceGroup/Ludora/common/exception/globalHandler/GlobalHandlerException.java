@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
-import ExperienceGroup.Ludora.common.exception.CartEmptyException;
+import ExperienceGroup.Ludora.features.cart.exception.CartEmptyException;
 import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
@@ -117,10 +117,8 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
     @ExceptionHandler(CartEmptyException.class)
-    public ResponseEntity<String> handlerCartEmpty(CartEmptyException ex) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
+    public ResponseEntity<ErrorResponseDTO> handlerCartEmpty(CartEmptyException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(MercadoPagoFailedException.class)

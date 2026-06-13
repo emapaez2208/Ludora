@@ -2,7 +2,7 @@ package ExperienceGroup.Ludora.features.sale;
 import ExperienceGroup.Ludora.features.mercadoPago.MercadoPagoService;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
-import ExperienceGroup.Ludora.common.exception.CartEmptyException;
+import ExperienceGroup.Ludora.features.cart.exception.CartEmptyException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;

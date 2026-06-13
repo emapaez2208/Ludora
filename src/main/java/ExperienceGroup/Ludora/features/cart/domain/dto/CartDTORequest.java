@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.cart.domain.dto;
 
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import ExperienceGroup.Ludora.features.game.domain.dto.InfoGameDTOResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,7 +16,7 @@ public record CartDTORequest(
 
 
         @Schema(description = "Lista de juegos en carrito")
-        List<GameDTOResponse> gamesResponse
+        List<InfoGameDTOResponse> gamesResponse
 ) {
 
 }
