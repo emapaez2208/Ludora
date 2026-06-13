@@ -1,7 +1,8 @@
 package ExperienceGroup.Ludora.features.sale;
-
+import ExperienceGroup.Ludora.features.mercadoPago.MercadoPagoService;
+import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.exception.CartEmptyException;
-
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
@@ -10,8 +11,6 @@ import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
-import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
-import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
@@ -38,6 +37,7 @@ public class SaleService  implements ISaleService{
     private static final Integer POINTS_THRESHOLD = 10000;
     private static final BigDecimal MAX_PRICE_FOR_DISCOUNT = BigDecimal.valueOf(6000);
     private static final BigDecimal DISCOUNT_PERCENTAGE = BigDecimal.valueOf(0.10);
+    private final MercadoPagoService mercadoPago;
 
     @Override
     @Transactional
@@ -68,6 +68,15 @@ public class SaleService  implements ISaleService{
         cartService.clearCart(client.getExternalId());
 
         return responseMapper.toDTO(saved);
+    }
+
+    @PreAuthorize("hasAuthority('BUY_GAMES')")
+    public String paySaleMP(UUID externalId){
+        SaleEntity sale = saleRepository.findByExternalId(externalId)
+                .orElseThrow(SaleNotFoundException::new);
+
+        cartService.clearCart(sale.getClient().getExternalId());
+        return mercadoPago.createPay(sale.getGames(), sale.getExternalId());
     }
 
     @Override

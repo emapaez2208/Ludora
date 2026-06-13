@@ -1,5 +1,7 @@
 package ExperienceGroup.Ludora.features.admin;
 
+import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
@@ -33,7 +35,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getByExternalId(id));
     }
 
-    @GetMapping("/perfil")
+    @GetMapping("/profile")
     ResponseEntity<AdminDTOResponse> getMyPerfil(){
         return ResponseEntity.ok(adminService.getMyPerfil());
     }
@@ -55,5 +57,18 @@ public class AdminController {
         adminService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/profile/changePassword")
+    ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordDTO passwordDTO){
+        adminService.changePassword(passwordDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/profile/changeEmail")
+    ResponseEntity<Void> changeEmail(@Valid @RequestBody ChangeEmailDTO emailDTO){
+        adminService.changeEmail(emailDTO);
+        return ResponseEntity.ok().build();
+    }
+
     
 }

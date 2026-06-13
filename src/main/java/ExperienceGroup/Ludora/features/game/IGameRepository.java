@@ -1,7 +1,6 @@
 package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
-import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -23,7 +22,7 @@ public interface IGameRepository extends JpaRepository<GameEntity, Long>, JpaSpe
 
     List<GameEntity> findByAgeRange_RangeNameIgnoreCase(String ageRange);
 
-    //List<GameEntity> findByUsers_UserNameIgnoreCase(String userName);
+    Optional<List<GameEntity>> findAllByClients_ExternalId(UUID externalId);
 
     List<GameEntity> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
 
