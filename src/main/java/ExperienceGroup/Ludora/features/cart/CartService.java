@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.DISCOUNT_PERCENTAGE;
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.POINTS_THRESHOLD;
+
 @Service
 @RequiredArgsConstructor
 public class CartService implements ICartService {
@@ -32,9 +35,6 @@ public class CartService implements ICartService {
     private final IGameRepository gameRepository;
     private final IClientRepository clientRepository;
     private final AuthenticatedUserProvider authenticatedUser;
-
-    private static final Integer POINTS_THRESHOLD = 10000;
-    private static final BigDecimal DISCOUNT_PERCENTAGE = BigDecimal.valueOf(0.10);
 
 
     ///-----------------------------------------------------------------------------------------///

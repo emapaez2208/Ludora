@@ -21,9 +21,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.*;
 
 @Service
 @AllArgsConstructor
@@ -35,10 +36,6 @@ public class SaleService  implements ISaleService{
     private final IClientRepository clientRepository;
     private final ICartService cartService;
     private final MercadoPagoService mercadoPago;
-
-    private static final BigDecimal REWARD_POINTS_PERCENTAGE = BigDecimal.valueOf(0.08);
-    private static final Integer POINTS_THRESHOLD = 10000;
-    private static final BigDecimal DISCOUNT_PERCENTAGE = BigDecimal.valueOf(0.10);
 
     @Override
     @Transactional
@@ -159,9 +156,10 @@ public class SaleService  implements ISaleService{
             return 0;
         }
 
-        Integer earnedPoints = totalPrice.multiply(REWARD_POINTS_PERCENTAGE).intValue();
+        return totalPrice.multiply(REWARD_POINTS_PERCENTAGE)
+                .setScale(0, RoundingMode.FLOOR)
+                .intValue();
 
-        return earnedPoints;
     }
 
 }
