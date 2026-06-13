@@ -39,6 +39,9 @@ public class CredentialsEntity implements UserDetails {
     @Column(nullable = false, columnDefinition = "boolean default true")
     private Boolean enabled;
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private Boolean accountNonLocked;
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private UserEntity user;
@@ -85,5 +88,9 @@ public class CredentialsEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return Boolean.TRUE.equals(this.enabled);
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {return Boolean.TRUE.equals(this.accountNonLocked);
     }
 }

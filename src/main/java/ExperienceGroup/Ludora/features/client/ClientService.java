@@ -104,6 +104,9 @@ public class ClientService implements IClientService{
         return getByExternalID(authenticatedUser.getCurrentUser().externalId());
     }
 
+
+
+
     @Override
     @Transactional
     public ClientDTOResponse save(ClientDTORequest clientDTORequest) {
@@ -126,6 +129,7 @@ public class ClientService implements IClientService{
         CredentialsEntity credentials = CredentialsEntity.builder()
                 .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_CLIENT).orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
+                .accountNonLocked(true)
                 .username(clientDTORequest.userName())
                 .externalId(saved.getExternalId())
                 .password(passwordEncoder.encode(clientDTORequest.password().value()))
@@ -137,6 +141,9 @@ public class ClientService implements IClientService{
 
         return mapperResponse.toDTO(saved);
     }
+
+
+
 
     @Override
     @PreAuthorize("hasAuthority('DELETE_USERS') or #externalID == authentication.principal.externalId")
