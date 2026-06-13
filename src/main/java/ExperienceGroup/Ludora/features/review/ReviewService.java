@@ -132,7 +132,7 @@ public class ReviewService implements IReviewService {
                     .getAuthentication().getPrincipal()).getExternalId();
 
             if (!review.getClient().getExternalId().equals(currentUser)) {                        /// compruebo , es o no su review?
-                throw new AccessDeniedException("No tenés permiso para eliminar esta review");   /// si no es largo excepcion
+                throw new AccessDeniedException("without sufficient permissions");   /// si no es largo excepcion
             }
         }
 
