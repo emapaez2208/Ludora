@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.review;
 
+import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
@@ -14,7 +15,9 @@ import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -110,13 +113,30 @@ public class ReviewService implements IReviewService {
                 .toList();
     }
 
+
+
     @Transactional
     @Override
-    @PreAuthorize("hasAuthority('DELETE_REVIEW')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CLIENT')")
     public void delete(UUID reviewID) {
+
         ReviewEntity review = reviewRepository.findByExternalId(reviewID)
-                .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
+                .orElseThrow(() -> new ReviewNotFoundException("Review not found"));       // traigo la review
+
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));  ///compruebo si es admin
+
+        if (!isAdmin) {
+            UUID currentUser = ((CredentialsEntity) SecurityContextHolder.getContext()         ///  si no es admin
+                    .getAuthentication().getPrincipal()).getExternalId();
+
+            if (!review.getClient().getExternalId().equals(currentUser)) {                        /// compruebo , es o no su review?
+                throw new AccessDeniedException("without sufficient permissions");   /// si no es largo excepcion
+            }
+        }
 
         reviewRepository.delete(review);
     }
+
 }
