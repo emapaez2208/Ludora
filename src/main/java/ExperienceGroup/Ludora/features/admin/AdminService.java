@@ -212,6 +212,17 @@ public class AdminService implements IAdminService{
         credentialsRepository.save(credentials);
     }
 
+   /// -------------------------------ALTA LOGICA -------------------///
+
+   @Override
+   @PreAuthorize("hasRole('ADMIN')")
+   public void enableAccount(UUID externalId) {
+       CredentialsEntity credentials = credentialsRepository.findByExternalId(externalId)
+               .orElseThrow(() -> new CredentialsNotFoundException("Credentials not found for user: " + externalId));
+       credentials.setEnabled(true);
+       credentialsRepository.save(credentials);
+   }
+
     private CredentialsEntity searchCredentials(String username){
         return credentialsRepository.findByUsername(username)
                 .orElseThrow(() -> new CredentialsNotFoundException("Credentials to user not found"));

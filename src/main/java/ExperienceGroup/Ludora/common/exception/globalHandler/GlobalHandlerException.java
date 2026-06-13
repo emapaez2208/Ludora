@@ -16,6 +16,7 @@ import ExperienceGroup.Ludora.features.user.exception.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -93,6 +94,11 @@ public class GlobalHandlerException {
     @ExceptionHandler(LockedException.class)
     public ResponseEntity<ErrorResponseDTO> handlerLockedAccount(LockedException ex) {
         return buildResponse(HttpStatus.FORBIDDEN, "La cuenta se encuentra bloqueada.");
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerDisabledAccount(DisabledException ex) {
+        return buildResponse(HttpStatus.FORBIDDEN, "Tu cuenta esta dada de baja.");
     }
 
 

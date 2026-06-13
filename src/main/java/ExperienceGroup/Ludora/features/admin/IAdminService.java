@@ -35,4 +35,6 @@ public interface IAdminService {
     void blockAccount(UUID externalId);
 
     void unblockAccount(UUID externalId);
+
+    void enableAccount(UUID externalId);
 }

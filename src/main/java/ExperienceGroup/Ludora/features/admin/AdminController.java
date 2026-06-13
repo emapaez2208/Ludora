@@ -101,5 +101,13 @@ public class AdminController {
         adminService.unblockAccount(id);
         return ResponseEntity.noContent().build();
     }
-    
+
+    /// -------------------------------ALTA LOGICA -------------------///
+
+    @PatchMapping("/{id}/enable")
+    ResponseEntity<Void> enableAccount(@PathVariable UUID id) {
+        adminService.enableAccount(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
