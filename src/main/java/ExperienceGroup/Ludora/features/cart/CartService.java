@@ -57,6 +57,9 @@ public class CartService implements ICartService {
         GameEntity game = gameRepository.findByExternalId(gameExternalId)
                 .orElseThrow(() -> new EntityNotFoundException("Juego no encontrado con id: " + gameExternalId));
 
+        if (cart.getClient().getGames().contains(game)) {
+            throw new IllegalStateException("Ya tenés este juego en tu biblioteca");
+        }
         if (cart.getGames().contains(game)) {
             throw new IllegalStateException("El juego ya está en el carrito");
         }
