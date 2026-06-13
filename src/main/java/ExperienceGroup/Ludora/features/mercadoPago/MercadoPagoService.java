@@ -4,6 +4,7 @@ import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.mercadoPago.exception.MercadoPagoFailedException;
 import ExperienceGroup.Ludora.features.sale.ISaleRepository;
+import ExperienceGroup.Ludora.features.sale.domain.SaleItemEntity;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
@@ -32,16 +33,16 @@ public class MercadoPagoService {
 
 
     @Transactional
-    public String createPay(List<GameEntity> games, UUID saleId) {
+    public String createPay(List<SaleItemEntity> itemsList, UUID saleId) {
 
         try {
             List<PreferenceItemRequest> items = new ArrayList<>();
 
-            for (GameEntity game : games) {
+            for (SaleItemEntity item : itemsList) {
                 items.add(PreferenceItemRequest.builder()
-                        .title(game.getName())
+                        .title(item.getGame().getName())
                         .quantity(1)
-                        .unitPrice(game.getPrice())
+                        .unitPrice(item.getPriceAtSale())
                         .currencyId("ARS")
                         .build());
             }

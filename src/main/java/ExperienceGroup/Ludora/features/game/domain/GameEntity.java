@@ -6,7 +6,6 @@ import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
-import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -71,9 +70,6 @@ public class GameEntity {
     @ManyToMany(mappedBy = "games")
     private List<CartEntity> carts;
 
-    @ManyToMany(mappedBy = "games")
-    private List<SaleEntity> sales;
-
     @ManyToMany (mappedBy = "games")
     private List<ClientEntity> clients;
 
@@ -84,8 +80,5 @@ public class GameEntity {
         if (statusBlocked == null)
             statusBlocked = true;
     }
-
-
-
 
 }

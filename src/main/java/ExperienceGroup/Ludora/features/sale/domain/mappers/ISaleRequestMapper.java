@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ISaleRequestMapper extends IMapper<SaleEntity, SaleDTORequest> {
     @Mapping(target = "client", ignore = true)
-    @Mapping(target = "games", ignore = true)
     SaleEntity toEntity(SaleDTORequest saleDTORequest);
 
     @Mapping(target = "clientExternalId", ignore = true)

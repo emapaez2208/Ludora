@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.sale;
 import ExperienceGroup.Ludora.features.mercadoPago.MercadoPagoService;
+import ExperienceGroup.Ludora.features.sale.domain.SaleItemEntity;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.features.cart.exception.CartEmptyException;
@@ -18,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class SaleService  implements ISaleService{
     private final MercadoPagoService mercadoPago;
 
     private static final BigDecimal REWARD_POINTS_PERCENTAGE = BigDecimal.valueOf(0.08);
+    private static final Integer POINTS_THRESHOLD = 10000;
+    private static final BigDecimal DISCOUNT_PERCENTAGE = BigDecimal.valueOf(0.10);
 
     @Override
     @Transactional
@@ -48,16 +52,40 @@ public class SaleService  implements ISaleService{
             throw new CartEmptyException("Empty cart");
         }
 
-        BigDecimal totalPrice = cart.getTotalPrice();
+        boolean hasDiscount = client.getPoints() >= POINTS_THRESHOLD;
+        if (hasDiscount) {
+            client.setPoints(client.getPoints() - POINTS_THRESHOLD);
+            clientRepository.save(client);
+        }
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
-
         saleEntity.setClient(client);
-        saleEntity.setGames(new ArrayList<>(cart.getGames()));
+        saleEntity.setHasDiscount(hasDiscount);
+
+        List<SaleItemEntity> items = cart.getGames().stream()
+                .map(game -> {
+                    SaleItemEntity item = new SaleItemEntity();
+                    item.setSale(saleEntity);
+                    item.setGame(game);
+
+                    BigDecimal price = hasDiscount
+                            ? game.getPrice().multiply(BigDecimal.ONE.subtract(DISCOUNT_PERCENTAGE))
+                                  .setScale(2, RoundingMode.HALF_UP)
+                            : game.getPrice().setScale(2, RoundingMode.HALF_UP);
+
+                    item.setPriceAtSale(price);
+                    return item;
+                })
+                .toList();
+
+        BigDecimal totalPrice = items.stream()
+                .map(SaleItemEntity::getPriceAtSale)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        saleEntity.setItems(items);
         saleEntity.setTotalPrice(totalPrice);
 
         Integer earnedPoints = calculateEarnedPoints(totalPrice);
-
         saleEntity.setEarnedPoints(earnedPoints);
 
         SaleEntity saved = saleRepository.save(saleEntity);
@@ -73,7 +101,7 @@ public class SaleService  implements ISaleService{
                 .orElseThrow(SaleNotFoundException::new);
 
         cartService.clearCart(sale.getClient().getExternalId());
-        return mercadoPago.createPay(sale.getGames(), sale.getExternalId());
+        return mercadoPago.createPay(sale.getItems(), sale.getExternalId());
     }
 
     @Override

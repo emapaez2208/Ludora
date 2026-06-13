@@ -1,6 +1,5 @@
 package ExperienceGroup.Ludora.features.sale.domain.dto;
 
-import ExperienceGroup.Ludora.features.game.domain.dto.InfoGameDTOResponse;
 import ExperienceGroup.Ludora.features.sale.ESaleStatus;
 
 import java.math.BigDecimal;
@@ -13,7 +12,8 @@ public record SaleDTOResponse ( UUID externalId,
                                 ESaleStatus status,
                                 BigDecimal totalPrice,
                                 Integer earnedPoints,
+                                Boolean hasDiscount,
                                 String userName,
-                                List<InfoGameDTOResponse> games
+                                List<SaleItemDTOResponse> items
 ){
 }
