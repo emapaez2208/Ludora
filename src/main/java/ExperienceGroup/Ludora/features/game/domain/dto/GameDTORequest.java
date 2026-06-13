@@ -32,7 +32,7 @@ public record GameDTORequest(
     @NotNull(message = "Debe existir un rango de edad para el juego")
     UUID ageRangeExternalId,
 
-    @Schema(description = "Lista de los ID de los géneros del juego", example = "[1, 4]", required = true)
+    @Schema(description = "Lista de los nombres de los géneros del juego", example = "[shooter, rpg]", required = true)
     @NotEmpty(message = "El juego debe tener al menos un género")
     List<String> genreNames,
 
