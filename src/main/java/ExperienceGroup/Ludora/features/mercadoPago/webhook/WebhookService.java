@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,10 +55,16 @@ public class WebhookService {
                 switch (payment.getStatus()) {
 
                     case "approved":
-                            List<GameEntity> games = client.getGames();
                             sale.setStatus(ESaleStatus.APPROVED);
-                            games.addAll(sale.getGames());
-                            client.setGames(games);
+
+                            List<GameEntity> gamesBought = sale.getItems().stream()
+                                .map(item -> item.getGame())
+                                .toList();
+
+                            List<GameEntity> clientGames = new ArrayList<>(client.getGames());
+                            clientGames.addAll(gamesBought);
+                            client.setGames(clientGames);
+
                             clientRepository.save(client);
                         break;
 

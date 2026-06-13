@@ -1,7 +1,6 @@
 package ExperienceGroup.Ludora.features.sale.domain;
 
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
-import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.sale.ESaleStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 
 @Entity
-@Table (name = "sale")
+@Table (name = "sales")
 public class SaleEntity{
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -37,20 +36,21 @@ public class SaleEntity{
     @Column(nullable = false)
     private ESaleStatus status;
 
-    @Column(nullable = false)
+    @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
+
+    @Column (name = "earned_points", nullable = false)
+    private Integer earnedPoints = 0;
+
+    @Column (name = "has_discount", nullable = false)
+    private Boolean hasDiscount = false;
 
     @ManyToOne
     @JoinColumn (name = "client_id")
     private ClientEntity client;
 
-    @ManyToMany
-    @JoinTable(
-            name = "sales_games",
-            joinColumns = @JoinColumn(name = "sale_id"),
-            inverseJoinColumns = @JoinColumn(name = "game_id")
-    )
-    private List<GameEntity> games;
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SaleItemEntity> items;
 
     @PrePersist
     void OnCreate(){

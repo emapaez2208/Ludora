@@ -3,19 +3,30 @@ package ExperienceGroup.Ludora.features.cart;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTOResponse;
-import ExperienceGroup.Ludora.features.cart.domain.mapper.ICartResponseMapper;
+import ExperienceGroup.Ludora.features.cart.exception.CartNotFoundException;
+import ExperienceGroup.Ludora.features.cart.exception.GameAlreadyInCartException;
+import ExperienceGroup.Ludora.features.cart.exception.GameAlreadyOwnedException;
+import ExperienceGroup.Ludora.features.cart.exception.GameNotInCartException;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
+import ExperienceGroup.Ludora.features.game.domain.dto.InfoGameDTOResponse;
+import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.DISCOUNT_PERCENTAGE;
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.POINTS_THRESHOLD;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +34,11 @@ public class CartService implements ICartService {
 
     private final ICartRepository cartRepository;
     private final IGameRepository gameRepository;
-    private final ICartResponseMapper cartResponseMapper;
     private final IClientRepository clientRepository;
     private final AuthenticatedUserProvider authenticatedUser;
 
-///-----------------------------------------------------------------------------------------///
+
+    ///-----------------------------------------------------------------------------------------///
 /// Logica
  ///--------------------------------------------------------------------------------------------------///
 
@@ -36,9 +47,8 @@ public class CartService implements ICartService {
     @PreAuthorize("hasRole('ADMIN') or #clientExternalId == authentication.principal.externalId")
     public CartDTOResponse getCartByClient(UUID clientExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado para el cliente: " + clientExternalId));
-        ;
-        return cartResponseMapper.toDTO(cart);
+                .orElseThrow(() -> new CartNotFoundException("Cart not found for client: " + clientExternalId));
+        return recalculateCart(cart);
     }
 
     @Override
@@ -52,27 +62,21 @@ public class CartService implements ICartService {
     @PreAuthorize("#clientExternalId == authentication.principal.externalId and hasAuthority('GAME_AGREE_CART')")
     public CartDTOResponse addGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId)) ;
+                .orElseThrow(() -> new UserNotFoundException("Client not found with id: " + clientExternalId));
 
         GameEntity game = gameRepository.findByExternalId(gameExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Juego no encontrado con id: " + gameExternalId));
+                .orElseThrow(() -> new GameNotFoundException("Game not found with id: " + gameExternalId));
 
         if (cart.getClient().getGames().contains(game)) {
-            throw new IllegalStateException("Ya tenés este juego en tu biblioteca");
+            throw new GameAlreadyOwnedException("You already own this game in your library");
         }
         if (cart.getGames().contains(game)) {
-            throw new IllegalStateException("El juego ya está en el carrito");
+            throw new GameAlreadyInCartException("The game is already in the cart");
         }
 
         cart.getGames().add(game);
 
-        cart.setTotalPrice(
-                        cart.getGames().stream()
-                                        .mapToDouble(g -> g.getPrice().doubleValue())
-                                        .sum()
-        );
-
-        return cartResponseMapper.toDTO(cartRepository.save(cart));
+        return recalculateCart(cart);
     }
 
     /// quito 1 juego del carrito
@@ -82,20 +86,16 @@ public class CartService implements ICartService {
 
     public CartDTOResponse removeGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId));
+                .orElseThrow(() -> new UserNotFoundException("Client not found: " + clientExternalId));
 
         GameEntity game = gameRepository.findByExternalId(gameExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Juego no encontrado con id: " + gameExternalId));
+                .orElseThrow(() -> new GameNotFoundException("Game not found with id: " + gameExternalId));
 
         if (!cart.getGames().remove(game)) {
-            throw new EntityNotFoundException("El juego no está en el carrito");
+            throw new GameNotInCartException("The game was not found in the cart");
         }
 
-        cart.setTotalPrice(cart.getGames().stream()
-                .mapToDouble(g -> g.getPrice().doubleValue())
-                .sum());
-
-        return cartResponseMapper.toDTO(cartRepository.save(cart));
+        return recalculateCart(cart);
     }
 
 
@@ -105,11 +105,11 @@ public class CartService implements ICartService {
     public void clearCart(UUID clientExternalId) {   /// este sirve para despues de la ventaa
 
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                                         .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId)) ;
+                                         .orElseThrow(() -> new UserNotFoundException("Client not found: " + clientExternalId)) ;
 
 
         cart.setGames(new ArrayList<>());
-        cart.setTotalPrice(0.0);
+        cart.setTotalPrice(BigDecimal.ZERO);
         cartRepository.save(cart);
     }
 
@@ -119,17 +119,69 @@ public class CartService implements ICartService {
     ///  se le setean los atributos
     ///  1% logica 99% FE
 
-    public CartDTOResponse crearCarrito(UUID clientExternalId) {
+    public CartDTOResponse createCart(UUID clientExternalId) {
         ClientEntity client = clientRepository.findByExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado con id: " + clientExternalId));
+                .orElseThrow(() -> new UserNotFoundException("Client not found with id: " + clientExternalId));
 
         CartEntity cart = new CartEntity();
         cart.setClient(client);
         cart.setGames(new ArrayList<>());
-        cart.setTotalPrice(0.0);
+        cart.setTotalPrice(BigDecimal.ZERO);
 
-        return cartResponseMapper.toDTO(cartRepository.save(cart));
+        return recalculateCart(cartRepository.save(cart));
     }
+
+
+    private CartDTOResponse recalculateCart(CartEntity cart){
+        ClientEntity client = cart.getClient();
+        boolean qualifiesForDiscount = client.getPoints() >= POINTS_THRESHOLD; // acá mira si el cliente califica para el descuento
+
+        // arma la lista de juegos con los precios original y con descuento si se aplica:
+
+        List<InfoGameDTOResponse> gamesWithPrices = cart.getGames().stream().map(game -> {
+            BigDecimal basePrice = game.getPrice();
+            BigDecimal discountedPrice = qualifiesForDiscount
+                    ? basePrice.multiply(BigDecimal.ONE.subtract(DISCOUNT_PERCENTAGE)).setScale(2, RoundingMode.HALF_UP)
+                    : null;
+
+            return new InfoGameDTOResponse(
+                    game.getName(),
+                    basePrice,
+                    discountedPrice,
+                    game.getDeveloper().getCompany()
+            );
+        }).toList();
+
+        // calcula el precio total:
+
+        BigDecimal total = gamesWithPrices.stream()
+                .map(dto -> dto.discountedPrice() != null ? dto.discountedPrice() : dto.price())
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        cart.setTotalPrice(total);
+        cartRepository.save(cart);
+
+        ClientDTOResponse clientDto = new ClientDTOResponse(
+                client.getExternalId(),
+                client.getName(),
+                client.getLastName(),
+                client.getPhone(),
+                client.getStreet(),
+                client.getNumberStreet(),
+                client.getBirthDate(),
+                client.getPoints()
+        );
+
+        return new CartDTOResponse(
+                clientDto,
+                gamesWithPrices,
+                total
+        );
+
+    }
+
+
 }
 
 

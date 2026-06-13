@@ -16,6 +16,6 @@ public interface ICartService {
 
     void clearCart(UUID clientExternalId);      /// limpiar el carrito sin borrarlo
 
-    CartDTOResponse crearCarrito (UUID clientExternalId);
+    CartDTOResponse createCart (UUID clientExternalId);
 
 }

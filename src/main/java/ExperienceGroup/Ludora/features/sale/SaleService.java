@@ -1,8 +1,9 @@
 package ExperienceGroup.Ludora.features.sale;
 import ExperienceGroup.Ludora.features.mercadoPago.MercadoPagoService;
+import ExperienceGroup.Ludora.features.sale.domain.SaleItemEntity;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
-import ExperienceGroup.Ludora.common.exception.CartEmptyException;
+import ExperienceGroup.Ludora.features.cart.exception.CartEmptyException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
@@ -18,10 +19,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.*;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +35,6 @@ public class SaleService  implements ISaleService{
 
     private final IClientRepository clientRepository;
     private final ICartService cartService;
-
     private final MercadoPagoService mercadoPago;
 
     @Override
@@ -47,13 +49,55 @@ public class SaleService  implements ISaleService{
             throw new CartEmptyException("Empty cart");
         }
 
-        BigDecimal precioTotal = BigDecimal.valueOf(cart.getTotalPrice());
+        // se fija si tiene mas del umbral de puntos definido para aplicar el descuento.
+        // si lo supera, se aplica el descuento y se le resta esa cantidad de puntos. se guarda en el cliente esta info
+
+        boolean hasDiscount = client.getPoints() >= POINTS_THRESHOLD;
+        if (hasDiscount) {
+            client.setPoints(client.getPoints() - POINTS_THRESHOLD);
+            clientRepository.save(client);
+        }
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
-
         saleEntity.setClient(client);
-        saleEntity.setGames(new ArrayList<>(cart.getGames()));
-        saleEntity.setTotalPrice(precioTotal);
+        saleEntity.setHasDiscount(hasDiscount);
+
+        // se crea una lista con los items de la venta según lo que estaba en el carrito.
+        // cada ítem guarda la venta, el juego y el precio del momento de la venta
+
+        List<SaleItemEntity> items = cart.getGames().stream()
+                .map(game -> {
+                    SaleItemEntity item = new SaleItemEntity();
+                    item.setSale(saleEntity);
+                    item.setGame(game);
+
+                    BigDecimal price = hasDiscount
+                            ? game.getPrice().multiply(BigDecimal.ONE.subtract(DISCOUNT_PERCENTAGE))
+                                  .setScale(2, RoundingMode.HALF_UP)
+                            : game.getPrice().setScale(2, RoundingMode.HALF_UP);
+
+                    item.setPriceAtSale(price);
+                    return item;
+                })
+                .toList();
+
+        // se calcula el total según los precios que figuran en los ítems de la venta
+
+        BigDecimal totalPrice = items.stream()
+                .map(SaleItemEntity::getPriceAtSale)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        saleEntity.setItems(items);
+        saleEntity.setTotalPrice(totalPrice);
+
+        // cálculo de recompensa de puntos por compra.
+        // los puntos ganados se le suman al cliente.
+
+        Integer earnedPoints = calculateEarnedPoints(totalPrice);
+        saleEntity.setEarnedPoints(earnedPoints);
+
+        client.setPoints(client.getPoints() + earnedPoints);
+        clientRepository.save(client);
 
         SaleEntity saved = saleRepository.save(saleEntity);
 
@@ -68,7 +112,7 @@ public class SaleService  implements ISaleService{
                 .orElseThrow(SaleNotFoundException::new);
 
         cartService.clearCart(sale.getClient().getExternalId());
-        return mercadoPago.createPay(sale.getGames(), sale.getExternalId());
+        return mercadoPago.createPay(sale.getItems(), sale.getExternalId());
     }
 
     @Override
@@ -117,4 +161,19 @@ public class SaleService  implements ISaleService{
                 .map(responseMapper::toDTO)
                 .toList();
     }
+
+    // CÁLCULO DE PUNTOS
+
+    public Integer calculateEarnedPoints(BigDecimal totalPrice){
+
+        if (totalPrice == null || totalPrice.compareTo(BigDecimal.ZERO) <= 0) {
+            return 0;
+        }
+
+        return totalPrice.multiply(REWARD_POINTS_PERCENTAGE)
+                .setScale(0, RoundingMode.FLOOR)
+                .intValue();
+
+    }
+
 }

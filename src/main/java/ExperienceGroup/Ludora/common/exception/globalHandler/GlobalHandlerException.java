@@ -1,6 +1,6 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
-import ExperienceGroup.Ludora.common.exception.CartEmptyException;
+import ExperienceGroup.Ludora.features.cart.exception.*;
 import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
@@ -121,11 +121,31 @@ public class GlobalHandlerException {
     public ResponseEntity<ErrorResponseDTO> handlerGenreExistsException (GenreExistsException ex){
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
+
     @ExceptionHandler(CartEmptyException.class)
-    public ResponseEntity<String> handlerCartEmpty(CartEmptyException ex) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
+    public ResponseEntity<ErrorResponseDTO> handlerCartEmpty(CartEmptyException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameAlreadyInCartException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameAlreadyInCart(GameAlreadyInCartException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(CartNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerCartNotFound(CartNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+
+    @ExceptionHandler(GameNotInCartException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameNotInCart(GameNotInCartException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameAlreadyOwnedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameAlreadyOwned(GameAlreadyOwnedException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(MercadoPagoFailedException.class)

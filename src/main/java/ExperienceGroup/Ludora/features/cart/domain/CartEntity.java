@@ -6,6 +6,7 @@ import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,6 @@ public class CartEntity {
     private List<GameEntity> games = new ArrayList<>();
 
     @Column (name = "total_price", columnDefinition = "DECIMAL(10,2) DEFAULT 0")
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
 }

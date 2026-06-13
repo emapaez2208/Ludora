@@ -12,12 +12,12 @@ public record DeveloperDtoRequest(
 
         @Schema(description = "El nombre del developer", example = "Nahuel", required = true)
         @Size(min = 3, max = 32, message = "El nombre tiene una longitud minima de 3 y maxima de 32 caracteres")
-        @NotEmpty
+        @NotBlank
         String name,
 
         @Schema(description = "El apellido del developer", example = "Suarez", required = true)
         @Size(min = 3, max = 32, message = "El apellido tiene una longitud minima de 3 y maxima de 32 caracteres")
-        @NotEmpty
+        @NotBlank
         String lastName,
 
         @Schema(description = "El nombre de usuario", example = "Fercho", required = true)
