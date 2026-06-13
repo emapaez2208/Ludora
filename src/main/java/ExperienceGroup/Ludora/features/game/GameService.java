@@ -84,8 +84,7 @@ public class GameService implements IGameService{
     /// -------------------CREACION DE JUEGO PARA DEVELOPERS ---------------------
 
     @Override
-    @PreAuthorize("hasAuthority('CREATE_GAMES') and " +
-                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId")
+    @PreAuthorize("hasAuthority('CREATE_GAMES')")
     @Transactional
     public GameDTOResponse save(GameDTORequest gameDTORequest) {
 
