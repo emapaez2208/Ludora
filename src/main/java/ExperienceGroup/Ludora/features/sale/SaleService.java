@@ -49,6 +49,9 @@ public class SaleService  implements ISaleService{
             throw new CartEmptyException("Empty cart");
         }
 
+        // se fija si tiene mas del umbral de puntos definido para aplicar el descuento.
+        // si lo supera, se aplica el descuento y se le resta esa cantidad de puntos. se guarda en el cliente esta info
+
         boolean hasDiscount = client.getPoints() >= POINTS_THRESHOLD;
         if (hasDiscount) {
             client.setPoints(client.getPoints() - POINTS_THRESHOLD);
@@ -58,6 +61,9 @@ public class SaleService  implements ISaleService{
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
         saleEntity.setClient(client);
         saleEntity.setHasDiscount(hasDiscount);
+
+        // se crea una lista con los items de la venta según lo que estaba en el carrito.
+        // cada ítem guarda la venta, el juego y el precio del momento de la venta
 
         List<SaleItemEntity> items = cart.getGames().stream()
                 .map(game -> {
@@ -75,6 +81,8 @@ public class SaleService  implements ISaleService{
                 })
                 .toList();
 
+        // se calcula el total según los precios que figuran en los ítems de la venta
+
         BigDecimal totalPrice = items.stream()
                 .map(SaleItemEntity::getPriceAtSale)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -82,8 +90,14 @@ public class SaleService  implements ISaleService{
         saleEntity.setItems(items);
         saleEntity.setTotalPrice(totalPrice);
 
+        // cálculo de recompensa de puntos por compra.
+        // los puntos ganados se le suman al cliente.
+
         Integer earnedPoints = calculateEarnedPoints(totalPrice);
         saleEntity.setEarnedPoints(earnedPoints);
+
+        client.setPoints(client.getPoints() + earnedPoints);
+        clientRepository.save(client);
 
         SaleEntity saved = saleRepository.save(saleEntity);
 

@@ -5,6 +5,7 @@ import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTOResponse;
 import ExperienceGroup.Ludora.features.cart.exception.CartNotFoundException;
 import ExperienceGroup.Ludora.features.cart.exception.GameAlreadyInCartException;
+import ExperienceGroup.Ludora.features.cart.exception.GameAlreadyOwnedException;
 import ExperienceGroup.Ludora.features.cart.exception.GameNotInCartException;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
@@ -67,7 +68,7 @@ public class CartService implements ICartService {
                 .orElseThrow(() -> new GameNotFoundException("Game not found with id: " + gameExternalId));
 
         if (cart.getClient().getGames().contains(game)) {
-            throw new IllegalStateException("Ya tenés este juego en tu biblioteca");
+            throw new GameAlreadyOwnedException("You already own this game in your library");
         }
         if (cart.getGames().contains(game)) {
             throw new GameAlreadyInCartException("The game is already in the cart");
@@ -133,7 +134,9 @@ public class CartService implements ICartService {
 
     private CartDTOResponse recalculateCart(CartEntity cart){
         ClientEntity client = cart.getClient();
-        boolean qualifiesForDiscount = client.getPoints() >= POINTS_THRESHOLD;
+        boolean qualifiesForDiscount = client.getPoints() >= POINTS_THRESHOLD; // acá mira si el cliente califica para el descuento
+
+        // arma la lista de juegos con los precios original y con descuento si se aplica:
 
         List<InfoGameDTOResponse> gamesWithPrices = cart.getGames().stream().map(game -> {
             BigDecimal basePrice = game.getPrice();
@@ -148,6 +151,8 @@ public class CartService implements ICartService {
                     game.getDeveloper().getCompany()
             );
         }).toList();
+
+        // calcula el precio total:
 
         BigDecimal total = gamesWithPrices.stream()
                 .map(dto -> dto.discountedPrice() != null ? dto.discountedPrice() : dto.price())
