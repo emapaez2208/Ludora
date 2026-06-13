@@ -55,6 +55,9 @@ public class GameEntity {
 
     @Column (name = "status_blocked", nullable = false)
     private Boolean statusBlocked;
+
+    @Column(nullable = false, name = "need_revision")
+    private Boolean needRevision;
     
     @ManyToMany
     @JoinTable(
@@ -63,12 +66,6 @@ public class GameEntity {
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     private List<GenreEntity> genres;
-
-    @OneToMany(mappedBy = "game")
-    private List<ReviewEntity> reviews;
-
-    @ManyToMany(mappedBy = "games")
-    private List<CartEntity> carts;
 
     @ManyToMany (mappedBy = "games")
     private List<ClientEntity> clients;
@@ -79,6 +76,8 @@ public class GameEntity {
             externalId = UUID.randomUUID();
         if (statusBlocked == null)
             statusBlocked = true;
+        if(needRevision == null)
+            needRevision = true;
     }
 
 }

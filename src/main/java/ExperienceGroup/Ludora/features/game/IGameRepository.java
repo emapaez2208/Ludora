@@ -30,4 +30,6 @@ public interface IGameRepository extends JpaRepository<GameEntity, Long>, JpaSpe
 
     List<GameEntity> findByReleaseDateBetween(LocalDate minDate, LocalDate maxDate);
 
+    Optional<List<GameEntity>> findAllByNeedRevision(Boolean needRevision);
+
 }
