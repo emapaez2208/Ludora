@@ -4,12 +4,16 @@ import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTOResponse;
 import ExperienceGroup.Ludora.features.cart.domain.mapper.ICartResponseMapper;
+import ExperienceGroup.Ludora.features.cart.exception.CartNotFoundException;
+import ExperienceGroup.Ludora.features.cart.exception.GameAlreadyInCartException;
+import ExperienceGroup.Ludora.features.cart.exception.GameNotInCartException;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.game.domain.dto.InfoGameDTOResponse;
-import jakarta.persistence.EntityNotFoundException;
+import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -43,7 +47,7 @@ public class CartService implements ICartService {
     @PreAuthorize("hasRole('ADMIN') or #clientExternalId == authentication.principal.externalId")
     public CartDTOResponse getCartByClient(UUID clientExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado para el cliente: " + clientExternalId));
+                .orElseThrow(() -> new CartNotFoundException("Cart not found for client: " + clientExternalId));
         return cartResponseMapper.toDTO(cart);
     }
 
@@ -58,13 +62,13 @@ public class CartService implements ICartService {
     @PreAuthorize("#clientExternalId == authentication.principal.externalId and hasAuthority('GAME_AGREE_CART')")
     public CartDTOResponse addGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Client not found with id: " + clientExternalId));
+                .orElseThrow(() -> new UserNotFoundException("Client not found with id: " + clientExternalId));
 
         GameEntity game = gameRepository.findByExternalId(gameExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + gameExternalId));
+                .orElseThrow(() -> new GameNotFoundException("Game not found with id: " + gameExternalId));
 
         if (cart.getGames().contains(game)) {
-            throw new IllegalStateException("The game is already in the cart");
+            throw new GameAlreadyInCartException("The game is already in the cart");
         }
 
         cart.getGames().add(game);
@@ -79,13 +83,13 @@ public class CartService implements ICartService {
 
     public CartDTOResponse removeGame(UUID clientExternalId, UUID gameExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId));
+                .orElseThrow(() -> new UserNotFoundException("Client not found: " + clientExternalId));
 
         GameEntity game = gameRepository.findByExternalId(gameExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Juego no encontrado con id: " + gameExternalId));
+                .orElseThrow(() -> new GameNotFoundException("Game not found with id: " + gameExternalId));
 
         if (!cart.getGames().remove(game)) {
-            throw new EntityNotFoundException("El juego no está en el carrito");
+            throw new GameNotInCartException("The game was not found in the cart");
         }
 
         return recalculateCart(cart);
@@ -98,7 +102,7 @@ public class CartService implements ICartService {
     public void clearCart(UUID clientExternalId) {   /// este sirve para despues de la ventaa
 
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
-                                         .orElseThrow(() -> new EntityNotFoundException("El cliente no existe: " + clientExternalId)) ;
+                                         .orElseThrow(() -> new UserNotFoundException("Client not found: " + clientExternalId)) ;
 
 
         cart.setGames(new ArrayList<>());
@@ -114,7 +118,7 @@ public class CartService implements ICartService {
 
     public CartDTOResponse createCart(UUID clientExternalId) {
         ClientEntity client = clientRepository.findByExternalId(clientExternalId)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado con id: " + clientExternalId));
+                .orElseThrow(() -> new UserNotFoundException("Client not found with id: " + clientExternalId));
 
         CartEntity cart = new CartEntity();
         cart.setClient(client);

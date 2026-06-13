@@ -2,6 +2,9 @@ package ExperienceGroup.Ludora.common.exception.globalHandler;
 
 import ExperienceGroup.Ludora.features.cart.exception.CartEmptyException;
 import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.features.cart.exception.CartNotFoundException;
+import ExperienceGroup.Ludora.features.cart.exception.GameAlreadyInCartException;
+import ExperienceGroup.Ludora.features.cart.exception.GameNotInCartException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
@@ -116,9 +119,26 @@ public class GlobalHandlerException {
     public ResponseEntity<ErrorResponseDTO> handlerGenreExistsException (GenreExistsException ex){
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
+
     @ExceptionHandler(CartEmptyException.class)
     public ResponseEntity<ErrorResponseDTO> handlerCartEmpty(CartEmptyException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameAlreadyInCartException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameAlreadyInCart(GameAlreadyInCartException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(CartNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerCartNotFound(CartNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+
+    @ExceptionHandler(GameNotInCartException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameNotInCart(GameNotInCartException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(MercadoPagoFailedException.class)
