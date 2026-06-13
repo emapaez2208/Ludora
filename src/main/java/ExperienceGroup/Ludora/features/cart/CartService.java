@@ -3,12 +3,12 @@ package ExperienceGroup.Ludora.features.cart;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.cart.domain.dto.CartDTOResponse;
-import ExperienceGroup.Ludora.features.cart.domain.mapper.ICartResponseMapper;
 import ExperienceGroup.Ludora.features.cart.exception.CartNotFoundException;
 import ExperienceGroup.Ludora.features.cart.exception.GameAlreadyInCartException;
 import ExperienceGroup.Ludora.features.cart.exception.GameNotInCartException;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.game.domain.dto.InfoGameDTOResponse;
@@ -30,7 +30,6 @@ public class CartService implements ICartService {
 
     private final ICartRepository cartRepository;
     private final IGameRepository gameRepository;
-    private final ICartResponseMapper cartResponseMapper;
     private final IClientRepository clientRepository;
     private final AuthenticatedUserProvider authenticatedUser;
 
@@ -48,7 +47,7 @@ public class CartService implements ICartService {
     public CartDTOResponse getCartByClient(UUID clientExternalId) {
         CartEntity cart = cartRepository.findByClient_ExternalId(clientExternalId)
                 .orElseThrow(() -> new CartNotFoundException("Cart not found for client: " + clientExternalId));
-        return cartResponseMapper.toDTO(cart);
+        return recalculateCart(cart);
     }
 
     @Override
@@ -125,7 +124,7 @@ public class CartService implements ICartService {
         cart.setGames(new ArrayList<>());
         cart.setTotalPrice(BigDecimal.ZERO);
 
-        return cartResponseMapper.toDTO(cartRepository.save(cart));
+        return recalculateCart(cartRepository.save(cart));
     }
 
 
@@ -133,45 +132,45 @@ public class CartService implements ICartService {
         ClientEntity client = cart.getClient();
         boolean qualifiesForDiscount = client.getPoints() >= POINTS_THRESHOLD;
 
-        BigDecimal totalPrice = cart.getGames().stream()
-                .map(g -> {
-                    BigDecimal price = g.getPrice();
-                    if (qualifiesForDiscount) {
-                        BigDecimal discount = price.multiply(DISCOUNT_PERCENTAGE);
-                        return price.subtract(discount).setScale(2, RoundingMode.HALF_UP);
-                    }
-                    return price;
-                })
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        List<InfoGameDTOResponse> gamesWithPrices = cart.getGames().stream().map(game -> {
+            BigDecimal basePrice = game.getPrice();
+            BigDecimal discountedPrice = qualifiesForDiscount
+                    ? basePrice.multiply(BigDecimal.ONE.subtract(DISCOUNT_PERCENTAGE)).setScale(2, RoundingMode.HALF_UP)
+                    : null;
 
-        cart.setTotalPrice(totalPrice);
-        CartEntity savedCart = cartRepository.save(cart);
-
-        CartDTOResponse initialDto = cartResponseMapper.toDTO(savedCart);
-
-        if (qualifiesForDiscount) {
-            List<InfoGameDTOResponse> discountedGames = initialDto.games().stream()
-                    .map(gameDto -> {
-                        BigDecimal originalPrice = gameDto.price();
-                        BigDecimal itemDiscount = originalPrice.multiply(DISCOUNT_PERCENTAGE);
-                        BigDecimal discountedPrice = originalPrice.subtract(itemDiscount).setScale(2, RoundingMode.HALF_UP);
-
-                        return new InfoGameDTOResponse(
-                                gameDto.name(),
-                                discountedPrice,
-                                gameDto.company()
-                        );
-                    })
-                    .toList();
-
-            return new CartDTOResponse(
-                    initialDto.client(),
-                    discountedGames,
-                    initialDto.totalPrice()
+            return new InfoGameDTOResponse(
+                    game.getName(),
+                    basePrice,
+                    discountedPrice,
+                    game.getDeveloper().getCompany()
             );
-        }
+        }).toList();
 
-        return initialDto;
+        BigDecimal total = gamesWithPrices.stream()
+                .map(dto -> dto.discountedPrice() != null ? dto.discountedPrice() : dto.price())
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        cart.setTotalPrice(total);
+        cartRepository.save(cart);
+
+        ClientDTOResponse clientDto = new ClientDTOResponse(
+                client.getExternalId(),
+                client.getName(),
+                client.getLastName(),
+                client.getPhone(),
+                client.getStreet(),
+                client.getNumberStreet(),
+                client.getBirthDate(),
+                client.getPoints()
+        );
+
+        return new CartDTOResponse(
+                clientDto,
+                gamesWithPrices,
+                total
+        );
+
     }
 
 
