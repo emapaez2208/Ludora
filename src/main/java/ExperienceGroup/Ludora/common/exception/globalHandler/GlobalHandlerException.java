@@ -16,6 +16,7 @@ import ExperienceGroup.Ludora.features.user.exception.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -101,6 +102,10 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.FORBIDDEN, "Tu cuenta esta dada de baja.");
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccessDenied(AccessDeniedException ex) {
+        return buildResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
 
     private ResponseEntity<ErrorResponseDTO> buildResponse(HttpStatus status, String message){
         ErrorResponseDTO error = new ErrorResponseDTO(
