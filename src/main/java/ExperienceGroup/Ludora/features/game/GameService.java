@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
+import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -47,7 +48,6 @@ public class GameService implements IGameService{
                                              BigDecimal minPrice,
                                              LocalDate minReleaseDate,
                                              LocalDate maxReleaseDate,
-                                             Boolean statusBlocked,
                                              List<String> genreNames,
                                              String rangeName,
                                              String developerCompany) {
@@ -58,7 +58,7 @@ public class GameService implements IGameService{
                 GameSpecification.priceGreaterThan(minPrice),
                 GameSpecification.releaseDateAfter(minReleaseDate),
                 GameSpecification.releaseDateBefore(maxReleaseDate),
-                GameSpecification.statusBlockedEquals(statusBlocked),
+                GameSpecification.statusBlockedEquals(false),
                 GameSpecification.hasGenreNames(genreNames),
                 GameSpecification.hasAgeRangeName(rangeName),
                 GameSpecification.hasDeveloperCompany(developerCompany)
@@ -84,8 +84,7 @@ public class GameService implements IGameService{
     /// -------------------CREACION DE JUEGO PARA DEVELOPERS ---------------------
 
     @Override
-    @PreAuthorize("hasAuthority('CREATE_GAMES') and " +
-                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId")
+    @PreAuthorize("hasAuthority('CREATE_GAMES')")
     @Transactional
     public GameDTOResponse save(GameDTORequest gameDTORequest) {
 
@@ -118,20 +117,22 @@ public class GameService implements IGameService{
     /// -------------------------UPDATE GAME DEVELOPER------------
 
     @Override
-    @PreAuthorize("hasAuthority('UPDATE_GAMES') and " +
-                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId\"")
+    @PreAuthorize("hasAuthority('UPDATE_GAMES')")
     @Transactional
     public GameDTOResponse update(UUID externalId, GameDTORequest gameDTORequest) {
 
         GameEntity existingGame = gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
-        GameEntity updatedData = requestMapper.toEntity(gameDTORequest);
+        // check si el juego corresponde al dev logueado
+        if(!existingGame.getDeveloper().getExternalId().equals(authenticatedUserProvider.getCurrentUser().externalId())){
+            throw new GameIsNotFromTheDevException();
+        }
 
-        existingGame.setName(updatedData.getName());
-        existingGame.setPrice(updatedData.getPrice());
-        existingGame.setReleaseDate(updatedData.getReleaseDate());
-        existingGame.setDescription(updatedData.getDescription());
+        existingGame.setName(gameDTORequest.name());
+        existingGame.setPrice(gameDTORequest.price());
+        existingGame.setReleaseDate(gameDTORequest.releaseDate());
+        existingGame.setDescription(gameDTORequest.description());
 
         AgeRangeEntity ageRange = ageRangeRepository.findByExternalId(gameDTORequest.ageRangeExternalId())
                 .orElseThrow(() -> new AgeRangeNotFoundException("Age range not found"));
@@ -149,7 +150,8 @@ public class GameService implements IGameService{
                 .orElseThrow(() -> new UserNotFoundException("Developer not found"));
         existingGame.setDeveloper(developer);
 
-
+        existingGame.setNeedRevision(true);
+        existingGame.setStatusBlocked(true);        /// al modificarlo se pide volver a revisar
 
         GameEntity savedGame = gameRepository.save(existingGame);
 
@@ -166,6 +168,7 @@ public class GameService implements IGameService{
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
         habilitarGame.setStatusBlocked(false);
+        habilitarGame.setNeedRevision(false);
         gameRepository.save(habilitarGame);
 
         return responseMapper.toDTO(habilitarGame);
@@ -184,5 +187,37 @@ public class GameService implements IGameService{
         habilitarGame.setStatusBlocked(true);
         gameRepository.save(habilitarGame);
 
+    }
+
+    /// ---------------- BUSCAR JUEGOS NUEVOS O CON REVISION ----------------
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<GameDTOResponse> getGamesNeedRevision(){
+
+        return gameRepository.findAllByNeedRevision(true)
+                .orElseThrow(GameNotFoundException::new)
+                .stream().map(responseMapper::toDTO)
+                .toList();
+    }
+
+    /// -------------- DEVELOPER SOLICITAR REVISION DE UN JUEGO ---------------------
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasRole('DEVELOPER')")
+    public GameDTOResponse askForReviewGame(UUID gameId){
+
+        GameEntity game = gameRepository.findByExternalId(gameId)
+                .orElseThrow(GameNotFoundException::new);
+
+        // check si el juego corresponde al dev logueado
+        if(!game.getDeveloper().getExternalId().equals(authenticatedUserProvider.getCurrentUser().externalId())){
+            throw new GameIsNotFromTheDevException();
+        }
+
+        game.setNeedRevision(true);
+        GameEntity saved = gameRepository.save(game);
+        return responseMapper.toDTO(saved);
     }
 }

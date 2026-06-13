@@ -28,7 +28,6 @@ public class GameController {
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate minReleaseDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate maxReleaseDate,
-            @RequestParam(required = false) Boolean statusBlocked,
             @RequestParam(required = false) List<String> genreName,
             @RequestParam(required = false) String rangeName,
             @RequestParam(required = false) String developerCompany
@@ -39,7 +38,6 @@ public class GameController {
                 minPrice,
                 minReleaseDate,
                 maxReleaseDate,
-                statusBlocked,
                 genreName,
                 rangeName,
                 developerCompany));
@@ -82,6 +80,16 @@ public class GameController {
         gameService.desauthorized(externalId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/needRevision")
+    ResponseEntity<List<GameDTOResponse>> getGamesNeedRevision(){
+        return ResponseEntity.ok(gameService.getGamesNeedRevision());
+    }
+
+    @PostMapping("/askRevision/{gameExternalId}")
+    ResponseEntity<GameDTOResponse> askForRevisionGame(@PathVariable UUID gameExternalId){
+        return ResponseEntity.ok(gameService.askForReviewGame(gameExternalId));
     }
 
 }

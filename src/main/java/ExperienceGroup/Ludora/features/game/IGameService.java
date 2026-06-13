@@ -14,7 +14,6 @@ public interface IGameService {
                                       BigDecimal minPrice,
                                       LocalDate minReleaseDate,
                                       LocalDate maxReleaseDate,
-                                      Boolean statusBlocked,
                                       List<String> genreNames,
                                       String rangeName,
                                       String developerCompany);
@@ -23,5 +22,7 @@ public interface IGameService {
     GameDTOResponse update (UUID externalId, GameDTORequest gameDTORequest);
     GameDTOResponse authorized(UUID externalId);
     void desauthorized(UUID externalId);
+    List<GameDTOResponse> getGamesNeedRevision();
+    GameDTOResponse askForReviewGame(UUID gameId);
 
 }
