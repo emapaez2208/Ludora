@@ -38,5 +38,7 @@ public interface IClientService {
     void changePassword(ChangePasswordDTO passwordDTO);
 
     void changeEmail(ChangeEmailDTO emailDTO);
+
     List<GameDTOResponse> getMyGames();
+
 }

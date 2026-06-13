@@ -103,6 +103,7 @@ public class DeveloperService implements IDeveloperService {
                 .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_DEVELOPER)
                         .orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
+                .accountNonLocked(true)
                 .username(developerDtoRequest.userName())
                 .externalId(saved.getExternalId())
                 .password(passwordEncoder.encode(developerDtoRequest.password().value()))

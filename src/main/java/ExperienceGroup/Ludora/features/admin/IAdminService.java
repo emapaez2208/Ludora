@@ -31,4 +31,10 @@ public interface IAdminService {
     void changePassword(ChangePasswordDTO passwordDTO);
 
     void changeEmail(ChangeEmailDTO emailDTO);
+
+    void blockAccount(UUID externalId);
+
+    void unblockAccount(UUID externalId);
+
+    void enableAccount(UUID externalId);
 }
