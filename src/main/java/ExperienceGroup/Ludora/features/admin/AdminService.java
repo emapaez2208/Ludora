@@ -43,6 +43,9 @@ public class AdminService implements IAdminService{
     private final PasswordEncoder passwordEncoder;
     private final AuthenticatedUserProvider authenticatedUser;
 
+
+    ///  ------------------------------------Listar ADMINS  -----------
+
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public List<AdminDTOResponse> getAllAdmins(String name,
@@ -66,6 +69,8 @@ public class AdminService implements IAdminService{
                 .toList();
     }
 
+    ///  -------------------------------ADMINS POR ID -------------------
+
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public AdminDTOResponse getByExternalId(UUID externalId) {
@@ -75,10 +80,14 @@ public class AdminService implements IAdminService{
                 .orElseThrow(() -> new UserNotFoundException("User not found, UserID: " + externalId));
     }
 
+    ///  ------------------------------- Traerse a si mismo(se perfil) -----------------------
+
     @Override
     public AdminDTOResponse getMyPerfil(){
         return getByExternalId(authenticatedUser.getCurrentUser().externalId());
     }
+
+    /// -------------------------------- CREAR CUENTA  ADMIN
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -97,6 +106,7 @@ public class AdminService implements IAdminService{
         CredentialsEntity credentials = CredentialsEntity.builder()
                 .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_ADMIN).orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
+                .accountNonLocked(true)
                 .username(adminDTO.userName())
                 .externalId(entity.getExternalId())
                 .password(passwordEncoder.encode(adminDTO.password().value()))
@@ -107,6 +117,9 @@ public class AdminService implements IAdminService{
 
         return responseMapper.toDTO(entity);
     }
+
+
+    /// --------------------------------------- MODIFICAR ADMIN ------------------------------
 
     @Override
     @PreAuthorize("#externalId == authentication.principal.externalId or hasRole('ADMIN')")
@@ -123,6 +136,8 @@ public class AdminService implements IAdminService{
         return responseMapper.toDTO(saved);
     }
 
+    /// -----------------------------------BAJA LOGICA DE CUENTA -------------------------
+
     @Override
     @PreAuthorize("hasRole('ADMIN') or #externalId == authentication.principal.externalId")
     public void delete(UUID externalId) {
@@ -134,6 +149,8 @@ public class AdminService implements IAdminService{
         credentials.setEnabled(false);
         credentialsRepository.save(credentials);
     }
+
+    /// -----------------------------------CAMBIO DE PASSWORD ------------------------
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -148,6 +165,9 @@ public class AdminService implements IAdminService{
             throw new PasswordInvalidException("The old password is invalid");
         }
     }
+
+    /// -----------------------------------CAMBIO DE PASSWORD ------------------------
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -170,8 +190,32 @@ public class AdminService implements IAdminService{
 
     }
 
+    /// ----------------------------------BANEAR UN USUARIO O DEVELOPER
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void blockAccount(UUID externalId) {
+        CredentialsEntity credentials = credentialsRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new CredentialsNotFoundException("Credentials not found for user: " + externalId));
+        credentials.setAccountNonLocked(false);
+        credentialsRepository.save(credentials);
+    }
+
+    /// ----------------------------------DESBANEAR UN USUARIO O DEVELOPER
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void unblockAccount(UUID externalId) {
+        CredentialsEntity credentials = credentialsRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new CredentialsNotFoundException("Credentials not found for user: " + externalId));
+        credentials.setAccountNonLocked(true);
+        credentialsRepository.save(credentials);
+    }
+
     private CredentialsEntity searchCredentials(String username){
         return credentialsRepository.findByUsername(username)
                 .orElseThrow(() -> new CredentialsNotFoundException("Credentials to user not found"));
     }
+
+
 }

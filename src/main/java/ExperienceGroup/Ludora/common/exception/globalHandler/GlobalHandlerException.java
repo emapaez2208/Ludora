@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.security.authentication.LockedException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -87,6 +88,11 @@ public class GlobalHandlerException {
     @ExceptionHandler(UserExistsWithUsernameException.class)
     public ResponseEntity<ErrorResponseDTO> handlerUserExistsUsername(UserExistsWithUsernameException ex){
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerLockedAccount(LockedException ex) {
+        return buildResponse(HttpStatus.FORBIDDEN, "La cuenta se encuentra bloqueada.");
     }
 
 
