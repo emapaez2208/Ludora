@@ -103,8 +103,8 @@ public class GameService implements IGameService{
 
         entity.setAgeRange(ageRange);
 
-        List<GenreEntity> genres = genreRepository.findAllById(gameDTORequest.genreIds());
-        if (genres.size() != gameDTORequest.genreIds().size()) {
+        List<GenreEntity> genres = genreRepository.findAllByName(gameDTORequest.genreName()).orElseThrow();
+        if (genres.size() != gameDTORequest.genreName().size()) {
             throw new EntityNotFoundException("One or more genres were not found");
         }
         entity.setGenres(genres);
@@ -136,8 +136,8 @@ public class GameService implements IGameService{
                 .orElseThrow(() -> new AgeRangeNotFoundException("Age range not found"));
         existingGame.setAgeRange(ageRange);
 
-        List<GenreEntity> genres = genreRepository.findAllById(gameDTORequest.genreIds());
-        if (genres.size() != gameDTORequest.genreIds().size()){
+        List<GenreEntity> genres = genreRepository.findAllByName(gameDTORequest.genreName()).orElseThrow();
+        if (genres.size() != gameDTORequest.genreName().size()){
             throw new EntityNotFoundException("One or more genres were not found");
         }
         existingGame.getGenres().clear();
@@ -185,7 +185,7 @@ public class GameService implements IGameService{
     }
 
     public List<ReviewDTOResponse> getReview (UUID externalID){
-        return 
+        return
     }
 
 
