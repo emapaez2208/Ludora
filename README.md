@@ -11,7 +11,7 @@ This project was developed as a final assignment for the "Programación III" and
 * Loyalty & Rewards Program: Automated point-earning system for every purchase. 
 * Discount Redemptions: Clients can redeem accumulated points for discounts on future purchases. 
 * Role-Based Access Control (RBAC): Distinct permissions for Developers, Clients, and Administrators. 
-* RESTful Architecture: Fully documented API using OpenAPI 3.0 (via OpenAPI-GUI).
+* RESTful Architecture: Fully documented API using OpenAPI.
 
 ## 🛠 Tech Stack
 
@@ -30,7 +30,7 @@ This project was developed as a final assignment for the "Programación III" and
 * ORM: Hibernate 
 * Authentication: JWT (JSON Web Tokens)
 * Mapping: MapStruct 
-* Documentation: OpenAPI (via OpenAPI-GUI)
+* Documentation: OpenAPI
 * Productivity: Lombok 
 * Database connectivity: JDBC
 
