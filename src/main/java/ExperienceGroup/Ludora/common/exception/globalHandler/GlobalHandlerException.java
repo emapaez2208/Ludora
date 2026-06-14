@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -113,6 +114,11 @@ public class GlobalHandlerException {
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<ErrorResponseDTO> handlerDisabledAccount(DisabledException ex) {
         return buildResponse(HttpStatus.FORBIDDEN, "Your account is disabled");
+    }
+
+    @ExceptionHandler(AccountExpiredException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerAccountExpired(AccountExpiredException ex){
+        return buildResponse(HttpStatus.FORBIDDEN, "Your account has expired. Please contact support.");
     }
 
     @ExceptionHandler(AccessDeniedException.class)
