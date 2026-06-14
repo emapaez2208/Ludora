@@ -106,3 +106,9 @@ This project was developed as a final assignment for the "Programación III" and
 
     mvn spring-boot:run
 
+## 🤝 Contributions
+This project is currently under active development. While we are not accepting external contributions at this time.
+
+## ⚖️ License
+This project is not currently released under a public license. Its use is strictly limited to educational or private purposes.
+
