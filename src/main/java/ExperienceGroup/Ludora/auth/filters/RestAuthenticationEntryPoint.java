@@ -26,20 +26,20 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         String errorMessage = switch (authException) {
             case BadCredentialsException badCredentialsException ->
-                    "Credenciales inválidas";
+                    "Invalid credentials";
             case DisabledException disabledException ->
-                    "Cuenta deshabilitada";
+                    "Account disabled";
             case LockedException lockedException ->
-                    "Cuenta bloqueada";
+                    "Account locked";
             case AccountExpiredException accountExpiredException ->
-                    "Cuenta expirada";
+                    "Account expired";
             case CredentialsExpiredException credentialsExpiredException ->
-                    "Credenciales expiradas";
+                    "Credentials expired";
             case InsufficientAuthenticationException insufficientAuthenticationException ->
-                    "Autenticación insuficiente";
+                    "Insufficient authentication";
             case AuthenticationServiceException authenticationServiceException ->
-                    "Error en el servicio de autenticación";
-            default -> "Error de autenticación: " + authException.getMessage();
+                    "Authentication service error";
+            default -> "Authentication error: " + authException.getMessage();
         };
 
         ObjectMapper mapper = new ObjectMapper();
