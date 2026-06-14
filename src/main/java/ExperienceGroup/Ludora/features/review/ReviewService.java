@@ -14,14 +14,18 @@ import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,7 +39,9 @@ public class ReviewService implements IReviewService {
     private final IClientRepository clientRepository;
 
     @Override
-    public List<ReviewDTOResponse> getAllReviews(UUID gameId,
+    public Page<ReviewDTOResponse> getAllReviews(int page,
+                                                 int size,
+                                                 UUID gameId,
                                                  UUID clientId,
                                                  Integer minRating,
                                                  Integer maxRating,
@@ -49,11 +55,12 @@ public class ReviewService implements IReviewService {
                 ReviewSpecification.dateBetween(minDate, maxDate)
         );
 
-        List<ReviewEntity> reviews = reviewRepository.findAll(spec);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
 
-        return reviews.stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Page<ReviewEntity> reviews = reviewRepository.findAll(Specification.where(spec), pageable);
+
+        return reviews
+                .map(responseMapper::toDTO);
     }
 
     @Transactional
@@ -76,41 +83,43 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public List<ReviewDTOResponse> getAllReviewsByGameId(UUID gameId) {
+    public Page<ReviewDTOResponse> getAllReviewsByGameId(int page, int size, UUID gameId) {
         GameEntity game = gameRepository.findByExternalId(gameId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
-        List<ReviewEntity> reviews = reviewRepository.findByGame(game);
 
-        return reviews.stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<ReviewEntity> reviews = reviewRepository.findByGame(game, pageable);
+
+        return reviews
+                .map(responseMapper::toDTO);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN') or #clientId == authentication.principal.externalId")
-    public List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId) {
+    public Page<ReviewDTOResponse> getAllReviewsByClientId(int page, int size, UUID clientId) {
         ClientEntity client = clientRepository.findByExternalId(clientId)
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
-        List<ReviewEntity> reviews = reviewRepository.findByClient(client);
 
-        return reviews.stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<ReviewEntity> reviews = reviewRepository.findByClient(client, pageable);
+
+        return reviews
+                .map(responseMapper::toDTO);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN') or #clientId == authentication.principal.externalId")
-    public List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId) {
+    public Page<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(int page, int size, UUID gameId, UUID clientId) {
         GameEntity game = gameRepository.findByExternalId(gameId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
         ClientEntity client = clientRepository.findByExternalId(clientId)
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
-        List<ReviewEntity> reviews = reviewRepository.findByGameAndClient(game, client);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<ReviewEntity> reviews = reviewRepository.findByGameAndClient(game, client, pageable);
 
-        return reviews.stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        return reviews
+                .map(responseMapper::toDTO);
     }
 
 

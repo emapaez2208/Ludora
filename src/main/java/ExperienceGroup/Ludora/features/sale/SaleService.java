@@ -14,7 +14,12 @@ import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +28,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
 
 import static ExperienceGroup.Ludora.common.utils.BusinessRules.*;
 
@@ -125,18 +131,21 @@ public class SaleService  implements ISaleService{
 
     @Override
     @PreAuthorize("#clientExternalId == authentication.principal.externalId")
-    public List<SaleDTOResponse> getSalesByClient(UUID clientExternalId) {
+    public Page<SaleDTOResponse> getSalesByClient(int page, int size, UUID clientExternalId) {
         ClientEntity client = clientRepository.findByExternalId(clientExternalId)
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
-        return saleRepository.findByClient(client).stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+
+        return saleRepository.findByClient(client, pageable)
+                .map(responseMapper::toDTO);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public List<SaleDTOResponse> getAllSales(UUID externalId,
+    public Page<SaleDTOResponse> getAllSales(int page,
+                                             int size,
+                                             UUID externalId,
                                              LocalDateTime minDate,
                                              LocalDateTime maxDate,
                                              ESaleStatus status,
@@ -156,10 +165,10 @@ public class SaleService  implements ISaleService{
                 SaleSpecification.gamesEquals(gameIds)
         );
 
-        return saleRepository.findAll(spec).stream()
-                .distinct()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+
+        return saleRepository.findAll(Specification.where(spec), pageable)
+                .map(responseMapper::toDTO);
     }
 
     // CÁLCULO DE PUNTOS

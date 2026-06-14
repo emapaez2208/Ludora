@@ -6,13 +6,16 @@ import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoRequest;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoResponse;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperUpdateRequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface IDeveloperService {
 
-    List<DeveloperDtoResponse> getAllDevelopers(String name,
+    Page<DeveloperDtoResponse> getAllDevelopers(int page,
+                                                int size,
+                                                String name,
                                                 String lastName,
                                                 String userName,
                                                 String email,

@@ -4,7 +4,6 @@ import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-
 import java.util.Optional;
 import java.util.UUID;
 

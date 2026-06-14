@@ -2,8 +2,10 @@ package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTORequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +36,10 @@ public class GameController {
             @ApiResponse(responseCode = "400", description = "Invalid search parameters")
     })
     @GetMapping
+
     ResponseEntity<List<GameDTOResponse>> getAll(
+            @Parameter(description = "Page number of the list") @RequestParam int page,
+            @Parameter(description = "Page size of the list") @RequestParam int size,
             @Parameter(description = "Filter by game name") @RequestParam(required = false) String name,
             @Parameter(description = "Maximum price") @RequestParam(required = false) BigDecimal maxPrice,
             @Parameter(description = "Minimum price") @RequestParam(required = false) BigDecimal minPrice,
@@ -45,6 +50,8 @@ public class GameController {
             @Parameter(description = "Developer company name") @RequestParam(required = false) String developerCompany
     ) {
         return ResponseEntity.ok(gameService.getAllGames(
+                page,
+                size,
                 name,
                 maxPrice,
                 minPrice,

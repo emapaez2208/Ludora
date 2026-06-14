@@ -26,7 +26,12 @@ import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailExcepti
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,7 +57,9 @@ public class ClientService implements IClientService{
 
     @Override
     @PreAuthorize("hasAuthority('SEE_USERS')")
-    public List<ClientDTOResponse> getAllClient(String name,
+    public Page<ClientDTOResponse> getAllClient(int page,
+                                                int size,
+                                                String name,
                                                 String lastName,
                                                 String userName,
                                                 String email,
@@ -74,9 +81,10 @@ public class ClientService implements IClientService{
                 ClientSpecification.birthDateEquals(birthDate)
         );
 
-        return repository.findAll(spec).stream()
-                .map(mapperResponse::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("userName").ascending());
+
+        return repository.findAll(Specification.where(spec), pageable)
+                .map(mapperResponse::toDTO);
     }
 
     @Override

@@ -8,6 +8,7 @@ import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperUpdateReque
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,6 @@ import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +39,9 @@ public class DeveloperController {
     })
 
     @GetMapping
-    ResponseEntity<List<DeveloperDtoResponse>> getAll(
+    ResponseEntity<Page<DeveloperDtoResponse>> getAll(
+            @Parameter(description = "Page number of the list") @RequestParam int page,
+            @Parameter(description = "Page size of the list") @RequestParam int size,
             @Parameter(description = "Filter by representative first name") @RequestParam(required = false) String name,
             @Parameter(description = "Filter by representative last name") @RequestParam(required = false) String lastName,
             @Parameter(description = "Filter by username") @RequestParam(required = false) String userName,
@@ -49,6 +51,8 @@ public class DeveloperController {
     ){
 
         return ResponseEntity.ok(developerService.getAllDevelopers(
+                        page,
+                        size,
                         name,
                         lastName,
                         userName,

@@ -4,6 +4,7 @@ import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,6 @@ import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,7 +66,9 @@ public class SaleController {
     })
 
     @GetMapping
-    public ResponseEntity<List<SaleDTOResponse>> getAllSales(
+    public ResponseEntity<Page<SaleDTOResponse>> getAllSales(
+            @Parameter(description = "Page number of the list") @RequestParam int page,
+            @Parameter(description = "Page size of the list") @RequestParam int size,
             @Parameter(description = "Target specific transaction UUID") @RequestParam(required = false) UUID externalId,
             @Parameter(description = "Initial timestamp scope boundary (ISO format)") @RequestParam(required = false) LocalDateTime minDate,
             @Parameter(description = "Final timestamp scope boundary (ISO format)") @RequestParam(required = false) LocalDateTime maxDate,
@@ -74,7 +76,9 @@ public class SaleController {
             @Parameter(description = "Minimum gross total cost boundary") @RequestParam(required = false) BigDecimal minPrice,
             @Parameter(description = "Maximum gross total cost boundary") @RequestParam(required = false) BigDecimal maxPrice,
             @Parameter(description = "Collection array of specific clients UUIDs") @RequestParam(required = false) List<UUID> clientIds,
-            @Parameter(description = "Collection array of digital games UUID components") @RequestParam(required = false) List<UUID> gameIds) {    return ResponseEntity.ok(saleService.getAllSales(externalId, minDate, maxDate, status, minPrice, maxPrice, clientIds, gameIds));
+            @Parameter(description = "Collection array of digital games UUID components") @RequestParam(required = false) List<UUID> gameIds) {
+
+        return ResponseEntity.ok(saleService.getAllSales(page, size, externalId, minDate, maxDate, status, minPrice, maxPrice, clientIds, gameIds));
     }
 
     @Operation(
@@ -100,7 +104,9 @@ public class SaleController {
     })
 
     @GetMapping("/client/{clientExternalId}")
-    public ResponseEntity<List<SaleDTOResponse>> getSalesByClient(@Parameter(description = "The target client profile external UUID key", required = true) @PathVariable UUID clientExternalId) {
-        return ResponseEntity.ok(saleService.getSalesByClient(clientExternalId));
+    public ResponseEntity<Page<SaleDTOResponse>> getSalesByClient(@Parameter(description = "Page number of the list") @RequestParam int page,
+                                                                  @Parameter(description = "Page size of the list") @RequestParam int size,
+                                                                  @Parameter(description = "The target client profile external UUID key", required = true) @PathVariable UUID clientExternalId) {
+        return ResponseEntity.ok(saleService.getSalesByClient(page, size, clientExternalId));
     }
 }
