@@ -82,7 +82,7 @@ This project was developed as a final assignment for the "Programación III" and
 ## ⚙️ Getting Started
 
 ### Prerequisites
-* Java Development Kit (JDK)
+* JDK 21
 * Maven
 * MySQL
 
@@ -112,3 +112,9 @@ This project is currently under active development. While we are not accepting e
 ## ⚖️ License
 This project is not currently released under a public license. Its use is strictly limited to educational or private purposes.
 
+## 👥 Authors
+* Oscar Desimone (https://github.com/DESIMONE-DEV)
+* Emanuel Paez (https://github.com/emapaez2208)
+* Germán Paez (https://github.com/germaniyo181818-lang)
+* Sofía Celeste Pagliaro (https://github.com/sofipagliaro)
+* Fernando Javier Suarez (https://github.com/Ferjs3)
