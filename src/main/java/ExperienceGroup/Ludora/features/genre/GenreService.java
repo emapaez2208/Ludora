@@ -47,8 +47,8 @@ public class GenreService  implements IGenreService{
         GenreEntity entity = mapper.toEntity(genreDTO);
         if(iGenreRepository.findByName(entity.getName()).isEmpty()) {
 
-            GenreEntity entityGuardar = iGenreRepository.save(entity);
-            return mapper.toDTO(entityGuardar);
+            GenreEntity saved = iGenreRepository.save(entity);
+            return mapper.toDTO(saved);
         }
         throw new GenreExistsException("Genre already exists");
     }
