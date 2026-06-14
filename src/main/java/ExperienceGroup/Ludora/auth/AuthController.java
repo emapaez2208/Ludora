@@ -62,20 +62,19 @@ public class AuthController {
         String token = jwtService.generateToken(user);
         return new AuthResponse(token);
     }
-
     @Operation(
-            summary = "Registrar un nuevo Cliente",
-            description = "Crea una cuenta de tipo Cliente en la plataforma validando los datos enviados en el cuerpo."
+            summary = "Register a new Client",
+            description = "Creates a Client account in the platform, validating the data sent in the request body."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Cliente registrado con éxito.",
+                    description = "Client successfully registered.",
                     content = @Content(schema = @Schema(implementation = ClientDTOResponse.class))
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Datos de registro inválidos (falla en las validaciones de @Valid).",
+                    description = "Invalid registration data (failed @Valid validations).",
                     content = @Content
             )
     })
