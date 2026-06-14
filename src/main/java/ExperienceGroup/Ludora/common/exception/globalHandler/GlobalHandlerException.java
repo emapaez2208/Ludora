@@ -1,6 +1,9 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
+import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.features.cart.exception.*;
+import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
+import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
@@ -32,6 +35,11 @@ import java.util.stream.Collectors;
 public class GlobalHandlerException {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalHandlerException.class);
+
+    @ExceptionHandler(CredentialsNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerCredentialsNotFound(CredentialsNotFoundException ex){
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
 
     @ExceptionHandler(IllegalEmailException.class)
     public ResponseEntity<ErrorResponseDTO> handlerIllegalEmail(IllegalEmailException ex){
@@ -151,6 +159,16 @@ public class GlobalHandlerException {
     @ExceptionHandler(PasswordInvalidException.class)
     public ResponseEntity<ErrorResponseDTO> handlerPasswordInvalid(PasswordInvalidException ex){
         return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameIsNotFromTheDevException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameIsNotFromDev(GameIsNotFromTheDevException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(SaleNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerSaleNotFound(SaleNotFoundException ex){
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     /// ---------------------- MSJ ERROR CONSTRUCTOR ----------------------------------- ///
