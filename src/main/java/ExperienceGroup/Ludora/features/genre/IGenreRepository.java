@@ -9,7 +9,4 @@ import java.util.Optional;
 @Repository
 public interface IGenreRepository extends JpaRepository<GenreEntity,Long> {
     Optional<GenreEntity> findByName(String name);
-
-    Optional<GenreEntity> findByDescription(String description);
-
 }
