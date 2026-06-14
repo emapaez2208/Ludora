@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Genres", description = "Endpoints for managing the video game categories or genres catalog")
 public class GenreController {
 
-    private IGenreService genreService;
+    private final IGenreService genreService;
 
     @Operation(
             summary = "List all genres",

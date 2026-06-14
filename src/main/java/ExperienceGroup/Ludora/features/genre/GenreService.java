@@ -25,8 +25,7 @@ public class GenreService  implements IGenreService{
                     .map(mapper::toDTO)
                     .toList();
         }else {
-            return iGenreRepository.findAll().stream()
-                    .filter(a -> a.getName().equals(name))
+            return iGenreRepository.findByName(name).stream()
                     .map(mapper::toDTO)
                     .toList();
         }
