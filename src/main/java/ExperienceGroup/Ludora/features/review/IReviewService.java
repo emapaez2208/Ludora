@@ -2,14 +2,16 @@ package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public interface IReviewService {
 
-    List<ReviewDTOResponse> getAllReviews(UUID gameId,
+    Page<ReviewDTOResponse> getAllReviews(int page,
+                                          int size,
+                                          UUID gameId,
                                           UUID clientId,
                                           Integer minRating,
                                           Integer maxRating,
@@ -18,11 +20,11 @@ public interface IReviewService {
 
     ReviewDTOResponse save(ReviewDTORequest reviewDTORequest);
 
-    List<ReviewDTOResponse> getAllReviewsByGameId(UUID gameId);
+    Page<ReviewDTOResponse> getAllReviewsByGameId(int page, int size, UUID gameId);
 
-    List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId);
+    Page<ReviewDTOResponse> getAllReviewsByClientId(int page, int size, UUID clientId);
 
-    List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId);
+    Page<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(int page, int size, UUID gameId, UUID clientId);
 
     void delete(UUID reviewID);
 

@@ -5,13 +5,15 @@ import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface IAdminService {
 
-    List<AdminDTOResponse> getAllAdmins(String name,
+    Page<AdminDTOResponse> getAllAdmins(int page,
+                                        int size,
+                                        String name,
                                         String lastName,
                                         String userName,
                                         String email,

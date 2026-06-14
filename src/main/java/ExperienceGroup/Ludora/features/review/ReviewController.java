@@ -4,18 +4,17 @@ import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,7 +49,9 @@ public class ReviewController {
             @ApiResponse(responseCode = "200", description = "Filtered list of reviews retrieved successfully.")
     })
     @GetMapping
-    public ResponseEntity<List<ReviewDTOResponse>> getAllReviews(
+    public ResponseEntity<Page<ReviewDTOResponse>> getAllReviews(
+            @Parameter(description = "Page number of the list") @RequestParam int page,
+            @Parameter(description = "Page size of the list") @RequestParam int size,
             @Parameter(description = "Filter by associated video game UUID") @RequestParam(required = false) UUID gameId,
             @Parameter(description = "Filter by reviewer client UUID") @RequestParam(required = false) UUID clientId,
             @Parameter(description = "Minimum rating value boundary") @RequestParam(required = false) Integer minRating,
@@ -58,7 +59,7 @@ public class ReviewController {
             @Parameter(description = "Initial timestamp boundary (ISO format: YYYY-MM-DDTHH:mm:ss)") @RequestParam(required = false) LocalDateTime minDate,
             @Parameter(description = "Final timestamp boundary (ISO format: YYYY-MM-DDTHH:mm:ss)") @RequestParam(required = false) LocalDateTime maxDate) {
 
-        List<ReviewDTOResponse> reviews = reviewService.getAllReviews(gameId, clientId, minRating, maxRating, minDate, maxDate);
+        Page<ReviewDTOResponse> reviews = reviewService.getAllReviews(page, size, gameId, clientId, minRating, maxRating, minDate, maxDate);
         return ResponseEntity.ok(reviews);
     }
 
@@ -71,8 +72,10 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "No game found matching the provided UUID parameter.", content = @Content)
     })
     @GetMapping("/games/{gameId}")
-    public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByGameID(@Parameter(description = "Unique UUID of the game", required = true) @PathVariable UUID gameId) {
-        List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameId(gameId);
+    public ResponseEntity<Page<ReviewDTOResponse>> getAllReviewsByGameID(@Parameter(description = "Page number of the list") @RequestParam int page,
+                                                                         @Parameter(description = "Page size of the list") @RequestParam int size,
+                                                                         @Parameter(description = "Unique UUID of the game", required = true) @PathVariable UUID gameId) {
+        Page<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameId(page, size, gameId);
         return ResponseEntity.ok(reviews);
     }
 
@@ -85,8 +88,10 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "No client found matching the provided UUID specification.", content = @Content)
     })
     @GetMapping("/clients/{clientId}")
-    public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByClientID(@Parameter(description = "Unique UUID of the client author", required = true) @PathVariable UUID clientId) {
-        List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByClientId(clientId);
+    public ResponseEntity<Page<ReviewDTOResponse>> getAllReviewsByClientID(@Parameter(description = "Page number of the list") @RequestParam int page,
+                                                                           @Parameter(description = "Page size of the list") @RequestParam int size,
+                                                                           @Parameter(description = "Unique UUID of the client author", required = true) @PathVariable UUID clientId) {
+        Page<ReviewDTOResponse> reviews = reviewService.getAllReviewsByClientId(page, size, clientId);
         return ResponseEntity.ok(reviews);
     }
 
@@ -99,9 +104,11 @@ public class ReviewController {
     })
 
     @GetMapping("/games/{gameId}/client/{clientId}")
-    public ResponseEntity<List<ReviewDTOResponse>> getAllReviewsByGameIdAndClientId(@Parameter(description = "Target game profile UUID", required = true) @PathVariable UUID gameId,
+    public ResponseEntity<Page<ReviewDTOResponse>> getAllReviewsByGameIdAndClientId(@Parameter(description = "Page number of the list") @RequestParam int page,
+                                                                                    @Parameter(description = "Page size of the list") @RequestParam int size,
+                                                                                    @Parameter(description = "Target game profile UUID", required = true) @PathVariable UUID gameId,
                                                                                     @Parameter(description = "Target author client UUID", required = true) @PathVariable UUID clientId){
-        List<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameIdAndClientId(gameId, clientId);
+        Page<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameIdAndClientId(page, size, gameId, clientId);
 
         return ResponseEntity.ok(reviews);
     }

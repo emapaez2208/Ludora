@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora;
+package ExperienceGroup.Ludora.config;
 
 import ExperienceGroup.Ludora.features.ageRange.IAgeRangeRepository;
 import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;

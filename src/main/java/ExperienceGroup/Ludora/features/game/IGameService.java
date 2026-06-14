@@ -2,6 +2,8 @@ package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTORequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import org.springframework.data.domain.Page;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -9,7 +11,9 @@ import java.util.UUID;
 
 public interface IGameService {
 
-    List<GameDTOResponse> getAllGames(String name,
+    Page<GameDTOResponse> getAllGames(int page,
+                                      int size,
+                                      String name,
                                       BigDecimal maxPrice,
                                       BigDecimal minPrice,
                                       LocalDate minReleaseDate,

@@ -2,8 +2,10 @@ package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTORequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,9 @@ public class GameController {
 
     /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) -----------------------------
     @GetMapping
-    ResponseEntity<List<GameDTOResponse>> getAll(
+    ResponseEntity<Page<GameDTOResponse>> getAll(
+            @Parameter(description = "Page number of the list") @RequestParam int page,
+            @Parameter(description = "Page size of the list") @RequestParam int size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) BigDecimal minPrice,
@@ -33,6 +37,8 @@ public class GameController {
             @RequestParam(required = false) String developerCompany
     ) {
         return ResponseEntity.ok(gameService.getAllGames(
+                page,
+                size,
                 name,
                 maxPrice,
                 minPrice,

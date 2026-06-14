@@ -13,10 +13,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,13 +37,15 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "Administrators list retrieved successfully.")
     })
     @GetMapping
-    ResponseEntity<List<AdminDTOResponse>> getAll(@Parameter(description = "Filter by first name") @RequestParam(required = false) String name,
+    ResponseEntity<Page<AdminDTOResponse>> getAll(@Parameter(description = "Page number of the list") @RequestParam int page,
+                                                  @Parameter(description = "Page size of the list") @RequestParam int size,
+                                                  @Parameter(description = "Filter by first name") @RequestParam(required = false) String name,
                                                   @Parameter(description = "Filter by last name") @RequestParam(required = false) String lastName,
                                                   @Parameter(description = "Filter by username") @RequestParam(required = false) String userName,
                                                   @Parameter(description = "Filter by email address") @RequestParam(required = false) String email,
                                                   @Parameter(description = "Filter by blocked status (true/false)") @RequestParam(required = false) Boolean statusBlocked,
                                                   @Parameter(description = "Filter by employee ID") @RequestParam(required = false) Long employeeId){
-        return ResponseEntity.ok(adminService.getAllAdmins(name, lastName, userName, email, statusBlocked, employeeId));
+        return ResponseEntity.ok(adminService.getAllAdmins(page, size, name, lastName, userName, email, statusBlocked, employeeId));
     }
 
     ///  -------------------------------ADMINS POR ID(Perfiles) -------------------

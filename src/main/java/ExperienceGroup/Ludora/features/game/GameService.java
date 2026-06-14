@@ -17,7 +17,12 @@ import ExperienceGroup.Ludora.features.genre.IGenreRepository;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +48,9 @@ public class GameService implements IGameService{
 
     /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) ------------------------------
     @Override
-    public List<GameDTOResponse> getAllGames(String name,
+    public Page<GameDTOResponse> getAllGames(int page,
+                                             int size,
+                                             String name,
                                              BigDecimal maxPrice,
                                              BigDecimal minPrice,
                                              LocalDate minReleaseDate,
@@ -64,11 +71,10 @@ public class GameService implements IGameService{
                 GameSpecification.hasDeveloperCompany(developerCompany)
         );
 
-        return gameRepository.findAll(spec).stream()
-                .distinct()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
 
+        return gameRepository.findAll(Specification.where(spec), pageable)
+                .map(responseMapper::toDTO);
     }
 
 

@@ -21,12 +21,16 @@ import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTOResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -47,7 +51,9 @@ public class AdminService implements IAdminService{
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public List<AdminDTOResponse> getAllAdmins(String name,
+    public Page<AdminDTOResponse> getAllAdmins(int page,
+                                               int size,
+                                               String name,
                                                String lastName,
                                                String userName,
                                                String email,
@@ -63,9 +69,10 @@ public class AdminService implements IAdminService{
                 AdminSpecification.employeeIdEquals(employeeId)
         );
 
-        return adminRepository.findAll(spec).stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("userName").ascending());
+
+        return adminRepository.findAll(Specification.where(spec), pageable)
+                .map(responseMapper::toDTO);
     }
 
     ///  -------------------------------ADMINS POR ID -------------------
