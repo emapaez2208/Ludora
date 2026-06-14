@@ -29,12 +29,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         String errorMessage = switch (authException) {
             case BadCredentialsException badCredentialsException ->
                     "Invalid credentials";
-            case DisabledException disabledException ->
-                    "Account disabled";
-            case LockedException lockedException ->
-                    "Account locked";
-            case AccountExpiredException accountExpiredException ->
-                    "Account expired";
             case CredentialsExpiredException credentialsExpiredException ->
                     "Credentials expired";
             case InsufficientAuthenticationException insufficientAuthenticationException ->
