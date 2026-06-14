@@ -56,7 +56,7 @@ This project was developed as a final assignment for the "Programación III" and
 * Hibernate: Serves as the ORM provider to automatically manage object-relational mapping and synchronization with MySQL.
 
 ## 📖 API Documentation
-* Endpoint Descriptions: Detailed information for every available API route and operation. }
+* Endpoint Descriptions: Detailed information for every available API route and operation.
 * Request/Response Examples: Concrete JSON samples for all endpoints to facilitate integration. 
 * Authentication Requirements: Clear documentation on protected routes and JWT-based security requirements. 
 * Schema Definitions: Detailed data structures for all models used in the API.
@@ -78,4 +78,31 @@ This project was developed as a final assignment for the "Programación III" and
 * Transaction Lifecycle: Automated management of payment states (Pending, Approved, Rejected) ensuring data consistency. 
 * Webhook Handling: Secure reception of asynchronous notifications from Mercado Pago to update order status automatically. 
 * Checkout Experience: Implementation of a standardized, secure flow to facilitate user transactions.
+
+## ⚙️ Getting Started
+
+### Prerequisites
+* Java Development Kit (JDK)
+* Maven
+* MySQL
+
+### Usage
+1. Clone the repository:
+
+    git clone https://github.com/emapaez2208/Ludora.git
+
+
+2. Navigate to the project folder:
+    
+    cd Ludora
+
+
+3. Configure environment variables:
+* DB_URL, DB_USER, DB_PASSWORD
+* JWT_SECRET, JWT_EXPIRATION
+* MERCADOPAGO_ACCESS, APP_BASE_URL
+
+4. Run the application:
+
+    mvn spring-boot:run
 
