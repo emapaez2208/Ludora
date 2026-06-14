@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.common.exception;
+package ExperienceGroup.Ludora.features.user.exception;
 
 public class PasswordInvalidException extends RuntimeException {
     public PasswordInvalidException(String message) {

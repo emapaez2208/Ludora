@@ -1,0 +1,1857 @@
+{
+  "info": {
+    "_postman_id": "16349379-6a42-4af4-869b-9af1b0901548",
+    "name": "Ludora API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53873447",
+    "_collection_link": "https://go.postman.co/collection/53873447-16349379-6a42-4af4-869b-9af1b0901548?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJDUlVEX0FHRVJBTkdFIiwiREVMRVRFX1VTRVJTIiwiVVBEQVRFX1VTRVJTIiwiQ1JFQVRFX1VTRVJTIiwiUk9MRV9BRE1JTiIsIkRFTEVURV9HQU1FUyIsIkRFTEVURV9SRVZJRVciLCJTRUVfVVNFUlMiXSwiZXh0ZXJuYWxJZCI6ImJkNWM2YjE2LTA3Y2UtNDBiYS04ZTYyLTBkNTQwMzNlZjUwMSIsInN1YiI6ImFkbWluMTIzIiwiaWF0IjoxNzgxNDU4NTMxLCJleHAiOjE3ODE0NjU3MzF9.CcuqK5nOpSYN0-bMSXv2az2fFn_qhQyUVqsFusrsNuI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"Admin123\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Autentica las credenciales del usuario y devuelve el token JWT."
+          },
+          "response": []
+        },
+        {
+          "name": "Register Client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tomas\",\n  \"lastName\": \"Martinez\",\n  \"userName\": \"TGamer\",\n  \"email\": \"tomas@gmail.com\",\n  \"password\": \"palabra123\",\n  \"phone\": 223123456,\n  \"street\": \"Av. Colón\",\n  \"numberStreet\": 1234,\n  \"birthDate\": \"2001-05-15\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register/client",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "register",
+                "client"
+              ]
+            },
+            "description": "Registra un nuevo Cliente en la plataforma validando sus datos."
+          },
+          "response": []
+        },
+        {
+          "name": "Register Developer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hideo\",\n  \"lastName\": \"Kojima\",\n  \"userName\": \"kojima_dev\",\n  \"email\": \"contact@kojimapro.com\",\n  \"password\": \"deathstranding2\",\n  \"company\": \"Kojima Productions\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register/developer",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "register",
+                "developer"
+              ]
+            },
+            "description": "Registra una cuenta de Desarrollador/Estudio de videojuegos."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admins",
+      "item": [
+        {
+          "name": "Listar admins",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admins",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar admin por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admins/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver Mi perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admins/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear cuenta admin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pedro\",\n  \"lastName\": \"Dominguez\",\n  \"userName\": \"PedroAdmin\",\n  \"email\": \"pedro@gmail.com\",\n  \"password\": \"password123\",\n  \"employeeId\": 12345\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admins",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar admin",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rodrigo\",\n  \"lastName\": \"Bustamante\",\n  \"employeeId\": 12345\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admins/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Baja lógica de cuenta",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admins/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alta lógica de cuenta",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admins/:externalId/enable",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                ":externalId",
+                "enable"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar contraseña",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPass\": \"password123\",\n  \"newPass\": \"password987\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admins/profile/changePassword",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                "profile",
+                "changePassword"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar mail",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldEmail\": \"felipe@hotmail.com\",\n  \"newEmail\": \"felipe123@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admins/profile/changeEmail",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                "profile",
+                "changeEmail"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Banear usuario/developer",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admins/:externalId/block",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                ":externalId",
+                "block"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Desbanear usuario/developer",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admins/:externalId/unblock",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admins",
+                ":externalId",
+                "unblock"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AgeRanges",
+      "item": [
+        {
+          "name": "Listar rangos de edad",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/ageRanges",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "ageRanges"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar rango por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/ageRanges/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "ageRanges",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear rango de edad",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rangeName\": \"+18\", \r\n    \"minAge\": 18, \r\n    \"description\": \"Violencia\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/ageRanges",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "ageRanges"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar rango",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rangeName\": \"+16\", \r\n    \"minAge\": 16, \r\n    \"description\": \"Violencia moderada\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/ageRanges/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "ageRanges",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar rango",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/ageRanges/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "ageRanges",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Obtener carrito por Cliente ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/cart/:clientExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "cart",
+                ":clientExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "clientExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver Mi carrito",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/cart",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agregar juego al carrito",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/cart/:clientExternalId/games/:gameExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "cart",
+                ":clientExternalId",
+                "games",
+                ":gameExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "clientExternalId",
+                  "value": ""
+                },
+                {
+                  "key": "gameExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remover juego del carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/cart/:clientExternalId/games/:gameExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "cart",
+                ":clientExternalId",
+                "games",
+                ":gameExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "clientExternalId",
+                  "value": ""
+                },
+                {
+                  "key": "gameExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Vaciar carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/cart/:clientExternalId/clear",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "cart",
+                ":clientExternalId",
+                "clear"
+              ],
+              "variable": [
+                {
+                  "key": "clientExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "Listar clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver Mi perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver mis juegos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/library",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "library"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar perfil",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Mario\",\r\n  \"lastName\": \"Bros\",\r\n  \"phone\": 987654321,\r\n  \"street\": \"Avenida champiñon\",\r\n  \"numberStreet\": 200,\r\n  \"birthDate\": \"1985-05-15\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/clients/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar contraseña",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"oldPass\": \"Pass123\", \r\n    \"newPass\": \"NewPass456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/clients/profile/changePassword",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "profile",
+                "changePassword"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar mail",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"oldEmail\": \"mario@gmail.com\", \r\n    \"newEmail\": \"mariobros@gmail.com\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/clients/profile/changeEmail",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                "profile",
+                "changeEmail"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/clients/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clients",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Developers",
+      "item": [
+        {
+          "name": "Listar developers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/developers",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "developers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar developer por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/developers/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "developers",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver Mi perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/developers/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "developers",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar developer",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Leonardo\",\n  \"lastName\": \"Di Caprio\",\n  \"company\": \"Di Caprio Interactive\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/developers/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "developers",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver juegos del developer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/developers/:externalId/games",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "developers",
+                ":externalId",
+                "games"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar developer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/developers/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "developers",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar contraseña",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPass\": \"password123\",\n  \"newPass\": \"pasrord456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/developers/profile/changePassword",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "developers",
+                "profile",
+                "changePassword"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar mail",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldEmail\": \"laura@gmail.com\",\n  \"newEmail\": \"laura@outlook.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/developers/profile/changeEmail",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "developers",
+                "profile",
+                "changeEmail"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Games",
+      "item": [
+        {
+          "name": "Listar juegos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/games?name&maxPrice&minPrice&minReleaseDate&maxReleaseDate&genreName&rangeName&developerCompany",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "games"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": null,
+                  "description": "Filtra por nombre del juego",
+                  "type": "text"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": null,
+                  "description": "Precio máximo del juego",
+                  "type": "text"
+                },
+                {
+                  "key": "minPrice",
+                  "value": null,
+                  "description": "Precio mínimo del juego",
+                  "type": "text"
+                },
+                {
+                  "key": "minReleaseDate",
+                  "value": null,
+                  "description": "Fecha de lanzamiento mínima. Formato: AAAA-MM-DD",
+                  "type": "text"
+                },
+                {
+                  "key": "maxReleaseDate",
+                  "value": null,
+                  "description": "Fecha de lanzamiento máxima. Formato: AAAA-MM-DD",
+                  "type": "text"
+                },
+                {
+                  "key": "genreName",
+                  "value": null,
+                  "description": "Filtra por el nombre del género",
+                  "type": "text"
+                },
+                {
+                  "key": "rangeName",
+                  "value": null,
+                  "description": "Filtra por las siglas del rango de edad",
+                  "type": "text"
+                },
+                {
+                  "key": "developerCompany",
+                  "value": null,
+                  "description": "Filtra por el nombre de la empresa/estudio desarrollador",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar juego por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/games/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "games",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear juego",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"God of War\", \r\n    \"price\": 59.99, \r\n    \"description\": \"RPG\", \r\n    \"releaseDate\": \"2022-02-25\", \r\n    \"ageRangeExternalId\": \"UUID_AQUÍ\", \r\n    \"genreNames\": [\"RPG\"], \r\n    \"statusBlocked\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/games",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "games"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar juego",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"God of War Ragnarok\", \r\n    \"price\": 69.99, \r\n    \"description\": \"RPG de acción\", \r\n    \"releaseDate\": \"2022-11-09\", \r\n    \"ageRangeExternalId\": \"UUID_AQUÍ\", \r\n    \"genreNames\": [\"Action\", \"RPG\"],\r\n    \"statusBlocked\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/games/:externalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "games",
+                ":externalId"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Autorizar juego (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/games/:externalId/AuthorizedGame",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "games",
+                ":externalId",
+                "AuthorizedGame"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Desautorizar juego",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/games/:externalId/DesAuthorizedGame",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "games",
+                ":externalId",
+                "DesAuthorizedGame"
+              ],
+              "variable": [
+                {
+                  "key": "externalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Genres",
+      "item": [
+        {
+          "name": "Listar generos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/genres",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "genres"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear género",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Shooter\", \r\n    \"description\": \"Juegos de disparos\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/genres",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "genres"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar género",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"FPS\", \r\n    \"description\": \"First Person Shooter\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/genres",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "genres"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar género",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/genres?name=FPS",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "genres"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "FPS"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Crear review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gameId\": \"UUID DEL JUEGO\",\n  \"clientId\": \"UUID DEL CLIENTE\",\n  \"rating\": 5,\n  \"textContent\": \"Juegazo. Goty\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/reviews",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar todas las reviews (Filtros opcionales)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reviews?gameId&clientId&minRating=3&maxRating=5&minDate=2014-01-01T00:00:00&maxDate=2026-12-31T23:59:59",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reviews"
+              ],
+              "query": [
+                {
+                  "key": "gameId",
+                  "value": null,
+                  "description": "ID externo del juego",
+                  "type": "text"
+                },
+                {
+                  "key": "clientId",
+                  "value": null,
+                  "description": "ID externo del cliente que hizo reviews (o no)",
+                  "type": "text"
+                },
+                {
+                  "key": "minRating",
+                  "value": "3",
+                  "description": "Puntaje minimo de puntaje de review",
+                  "type": "text"
+                },
+                {
+                  "key": "maxRating",
+                  "value": "5",
+                  "description": "Puntaje maximo de puntaje de review",
+                  "type": "text"
+                },
+                {
+                  "key": "minDate",
+                  "value": "2014-01-01T00:00:00",
+                  "description": "Fecha de inicio de busqueda",
+                  "type": "text"
+                },
+                {
+                  "key": "maxDate",
+                  "value": "2026-12-31T23:59:59",
+                  "description": "Fecha de limite de busqueda",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener reviews de Juego",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reviews/games/:gameExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reviews",
+                "games",
+                ":gameExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "gameExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener reviews por Cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reviews/clients/:clientExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reviews",
+                "clients",
+                ":clientExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "clientExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener review por Juego y Cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reviews/games/:gameExternalId/client/:clientExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reviews",
+                "games",
+                ":gameExternalId",
+                "client",
+                ":clientExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "gameExternalId",
+                  "value": ""
+                },
+                {
+                  "key": "clientExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar review",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reviews/:reviewExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reviews",
+                ":reviewExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "reviewExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sales",
+      "item": [
+        {
+          "name": "Crear orden de venta",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientExternalId\": \"UUID-DEL-CLIENTE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/sales",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "sales"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Procesar pago con MercadoPago",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/sales/pay/:saleExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "sales",
+                "pay",
+                ":saleExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "saleExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar todas las ventas (Auditoría Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/sales",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "sales"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar venta por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/sales/:saleExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "sales",
+                ":saleExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "saleExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar ventas por Cliente ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/sales/client/:clientExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "sales",
+                "client",
+                ":clientExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "clientExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "MercadoPago",
+      "item": [
+        {
+          "name": "Webhook: Pago Exitoso",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/pay/success",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pay",
+                "success"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Webhook: Pago Fallido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/pay/failure",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pay",
+                "failure"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Webhook: Pago Pendiente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/pay/pending",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pay",
+                "pending"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
