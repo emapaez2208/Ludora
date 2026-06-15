@@ -60,6 +60,9 @@ public class SaleEntity{
         if(externalId == null)
             externalId = UUID.randomUUID();
 
+        if (status == null)                       // Inicia la venta en modo pendiente
+            status = ESaleStatus.PENDING;
+
     }
 
 }
