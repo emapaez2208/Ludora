@@ -34,9 +34,7 @@ public record GameDTORequest(
 
     @Schema(description = "Lista de los nombres de los géneros del juego", example = "[shooter, rpg]", required = true)
     @NotEmpty(message = "El juego debe tener al menos un género")
-    List<String> genreNames,
+    List<String> genreNames
 
-    @Schema(description = "Indica si el juego se encuentra bloqueado para los usuarios", example = "false")
-    Boolean statusBlocked
     ) {
 }
