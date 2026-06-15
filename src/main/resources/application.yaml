@@ -15,7 +15,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
-app:
-  base:
-    url: http://localhost:8080
