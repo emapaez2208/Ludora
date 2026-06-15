@@ -17,9 +17,9 @@
               "type": "bearer",
               "bearer": [
                 {
-                  "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJDUlVEX0FHRVJBTkdFIiwiREVMRVRFX1VTRVJTIiwiVVBEQVRFX1VTRVJTIiwiQ1JFQVRFX1VTRVJTIiwiUk9MRV9BRE1JTiIsIkRFTEVURV9HQU1FUyIsIkRFTEVURV9SRVZJRVciLCJTRUVfVVNFUlMiXSwiZXh0ZXJuYWxJZCI6ImJkNWM2YjE2LTA3Y2UtNDBiYS04ZTYyLTBkNTQwMzNlZjUwMSIsInN1YiI6ImFkbWluMTIzIiwiaWF0IjoxNzgxNDU4NTMxLCJleHAiOjE3ODE0NjU3MzF9.CcuqK5nOpSYN0-bMSXv2az2fFn_qhQyUVqsFusrsNuI",
-                  "type": "string"
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
                 }
               ]
             },
@@ -34,6 +34,88 @@
             "body": {
               "mode": "raw",
               "raw": "{\n  \"username\": \"Admin123\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Autentica las credenciales del usuario y devuelve el token JWT."
+          },
+          "response": []
+        },
+        {
+          "name": "Login Client",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"TGamer\",\n  \"password\": \"Palabra123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Autentica las credenciales del usuario y devuelve el token JWT."
+          },
+          "response": []
+        },
+        {
+          "name": "Login Developer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"kojima_dev\",\n  \"password\": \"Deathstranding2\"\n}"
             },
             "url": {
               "raw": "http://localhost:8080/auth/login",
