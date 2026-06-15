@@ -126,7 +126,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/admins",
+              "raw": "http://localhost:8080/admins?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -134,6 +134,52 @@
               "port": "8080",
               "path": [
                 "admins"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "",
+                  "description": "Buscar por nombre",
+                  "disabled": true
+                },
+                {
+                  "key": "lastName",
+                  "value": "",
+                  "description": "Buscar por apellido",
+                  "disabled": true
+                },
+                {
+                  "key": "userName",
+                  "value": null,
+                  "description": "Buscar por nombre de usuario",
+                  "disabled": true
+                },
+                {
+                  "key": "statusBlocked",
+                  "value": null,
+                  "description": "true para ver bloqueados, false para desbloqueados",
+                  "disabled": true
+                },
+                {
+                  "key": "email",
+                  "value": null,
+                  "description": "Buscar por email especifico",
+                  "disabled": true
+                },
+                {
+                  "key": "employeeId",
+                  "value": null,
+                  "description": "Buscar por ID de empleado",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
               ]
             }
           },
@@ -711,7 +757,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/clients",
+              "raw": "http://localhost:8080/clients?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -719,6 +765,70 @@
               "port": "8080",
               "path": [
                 "clients"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": null,
+                  "description": "Buscar por nombre",
+                  "disabled": true
+                },
+                {
+                  "key": "lastName",
+                  "value": null,
+                  "description": "Buscar por apellido",
+                  "disabled": true
+                },
+                {
+                  "key": "userName",
+                  "value": null,
+                  "description": "Username (sin distingir mayusculas)",
+                  "disabled": true
+                },
+                {
+                  "key": "statusBlocked",
+                  "value": null,
+                  "description": "true para ver bloqueados, false para desbloqueados",
+                  "disabled": true
+                },
+                {
+                  "key": "email",
+                  "value": null,
+                  "description": "Buscar por email especifico",
+                  "disabled": true
+                },
+                {
+                  "key": "phone",
+                  "value": null,
+                  "description": "Buscar por numero de telefono especifico",
+                  "disabled": true
+                },
+                {
+                  "key": "street",
+                  "value": null,
+                  "description": "Buscar por la calle exacta",
+                  "disabled": true
+                },
+                {
+                  "key": "numberStreet",
+                  "value": null,
+                  "description": "Buscar por numeracion de calle exacta",
+                  "disabled": true
+                },
+                {
+                  "key": "birthDate",
+                  "value": null,
+                  "description": "Fecha de nacimiento. AAAA-MM-DD",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
               ]
             }
           },
@@ -922,7 +1032,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/developers",
+              "raw": "http://localhost:8080/developers?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -930,6 +1040,52 @@
               "port": "8080",
               "path": [
                 "developers"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": null,
+                  "description": "Buscar por nombre",
+                  "disabled": true
+                },
+                {
+                  "key": "lastName",
+                  "value": null,
+                  "description": "Buscar por apellido",
+                  "disabled": true
+                },
+                {
+                  "key": "userName",
+                  "value": null,
+                  "description": "Buscar por nombre de usuario",
+                  "disabled": true
+                },
+                {
+                  "key": "email",
+                  "value": null,
+                  "description": "Buscar por email especifico",
+                  "disabled": true
+                },
+                {
+                  "key": "statusBlocked",
+                  "value": null,
+                  "description": "true para ver bloqueados, false para desbloqueados",
+                  "disabled": true
+                },
+                {
+                  "key": "company",
+                  "value": null,
+                  "description": "Busca por nombre de empresa",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
               ]
             }
           },
@@ -1136,11 +1292,33 @@
       "item": [
         {
           "name": "Listar juegos",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "http://localhost:8080/games?name&maxPrice&minPrice&minReleaseDate&maxReleaseDate&genreName&rangeName&developerCompany",
+              "raw": "http://localhost:8080/games?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1154,49 +1332,57 @@
                   "key": "name",
                   "value": null,
                   "description": "Filtra por nombre del juego",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "maxPrice",
                   "value": null,
                   "description": "Precio máximo del juego",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "minPrice",
                   "value": null,
                   "description": "Precio mínimo del juego",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "minReleaseDate",
                   "value": null,
                   "description": "Fecha de lanzamiento mínima. Formato: AAAA-MM-DD",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "maxReleaseDate",
                   "value": null,
                   "description": "Fecha de lanzamiento máxima. Formato: AAAA-MM-DD",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "genreName",
                   "value": null,
                   "description": "Filtra por el nombre del género",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "rangeName",
                   "value": null,
                   "description": "Filtra por las siglas del rango de edad",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "developerCompany",
                   "value": null,
                   "description": "Filtra por el nombre de la empresa/estudio desarrollador",
-                  "type": "text"
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
                 }
               ]
             }
@@ -1485,12 +1671,12 @@
           "response": []
         },
         {
-          "name": "Listar todas las reviews (Filtros opcionales)",
+          "name": "Listar todas las reviews",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/reviews?gameId&clientId&minRating=3&maxRating=5&minDate=2014-01-01T00:00:00&maxDate=2026-12-31T23:59:59",
+              "raw": "http://localhost:8080/reviews?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1504,37 +1690,45 @@
                   "key": "gameId",
                   "value": null,
                   "description": "ID externo del juego",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "clientId",
                   "value": null,
                   "description": "ID externo del cliente que hizo reviews (o no)",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "minRating",
                   "value": "3",
                   "description": "Puntaje minimo de puntaje de review",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "maxRating",
                   "value": "5",
                   "description": "Puntaje maximo de puntaje de review",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "minDate",
                   "value": "2014-01-01T00:00:00",
                   "description": "Fecha de inicio de busqueda",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "maxDate",
                   "value": "2026-12-31T23:59:59",
                   "description": "Fecha de limite de busqueda",
-                  "type": "text"
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
                 }
               ]
             }
@@ -1547,7 +1741,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/reviews/games/:gameExternalId",
+              "raw": "http://localhost:8080/reviews/games/:gameExternalId?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1557,6 +1751,18 @@
                 "reviews",
                 "games",
                 ":gameExternalId"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "type": "text"
+                }
               ],
               "variable": [
                 {
@@ -1574,7 +1780,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/reviews/clients/:clientExternalId",
+              "raw": "http://localhost:8080/reviews/clients/:clientExternalId?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1584,6 +1790,18 @@
                 "reviews",
                 "clients",
                 ":clientExternalId"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "type": "text"
+                }
               ],
               "variable": [
                 {
@@ -1601,7 +1819,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/reviews/games/:gameExternalId/client/:clientExternalId",
+              "raw": "http://localhost:8080/reviews/games/:gameExternalId/client/:clientExternalId?page&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1613,6 +1831,18 @@
                 ":gameExternalId",
                 "client",
                 ":clientExternalId"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": null,
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "type": "text"
+                }
               ],
               "variable": [
                 {
@@ -1720,7 +1950,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/sales",
+              "raw": "http://localhost:8080/sales?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1728,6 +1958,74 @@
               "port": "8080",
               "path": [
                 "sales"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": null,
+                  "description": "Busca por UUID exacto de la venta",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "minDate",
+                  "value": null,
+                  "description": "Ventas desde esta fecha (AAAA-MM-DDTHH:MM:SS)",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "maxDate",
+                  "value": null,
+                  "description": "Ventas hasta esta fecha (AAAA-MM-DDTHH:MM:SS)",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": null,
+                  "description": "Estado de la venta",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "minPrice",
+                  "value": null,
+                  "description": "Montos mayores o iguales a...",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "maxPrice",
+                  "value": null,
+                  "description": "Montos menores o iguales a...",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "clientId",
+                  "value": null,
+                  "description": "Todas las ventas de un cliente por UUID",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "gamesId",
+                  "value": null,
+                  "description": "Todas las ventas de un juego por UUID",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "type": "text"
+                }
               ]
             }
           },
@@ -1765,7 +2063,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/sales/client/:clientExternalId",
+              "raw": "http://localhost:8080/sales/client/:clientExternalId?page=0&size=5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1775,6 +2073,18 @@
                 "sales",
                 "client",
                 ":clientExternalId"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "type": "text"
+                }
               ],
               "variable": [
                 {

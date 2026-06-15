@@ -37,7 +37,7 @@ public class GameController {
     })
     @GetMapping
 
-    ResponseEntity<List<GameDTOResponse>> getAll(
+    ResponseEntity<Page<GameDTOResponse>> getAll(
             @Parameter(description = "Page number of the list") @RequestParam int page,
             @Parameter(description = "Page size of the list") @RequestParam int size,
             @Parameter(description = "Filter by game name") @RequestParam(required = false) String name,
