@@ -117,7 +117,7 @@ public class SaleService  implements ISaleService{
         SaleEntity sale = saleRepository.findByExternalId(externalId)
                 .orElseThrow(SaleNotFoundException::new);
 
-        if (sale.getStatus() != ESaleStatus.PENDING) {
+        if (sale.getStatus() == ESaleStatus.APPROVED) {
             throw new IllegalStateException("Only pending sales can be paid.");
         }
 
