@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.features.client.domain.dto;
 
 
+import ExperienceGroup.Ludora.common.utils.AnotationAdult.Adult;
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
 import com.fasterxml.jackson.dataformat.yaml.util.StringQuotingChecker;
@@ -54,7 +55,9 @@ public record ClientDTORequest (@Schema(description = "The user's name", example
 
                                 @Schema(description = "Date of birth, format = YYYY-MM-DD", example = "2010-05-27", required = true)
                                 @Past(message = "The date of birth must be a past date")
-                                @NotNull LocalDate birthDate
+                                @NotNull
+                                @Adult
+                                LocalDate birthDate
 
                                 ){
 
