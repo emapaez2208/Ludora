@@ -39,8 +39,7 @@ public class SaleController {
             @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
             @ApiResponse(responseCode = "403", description = "You do not have permission to create this sale.", content = @Content),
             @ApiResponse(responseCode = "404", description = "Client not found.", content = @Content),
-            @ApiResponse(responseCode = "409", description = "The client's shopping cart is empty.", content = @Content),
-            @ApiResponse(responseCode = "422", description = "The shopping cart is empty.", content = @Content)
+            @ApiResponse(responseCode = "409", description = "The client's shopping cart is empty.", content = @Content)
     })
     @PostMapping
     public ResponseEntity<SaleDTOResponse> create(@Valid @RequestBody SaleDTORequest saleDTORequest) {
@@ -57,7 +56,6 @@ public class SaleController {
             @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
             @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
             @ApiResponse(responseCode = "404", description = "No sale instance found matching the given UUID.", content = @Content),
-            @ApiResponse(responseCode = "422", description = "The payment request could not be processed by Mercado Pago.", content = @Content),
             @ApiResponse(responseCode = "502", description = "Failed to communicate with Mercado Pago services.", content = @Content)
     })
 

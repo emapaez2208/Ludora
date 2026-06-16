@@ -86,8 +86,7 @@ public class GameController {
             @ApiResponse(responseCode = "400", description = "Invalid input data (validation error).", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden. Only users with CREATE_GAMES permission can perform this action.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Developer, age range, or one of the specified genres was not found.", content = @Content),
-            @ApiResponse(responseCode = "422", description = "Content unprocessable due to business logic rules.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Developer, age range, or one of the specified genres was not found.", content = @Content)
     })
     @PostMapping
     ResponseEntity<GameDTOResponse> create(@Valid @RequestBody GameDTORequest gameDTORequest) {
@@ -103,8 +102,7 @@ public class GameController {
             @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to update this game.", content = @Content),
             @ApiResponse(responseCode = "404", description = "Game not found.", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Conflict. The specified game does not belong to the authenticated developer.", content = @Content),
-            @ApiResponse(responseCode = "422", description = "Content unprocessable due to business logic rules.", content = @Content)
+            @ApiResponse(responseCode = "409", description = "Conflict. The specified game does not belong to the authenticated developer.", content = @Content)
     })
     @PutMapping("/{externalId}")
     ResponseEntity<GameDTOResponse> update(
