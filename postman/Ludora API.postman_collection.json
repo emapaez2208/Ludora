@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "16349379-6a42-4af4-869b-9af1b0901548",
+    "_postman_id": "529e8ecd-9e49-4f74-a697-3c8315a1e0ae",
     "name": "Ludora API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "53873447",
-    "_collection_link": "https://go.postman.co/collection/53873447-16349379-6a42-4af4-869b-9af1b0901548?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/53873447-529e8ecd-9e49-4f74-a697-3c8315a1e0ae?source=collection_link"
   },
   "item": [
     {
@@ -19,7 +19,7 @@
                 {
                   "key": "Content-Type",
                   "value": "application/json",
-                  "type": "text"
+                  "type": "string"
                 }
               ]
             },
@@ -60,7 +60,7 @@
                 {
                   "key": "Content-Type",
                   "value": "application/json",
-                  "type": "text"
+                  "type": "string"
                 }
               ]
             },
@@ -101,7 +101,7 @@
                 {
                   "key": "Content-Type",
                   "value": "application/json",
-                  "type": "text"
+                  "type": "string"
                 }
               ]
             },
@@ -1379,14 +1379,7 @@
           },
           "request": {
             "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "",
-                  "type": "string"
-                }
-              ]
+              "type": "noauth"
             },
             "method": "GET",
             "header": [],
@@ -1412,49 +1405,49 @@
               "query": [
                 {
                   "key": "name",
-                  "value": null,
+                  "value": "",
                   "description": "Filtra por nombre del juego",
                   "disabled": true
                 },
                 {
                   "key": "maxPrice",
-                  "value": null,
+                  "value": "",
                   "description": "Precio máximo del juego",
                   "disabled": true
                 },
                 {
                   "key": "minPrice",
-                  "value": null,
+                  "value": "",
                   "description": "Precio mínimo del juego",
                   "disabled": true
                 },
                 {
                   "key": "minReleaseDate",
-                  "value": null,
+                  "value": "",
                   "description": "Fecha de lanzamiento mínima. Formato: AAAA-MM-DD",
                   "disabled": true
                 },
                 {
                   "key": "maxReleaseDate",
-                  "value": null,
+                  "value": "",
                   "description": "Fecha de lanzamiento máxima. Formato: AAAA-MM-DD",
                   "disabled": true
                 },
                 {
                   "key": "genreName",
-                  "value": null,
+                  "value": "",
                   "description": "Filtra por el nombre del género",
                   "disabled": true
                 },
                 {
                   "key": "rangeName",
-                  "value": null,
+                  "value": "",
                   "description": "Filtra por las siglas del rango de edad",
                   "disabled": true
                 },
                 {
                   "key": "developerCompany",
-                  "value": null,
+                  "value": "",
                   "description": "Filtra por el nombre de la empresa/estudio desarrollador",
                   "disabled": true
                 },
@@ -1555,6 +1548,36 @@
                   "key": "externalId",
                   "value": ""
                 }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver juegos a revisar (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/games/needRevision",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "games",
+                "needRevision"
               ]
             }
           },

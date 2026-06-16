@@ -200,13 +200,16 @@ public class GameService implements IGameService{
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public List<GameDTOResponse> getGamesNeedRevision(){
+        List<GameEntity> games = gameRepository.findAll();
 
-        return gameRepository.findAllByNeedRevision(true)
-                .orElseThrow(GameNotFoundException::new)
-                .stream().map(responseMapper::toDTO)
+        List<GameEntity> blockedGames = games.stream()
+                .filter(g -> g.getStatusBlocked() != null && g.getStatusBlocked())
+                .toList();
+
+        return blockedGames.stream()
+                .map(responseMapper::toDTO)
                 .toList();
     }
-
     /// -------------- DEVELOPER SOLICITAR REVISION DE UN JUEGO ---------------------
 
     @Override
