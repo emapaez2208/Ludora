@@ -120,8 +120,7 @@ public class SaleService  implements ISaleService{
         if (sale.getStatus() == ESaleStatus.APPROVED) {
             throw new IllegalStateException("Only pending sales can be paid.");
         }
-
-        cartService.clearCart(sale.getClient().getExternalId());
+        
         return mercadoPago.createPay(sale.getItems(), sale.getExternalId());
     }
 
