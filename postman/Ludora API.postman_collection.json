@@ -1754,7 +1754,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"gameExternalId\": \"UUID DEL JUEGO\",\n  \"clientExternalId\": \"UUID DEL CLIENTE\",\n  \"rating\": 5,\n  \"textContent\": \"Juegazo. Goty\"\n}",
+              "raw": "{\n  \"gameExternalId\": \"UUID DEL JUEGO\",\n  \"clientExternalId\": \"UUID DEL CLIENTE\",\n  \"rating\": 5,\n  \"comment\": \"Juegazo. Goty\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
