@@ -63,7 +63,7 @@ public class ReviewService implements IReviewService {
         if (minDate != null && maxDate != null && minDate.isAfter(maxDate)) {
             throw new IllegalArgumentException("The start date cannot be later than the end date.");
         }
-        
+
         if (minDate != null && minDate.isAfter(now)) {
             throw new IllegalArgumentException("The minimum date cannot be in the future.");
         }
