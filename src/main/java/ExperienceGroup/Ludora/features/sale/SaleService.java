@@ -154,6 +154,28 @@ public class SaleService  implements ISaleService{
                                              List<UUID> clientIds,
                                              List<UUID> gameIds) {
 
+        LocalDateTime now = LocalDateTime.now();
+
+        if (minDate != null && maxDate != null && minDate.isAfter(maxDate)) {
+            throw new IllegalArgumentException("The start date must be before the end date.");
+        }
+        if (minDate != null && minDate.isAfter(now)) {
+            throw new IllegalArgumentException("The start date cannot be in the future.");
+        }
+        if (maxDate != null && maxDate.isAfter(now)) {
+            throw new IllegalArgumentException("The end date cannot be in the future.");
+        }
+
+        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Minimum price cannot be negative.");
+        }
+        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Maximum price cannot be negative.");
+        }
+        if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
+            throw new IllegalArgumentException("Minimum price must be less than the maximum price.");
+        }
+
         PredicateSpecification<SaleEntity> spec = PredicateSpecification.allOf(
                 SaleSpecification.externalIdEquals(externalId),
                 SaleSpecification.dateGreaterThan(minDate),

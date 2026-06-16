@@ -3,6 +3,8 @@ package ExperienceGroup.Ludora.common.exception.globalHandler;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.features.cart.exception.*;
 import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
+import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
+import ExperienceGroup.Ludora.features.review.exception.ReviewAlreadyExistsException;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
@@ -165,6 +167,25 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerIllegalArgument(IllegalArgumentException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameNotPurchasedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameNotPurchased(GameNotPurchasedException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String message = String.format("The parameter '%s' has an invalid value. Expected type: %s",
+                ex.getName(),
+                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
+
+        return buildResponse(HttpStatus.BAD_REQUEST, message);
+    }
+
     @ExceptionHandler(MercadoPagoFailedException.class)
         public ResponseEntity<ErrorResponseDTO> handlerMercadoPagoFailedException ( MercadoPagoFailedException ex){
             return buildResponse(HttpStatus.BAD_GATEWAY , ex.getMessage());
@@ -193,6 +214,10 @@ public class GlobalHandlerException {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponseDTO> handlerMethodArgumentMismatch(MethodArgumentTypeMismatchException ex){
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+      
+    @ExceptionHandler(ReviewAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerReviewAlreadyExists(ReviewAlreadyExistsException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     /// ---------------------- MSJ ERROR CONSTRUCTOR ----------------------------------- ///

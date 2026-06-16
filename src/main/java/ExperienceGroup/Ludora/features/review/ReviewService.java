@@ -1,7 +1,10 @@
 package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
+import ExperienceGroup.Ludora.features.review.exception.ReviewAlreadyExistsException;
 import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -34,6 +37,7 @@ public class ReviewService implements IReviewService {
     private final IReviewRepository reviewRepository;
     private final IMapper<ReviewEntity, ReviewDTOResponse> responseMapper;
     private final IMapper<ReviewEntity, ReviewDTORequest> requestMapper;
+    private final AuthenticatedUserProvider authenticatedUser;
 
     private final IGameRepository gameRepository;
     private final IClientRepository clientRepository;
@@ -47,6 +51,29 @@ public class ReviewService implements IReviewService {
                                                  Integer maxRating,
                                                  LocalDateTime minDate,
                                                  LocalDateTime maxDate) {
+
+        if (minRating != null && (minRating < 1 || minRating > 5)) {
+            throw new IllegalArgumentException("Minimum rating must be between 1 and 5.");
+        }
+        if (maxRating != null && (maxRating < 1 || maxRating > 5)) {
+            throw new IllegalArgumentException("Maximum rating must be between 1 and 5.");
+        }
+        if (minRating != null && maxRating != null && minRating > maxRating) {
+            throw new IllegalArgumentException("Minimum rating cannot be greater than maximum rating.");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (minDate != null && maxDate != null && minDate.isAfter(maxDate)) {
+            throw new IllegalArgumentException("The start date cannot be later than the end date.");
+        }
+
+        if (minDate != null && minDate.isAfter(now)) {
+            throw new IllegalArgumentException("The minimum date cannot be in the future.");
+        }
+        if (maxDate != null && maxDate.isAfter(now)) {
+            throw new IllegalArgumentException("The maximum date cannot be in the future.");
+        }
 
         PredicateSpecification<ReviewEntity> spec = PredicateSpecification.allOf(
                 ReviewSpecification.gameEquals(gameId),
@@ -67,10 +94,30 @@ public class ReviewService implements IReviewService {
     @PreAuthorize("hasAuthority('CREATE_REVIEW')")
     @Override
     public ReviewDTOResponse save(ReviewDTORequest reviewDTORequest) {
+
         GameEntity game = gameRepository.findByExternalId(reviewDTORequest.gameExternalId())
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
+
+        UUID authenticatedClientId = authenticatedUser.getCurrentUser().externalId();
+
+        if (!reviewDTORequest.clientExternalId().equals(authenticatedClientId)) {
+            throw new AccessDeniedException("You can only create reviews for your own account.");
+        }
+
         ClientEntity client = clientRepository.findByExternalId(reviewDTORequest.clientExternalId())
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
+
+        boolean hasPurchased = client.getGames().stream()
+                .anyMatch(purchasedGame -> purchasedGame.getExternalId().equals(game.getExternalId()));
+
+        if (!hasPurchased) {
+            throw new GameNotPurchasedException("You cannot review a game that you have not purchased.");
+        }
+
+        boolean alreadyReviewed = reviewRepository.existsByClientAndGame(client, game);
+        if (alreadyReviewed) {
+            throw new ReviewAlreadyExistsException("You have already reviewed this game.");
+        }
 
         ReviewEntity reviewEntity = requestMapper.toEntity(reviewDTORequest);
 
