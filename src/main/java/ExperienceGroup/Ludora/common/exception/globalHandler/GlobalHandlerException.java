@@ -212,8 +212,9 @@ public class GlobalHandlerException {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerMethodArgumentMismatch(MethodArgumentTypeMismatchException ex){
+    public ResponseEntity<ErrorResponseDTO> handlerMethodArgumentMismatch(MethodArgumentTypeMismatchException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
       
     @ExceptionHandler(ReviewAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDTO> handlerReviewAlreadyExists(ReviewAlreadyExistsException ex){
