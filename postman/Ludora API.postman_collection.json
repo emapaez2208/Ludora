@@ -115,7 +115,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"kojima_dev\",\n  \"password\": \"Deathstranding2\"\n}"
+              "raw": "{\n  \"username\": \"juanDev\",\n  \"password\": \"Palabra123\"\n}"
             },
             "url": {
               "raw": "http://localhost:8080/auth/login",
@@ -146,7 +146,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Tomas\",\n  \"lastName\": \"Martinez\",\n  \"userName\": \"TGamer\",\n  \"email\": \"tomas@gmail.com\",\n  \"password\": \"palabra123\",\n  \"phone\": 223123456,\n  \"street\": \"Av. Colón\",\n  \"numberStreet\": 1234,\n  \"birthDate\": \"2001-05-15\"\n}"
+              "raw": "{\n  \"name\": \"Tomas\",\n  \"lastName\": \"Martinez\",\n  \"userName\": \"TGamer\",\n  \"email\": \"tomas@gmail.com\",\n  \"password\": \"Palabra123\",\n  \"phone\": 223123456,\n  \"street\": \"Av. Colón\",\n  \"numberStreet\": 1234,\n  \"birthDate\": \"2001-05-15\"\n}"
             },
             "url": {
               "raw": "http://localhost:8080/auth/register/client",
@@ -178,7 +178,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Hideo\",\n  \"lastName\": \"Kojima\",\n  \"userName\": \"kojima_dev\",\n  \"email\": \"contact@kojimapro.com\",\n  \"password\": \"deathstranding2\",\n  \"company\": \"Kojima Productions\"\n}"
+              "raw": "{\n  \"name\": \"Juan\",\n  \"lastName\": \"Maidana\",\n  \"userName\": \"juanDev\",\n  \"email\": \"juanDev@konami.com\",\n  \"password\": \"Palabra123\",\n  \"company\": \"Konami\"\n}"
             },
             "url": {
               "raw": "http://localhost:8080/auth/register/developer",
@@ -1754,7 +1754,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"gameId\": \"UUID DEL JUEGO\",\n  \"clientId\": \"UUID DEL CLIENTE\",\n  \"rating\": 5,\n  \"textContent\": \"Juegazo. Goty\"\n}",
+              "raw": "{\n  \"gameExternalId\": \"UUID DEL JUEGO\",\n  \"clientExternalId\": \"UUID DEL CLIENTE\",\n  \"rating\": 5,\n  \"textContent\": \"Juegazo. Goty\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
