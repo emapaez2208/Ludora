@@ -103,6 +103,11 @@ public class ReviewService implements IReviewService {
             throw new GameNotPurchasedException("You cannot review a game that you have not purchased.");
         }
 
+        boolean alreadyReviewed = reviewRepository.existsByClientAndGame(client, game);
+        if (alreadyReviewed) {
+            throw new ReviewAlreadyExistsException("You have already reviewed this game.");
+        }
+
         ReviewEntity reviewEntity = requestMapper.toEntity(reviewDTORequest);
 
         reviewEntity.setGame(game);

@@ -4,6 +4,7 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.features.cart.exception.*;
 import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
 import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
+import ExperienceGroup.Ludora.features.review.exception.ReviewAlreadyExistsException;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
@@ -202,6 +203,11 @@ public class GlobalHandlerException {
     @ExceptionHandler(SaleNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handlerSaleNotFound(SaleNotFoundException ex){
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(ReviewAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerReviewAlreadyExists(ReviewAlreadyExistsException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     /// ---------------------- MSJ ERROR CONSTRUCTOR ----------------------------------- ///
