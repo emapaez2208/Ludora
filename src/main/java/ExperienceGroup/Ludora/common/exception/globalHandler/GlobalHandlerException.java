@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.common.exception.globalHandler;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.features.cart.exception.*;
 import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
+import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -161,6 +163,25 @@ public class GlobalHandlerException {
     @ExceptionHandler(GameAlreadyOwnedException.class)
     public ResponseEntity<ErrorResponseDTO> handlerGameAlreadyOwned(GameAlreadyOwnedException ex) {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerIllegalArgument(IllegalArgumentException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameNotPurchasedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameNotPurchased(GameNotPurchasedException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String message = String.format("The parameter '%s' has an invalid value. Expected type: %s",
+                ex.getName(),
+                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
+
+        return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
     @ExceptionHandler(MercadoPagoFailedException.class)

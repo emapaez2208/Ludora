@@ -69,6 +69,10 @@ public class ClientService implements IClientService{
                                                 Integer numberStreet,
                                                 LocalDate birthDate) {
 
+        if (birthDate != null && birthDate.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("The birth date cannot be in the future.");
+        }
+
         PredicateSpecification<ClientEntity> spec = PredicateSpecification.allOf(
                 ClientSpecification.nameContains(name),
                 ClientSpecification.lastNameContains(lastName),
