@@ -35,7 +35,11 @@ public class SaleController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Sale checkout order initialized successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid request payload or verification conditions failed.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Invalid request payload or validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to create this sale.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client not found.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "The client's shopping cart is empty.", content = @Content)
     })
     @PostMapping
     public ResponseEntity<SaleDTOResponse> create(@Valid @RequestBody SaleDTORequest saleDTORequest) {
@@ -49,7 +53,10 @@ public class SaleController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Payment gateway preference context loaded successfully."),
-            @ApiResponse(responseCode = "404", description = "No sale instance found matching the given UUID description.", content = @Content)
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No sale instance found matching the given UUID.", content = @Content),
+            @ApiResponse(responseCode = "502", description = "Failed to communicate with Mercado Pago services.", content = @Content)
     })
 
     @PostMapping("/pay/{externalId}")
@@ -62,7 +69,10 @@ public class SaleController {
             description = "Retrieves an explicit transaction log index from the database system registry, supporting dynamic fields like price caps, status types, or multiple user lists."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Filtered historical transactions list retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Filtered historical transactions list retrieved successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid search parameters.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content)
     })
 
     @GetMapping
@@ -87,6 +97,9 @@ public class SaleController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sale transaction log matched successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid transaction identifier.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
             @ApiResponse(responseCode = "404", description = "Target transaction element not found.", content = @Content)
     })
 
@@ -100,6 +113,9 @@ public class SaleController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Client historical checkout collection retrieved successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
             @ApiResponse(responseCode = "404", description = "No client found matching the provided UUID tracker.", content = @Content)
     })
 

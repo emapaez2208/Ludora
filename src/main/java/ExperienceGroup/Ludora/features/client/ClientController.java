@@ -10,6 +10,7 @@ import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,9 @@ public class ClientController {
             description = "Retrieves a filtered list of clients based on multiple optional query parameters."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Clients list retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Clients list retrieved successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to access this resource.", content = @Content)
     })
 
     @GetMapping
@@ -73,7 +76,9 @@ public class ClientController {
             description = "Retrieves account details of the currently authenticated client user."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Client profile details retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Client profile details retrieved successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Client account is blocked, disabled, or expired.", content = @Content)
     })
 
     @GetMapping("/profile")
@@ -86,7 +91,9 @@ public class ClientController {
             description = "Retrieves the list of games purchased or owned by the currently authenticated client user."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game library retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Game library retrieved successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Client account is blocked, disabled, or expired.", content = @Content)
     })
     @GetMapping("/library")
     ResponseEntity<List<GameDTOResponse>> getMyGames(){
@@ -99,6 +106,8 @@ public class ClientController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Client profile found successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to access this client.", content = @Content),
             @ApiResponse(responseCode = "404", description = "No client found with the given UUID specification.", content = @Content)
     })
    @GetMapping("/{id}")
@@ -111,13 +120,17 @@ public class ClientController {
             description = "Directly creates a new client account profile in the system database after validating inputs."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Client account created successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid payload structure or validation constraints failed.", content = @Content)
+            @ApiResponse(responseCode = "201", description = "Client account created successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid payload structure or validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to create client accounts.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. Email or username already exists.", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity. Invalid email format or password does not satisfy security requirements.", content = @Content)
     })
 
     @PostMapping
     ResponseEntity<ClientDTOResponse> save (@Valid @RequestBody ClientDTORequest clientDTORequest){
-        return ResponseEntity.ok(clientService.save(clientDTORequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientService.save(clientDTORequest));
     }
 
     @Operation(
@@ -127,7 +140,10 @@ public class ClientController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Client account updated successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid profile update constraints provided.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Client target not found.", content = @Content)
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to update this client.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client target not found.", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity. Invalid email format or password does not satisfy security requirements.", content = @Content)
     })
 
     @PutMapping("/{id}")
@@ -142,6 +158,8 @@ public class ClientController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Client account deleted successfully (No Content)."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to delete this client.", content = @Content),
             @ApiResponse(responseCode = "404", description = "Client target not found.", content = @Content)
     })
 
@@ -158,7 +176,9 @@ public class ClientController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password updated successfully."),
-            @ApiResponse(responseCode = "400", description = "Current password mismatch or invalid complexity constraints.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Current password is incorrect.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Client account is blocked, disabled, or expired.", content = @Content)
     })
     @PutMapping("/profile/changePassword")
     ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordDTO passwordDTO){
@@ -172,7 +192,11 @@ public class ClientController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Email address updated successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid data format or email address already registered by another account.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Invalid payload structure or validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Client account is blocked, disabled, or expired.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. Email address already exists.", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity. Invalid email format.", content = @Content)
     })
 
     @PutMapping("/profile/changeEmail")

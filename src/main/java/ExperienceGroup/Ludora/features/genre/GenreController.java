@@ -1,11 +1,9 @@
 package ExperienceGroup.Ludora.features.genre;
 
-import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import ExperienceGroup.Ludora.features.genre.domain.dto.GenreDTO;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +12,6 @@ import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +29,9 @@ public class GenreController {
             description = "Retrieves the full list of genres. Can optionally be filtered by matching a specific name."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Genres list retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Genres list retrieved successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to access this resource.", content = @Content)
     })
     @GetMapping()
     public ResponseEntity<List<GenreDTO>> getAllGenre(@Parameter(description = "Optional genre name to filter the results") @RequestParam (required = false) String name){
@@ -43,13 +42,16 @@ public class GenreController {
             description = "Registers a new video game category into the system (e.g., 'RPG', 'Action') after validating the request body input."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Genre created successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid data structure or validation constraints failed.", content = @Content)
+            @ApiResponse(responseCode = "201", description = "Genre created successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid data structure or validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to create genres.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. A genre with the same name already exists.", content = @Content)
     })
 
     @PostMapping
     public ResponseEntity<GenreDTO> save(@Valid @RequestBody GenreDTO genreDTO){
-        return ResponseEntity.ok(genreService.save(genreDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(genreService.save(genreDTO));
     }
 
     @Operation(
@@ -58,10 +60,12 @@ public class GenreController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Genre deleted successfully (No Content)."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to delete genres.", content = @Content),
             @ApiResponse(responseCode = "404", description = "No genre found matching the provided name parameter.", content = @Content)
     })
     @DeleteMapping()
-    public ResponseEntity<GenreDTO> delete (@Parameter(description = "The exact name of the genre to delete", required = true) @RequestParam(required = true) String name){
+    public ResponseEntity<Void> delete (@Parameter(description = "The exact name of the genre to delete", required = true) @RequestParam(required = true) String name){
         genreService.delete(name);
         return ResponseEntity.noContent().build();
     }
@@ -73,7 +77,10 @@ public class GenreController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Genre updated successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid profile update criteria provided.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Target genre not found.", content = @Content)
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to update genres.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Target genre not found.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. A genre with the same name already exists.", content = @Content)
     })
     @PutMapping()
     public ResponseEntity<GenreDTO> update(@Valid @RequestBody GenreDTO genreDTO){

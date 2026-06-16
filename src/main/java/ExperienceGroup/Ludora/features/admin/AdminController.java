@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +35,20 @@ public class AdminController {
             description = "Retrieves a filtered list of administrators based on the provided search query parameters."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Administrators list retrieved successfully.")
+            @ApiResponse(responseCode = "200",
+                    description = "Administrators list retrieved successfully."),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access this resource.",
+                    content = @Content
+            )
     })
+
     @GetMapping
     ResponseEntity<Page<AdminDTOResponse>> getAll(@Parameter(description = "Page number of the list") @RequestParam int page,
                                                   @Parameter(description = "Page size of the list") @RequestParam int size,
@@ -55,8 +68,20 @@ public class AdminController {
             description = "Fetches the profile details of a specific administrator using their external unique identifier (UUID)."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Administrator found successfully."),
-            @ApiResponse(responseCode = "404", description = "No administrator found with the given ID.", content = @Content)
+            @ApiResponse(responseCode = "200",
+                    description = "Administrator found successfully."),
+            @ApiResponse(responseCode = "404",
+                    description = "No administrator found with the given ID.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access this administrator.",
+                    content = @Content
+            )
     })
     @GetMapping("/{id}")
     ResponseEntity<AdminDTOResponse> getById(@Parameter(description = "Unique UUID of the administrator", required = true) @PathVariable UUID id){
@@ -70,7 +95,17 @@ public class AdminController {
             description = "Retrieves detailed information of the currently authenticated administrator."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Profile details retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Profile details retrieved successfully."),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. Administrator account is blocked, disabled, or expired.",
+                    content = @Content
+            )
     })
     @GetMapping("/profile")
     ResponseEntity<AdminDTOResponse> getMyPerfil(){
@@ -83,12 +118,32 @@ public class AdminController {
             description = "Registers a new administrator account in the system after validating the request payload."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Administrator account created successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid request payload structure or failed validations.", content = @Content)
+            @ApiResponse(responseCode = "201", description = "Administrator account created successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid request payload structure or failed validations.", content = @Content),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to create administrator accounts.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict. Email or username already exists.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Unprocessable Entity. Invalid email format or password does not satisfy security requirements.",
+                    content = @Content
+            )
     })
     @PostMapping
     ResponseEntity<AdminDTOResponse> create(@Valid @RequestBody AdminDTORequest adminDTORequest){
-        return ResponseEntity.ok(adminService.save(adminDTORequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.save(adminDTORequest));
     }
 
     /// --------------------------------------- MODIFICAR ADMIN ------------------------------
@@ -100,7 +155,27 @@ public class AdminController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Administrator updated successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid update data constraints.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Administrator not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Administrator not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to update this administrator.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict. Email or username already exists.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Unprocessable Entity. Invalid email format or password does not satisfy security requirements.",
+                    content = @Content
+            )
     })
     @PutMapping("/{id}")
     ResponseEntity<AdminDTOResponse> update(@Parameter(description = "UUID of the administrator to update", required = true) @PathVariable UUID id,
@@ -116,7 +191,17 @@ public class AdminController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Account deactivated successfully (No Content)."),
-            @ApiResponse(responseCode = "404", description = "Administrator not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Administrator not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to deactivate this administrator.",
+                    content = @Content
+            )
     })
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@Parameter(description = "UUID of the administrator to deactivate", required = true) @PathVariable UUID id){
@@ -132,7 +217,17 @@ public class AdminController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password updated successfully."),
-            @ApiResponse(responseCode = "400", description = "Current password mismatch or invalid formatting criteria.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Current password mismatch or invalid formatting criteria.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Current password is incorrect.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. Administrator account is blocked, disabled, or expired.",
+                    content = @Content
+            )
     })
     @PutMapping("/profile/changePassword")
     ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordDTO passwordDTO){
@@ -148,7 +243,27 @@ public class AdminController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Email address updated successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid payload or email address already in use.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Invalid payload or email address already in use.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. Administrator account is blocked, disabled, or expired.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict. Email address already exists.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Unprocessable Entity. Invalid email format.",
+                    content = @Content
+            )
     })
     @PutMapping("/profile/changeEmail")
     ResponseEntity<Void> changeEmail(@Valid @RequestBody ChangeEmailDTO emailDTO){
@@ -164,7 +279,17 @@ public class AdminController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Account blocked successfully."),
-            @ApiResponse(responseCode = "404", description = "Target account not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Target account not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. Administrator account is blocked, disabled, or expired.",
+                    content = @Content
+            )
     })
     @PatchMapping("/{id}/block")
     ResponseEntity<Void> blockAccount(@Parameter(description = "UUID of the target account to block", required = true) @PathVariable UUID id) {
@@ -180,7 +305,17 @@ public class AdminController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Account unblocked successfully."),
-            @ApiResponse(responseCode = "404", description = "Target account not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Target account not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. Administrator account is blocked, disabled, or expired.",
+                    content = @Content
+            )
     })
     @PatchMapping("/{id}/unblock")
     ResponseEntity<Void> unblockAccount(@Parameter(description = "UUID of the target account to unblock", required = true) @PathVariable UUID id) {
@@ -196,7 +331,17 @@ public class AdminController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Account re-enabled successfully."),
-            @ApiResponse(responseCode = "404", description = "Administrator not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Administrator not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. Administrator account is blocked, disabled, or expired.",
+                    content = @Content
+            )
     })
     @PatchMapping("/{id}/enable")
     ResponseEntity<Void> enableAccount(@Parameter(description = "UUID of the administrator to re-enable", required = true) @PathVariable UUID id) {

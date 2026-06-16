@@ -33,7 +33,10 @@ public class ReviewController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Review posted successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid payload structure or input data constraints validation failed.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Invalid payload structure or validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Associated game or client not found.", content = @Content)
     })
     @PostMapping
     public ResponseEntity<ReviewDTOResponse> save(@Valid @RequestBody ReviewDTORequest reviewDTORequest){
@@ -46,7 +49,10 @@ public class ReviewController {
             description = "Retrieves a list of reviews matching multiple optional parameters like score thresholds or creation timestamps."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Filtered list of reviews retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Filtered list of reviews retrieved successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid search parameters.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content)
     })
     @GetMapping
     public ResponseEntity<Page<ReviewDTOResponse>> getAllReviews(
@@ -69,6 +75,9 @@ public class ReviewController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Game reviews list retrieved successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
             @ApiResponse(responseCode = "404", description = "No game found matching the provided UUID parameter.", content = @Content)
     })
     @GetMapping("/games/{gameId}")
@@ -85,6 +94,9 @@ public class ReviewController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Client historical reviews log retrieved successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
             @ApiResponse(responseCode = "404", description = "No client found matching the provided UUID specification.", content = @Content)
     })
     @GetMapping("/clients/{clientId}")
@@ -100,7 +112,11 @@ public class ReviewController {
             description = "Fetches the specific review entries posted by a distinct client user regarding a targeted game profile."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Target specific review log profile found successfully.")
+            @ApiResponse(responseCode = "200", description = "Target specific review profile found successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Associated game or client not found.", content = @Content)
     })
 
     @GetMapping("/games/{gameId}/client/{clientId}")
@@ -119,7 +135,10 @@ public class ReviewController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Review log entry deleted successfully (No Content)."),
-            @ApiResponse(responseCode = "404", description = "No review data found matching the given UUID description.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Invalid review identifier.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No review data found matching the given UUID.", content = @Content)
     })
 
     @DeleteMapping("/{reviewId}")
