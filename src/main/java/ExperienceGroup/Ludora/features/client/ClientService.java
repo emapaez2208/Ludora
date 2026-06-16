@@ -225,11 +225,11 @@ public class ClientService implements IClientService{
     public List<GameDTOResponse> getMyGames(){
         return  gameRepository.findAllByClients_ExternalId(
                 authenticatedUser.getCurrentUser().externalId()
-                ).orElseThrow(() -> new GameNotFoundException("The user not contain games"))
-                    .stream()
-                    .map(mapperGamesResponse::toDTO)
-                    .toList();
-    }
+                ).orElse(List.of())
+                                 .stream()
+                                 .map(mapperGamesResponse::toDTO)
+                                 .toList();
+          }
 
     private CredentialsEntity searchCredentials(String username){
         return credentialsRepository.findByUsername(username)
