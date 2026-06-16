@@ -223,13 +223,11 @@ public class GameService implements IGameService{
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public List<GameDTOResponse> getGamesNeedRevision(){
-
         return gameRepository.findAllByNeedRevision(true)
                 .orElseThrow(GameNotFoundException::new)
                 .stream().map(responseMapper::toDTO)
                 .toList();
     }
-
     /// -------------- DEVELOPER SOLICITAR REVISION DE UN JUEGO ---------------------
 
     @Override
