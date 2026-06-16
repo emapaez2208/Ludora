@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.genre;
 
+import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
@@ -17,6 +18,7 @@ public class GenreService  implements IGenreService{
 
     private final IGenreRepository iGenreRepository;
     private final IMapper<GenreEntity, GenreDTO> mapper;
+    private final IGameRepository gameRepository;
 
     @Override
     public List<GenreDTO> getAllGenre(String name) {
@@ -36,6 +38,11 @@ public class GenreService  implements IGenreService{
     public void delete(String name) {
         GenreEntity entity = iGenreRepository.findByName(name)
                 .orElseThrow(()-> new EntityNotFoundException("No se encontro el genero"+name.toString()));
+
+        if (gameRepository.existsByGenresContaining(entity)) {
+            throw new IllegalStateException("Cannot delete genre because it has games associated.");
+        }
+
 
         iGenreRepository.delete(entity);
     }
