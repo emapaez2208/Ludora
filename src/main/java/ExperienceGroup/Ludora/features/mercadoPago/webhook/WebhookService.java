@@ -17,9 +17,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.POINTS_THRESHOLD;
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.REWARD_POINTS_PERCENTAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +70,15 @@ public class WebhookService {
                             clientGames.addAll(gamesBought);
                             client.setGames(clientGames);
 
+                            boolean hasDiscount = client.getPoints() >= POINTS_THRESHOLD;
+                            if (hasDiscount) {
+                                client.setPoints(client.getPoints() - POINTS_THRESHOLD);
+                                clientRepository.save(client);
+                            }
+
+                            client.setPoints(client.getPoints() + sale.getEarnedPoints());
                             clientRepository.save(client);
+
                         break;
 
                     case "pending":

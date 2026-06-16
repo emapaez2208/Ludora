@@ -9,51 +9,51 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-public record ClientDTORequest (@Schema(description = "El nombre del usuario", example = "John", required = true)
-                                @Size(min = 3, max = 32, message = "El nombre tiene una longitud minima de 3 y maxima de 32 caracteres")
+public record ClientDTORequest (@Schema(description = "The user's name", example = "John", required = true)
+                                @Size(min = 3, max = 32, message = "The name must be between 3 and 32 characters long")
                                 @NotBlank
                                 String name,
 
-                                @Schema(description = "El apellido del usuario", example = "Doe", required = true)
-                                @Size(min = 3, max = 32, message = "El nombre tiene una longitud minima de 3 y maxima de 32 caracteres")
+                                @Schema(description = "The user's last name", example = "Doe", required = true)
+                                @Size(min = 3, max = 32, message = "The last name must be between 3 and 32 characters long")
                                 @NotBlank
                                 String lastName,
 
-                                @Schema(description = "El usuario para poder registrarse o iniciar sesion", example = "JohnDoe", required = true)
-                                @Size(min = 5, max = 20, message = "El usuario tiene una longitud minima de 5 y maxima de 20 caracteres")
+                                @Schema(description = "The username to register or log in", example = "JohnDoe", required = true)
+                                @Size(min = 5, max = 20, message = "The username must be between 5 and 20 characters long")
                                 @NotBlank
                                 String userName,
 
-                                @Schema(description = "El email debe tener un formato email valido", example = "JohnDoe@email.com", required = true)
+                                @Schema(description = "The email must have a valid format", example = "JohnDoe@email.com", required = true)
                                 @NotNull
                                 Email email,
 
-                                @Schema(description = "La contraseña para poder ingresar a la cuenta, debe tener un formato valido, " +
-                                        "usar minimo una minuscula, una mayuscula, un numero y un caracter especial." +
-                                        "La longitud debe ser entre 8 y 16 caracteres")
+                                @Schema(description = "The password to access the account, must have a valid format, " +
+                                        "using at least one lowercase, one uppercase and one number." +
+                                        "The length must be between 8 and 16 characters")
                                 @NotNull
                                 Password password ,
 
-                                @Schema(description = "Numero de telefono",example = "123" , required = true)
-                                @Positive (message = "No puede ser un numero negativo")
+                                @Schema(description = "Phone number",example = "123" , required = true)
+                                @Positive (message = "Cannot be a negative number")
                                 @NotNull
-                                @Min(value = 1000000L, message = "El teléfono debe tener al menos 7 dígitos")
-                                @Max(value = 99999999999L, message = "El teléfono no puede superar los 11 dígitos")
+                                @Min(value = 1000000L, message = "The phone number must have at least 7 digits")
+                                @Max(value = 99999999999L, message = "The phone number cannot exceed 11 digits")
                                 Long phone ,
 
-                                @Schema(description = "Nombre de la calle", example = "Luro" , required = true)
-                                @Size(max = 25 , message = "Tiene que tener como maximo 25 caracteres")
+                                @Schema(description = "Street name", example = "Luro" , required = true)
+                                @Size(max = 25 , message = "Must have a maximum of 25 characters")
                                 @NotNull
                                 String street,
 
-                                @Schema (description = "numero de la calle",example = "123",required = true)
-                                @Positive(message = "No puede ser numero negativo")
+                                @Schema (description = "Street number",example = "123",required = true)
+                                @Positive(message = "Cannot be a negative number")
                                 @NotNull
-                                @Digits(integer = 5, fraction = 0, message = "El maximo de caracteres permitidos es 5")
+                                @Digits(integer = 5, fraction = 0, message = "The maximum number of digits allowed is 5")
                                 Integer numberStreet,
 
-                                @Schema(description = "Fecha de nacimiento, formato = YYYY-MM-DD", example = "2010-05-27", required = true)
-                                @Past(message = "La fecha de nacimiento debe ser una fecha pasada")
+                                @Schema(description = "Date of birth, format = YYYY-MM-DD", example = "2010-05-27", required = true)
+                                @Past(message = "The date of birth must be a past date")
                                 @NotNull LocalDate birthDate
 
                                 ){

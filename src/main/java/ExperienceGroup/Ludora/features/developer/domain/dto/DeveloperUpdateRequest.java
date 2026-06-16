@@ -10,17 +10,17 @@ import jakarta.validation.constraints.Size;
 
 public record DeveloperUpdateRequest(
 
-        @Schema(description = "El nombre del developer", example = "Nahuel", required = true)
-        @Size(min = 3, max = 32, message = "El nombre tiene una longitud minima de 3 y maxima de 32 caracteres")
+        @Schema(description = "The developer's name", example = "Nahuel", required = true)
+        @Size(min = 3, max = 32, message = "The name must be between 3 and 32 characters long")
         @NotBlank
         String name,
 
-        @Schema(description = "El apellido del developer", example = "Suarez", required = true)
-        @Size(min = 3, max = 32, message = "El apellido tiene una longitud minima de 3 y maxima de 32 caracteres")
+        @Schema(description = "The developer's lastname", example = "Suarez", required = true)
+        @Size(min = 3, max = 32, message = "The last name must be between 3 and 32 characters long")
         @NotBlank
         String lastName,
 
-        @Schema(description = "La compañía del developer", example = "Rito Games", required = true)
+        @Schema(description = "The developer's company", example = "Rito Games", required = true)
         @NotBlank
         String company
 ) {

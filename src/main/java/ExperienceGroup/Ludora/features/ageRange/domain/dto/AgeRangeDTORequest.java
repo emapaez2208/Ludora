@@ -4,19 +4,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 public record AgeRangeDTORequest(
-        @Schema(description = "Categoría de edad", example = "Apto para todos", required = true)
-        @NotBlank(message = "El nombre de la categoría de edad no puede estar vacío")
-        @Size(max = 50, message = "El nombre no puede superar los 50 caracteres")
+        @Schema(description = "Age category", example = "Suitable for all", required = true)
+        @NotBlank(message = "The age category name cannot be empty")
+        @Size(max = 50, message = "The name cannot exceed 50 characters")
         String rangeName,
 
-        @Schema(description = "Mínimo de edad requerido", example = "11", required = true)
-        @NotNull(message = "El mínimo de edad no puede ser nula")
-        @PositiveOrZero(message = "El mínimo de edad no puede ser un número negativo")
-        @Max(value = 21, message = "La edad mínima permitida no puede ser mayor a 21 años")
+        @Schema(description = "Minimum age required", example = "11", required = true)
+        @NotNull(message = "The minimum age cannot be null")
+        @PositiveOrZero(message = "The minimum age cannot be a negative number")
+        @Max(value = 21, message = "The minimum age allowed cannot be greater than 21 years")
         Integer minAge,
 
-        @Schema(description = "Descripción de la categoría de edad", example = "Contiene contenido violento")
-        @Size(max = 100, message = "La descripción no puede superar los 100 caracteres")
+        @Schema(description = "Description of the age category", example = "Contains violent content")
+        @Size(max = 100, message = "The description cannot exceed 100 characters")
         String description
 ) {
 }

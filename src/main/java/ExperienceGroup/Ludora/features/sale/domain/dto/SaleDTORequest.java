@@ -8,7 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record SaleDTORequest(
-        @Schema(description = "ID del cliente que realiza la compra", example = "1", required = true)
-        @NotNull UUID clientExternalId
+        @Schema(description = "ID of the client making the purchase", example = "1", required = true)
+        @NotNull(message = "The client ID cannot be null")
+        UUID clientExternalId
 ) {
 }

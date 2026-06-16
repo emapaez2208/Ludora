@@ -6,20 +6,20 @@ import jakarta.validation.constraints.*;
 import java.util.UUID;
 
 public record ReviewDTORequest(
-                        @Schema(description = "Calificacion del juego del 1 al 5", example = "5", required = true )
-                        @Min(value = 1, message = "La calificacion minima es 1")
-                        @Max(value = 5, message = "La calificacion maxima es 5")
-                        @NotNull (message = "La calificacion es obligatoria")
+                        @Schema(description = "Game rating from 1 to 5", example = "5", required = true )
+                        @Min(value = 1, message = "The minimum rating is 1")
+                        @Max(value = 5, message = "The maximum rating is 5")
+                        @NotNull (message = "The rating is mandatory")
                         Integer rating,
 
-                        @Schema(description = "Comentario u opinion del juego", example = "Este juego es una joyita")
-                        @Size(max = 255, message = "El comentario no puede superar los 255 caracteres")
+                        @Schema(description = "Comment or opinion about the game", example = "This game is a little gem")
+                        @Size(max = 255, message = "The comment cannot exceed 255 characters")
                         String comment,
 
-                        @Schema(description = "ID externo del juego al que le pertenece la reseña", required = true)
+                        @Schema(description = "External ID of the game to which the review belongs", required = true)
                         @NotNull UUID gameExternalId,
 
-                        @Schema(description = "ID externo del usuario al que le pertenece la reseña", required = true)
+                        @Schema(description = "External ID of the user to whom the review belongs", required = true)
                         @NotNull UUID clientExternalId
 
 ){
