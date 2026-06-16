@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.common.exception.globalHandler;
 import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
 import ExperienceGroup.Ludora.features.cart.exception.*;
 import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
+import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
@@ -167,6 +168,11 @@ public class GlobalHandlerException {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponseDTO> handlerIllegalArgument(IllegalArgumentException ex){
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameNotPurchasedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameNotPurchased(GameNotPurchasedException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

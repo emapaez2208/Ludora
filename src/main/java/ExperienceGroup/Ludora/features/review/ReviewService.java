@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
 import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -94,6 +95,13 @@ public class ReviewService implements IReviewService {
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
         ClientEntity client = clientRepository.findByExternalId(reviewDTORequest.clientExternalId())
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
+
+        boolean hasPurchased = client.getGames().stream()
+                .anyMatch(purchasedGame -> purchasedGame.getExternalId().equals(game.getExternalId()));
+
+        if (!hasPurchased) {
+            throw new GameNotPurchasedException("You cannot review a game that you have not purchased.");
+        }
 
         ReviewEntity reviewEntity = requestMapper.toEntity(reviewDTORequest);
 
