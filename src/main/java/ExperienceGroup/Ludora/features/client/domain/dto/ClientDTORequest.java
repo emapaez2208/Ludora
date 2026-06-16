@@ -56,7 +56,6 @@ public record ClientDTORequest (@Schema(description = "El nombre del usuario", e
                                 @Schema(description = "Fecha de nacimiento, formato = YYYY-MM-DD", example = "2010-05-27", required = true)
                                 @Past(message = "La fecha de nacimiento debe ser una fecha pasada")
                                 @NotNull
-                                @Adult
                                 LocalDate birthDate
 
                                 ){
