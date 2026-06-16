@@ -27,7 +27,17 @@ public class CartController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Shopping cart retrieved successfully."),
-            @ApiResponse(responseCode = "404", description = "Client or cart not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Client or cart not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access this shopping cart.",
+                    content = @Content
+            )
     })
 
     @GetMapping("/{clientId}")
@@ -41,7 +51,22 @@ public class CartController {
             description = "Retrieves the shopping cart details of the currently authenticated client session."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Authenticated user's cart retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Authenticated user's cart retrieved successfully."),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access this shopping cart.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Shopping cart not found.",
+                    content = @Content
+            )
     })
     @GetMapping
     ResponseEntity<CartDTOResponse> getMyCart(){
@@ -54,7 +79,22 @@ public class CartController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Game successfully added. Returns the updated cart items."),
-            @ApiResponse(responseCode = "404", description = "Specified client or game not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Specified client or game not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access this shopping cart.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict. The game is already in the cart or already owned by the client.",
+                    content = @Content
+            )
     })
     @PostMapping("/{clientId}/games/{gameId}")
     public ResponseEntity<CartDTOResponse> addGame(
@@ -71,7 +111,17 @@ public class CartController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Game successfully removed. Returns the updated cart items."),
-            @ApiResponse(responseCode = "404", description = "Client, cart, or game not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Client, cart, or game not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access this shopping cart.",
+                    content = @Content
+            )
     })
 
     @DeleteMapping("/{clientId}/games/{gameId}")
@@ -90,7 +140,17 @@ public class CartController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Shopping cart cleared successfully (No Content)."),
-            @ApiResponse(responseCode = "404", description = "Client or cart not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Client or cart not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access this shopping cart.",
+                    content = @Content
+            )
     })
 
     @DeleteMapping("/{clientId}/clear")

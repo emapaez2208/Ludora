@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.features.game;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTORequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,10 @@ public class GameController {
     /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) -----------------------------
     @Operation(summary = "Get all games", description = "Returns a list of video games that match the provided optional filters.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of games successfully retrieved"),
-            @ApiResponse(responseCode = "400", description = "Invalid search parameters")
+            @ApiResponse(responseCode = "200", description = "Games list retrieved successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid search parameters.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to access this resource.", content = @Content)
     })
     @GetMapping
 
@@ -65,8 +68,10 @@ public class GameController {
     /// -------------------- TRAEMOS UN JUEGO EXTERNAL----------------------
     @Operation(summary = "Get a game by its external ID", description = "Returns the details of a single video game using its UUID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game successfully found"),
-            @ApiResponse(responseCode = "404", description = "No game found with the provided ID")
+            @ApiResponse(responseCode = "200", description = "Game successfully found."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to access this game.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No game found with the provided ID.", content = @Content)
     })
     @GetMapping("/{externalId}")
     ResponseEntity<GameDTOResponse> getByExternalId(@Parameter(description = "Unique UUID of the game", required = true) @PathVariable UUID externalId) {
@@ -77,9 +82,11 @@ public class GameController {
 
     @Operation(summary = "Create a new game", description = "Allows developers to register a new video game into the system.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Game successfully created"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data (Validation error)"),
-            @ApiResponse(responseCode = "422", description = "Content unprocessable due to business logic rules")
+            @ApiResponse(responseCode = "201", description = "Game successfully created."),
+            @ApiResponse(responseCode = "400", description = "Invalid input data (validation error).", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Only users with CREATE_GAMES permission can perform this action.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Developer, age range, or one of the specified genres was not found.", content = @Content)
     })
     @PostMapping
     ResponseEntity<GameDTOResponse> create(@Valid @RequestBody GameDTORequest gameDTORequest) {
@@ -90,9 +97,12 @@ public class GameController {
 
     @Operation(summary = "Update an existing game", description = "Allows developers to modify a video game's data using its external ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game successfully updated"),
-            @ApiResponse(responseCode = "400", description = "Invalid update data"),
-            @ApiResponse(responseCode = "404", description = "Game not found")
+            @ApiResponse(responseCode = "200", description = "Game successfully updated."),
+            @ApiResponse(responseCode = "400", description = "Invalid update data.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to update this game.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Game not found.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. The specified game does not belong to the authenticated developer.", content = @Content)
     })
     @PutMapping("/{externalId}")
     ResponseEntity<GameDTOResponse> update(
@@ -106,9 +116,10 @@ public class GameController {
 
     @Operation(summary = "Authorize a game", description = "Admin action to approve and authorize a video game on the platform.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game successfully authorized"),
-            @ApiResponse(responseCode = "403", description = "Missing admin permissions (Forbidden)"),
-            @ApiResponse(responseCode = "404", description = "Game not found")
+            @ApiResponse(responseCode = "200", description = "Game successfully authorized."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Missing administrator permissions.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Game not found.", content = @Content)
     })
     @PatchMapping("/{externalId}/AuthorizedGame")
     ResponseEntity<GameDTOResponse> autorizedGame(@Parameter(description = "Unique UUID of the game to authorize", required = true) @PathVariable UUID externalId) {
@@ -120,21 +131,23 @@ public class GameController {
 
     @Operation(summary = "Deauthorize a game", description = "Admin action to revoke a video game's authorization.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game successfully deauthorized"),
-            @ApiResponse(responseCode = "403", description = "Missing admin permissions (Forbidden)"),
-            @ApiResponse(responseCode = "404", description = "Game not found")
+            @ApiResponse(responseCode = "204", description = "Game successfully deauthorized."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Missing administrator permissions.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Game not found.", content = @Content)
     })
     @DeleteMapping("/{externalId}/DesAuthorizedGame")
     ResponseEntity<Void> desautorizedGame(@Parameter(description = "Unique UUID of the game to deauthorize", required = true) @PathVariable UUID externalId){
 
         gameService.desauthorized(externalId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
     @Operation(summary = "List games that need revision", description = "Returns a list of video games that currently require review by the staff.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Revision list successfully retrieved"),
-            @ApiResponse(responseCode = "403", description = "Access denied")
+            @ApiResponse(responseCode = "200", description = "Revision list successfully retrieved."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Access denied.", content = @Content)
     })
 
     @GetMapping("/needRevision")
@@ -144,9 +157,11 @@ public class GameController {
 
     @Operation(summary = "Request revision for a game", description = "Allows sending a specific video game to the review queue.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Revision request successfully submitted"),
-            @ApiResponse(responseCode = "404", description = "Game not found"),
-            @ApiResponse(responseCode = "409", description = "The game is already undergoing review or presents a state conflict")
+            @ApiResponse(responseCode = "200", description = "Revision request successfully submitted."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to request revisions for this game.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Game not found.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. The game is already undergoing review or presents a state conflict.", content = @Content)
     })
 
     @PostMapping("/askRevision/{gameExternalId}")

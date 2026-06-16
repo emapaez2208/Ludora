@@ -1,8 +1,6 @@
 package ExperienceGroup.Ludora.features.mercadoPago.webhook;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +24,20 @@ public class WebhookController {
             description = "Processes backend Instant Payment Notifications (IPN) dispatched asynchronously by Mercado Pago whenever a transaction state switches (e.g., payment approved)."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Notification received, validated, and processed successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid payload properties or notification signature mismatch error.", content = @Content)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Notification received and processed successfully."
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Associated sale or client record was not found.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "502",
+                    description = "Bad Gateway. Failed to retrieve or validate payment information from Mercado Pago.",
+                    content = @Content
+            )
     })
     @PostMapping
     public ResponseEntity<Void> getWebhook(
