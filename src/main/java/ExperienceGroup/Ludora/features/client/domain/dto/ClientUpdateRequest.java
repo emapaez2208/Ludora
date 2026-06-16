@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.client.domain.dto;
 
 import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.Password;
+import ExperienceGroup.Ludora.common.utils.anotacionPersonalizada.Adult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
@@ -36,6 +37,8 @@ public record ClientUpdateRequest(@Schema(description = "El nombre del usuario",
                                   Integer numberStreet,
 
                                   @Schema(description = "Fecha de nacimiento, formato = YYYY-MM-DD", example = "2010-05-27", required = true)
-                                  @NotNull LocalDate birthDate
+                                  @NotNull
+                                  @Adult
+                                  LocalDate birthDate
 ) {
 }
