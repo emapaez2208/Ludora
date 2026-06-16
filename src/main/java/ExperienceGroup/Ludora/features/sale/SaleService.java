@@ -117,7 +117,10 @@ public class SaleService  implements ISaleService{
         SaleEntity sale = saleRepository.findByExternalId(externalId)
                 .orElseThrow(SaleNotFoundException::new);
 
-        cartService.clearCart(sale.getClient().getExternalId());
+        if (sale.getStatus() == ESaleStatus.APPROVED) {
+            throw new IllegalStateException("Only pending sales can be paid.");
+        }
+        
         return mercadoPago.createPay(sale.getItems(), sale.getExternalId());
     }
 
