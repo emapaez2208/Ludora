@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.game;
 
+import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -31,5 +32,7 @@ public interface IGameRepository extends JpaRepository<GameEntity, Long>, JpaSpe
     List<GameEntity> findByReleaseDateBetween(LocalDate minDate, LocalDate maxDate);
 
     Optional<List<GameEntity>> findAllByNeedRevision(Boolean needRevision);
+
+    boolean existsByAgeRange(AgeRangeEntity ageRange);
 
 }
