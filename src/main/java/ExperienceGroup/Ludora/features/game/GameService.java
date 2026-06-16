@@ -59,6 +59,24 @@ public class GameService implements IGameService{
                                              String rangeName,
                                              String developerCompany) {
 
+        if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
+            throw new IllegalArgumentException("The minimum price cannot be greater than the maximum price.");
+        }
+
+        if (minReleaseDate != null && maxReleaseDate != null && minReleaseDate.isAfter(maxReleaseDate)) {
+            throw new IllegalArgumentException("The start date cannot be later than the end date.");
+        }
+
+        LocalDate today = LocalDate.now();
+
+        if (minReleaseDate != null && minReleaseDate.isAfter(today)) {
+            throw new IllegalArgumentException("The start date cannot be in the future.");
+        }
+
+        if (maxReleaseDate != null && maxReleaseDate.isAfter(today)) {
+            throw new IllegalArgumentException("The end date cannot be in the future.");
+        }
+
         PredicateSpecification<GameEntity> spec = PredicateSpecification.allOf(
                 GameSpecification.nameContains(name),
                 GameSpecification.priceLesserThan(maxPrice),

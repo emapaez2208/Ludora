@@ -48,6 +48,29 @@ public class ReviewService implements IReviewService {
                                                  LocalDateTime minDate,
                                                  LocalDateTime maxDate) {
 
+        if (minRating != null && (minRating < 1 || minRating > 5)) {
+            throw new IllegalArgumentException("Minimum rating must be between 1 and 5.");
+        }
+        if (maxRating != null && (maxRating < 1 || maxRating > 5)) {
+            throw new IllegalArgumentException("Maximum rating must be between 1 and 5.");
+        }
+        if (minRating != null && maxRating != null && minRating > maxRating) {
+            throw new IllegalArgumentException("Minimum rating cannot be greater than maximum rating.");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (minDate != null && maxDate != null && minDate.isAfter(maxDate)) {
+            throw new IllegalArgumentException("The start date cannot be later than the end date.");
+        }
+        
+        if (minDate != null && minDate.isAfter(now)) {
+            throw new IllegalArgumentException("The minimum date cannot be in the future.");
+        }
+        if (maxDate != null && maxDate.isAfter(now)) {
+            throw new IllegalArgumentException("The maximum date cannot be in the future.");
+        }
+
         PredicateSpecification<ReviewEntity> spec = PredicateSpecification.allOf(
                 ReviewSpecification.gameEquals(gameId),
                 ReviewSpecification.clientEquals(clientId),
