@@ -1366,6 +1366,33 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Enviar juego a revisión",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/games/askRevision/:gameExternalId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "games",
+                "askRevision",
+                ":gameExternalId"
+              ],
+              "variable": [
+                {
+                  "key": "gameExternalId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -1554,7 +1581,7 @@
           "response": []
         },
         {
-          "name": "Ver juegos a revisar (Admin)",
+          "name": "Ver juegos pendientes a revisar (Admin)",
           "request": {
             "auth": {
               "type": "bearer",
