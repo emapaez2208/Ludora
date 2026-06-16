@@ -165,7 +165,7 @@ public class SaleService  implements ISaleService{
         if (maxDate != null && maxDate.isAfter(now)) {
             throw new IllegalArgumentException("The end date cannot be in the future.");
         }
-        
+
         if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Minimum price cannot be negative.");
         }

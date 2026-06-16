@@ -59,6 +59,12 @@ public class GameService implements IGameService{
                                              String rangeName,
                                              String developerCompany) {
 
+        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("The minimum price cannot be negative.");
+        }
+        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("The maximum price cannot be negative.");
+        }
         if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
             throw new IllegalArgumentException("The minimum price cannot be greater than the maximum price.");
         }
@@ -72,7 +78,6 @@ public class GameService implements IGameService{
         if (minReleaseDate != null && minReleaseDate.isAfter(today)) {
             throw new IllegalArgumentException("The start date cannot be in the future.");
         }
-
         if (maxReleaseDate != null && maxReleaseDate.isAfter(today)) {
             throw new IllegalArgumentException("The end date cannot be in the future.");
         }
