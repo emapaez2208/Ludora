@@ -10,12 +10,12 @@ import java.util.List;
 
 public record CartDTORequest(
 
-        @NotNull(message = "El usuario no puede estar vacío")
-        @Schema(description = "Usuario dueño del carrito")
+        @NotNull(message = "The user cannot be empty")
+        @Schema(description = "User who owns the cart")
         ClientDTOResponse clientDTORequest,
 
 
-        @Schema(description = "Lista de juegos en carrito")
+        @Schema(description = "List of games in the cart")
         List<InfoGameDTOResponse> gamesResponse
 ) {
 

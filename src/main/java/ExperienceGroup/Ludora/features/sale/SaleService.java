@@ -56,13 +56,9 @@ public class SaleService  implements ISaleService{
         }
 
         // se fija si tiene mas del umbral de puntos definido para aplicar el descuento.
-        // si lo supera, se aplica el descuento y se le resta esa cantidad de puntos. se guarda en el cliente esta info
+        // si lo supera, se aplica el descuento
 
         boolean hasDiscount = client.getPoints() >= POINTS_THRESHOLD;
-        if (hasDiscount) {
-            client.setPoints(client.getPoints() - POINTS_THRESHOLD);
-            clientRepository.save(client);
-        }
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
         saleEntity.setClient(client);
@@ -96,14 +92,8 @@ public class SaleService  implements ISaleService{
         saleEntity.setItems(items);
         saleEntity.setTotalPrice(totalPrice);
 
-        // cálculo de recompensa de puntos por compra.
-        // los puntos ganados se le suman al cliente.
-
         Integer earnedPoints = calculateEarnedPoints(totalPrice);
         saleEntity.setEarnedPoints(earnedPoints);
-
-        client.setPoints(client.getPoints() + earnedPoints);
-        clientRepository.save(client);
 
         SaleEntity saved = saleRepository.save(saleEntity);
 
@@ -202,12 +192,10 @@ public class SaleService  implements ISaleService{
 
         if (totalPrice == null || totalPrice.compareTo(BigDecimal.ZERO) <= 0) {
             return 0;
-        }
-
+      }
         return totalPrice.multiply(REWARD_POINTS_PERCENTAGE)
-                .setScale(0, RoundingMode.FLOOR)
-                .intValue();
-
+              .setScale(0, RoundingMode.FLOOR)
+              .intValue();
     }
 
 }
