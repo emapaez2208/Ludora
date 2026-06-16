@@ -96,7 +96,7 @@ public class DeveloperController {
             @ApiResponse(responseCode = "403", description = "Forbidden. Developer account is blocked, disabled, or expired.", content = @Content)
     })
 
-    @GetMapping("/perfil")
+    @GetMapping("/profile")
     ResponseEntity<DeveloperDtoResponse> getMyPerfil(){
         return ResponseEntity.ok(developerService.getMyPerfil());
     }
