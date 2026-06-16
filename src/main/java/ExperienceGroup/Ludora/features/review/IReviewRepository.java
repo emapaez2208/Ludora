@@ -22,4 +22,5 @@ public interface IReviewRepository extends JpaRepository <ReviewEntity, Long>, J
 
     Page<ReviewEntity> findByGameAndClient(GameEntity game, ClientEntity client, Pageable pageable);
 
+    boolean existsByClientAndGame(ClientEntity client, GameEntity game);
 }

@@ -1,8 +1,10 @@
 package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
+import ExperienceGroup.Ludora.features.review.exception.ReviewAlreadyExistsException;
 import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -35,6 +37,7 @@ public class ReviewService implements IReviewService {
     private final IReviewRepository reviewRepository;
     private final IMapper<ReviewEntity, ReviewDTOResponse> responseMapper;
     private final IMapper<ReviewEntity, ReviewDTORequest> requestMapper;
+    private final AuthenticatedUserProvider authenticatedUser;
 
     private final IGameRepository gameRepository;
     private final IClientRepository clientRepository;
@@ -91,8 +94,16 @@ public class ReviewService implements IReviewService {
     @PreAuthorize("hasAuthority('CREATE_REVIEW')")
     @Override
     public ReviewDTOResponse save(ReviewDTORequest reviewDTORequest) {
+
         GameEntity game = gameRepository.findByExternalId(reviewDTORequest.gameExternalId())
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
+
+        UUID authenticatedClientId = authenticatedUser.getCurrentUser().externalId();
+
+        if (!reviewDTORequest.clientExternalId().equals(authenticatedClientId)) {
+            throw new AccessDeniedException("You can only create reviews for your own account.");
+        }
+
         ClientEntity client = clientRepository.findByExternalId(reviewDTORequest.clientExternalId())
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
@@ -101,6 +112,11 @@ public class ReviewService implements IReviewService {
 
         if (!hasPurchased) {
             throw new GameNotPurchasedException("You cannot review a game that you have not purchased.");
+        }
+
+        boolean alreadyReviewed = reviewRepository.existsByClientAndGame(client, game);
+        if (alreadyReviewed) {
+            throw new ReviewAlreadyExistsException("You have already reviewed this game.");
         }
 
         ReviewEntity reviewEntity = requestMapper.toEntity(reviewDTORequest);
