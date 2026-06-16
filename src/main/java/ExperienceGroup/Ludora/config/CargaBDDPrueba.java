@@ -39,7 +39,7 @@ public class CargaBDDPrueba {
             // INTERRUPTOR
             // true  -> Escanea la BD en memoria e inserta SOLO los faltantes
             // false -> Carga desactivada. Si se borra en postman, queda borrado. hasta que esté true nuevamente.
-            boolean insertarTodo = false;
+            boolean insertarTodo = true;
 
             if (!insertarTodo) {
                 System.out.println("====== CARGA DESACTIVADA MANUALMENTE ======");
