@@ -30,7 +30,17 @@ public class AgeRangeController {
             description = "Retrieves a comprehensive list of all registered age ranges."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Age ranges list retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Age ranges list retrieved successfully."),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access age ranges.",
+                    content = @Content
+            )
     })
     @GetMapping
     ResponseEntity<List<AgeRangeDTOResponse>> getAll(){
@@ -43,7 +53,17 @@ public class AgeRangeController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Age range found successfully."),
-            @ApiResponse(responseCode = "404", description = "No age range found with the given ID.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "No age range found with the given ID.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access age ranges.",
+                    content = @Content
+            )
     })
     @GetMapping("/{externalId}")
     ResponseEntity<AgeRangeDTOResponse> getByExternalId (@Parameter(description = "External unique ID (UUID) of the age range", required = true) @PathVariable UUID externalId){
@@ -60,7 +80,22 @@ public class AgeRangeController {
                     description = "Age range created successfully.",
                     content = @Content(schema = @Schema(implementation = AgeRangeDTOResponse.class))
             ),
-            @ApiResponse(responseCode = "400", description = "Invalid request payload structure or failed validations.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Invalid request payload structure or failed validations.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access age ranges.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict. An identical age range already exists.",
+                    content = @Content
+            )
     })
     @PostMapping
     ResponseEntity<AgeRangeDTOResponse> create (@Valid @RequestBody AgeRangeDTORequest ageRangeDTORequest){
@@ -74,7 +109,22 @@ public class AgeRangeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Age range updated successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid update constraints provided.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Age range not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Age range not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access age ranges.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict. An identical age range already exists.",
+                    content = @Content
+            )
     })
     @PutMapping("/{externalId}")
     ResponseEntity<AgeRangeDTOResponse> update(
@@ -90,7 +140,17 @@ public class AgeRangeController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Age range deleted successfully (No Content)."),
-            @ApiResponse(responseCode = "404", description = "Age range not found.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Age range not found.", content = @Content),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized. Authentication is required.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden. You do not have permission to access age ranges.",
+                    content = @Content
+            )
     })
     @DeleteMapping("/{externalId}")
     ResponseEntity<Void> delete(@Parameter(description = "External unique ID (UUID) of the age range to delete", required = true) @PathVariable UUID externalId){

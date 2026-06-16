@@ -9,6 +9,7 @@ import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,9 @@ public class DeveloperController {
             description = "Retrieves a filtered list of developers or studios based on multiple optional query parameters."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Developers list retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Developers list retrieved successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to access this resource.", content = @Content)
     })
 
     @GetMapping
@@ -69,6 +72,8 @@ public class DeveloperController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Developer profile found successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to access this developer.", content = @Content),
             @ApiResponse(responseCode = "404", description = "No developer found with the given UUID specification.", content = @Content)
     })
 
@@ -86,7 +91,9 @@ public class DeveloperController {
             description = "Retrieves account details of the currently authenticated developer user."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Developer profile details retrieved successfully.")
+            @ApiResponse(responseCode = "200", description = "Developer profile details retrieved successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Developer account is blocked, disabled, or expired.", content = @Content)
     })
 
     @GetMapping("/perfil")
@@ -100,13 +107,17 @@ public class DeveloperController {
             description = "Directly creates a new developer or studio account profile in the system after validating company data inputs."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Developer account created successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid payload structure or validation constraints failed.", content = @Content)
+            @ApiResponse(responseCode = "201", description = "Developer account created successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid payload structure or validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to create developer accounts.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. Email or username already exists.", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity. Invalid email format or password does not satisfy security requirements.", content = @Content)
     })
     @PostMapping
     ResponseEntity<DeveloperDtoResponse> create(@Valid @RequestBody DeveloperDtoRequest developerDtoRequest){
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 developerService.save(developerDtoRequest)
         );
     }
@@ -118,7 +129,10 @@ public class DeveloperController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Developer account updated successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid profile update constraints provided.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Developer target not found.", content = @Content)
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to update this developer.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Developer target not found.", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity. Invalid email format or password does not satisfy security requirements.", content = @Content)
     })
 
     @PutMapping("/{id}")
@@ -137,6 +151,8 @@ public class DeveloperController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Developer games catalog retrieved successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to access this developer catalog.", content = @Content),
             @ApiResponse(responseCode = "404", description = "Developer target not found.", content = @Content)
     })
 
@@ -153,6 +169,8 @@ public class DeveloperController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Developer account deleted successfully (No Content)."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You do not have permission to delete this developer.", content = @Content),
             @ApiResponse(responseCode = "404", description = "Developer target not found.", content = @Content)
     })
 
@@ -168,7 +186,9 @@ public class DeveloperController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password updated successfully."),
-            @ApiResponse(responseCode = "400", description = "Current password mismatch or invalid complexity constraints.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Current password is incorrect.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Developer account is blocked, disabled, or expired.", content = @Content)
     })
 
     @PutMapping("/profile/changePassword")
@@ -183,7 +203,11 @@ public class DeveloperController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Email address updated successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid data format or email address already registered by another account.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Invalid payload structure or validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Developer account is blocked, disabled, or expired.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. Email address already exists.", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity. Invalid email format.", content = @Content)
     })
 
     @PutMapping("/profile/changeEmail")

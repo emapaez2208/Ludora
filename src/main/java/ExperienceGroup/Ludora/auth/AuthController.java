@@ -52,6 +52,11 @@ public class AuthController {
                     responseCode = "400",
                     description = "Bad Request. Invalid request body structure.",
                     content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Account locked, disabled, or expired.",
+                    content = @Content
             )
     })
 
@@ -76,6 +81,16 @@ public class AuthController {
                     responseCode = "400",
                     description = "Invalid registration data (failed @Valid validations).",
                     content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Email or username already exists.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Unprocessable Entity. Invalid email format or password does not satisfy the required security constraints.",
+                    content = @Content
             )
     })
 
@@ -97,6 +112,16 @@ public class AuthController {
             @ApiResponse(
                     responseCode = "400",
                     description = "Bad Request. Validation constraints failed.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Email or username already exists.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Unprocessable Entity. Invalid email format or password does not satisfy the required security constraints.",
                     content = @Content
             )
     })
