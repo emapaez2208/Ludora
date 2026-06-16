@@ -210,11 +210,6 @@ public class GlobalHandlerException {
     public ResponseEntity<ErrorResponseDTO> handlerHttpMessageException(HttpMessageNotReadableException ex){
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
-
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerMethodArgumentMismatch(MethodArgumentTypeMismatchException ex) {
-        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
       
     @ExceptionHandler(ReviewAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDTO> handlerReviewAlreadyExists(ReviewAlreadyExistsException ex){
