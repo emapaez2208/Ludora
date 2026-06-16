@@ -36,6 +36,7 @@ public record ClientUpdateRequest(@Schema(description = "The user's name", examp
                                   Integer numberStreet,
 
                                   @Schema(description = "Date of birth, format = YYYY-MM-DD", example = "2010-05-27", required = true)
+                                  @Past(message = "The date of birth must be a past date")
                                   @NotNull LocalDate birthDate
 ) {
 }
