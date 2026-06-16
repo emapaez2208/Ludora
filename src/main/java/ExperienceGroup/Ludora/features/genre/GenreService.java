@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.genre;
 
+import ExperienceGroup.Ludora.features.game.IGameRepository;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
@@ -17,6 +18,7 @@ public class GenreService  implements IGenreService{
 
     private final IGenreRepository iGenreRepository;
     private final IMapper<GenreEntity, GenreDTO> mapper;
+    private final IGameRepository gameRepository;
 
     @Override
     public List<GenreDTO> getAllGenre(String name) {
@@ -25,8 +27,7 @@ public class GenreService  implements IGenreService{
                     .map(mapper::toDTO)
                     .toList();
         }else {
-            return iGenreRepository.findAll().stream()
-                    .filter(a -> a.getName().equals(name))
+            return iGenreRepository.findByName(name).stream()
                     .map(mapper::toDTO)
                     .toList();
         }
@@ -38,6 +39,11 @@ public class GenreService  implements IGenreService{
         GenreEntity entity = iGenreRepository.findByName(name)
                 .orElseThrow(()-> new EntityNotFoundException("No se encontro el genero"+name.toString()));
 
+        if (gameRepository.existsByGenresContaining(entity)) {
+            throw new IllegalStateException("Cannot delete genre because it has games associated.");
+        }
+
+
         iGenreRepository.delete(entity);
     }
 
@@ -48,8 +54,8 @@ public class GenreService  implements IGenreService{
         GenreEntity entity = mapper.toEntity(genreDTO);
         if(iGenreRepository.findByName(entity.getName()).isEmpty()) {
 
-            GenreEntity entityGuardar = iGenreRepository.save(entity);
-            return mapper.toDTO(entityGuardar);
+            GenreEntity saved = iGenreRepository.save(entity);
+            return mapper.toDTO(saved);
         }
         throw new GenreExistsException("Genre already exists");
     }

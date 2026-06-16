@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public record InfoGameDTOResponse(
         String name,
         BigDecimal price,
+        BigDecimal discountedPrice,
         String company
 ) {
 }

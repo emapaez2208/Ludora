@@ -1,6 +1,10 @@
 package ExperienceGroup.Ludora.features.review;
 
+import ExperienceGroup.Ludora.auth.credentials.CredentialsEntity;
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
+import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
+import ExperienceGroup.Ludora.features.review.exception.ReviewAlreadyExistsException;
 import ExperienceGroup.Ludora.features.review.exception.ReviewNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -13,12 +17,18 @@ import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,17 +37,43 @@ public class ReviewService implements IReviewService {
     private final IReviewRepository reviewRepository;
     private final IMapper<ReviewEntity, ReviewDTOResponse> responseMapper;
     private final IMapper<ReviewEntity, ReviewDTORequest> requestMapper;
+    private final AuthenticatedUserProvider authenticatedUser;
 
     private final IGameRepository gameRepository;
     private final IClientRepository clientRepository;
 
     @Override
-    public List<ReviewDTOResponse> getAllReviews(UUID gameId,
+    public Page<ReviewDTOResponse> getAllReviews(int page,
+                                                 int size,
+                                                 UUID gameId,
                                                  UUID clientId,
                                                  Integer minRating,
                                                  Integer maxRating,
                                                  LocalDateTime minDate,
                                                  LocalDateTime maxDate) {
+
+        if (minRating != null && (minRating < 1 || minRating > 5)) {
+            throw new IllegalArgumentException("Minimum rating must be between 1 and 5.");
+        }
+        if (maxRating != null && (maxRating < 1 || maxRating > 5)) {
+            throw new IllegalArgumentException("Maximum rating must be between 1 and 5.");
+        }
+        if (minRating != null && maxRating != null && minRating > maxRating) {
+            throw new IllegalArgumentException("Minimum rating cannot be greater than maximum rating.");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (minDate != null && maxDate != null && minDate.isAfter(maxDate)) {
+            throw new IllegalArgumentException("The start date cannot be later than the end date.");
+        }
+
+        if (minDate != null && minDate.isAfter(now)) {
+            throw new IllegalArgumentException("The minimum date cannot be in the future.");
+        }
+        if (maxDate != null && maxDate.isAfter(now)) {
+            throw new IllegalArgumentException("The maximum date cannot be in the future.");
+        }
 
         PredicateSpecification<ReviewEntity> spec = PredicateSpecification.allOf(
                 ReviewSpecification.gameEquals(gameId),
@@ -46,21 +82,42 @@ public class ReviewService implements IReviewService {
                 ReviewSpecification.dateBetween(minDate, maxDate)
         );
 
-        List<ReviewEntity> reviews = reviewRepository.findAll(spec);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
 
-        return reviews.stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Page<ReviewEntity> reviews = reviewRepository.findAll(Specification.where(spec), pageable);
+
+        return reviews
+                .map(responseMapper::toDTO);
     }
 
     @Transactional
     @PreAuthorize("hasAuthority('CREATE_REVIEW')")
     @Override
     public ReviewDTOResponse save(ReviewDTORequest reviewDTORequest) {
+
         GameEntity game = gameRepository.findByExternalId(reviewDTORequest.gameExternalId())
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
+
+        UUID authenticatedClientId = authenticatedUser.getCurrentUser().externalId();
+
+        if (!reviewDTORequest.clientExternalId().equals(authenticatedClientId)) {
+            throw new AccessDeniedException("You can only create reviews for your own account.");
+        }
+
         ClientEntity client = clientRepository.findByExternalId(reviewDTORequest.clientExternalId())
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
+
+        boolean hasPurchased = client.getGames().stream()
+                .anyMatch(purchasedGame -> purchasedGame.getExternalId().equals(game.getExternalId()));
+
+        if (!hasPurchased) {
+            throw new GameNotPurchasedException("You cannot review a game that you have not purchased.");
+        }
+
+        boolean alreadyReviewed = reviewRepository.existsByClientAndGame(client, game);
+        if (alreadyReviewed) {
+            throw new ReviewAlreadyExistsException("You have already reviewed this game.");
+        }
 
         ReviewEntity reviewEntity = requestMapper.toEntity(reviewDTORequest);
 
@@ -73,50 +130,69 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public List<ReviewDTOResponse> getAllReviewsByGameId(UUID gameId) {
+    public Page<ReviewDTOResponse> getAllReviewsByGameId(int page, int size, UUID gameId) {
         GameEntity game = gameRepository.findByExternalId(gameId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
-        List<ReviewEntity> reviews = reviewRepository.findByGame(game);
 
-        return reviews.stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<ReviewEntity> reviews = reviewRepository.findByGame(game, pageable);
+
+        return reviews
+                .map(responseMapper::toDTO);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN') or #clientId == authentication.principal.externalId")
-    public List<ReviewDTOResponse> getAllReviewsByClientId(UUID clientId) {
+    public Page<ReviewDTOResponse> getAllReviewsByClientId(int page, int size, UUID clientId) {
         ClientEntity client = clientRepository.findByExternalId(clientId)
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
-        List<ReviewEntity> reviews = reviewRepository.findByClient(client);
 
-        return reviews.stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<ReviewEntity> reviews = reviewRepository.findByClient(client, pageable);
+
+        return reviews
+                .map(responseMapper::toDTO);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN') or #clientId == authentication.principal.externalId")
-    public List<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(UUID gameId, UUID clientId) {
+    public Page<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(int page, int size, UUID gameId, UUID clientId) {
         GameEntity game = gameRepository.findByExternalId(gameId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
         ClientEntity client = clientRepository.findByExternalId(clientId)
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
-        List<ReviewEntity> reviews = reviewRepository.findByGameAndClient(game, client);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<ReviewEntity> reviews = reviewRepository.findByGameAndClient(game, client, pageable);
 
-        return reviews.stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        return reviews
+                .map(responseMapper::toDTO);
     }
+
+
 
     @Transactional
     @Override
-    @PreAuthorize("hasAuthority('DELETE_REVIEW')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CLIENT')")
     public void delete(UUID reviewID) {
+
         ReviewEntity review = reviewRepository.findByExternalId(reviewID)
-                .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
+                .orElseThrow(() -> new ReviewNotFoundException("Review not found"));       // traigo la review
+
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));  ///compruebo si es admin
+
+        if (!isAdmin) {
+            UUID currentUser = ((CredentialsEntity) SecurityContextHolder.getContext()         ///  si no es admin
+                    .getAuthentication().getPrincipal()).getExternalId();
+
+            if (!review.getClient().getExternalId().equals(currentUser)) {                        /// compruebo , es o no su review?
+                throw new AccessDeniedException("without sufficient permissions");   /// si no es largo excepcion
+            }
+        }
 
         reviewRepository.delete(review);
     }
+
 }

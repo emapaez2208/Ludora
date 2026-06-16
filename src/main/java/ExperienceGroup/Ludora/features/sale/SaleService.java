@@ -1,8 +1,9 @@
 package ExperienceGroup.Ludora.features.sale;
 import ExperienceGroup.Ludora.features.mercadoPago.MercadoPagoService;
+import ExperienceGroup.Ludora.features.sale.domain.SaleItemEntity;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
-import ExperienceGroup.Ludora.common.exception.CartEmptyException;
+import ExperienceGroup.Ludora.features.cart.exception.CartEmptyException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.cart.ICartService;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
@@ -13,15 +14,23 @@ import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+
+import static ExperienceGroup.Ludora.common.utils.BusinessRules.*;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +41,6 @@ public class SaleService  implements ISaleService{
 
     private final IClientRepository clientRepository;
     private final ICartService cartService;
-
     private final MercadoPagoService mercadoPago;
 
     @Override
@@ -47,13 +55,45 @@ public class SaleService  implements ISaleService{
             throw new CartEmptyException("Empty cart");
         }
 
-        BigDecimal precioTotal = BigDecimal.valueOf(cart.getTotalPrice());
+        // se fija si tiene mas del umbral de puntos definido para aplicar el descuento.
+        // si lo supera, se aplica el descuento
+
+        boolean hasDiscount = client.getPoints() >= POINTS_THRESHOLD;
 
         SaleEntity saleEntity = requestMapper.toEntity(saleDTORequest);
-
         saleEntity.setClient(client);
-        saleEntity.setGames(new ArrayList<>(cart.getGames()));
-        saleEntity.setTotalPrice(precioTotal);
+        saleEntity.setHasDiscount(hasDiscount);
+
+        // se crea una lista con los items de la venta según lo que estaba en el carrito.
+        // cada ítem guarda la venta, el juego y el precio del momento de la venta
+
+        List<SaleItemEntity> items = cart.getGames().stream()
+                .map(game -> {
+                    SaleItemEntity item = new SaleItemEntity();
+                    item.setSale(saleEntity);
+                    item.setGame(game);
+
+                    BigDecimal price = hasDiscount
+                            ? game.getPrice().multiply(BigDecimal.ONE.subtract(DISCOUNT_PERCENTAGE))
+                                  .setScale(2, RoundingMode.HALF_UP)
+                            : game.getPrice().setScale(2, RoundingMode.HALF_UP);
+
+                    item.setPriceAtSale(price);
+                    return item;
+                })
+                .toList();
+
+        // se calcula el total según los precios que figuran en los ítems de la venta
+
+        BigDecimal totalPrice = items.stream()
+                .map(SaleItemEntity::getPriceAtSale)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        saleEntity.setItems(items);
+        saleEntity.setTotalPrice(totalPrice);
+
+        Integer earnedPoints = calculateEarnedPoints(totalPrice);
+        saleEntity.setEarnedPoints(earnedPoints);
 
         SaleEntity saved = saleRepository.save(saleEntity);
 
@@ -67,8 +107,11 @@ public class SaleService  implements ISaleService{
         SaleEntity sale = saleRepository.findByExternalId(externalId)
                 .orElseThrow(SaleNotFoundException::new);
 
-        cartService.clearCart(sale.getClient().getExternalId());
-        return mercadoPago.createPay(sale.getGames(), sale.getExternalId());
+        if (sale.getStatus() == ESaleStatus.APPROVED) {
+            throw new IllegalStateException("Only pending sales can be paid.");
+        }
+        
+        return mercadoPago.createPay(sale.getItems(), sale.getExternalId());
     }
 
     @Override
@@ -81,18 +124,21 @@ public class SaleService  implements ISaleService{
 
     @Override
     @PreAuthorize("#clientExternalId == authentication.principal.externalId")
-    public List<SaleDTOResponse> getSalesByClient(UUID clientExternalId) {
+    public Page<SaleDTOResponse> getSalesByClient(int page, int size, UUID clientExternalId) {
         ClientEntity client = clientRepository.findByExternalId(clientExternalId)
                 .orElseThrow(() -> new UserNotFoundException("Client not found"));
 
-        return saleRepository.findByClient(client).stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+
+        return saleRepository.findByClient(client, pageable)
+                .map(responseMapper::toDTO);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public List<SaleDTOResponse> getAllSales(UUID externalId,
+    public Page<SaleDTOResponse> getAllSales(int page,
+                                             int size,
+                                             UUID externalId,
                                              LocalDateTime minDate,
                                              LocalDateTime maxDate,
                                              ESaleStatus status,
@@ -100,6 +146,28 @@ public class SaleService  implements ISaleService{
                                              BigDecimal maxPrice,
                                              List<UUID> clientIds,
                                              List<UUID> gameIds) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (minDate != null && maxDate != null && minDate.isAfter(maxDate)) {
+            throw new IllegalArgumentException("The start date must be before the end date.");
+        }
+        if (minDate != null && minDate.isAfter(now)) {
+            throw new IllegalArgumentException("The start date cannot be in the future.");
+        }
+        if (maxDate != null && maxDate.isAfter(now)) {
+            throw new IllegalArgumentException("The end date cannot be in the future.");
+        }
+
+        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Minimum price cannot be negative.");
+        }
+        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Maximum price cannot be negative.");
+        }
+        if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
+            throw new IllegalArgumentException("Minimum price must be less than the maximum price.");
+        }
 
         PredicateSpecification<SaleEntity> spec = PredicateSpecification.allOf(
                 SaleSpecification.externalIdEquals(externalId),
@@ -112,9 +180,22 @@ public class SaleService  implements ISaleService{
                 SaleSpecification.gamesEquals(gameIds)
         );
 
-        return saleRepository.findAll(spec).stream()
-                .distinct()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+
+        return saleRepository.findAll(Specification.where(spec), pageable)
+                .map(responseMapper::toDTO);
     }
+
+    // CÁLCULO DE PUNTOS
+
+    public Integer calculateEarnedPoints(BigDecimal totalPrice){
+
+        if (totalPrice == null || totalPrice.compareTo(BigDecimal.ZERO) <= 0) {
+            return 0;
+      }
+        return totalPrice.multiply(REWARD_POINTS_PERCENTAGE)
+              .setScale(0, RoundingMode.FLOOR)
+              .intValue();
+    }
+
 }

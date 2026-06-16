@@ -1,8 +1,10 @@
 package ExperienceGroup.Ludora.auth.filters;
 
+import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -10,11 +12,17 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public RestAuthenticationEntryPoint(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void commence(HttpServletRequest request,
@@ -26,30 +34,23 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         String errorMessage = switch (authException) {
             case BadCredentialsException badCredentialsException ->
-                    "Credenciales inválidas";
-            case DisabledException disabledException ->
-                    "Cuenta deshabilitada";
-            case LockedException lockedException ->
-                    "Cuenta bloqueada";
-            case AccountExpiredException accountExpiredException ->
-                    "Cuenta expirada";
+                    "Invalid credentials";
             case CredentialsExpiredException credentialsExpiredException ->
-                    "Credenciales expiradas";
+                    "Credentials expired";
             case InsufficientAuthenticationException insufficientAuthenticationException ->
-                    "Autenticación insuficiente";
+                    "Insufficient authentication";
             case AuthenticationServiceException authenticationServiceException ->
-                    "Error en el servicio de autenticación";
-            default -> "Error de autenticación: " + authException.getMessage();
+                    "Authentication service error";
+            default -> "Authentication error: " + authException.getMessage();
         };
 
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> responseData = new HashMap<>();
-        responseData.put("error", errorMessage);
-        responseData.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        responseData.put("path", request.getRequestURI());
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpServletResponse.SC_UNAUTHORIZED,
+                "Unauthorized",
+                errorMessage
+        );
 
-        response.getWriter().write(mapper.writeValueAsString(responseData));
-
-        response.getWriter().flush();
+        objectMapper.writeValue(response.getWriter(), error);
     }
 }

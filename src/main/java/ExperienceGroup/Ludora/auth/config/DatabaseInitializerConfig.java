@@ -91,6 +91,7 @@ public class DatabaseInitializerConfig {
             adminCreds.setExternalId(adminUser.getExternalId());
             adminCreds.setPassword(passwordEncriptada); // Guardamos el hash generado en vivo
             adminCreds.setEnabled(true);
+            adminCreds.setAccountNonLocked(true);
             adminCreds.getRoles().add(roleAdmin);
             adminCreds.setUser(adminUser);
             credentialsRepository.save(adminCreds);

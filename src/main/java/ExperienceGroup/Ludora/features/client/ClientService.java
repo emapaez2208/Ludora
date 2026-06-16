@@ -6,7 +6,7 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
-import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
@@ -26,7 +26,12 @@ import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailExcepti
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,7 +57,9 @@ public class ClientService implements IClientService{
 
     @Override
     @PreAuthorize("hasAuthority('SEE_USERS')")
-    public List<ClientDTOResponse> getAllClient(String name,
+    public Page<ClientDTOResponse> getAllClient(int page,
+                                                int size,
+                                                String name,
                                                 String lastName,
                                                 String userName,
                                                 String email,
@@ -61,6 +68,10 @@ public class ClientService implements IClientService{
                                                 String street,
                                                 Integer numberStreet,
                                                 LocalDate birthDate) {
+
+        if (birthDate != null && birthDate.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("The birth date cannot be in the future.");
+        }
 
         PredicateSpecification<ClientEntity> spec = PredicateSpecification.allOf(
                 ClientSpecification.nameContains(name),
@@ -74,9 +85,10 @@ public class ClientService implements IClientService{
                 ClientSpecification.birthDateEquals(birthDate)
         );
 
-        return repository.findAll(spec).stream()
-                .map(mapperResponse::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("userName").ascending());
+
+        return repository.findAll(Specification.where(spec), pageable)
+                .map(mapperResponse::toDTO);
     }
 
     @Override
@@ -104,6 +116,9 @@ public class ClientService implements IClientService{
         return getByExternalID(authenticatedUser.getCurrentUser().externalId());
     }
 
+
+
+
     @Override
     @Transactional
     public ClientDTOResponse save(ClientDTORequest clientDTORequest) {
@@ -121,11 +136,12 @@ public class ClientService implements IClientService{
 
         repository.save(saved);
 
-        cartService.crearCarrito(saved.getExternalId());
+        cartService.createCart(saved.getExternalId());
 
         CredentialsEntity credentials = CredentialsEntity.builder()
                 .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_CLIENT).orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
+                .accountNonLocked(true)
                 .username(clientDTORequest.userName())
                 .externalId(saved.getExternalId())
                 .password(passwordEncoder.encode(clientDTORequest.password().value()))
@@ -137,6 +153,9 @@ public class ClientService implements IClientService{
 
         return mapperResponse.toDTO(saved);
     }
+
+
+
 
     @Override
     @PreAuthorize("hasAuthority('DELETE_USERS') or #externalID == authentication.principal.externalId")

@@ -6,10 +6,9 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
-import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
-import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
 import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
@@ -24,7 +23,12 @@ import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailExcepti
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,7 +52,9 @@ public class DeveloperService implements IDeveloperService {
 
     @Override
     @PreAuthorize("hasAuthority('SEE_USERS')")
-    public List<DeveloperDtoResponse> getAllDevelopers(String name,
+    public Page<DeveloperDtoResponse> getAllDevelopers(int page,
+                                                       int size,
+                                                       String name,
                                                        String lastName,
                                                        String userName,
                                                        String email,
@@ -64,9 +70,10 @@ public class DeveloperService implements IDeveloperService {
                 DeveloperSpecification.companyContains(company)
         );
 
-        return developerRepository.findAll(spec).stream()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("userName").ascending());
+
+        return developerRepository.findAll(Specification.where(spec), pageable)
+                .map(responseMapper::toDTO);
     }
 
     @Override
@@ -103,6 +110,7 @@ public class DeveloperService implements IDeveloperService {
                 .roles(Set.of(roleRepository.findByRole(RolesEnum.ROLE_DEVELOPER)
                         .orElseThrow(() -> new EntityNotFoundException("Role not found"))))
                 .enabled(true)
+                .accountNonLocked(true)
                 .username(developerDtoRequest.userName())
                 .externalId(saved.getExternalId())
                 .password(passwordEncoder.encode(developerDtoRequest.password().value()))

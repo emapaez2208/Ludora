@@ -45,10 +45,11 @@ public class ClientSpecification {
   public static  PredicateSpecification<ClientEntity> streetEquals (String street){
         return (root, cb) -> street==null || street.isBlank()
                 ?cb.conjunction()
-                :cb.equal(cb.lower(root.get("street")),"%"+street.toLowerCase()+"%");
+                :cb.like(cb.lower(root.get("street")),"%" +street.toLowerCase()+ "%");
   }
 
-  public static PredicateSpecification<ClientEntity> numberStreetEquals (Integer numberSteet){
+
+    public static PredicateSpecification<ClientEntity> numberStreetEquals (Integer numberSteet){
         return (root, cb)-> numberSteet== null
                 ?cb.conjunction()
                 :cb.equal(root.get("numberStreet"), numberSteet);
@@ -57,6 +58,6 @@ public class ClientSpecification {
   public static PredicateSpecification<ClientEntity> birthDateEquals (LocalDate birthDate){
         return (root,cb )->  birthDate==null
                 ?cb.conjunction()
-                :cb.equal(root.get("birhDate"),birthDate);
+                :cb.equal(root.get("birthDate"),birthDate);
   }
 }

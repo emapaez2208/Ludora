@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
+import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
@@ -16,14 +17,19 @@ import ExperienceGroup.Ludora.features.genre.IGenreRepository;
 import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,15 +48,39 @@ public class GameService implements IGameService{
 
     /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) ------------------------------
     @Override
-    public List<GameDTOResponse> getAllGames(String name,
+    public Page<GameDTOResponse> getAllGames(int page,
+                                             int size,
+                                             String name,
                                              BigDecimal maxPrice,
                                              BigDecimal minPrice,
                                              LocalDate minReleaseDate,
                                              LocalDate maxReleaseDate,
-                                             Boolean statusBlocked,
                                              List<String> genreNames,
                                              String rangeName,
                                              String developerCompany) {
+
+        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("The minimum price cannot be negative.");
+        }
+        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("The maximum price cannot be negative.");
+        }
+        if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
+            throw new IllegalArgumentException("The minimum price cannot be greater than the maximum price.");
+        }
+
+        if (minReleaseDate != null && maxReleaseDate != null && minReleaseDate.isAfter(maxReleaseDate)) {
+            throw new IllegalArgumentException("The start date cannot be later than the end date.");
+        }
+
+        LocalDate today = LocalDate.now();
+
+        if (minReleaseDate != null && minReleaseDate.isAfter(today)) {
+            throw new IllegalArgumentException("The start date cannot be in the future.");
+        }
+        if (maxReleaseDate != null && maxReleaseDate.isAfter(today)) {
+            throw new IllegalArgumentException("The end date cannot be in the future.");
+        }
 
         PredicateSpecification<GameEntity> spec = PredicateSpecification.allOf(
                 GameSpecification.nameContains(name),
@@ -58,17 +88,16 @@ public class GameService implements IGameService{
                 GameSpecification.priceGreaterThan(minPrice),
                 GameSpecification.releaseDateAfter(minReleaseDate),
                 GameSpecification.releaseDateBefore(maxReleaseDate),
-                GameSpecification.statusBlockedEquals(statusBlocked),
+                GameSpecification.statusBlockedEquals(false),
                 GameSpecification.hasGenreNames(genreNames),
                 GameSpecification.hasAgeRangeName(rangeName),
                 GameSpecification.hasDeveloperCompany(developerCompany)
         );
 
-        return gameRepository.findAll(spec).stream()
-                .distinct()
-                .map(responseMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
 
+        return gameRepository.findAll(Specification.where(spec), pageable)
+                .map(responseMapper::toDTO);
     }
 
 
@@ -84,8 +113,7 @@ public class GameService implements IGameService{
     /// -------------------CREACION DE JUEGO PARA DEVELOPERS ---------------------
 
     @Override
-    @PreAuthorize("hasAuthority('CREATE_GAMES') and " +
-                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId")
+    @PreAuthorize("hasAuthority('CREATE_GAMES')")
     @Transactional
     public GameDTOResponse save(GameDTORequest gameDTORequest) {
 
@@ -102,10 +130,12 @@ public class GameService implements IGameService{
 
         entity.setAgeRange(ageRange);
 
-        List<GenreEntity> genres = genreRepository.findAllById(gameDTORequest.genreIds());
-        if (genres.size() != gameDTORequest.genreIds().size()) {
-            throw new EntityNotFoundException("One or more genres were not found");
-        }
+        List<GenreEntity> genres = new ArrayList<>();
+
+        gameDTORequest.genreNames().forEach(
+                genre -> genres.add(genreRepository.findByName(genre).orElseThrow(
+                        () -> new EntityNotFoundException("Genre not found")))
+        );
         entity.setGenres(genres);
 
         GameEntity savedEntity = gameRepository.save(entity);
@@ -116,37 +146,41 @@ public class GameService implements IGameService{
     /// -------------------------UPDATE GAME DEVELOPER------------
 
     @Override
-    @PreAuthorize("hasAuthority('UPDATE_GAMES') and " +
-                    "#gameDTORequest.developerExternalId() == authentication.principal.externalId\"")
+    @PreAuthorize("hasAuthority('UPDATE_GAMES')")
     @Transactional
     public GameDTOResponse update(UUID externalId, GameDTORequest gameDTORequest) {
 
         GameEntity existingGame = gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
-        GameEntity updatedData = requestMapper.toEntity(gameDTORequest);
+        // check si el juego corresponde al dev logueado
+        if(!existingGame.getDeveloper().getExternalId().equals(authenticatedUserProvider.getCurrentUser().externalId())){
+            throw new GameIsNotFromTheDevException();
+        }
 
-        existingGame.setName(updatedData.getName());
-        existingGame.setPrice(updatedData.getPrice());
-        existingGame.setReleaseDate(updatedData.getReleaseDate());
-        existingGame.setDescription(updatedData.getDescription());
+        existingGame.setName(gameDTORequest.name());
+        existingGame.setPrice(gameDTORequest.price());
+        existingGame.setReleaseDate(gameDTORequest.releaseDate());
+        existingGame.setDescription(gameDTORequest.description());
 
         AgeRangeEntity ageRange = ageRangeRepository.findByExternalId(gameDTORequest.ageRangeExternalId())
                 .orElseThrow(() -> new AgeRangeNotFoundException("Age range not found"));
         existingGame.setAgeRange(ageRange);
 
-        List<GenreEntity> genres = genreRepository.findAllById(gameDTORequest.genreIds());
-        if (genres.size() != gameDTORequest.genreIds().size()){
-            throw new EntityNotFoundException("One or more genres were not found");
-        }
-        existingGame.getGenres().clear();
-        existingGame.getGenres().addAll(genres);
+        List<GenreEntity> genres = new ArrayList<>();
+
+        gameDTORequest.genreNames().forEach(
+                genre -> genres.add(genreRepository.findByName(genre).orElseThrow(
+                        () -> new EntityNotFoundException("Genre not found")))
+        );
+        existingGame.setGenres(genres);
 
         DeveloperEntity developer = developerRepository.findByExternalId(authenticatedUserProvider.getCurrentUser().externalId())
                 .orElseThrow(() -> new UserNotFoundException("Developer not found"));
         existingGame.setDeveloper(developer);
 
-
+        existingGame.setNeedRevision(true);
+        existingGame.setStatusBlocked(true);        /// al modificarlo se pide volver a revisar
 
         GameEntity savedGame = gameRepository.save(existingGame);
 
@@ -163,6 +197,7 @@ public class GameService implements IGameService{
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
         habilitarGame.setStatusBlocked(false);
+        habilitarGame.setNeedRevision(false);
         gameRepository.save(habilitarGame);
 
         return responseMapper.toDTO(habilitarGame);
@@ -183,5 +218,33 @@ public class GameService implements IGameService{
 
     }
 
+    /// ---------------- BUSCAR JUEGOS NUEVOS O CON REVISION ----------------
 
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<GameDTOResponse> getGamesNeedRevision(){
+        return gameRepository.findAllByNeedRevision(true)
+                .orElseThrow(GameNotFoundException::new)
+                .stream().map(responseMapper::toDTO)
+                .toList();
+    }
+    /// -------------- DEVELOPER SOLICITAR REVISION DE UN JUEGO ---------------------
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasRole('DEVELOPER')")
+    public GameDTOResponse askForReviewGame(UUID gameId){
+
+        GameEntity game = gameRepository.findByExternalId(gameId)
+                .orElseThrow(GameNotFoundException::new);
+
+        // check si el juego corresponde al dev logueado
+        if(!game.getDeveloper().getExternalId().equals(authenticatedUserProvider.getCurrentUser().externalId())){
+            throw new GameIsNotFromTheDevException();
+        }
+
+        game.setNeedRevision(true);
+        GameEntity saved = gameRepository.save(game);
+        return responseMapper.toDTO(saved);
+    }
 }

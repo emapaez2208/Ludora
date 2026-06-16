@@ -1,7 +1,12 @@
 package ExperienceGroup.Ludora.common.exception.globalHandler;
 
-import ExperienceGroup.Ludora.common.exception.CartEmptyException;
-import ExperienceGroup.Ludora.common.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundException;
+import ExperienceGroup.Ludora.features.cart.exception.*;
+import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
+import ExperienceGroup.Ludora.features.review.exception.GameNotPurchasedException;
+import ExperienceGroup.Ludora.features.review.exception.ReviewAlreadyExistsException;
+import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
+import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
 import ExperienceGroup.Ludora.features.genre.exception.GenreExistsException;
 import ExperienceGroup.Ludora.common.exception.dto.ErrorResponseDTO;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
@@ -14,11 +19,21 @@ import ExperienceGroup.Ludora.features.user.exception.IllegalPasswordException;
 import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.features.user.exception.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -26,14 +41,21 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalHandlerException {
 
+    private static final Logger log = LoggerFactory.getLogger(GlobalHandlerException.class);
+
+    @ExceptionHandler(CredentialsNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerCredentialsNotFound(CredentialsNotFoundException ex){
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
     @ExceptionHandler(IllegalEmailException.class)
     public ResponseEntity<ErrorResponseDTO> handlerIllegalEmail(IllegalEmailException ex){
-        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return buildResponse(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
     }
 
     @ExceptionHandler(IllegalPasswordException.class)
     public ResponseEntity<ErrorResponseDTO> handlerIllegalPassword(IllegalPasswordException ex){
-        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return buildResponse(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -63,12 +85,13 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(InvalidAgeRangeException.class)
     public ResponseEntity<ErrorResponseDTO> handlerInvalidAgeRange(InvalidAgeRangeException ex) {
-        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleUnexpected(Exception ex){
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error inesperado en el servidor.");
+        log.error("Unexpected error", ex);  /// msj para saber que esta pasando
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred on the server. We don't know what happened. We're sorry.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -89,7 +112,117 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerLockedAccount(LockedException ex) {
+        return buildResponse(HttpStatus.FORBIDDEN, "Your account is Locked");
+    }
 
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerDisabledAccount(DisabledException ex) {
+        return buildResponse(HttpStatus.FORBIDDEN, "Your account is disabled");
+    }
+
+    @ExceptionHandler(AccountExpiredException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerAccountExpired(AccountExpiredException ex){
+        return buildResponse(HttpStatus.FORBIDDEN, "Your account has expired. Please contact support.");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccessDenied(AccessDeniedException ex) {
+        return buildResponse(HttpStatus.FORBIDDEN, "You do not have permission to perform this action.");
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerBadCredentials(BadCredentialsException ex){
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Authentication invalid, try again");
+    }
+
+    @ExceptionHandler(GenreExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGenreExistsException (GenreExistsException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(CartEmptyException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerCartEmpty(CartEmptyException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameAlreadyInCartException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameAlreadyInCart(GameAlreadyInCartException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(CartNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerCartNotFound(CartNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+
+    @ExceptionHandler(GameNotInCartException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameNotInCart(GameNotInCartException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameAlreadyOwnedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameAlreadyOwned(GameAlreadyOwnedException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerIllegalArgument(IllegalArgumentException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameNotPurchasedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameNotPurchased(GameNotPurchasedException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String message = String.format("The parameter '%s' has an invalid value. Expected type: %s",
+                ex.getName(),
+                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
+
+        return buildResponse(HttpStatus.BAD_REQUEST, message);
+    }
+
+    @ExceptionHandler(MercadoPagoFailedException.class)
+        public ResponseEntity<ErrorResponseDTO> handlerMercadoPagoFailedException ( MercadoPagoFailedException ex){
+            return buildResponse(HttpStatus.BAD_GATEWAY , ex.getMessage());
+    }
+
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerPasswordInvalid(PasswordInvalidException ex){
+        return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(GameIsNotFromTheDevException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerGameIsNotFromDev(GameIsNotFromTheDevException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(SaleNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerSaleNotFound(SaleNotFoundException ex){
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerHttpMessageException(HttpMessageNotReadableException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerHttpRequestMethod(HttpRequestMethodNotSupportedException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+      
+    @ExceptionHandler(ReviewAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerReviewAlreadyExists(ReviewAlreadyExistsException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    /// ---------------------- MSJ ERROR CONSTRUCTOR ----------------------------------- ///
     private ResponseEntity<ErrorResponseDTO> buildResponse(HttpStatus status, String message){
         ErrorResponseDTO error = new ErrorResponseDTO(
                 LocalDateTime.now(),
@@ -98,27 +231,6 @@ public class GlobalHandlerException {
                 message
         );
         return new ResponseEntity<>(error, status);
-    }
-
-    @ExceptionHandler(GenreExistsException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerGenreExistsException (GenreExistsException ex){
-        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
-    }
-    @ExceptionHandler(CartEmptyException.class)
-    public ResponseEntity<String> handlerCartEmpty(CartEmptyException ex) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
-    }
-
-    @ExceptionHandler(MercadoPagoFailedException.class)
-        public ResponseEntity<ErrorResponseDTO> handlerMercadoPagoFailedException ( MercadoPagoFailedException ex){
-            return buildResponse(HttpStatus.BAD_REQUEST , ex.getMessage());
-    }
-
-    @ExceptionHandler(PasswordInvalidException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerPasswordInvalid(PasswordInvalidException ex){
-        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
 

@@ -2,6 +2,8 @@ package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTORequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import org.springframework.data.domain.Page;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -9,12 +11,13 @@ import java.util.UUID;
 
 public interface IGameService {
 
-    List<GameDTOResponse> getAllGames(String name,
+    Page<GameDTOResponse> getAllGames(int page,
+                                      int size,
+                                      String name,
                                       BigDecimal maxPrice,
                                       BigDecimal minPrice,
                                       LocalDate minReleaseDate,
                                       LocalDate maxReleaseDate,
-                                      Boolean statusBlocked,
                                       List<String> genreNames,
                                       String rangeName,
                                       String developerCompany);
@@ -23,5 +26,7 @@ public interface IGameService {
     GameDTOResponse update (UUID externalId, GameDTORequest gameDTORequest);
     GameDTOResponse authorized(UUID externalId);
     void desauthorized(UUID externalId);
+    List<GameDTOResponse> getGamesNeedRevision();
+    GameDTOResponse askForReviewGame(UUID gameId);
 
 }

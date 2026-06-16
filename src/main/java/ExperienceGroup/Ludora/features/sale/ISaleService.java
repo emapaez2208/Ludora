@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.sale;
 
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTORequest;
 import ExperienceGroup.Ludora.features.sale.domain.dto.SaleDTOResponse;
+import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,9 +15,11 @@ public interface ISaleService {
 
     SaleDTOResponse getByExternalId(UUID externalId);
 
-    List<SaleDTOResponse> getSalesByClient(UUID clientExternalId);
+    Page<SaleDTOResponse> getSalesByClient(int page, int size, UUID clientExternalId);
 
-    List<SaleDTOResponse> getAllSales(UUID externalId,
+    Page<SaleDTOResponse> getAllSales(int page,
+                                      int size,
+                                      UUID externalId,
                                       LocalDateTime minDate,
                                       LocalDateTime maxDate,
                                       ESaleStatus status,

@@ -1,4 +1,4 @@
-package ExperienceGroup.Ludora.common.exception;
+package ExperienceGroup.Ludora.features.cart.exception;
 
 public class CartEmptyException extends RuntimeException {
     public CartEmptyException(String message) {

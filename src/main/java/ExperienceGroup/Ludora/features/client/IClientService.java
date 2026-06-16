@@ -6,13 +6,16 @@ import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTORequest;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientDTOResponse;
 import ExperienceGroup.Ludora.features.client.domain.dto.ClientUpdateRequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 public interface IClientService {
-    List<ClientDTOResponse> getAllClient (String name,
+    Page<ClientDTOResponse> getAllClient (int page,
+                                          int size,
+                                          String name,
                                           String lastName,
                                           String userName,
                                           String email,
@@ -38,5 +41,7 @@ public interface IClientService {
     void changePassword(ChangePasswordDTO passwordDTO);
 
     void changeEmail(ChangeEmailDTO emailDTO);
+
     List<GameDTOResponse> getMyGames();
+
 }

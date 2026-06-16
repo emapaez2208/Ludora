@@ -6,6 +6,7 @@ import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.ageRange.domain.AgeRangeEntity;
 import ExperienceGroup.Ludora.features.ageRange.domain.dto.AgeRangeDTORequest;
 import ExperienceGroup.Ludora.features.ageRange.domain.dto.AgeRangeDTOResponse;
+import ExperienceGroup.Ludora.features.game.IGameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class AgeRangeService implements IAgeRangeService{
     private final IAgeRangeRepository ageRangeRepository;
     private final IMapper<AgeRangeEntity, AgeRangeDTOResponse> responseMapper;
     private final IMapper<AgeRangeEntity, AgeRangeDTORequest> requestMapper;
+    private final IGameRepository gameRepository;
 
     @Override
     public List<AgeRangeDTOResponse> getAllAgeRange() {
@@ -82,6 +84,10 @@ public class AgeRangeService implements IAgeRangeService{
     public void delete(UUID externalId) {
         AgeRangeEntity toBeDeleted = ageRangeRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new AgeRangeNotFoundException("Age range not found"));
+
+        if (gameRepository.existsByAgeRange(toBeDeleted)) {
+            throw new InvalidAgeRangeException("Cannot delete age range because it has games associated.");
+        }
 
         ageRangeRepository.delete(toBeDeleted);
     }
