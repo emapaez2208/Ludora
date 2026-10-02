@@ -1,0 +1,179 @@
+2026-09-05T21:48:52.887Z [INFO] ----------------------invoke appmod-list-jdks----------------------
+2026-09-05T21:48:52.887Z [INFO] [Tool.invoke]({name: appmod-list-jdks, modelId: auto, input: {
+  "additionalSearchPaths": [
+    "/home/ema/.jdk",
+    "/usr/lib/jvm"
+  ],
+  "version": "",
+  "projectPath": "/home/ema/Proyectos/Ludora"
+}}).
+2026-09-05T21:48:52.888Z [INFO] [Tool.invoke] do invoke.
+2026-09-05T21:48:52.919Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following jdks in your system:\n\n1. Java 21.0.12\n   📁 Path: /usr/lib/jvm/java-21-openjdk-amd64/bin\n   🏷️ Source: PATH\n\n2. Java 21.0.12\n   📁 Path: /usr/lib/jvm/java-1.21.0-openjdk-amd64/bin\n   🏷️ Source: others\n\nTotal: 2 JDK installation(s) found"
+}}).
+2026-09-05T21:48:52.919Z [INFO] ----------------------invoked appmod-list-jdks----------------------
+2026-09-05T21:48:53.162Z [INFO] ----------------------invoke appmod-list-mavens----------------------
+2026-09-05T21:48:53.163Z [INFO] [Tool.invoke]({name: appmod-list-mavens, modelId: auto, input: {
+  "additionalSearchPaths": [
+    "/home/ema/Proyectos/Ludora"
+  ],
+  "includeVersion": true,
+  "projectPath": "/home/ema/Proyectos/Ludora"
+}}).
+2026-09-05T21:48:53.163Z [INFO] [Tool.invoke] do invoke.
+2026-09-05T21:48:57.728Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following maven installations in your system:\n\n1. Maven \n   📁 Path: /usr/share/maven/bin\n   🏷️ Source: PATH,others\n\nTotal: 1 Maven installation(s) found"
+}}).
+2026-09-05T21:48:57.728Z [INFO] ----------------------invoked appmod-list-mavens----------------------
+2026-09-05T21:51:37.387Z [INFO] ---------------------prepare appmod-report-event----------------------
+2026-09-05T21:51:37.387Z [INFO] [Tool.prepareInvocation]({name: appmod-report-event, input: {
+  "projectPath": "/home/ema/Proyectos/Ludora",
+  "event": "precheckCompleted",
+  "status": "succeeded",
+  "phase": "precheck",
+  "details": {
+    "components": [
+      {
+        "name": "jdk",
+        "baseVersion": "21",
+        "targetVersion": "25"
+      }
+    ]
+  },
+  "message": "Maven Spring Boot project detected; Java 25 selected as latest LTS target."
+}}).
+2026-09-05T21:51:37.388Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-09-05T21:51:37.389Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Report upgrade event"
+}}).
+2026-09-05T21:51:37.389Z [INFO] ----------------------prepared appmod-report-event----------------------
+2026-09-05T21:51:37.526Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-09-05T21:51:37.526Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "projectPath": "/home/ema/Proyectos/Ludora",
+  "event": "precheckCompleted",
+  "status": "succeeded",
+  "phase": "precheck",
+  "details": {
+    "components": [
+      {
+        "name": "jdk",
+        "baseVersion": "21",
+        "targetVersion": "25"
+      }
+    ]
+  },
+  "message": "Maven Spring Boot project detected; Java 25 selected as latest LTS target."
+}}).
+2026-09-05T21:51:37.527Z [INFO] [Tool.invoke] do invoke.
+2026-09-05T21:51:37.531Z [INFO] Project /home/ema/Proyectos/Ludora is a maven project, try to get java version from pom.xml
+2026-09-05T21:51:37.535Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'precheckCompleted' reported!\nSession ID: 20260905214852,\nSession Dir: /home/ema/Proyectos/Ludora/.github/modernize/java-upgrade/20260905214852"
+}}).
+2026-09-05T21:51:37.535Z [INFO] ----------------------invoked appmod-report-event----------------------
+2026-09-05T21:51:37.542Z [INFO] Project java version: 21
+2026-09-05T21:51:37.542Z [INFO] Maven project detected.
+2026-09-05T21:51:37.542Z [INFO] Build tool type: mvnw
+2026-09-05T21:51:37.792Z [INFO] JDK: {
+  "name": "java",
+  "path": "/usr/lib/jvm/java-21-openjdk-amd64/bin",
+  "version": "21"
+}
+2026-09-05T21:51:37.793Z [INFO] Build tool: {
+  "name": "mvnw",
+  "path": ".",
+  "version": ""
+}
+2026-09-05T21:51:37.793Z [INFO] Project config: {
+  "buildTool": {
+    "path": ".",
+    "name": "mvnw",
+    "version": ""
+  },
+  "jdk": {
+    "path": "/usr/lib/jvm/java-21-openjdk-amd64/bin",
+    "name": "java",
+    "version": "21"
+  },
+  "name": "Ludora",
+  "dir": "/home/ema/Proyectos/Ludora"
+}
+2026-09-05T21:51:45.183Z [INFO] ---------------------prepare appmod-report-event----------------------
+2026-09-05T21:51:45.184Z [INFO] [Tool.prepareInvocation]({name: appmod-report-event, input: {
+  "sessionId": "20260905214852",
+  "projectPath": "/home/ema/Proyectos/Ludora",
+  "event": "planGenerationStarted",
+  "status": "succeeded",
+  "phase": "plan"
+}}).
+2026-09-05T21:51:45.185Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-09-05T21:51:45.187Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Report upgrade event"
+}}).
+2026-09-05T21:51:45.187Z [INFO] ----------------------prepared appmod-report-event----------------------
+2026-09-05T21:51:45.620Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-09-05T21:51:45.620Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "sessionId": "20260905214852",
+  "projectPath": "/home/ema/Proyectos/Ludora",
+  "event": "planGenerationStarted",
+  "status": "succeeded",
+  "phase": "plan"
+}}).
+2026-09-05T21:51:45.620Z [INFO] [Tool.invoke] do invoke.
+2026-09-05T21:51:45.622Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'planGenerationStarted' reported!\nSession ID: 20260905214852,\nSession Dir: /home/ema/Proyectos/Ludora/.github/modernize/java-upgrade/20260905214852"
+}}).
+2026-09-05T21:51:45.623Z [INFO] ----------------------invoked appmod-report-event----------------------
+2026-09-05T21:51:45.715Z [INFO] ---------------------prepare appmod-list-jdks----------------------
+2026-09-05T21:51:45.715Z [INFO] [Tool.prepareInvocation]({name: appmod-list-jdks, input: {
+  "sessionId": "20260905214852",
+  "additionalSearchPaths": [
+    "/home/ema/.jdk",
+    "/usr/lib/jvm"
+  ],
+  "version": "25"
+}}).
+2026-09-05T21:51:45.715Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-09-05T21:51:45.716Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "List jdks"
+}}).
+2026-09-05T21:51:45.716Z [INFO] ----------------------prepared appmod-list-jdks----------------------
+2026-09-05T21:51:46.194Z [INFO] ----------------------invoke appmod-list-jdks----------------------
+2026-09-05T21:51:46.195Z [INFO] [Tool.invoke]({name: appmod-list-jdks, modelId: auto, input: {
+  "sessionId": "20260905214852",
+  "additionalSearchPaths": [
+    "/home/ema/.jdk",
+    "/usr/lib/jvm"
+  ],
+  "version": "25"
+}}).
+2026-09-05T21:51:46.195Z [INFO] [Tool.invoke] do invoke.
+2026-09-05T21:51:46.209Z [INFO] [Tool.invoke]({result: {
+  "message": "No JDK installations found."
+}}).
+2026-09-05T21:51:46.209Z [INFO] ----------------------invoked appmod-list-jdks----------------------
+2026-09-05T21:51:46.270Z [INFO] ---------------------prepare appmod-list-mavens----------------------
+2026-09-05T21:51:46.270Z [INFO] [Tool.prepareInvocation]({name: appmod-list-mavens, input: {
+  "sessionId": "20260905214852",
+  "additionalSearchPaths": [
+    "/home/ema/Proyectos/Ludora"
+  ],
+  "includeVersion": true
+}}).
+2026-09-05T21:51:46.270Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-09-05T21:51:46.270Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "List mavens"
+}}).
+2026-09-05T21:51:46.271Z [INFO] ----------------------prepared appmod-list-mavens----------------------
+2026-09-05T21:51:46.635Z [INFO] ----------------------invoke appmod-list-mavens----------------------
+2026-09-05T21:51:46.635Z [INFO] [Tool.invoke]({name: appmod-list-mavens, modelId: auto, input: {
+  "sessionId": "20260905214852",
+  "additionalSearchPaths": [
+    "/home/ema/Proyectos/Ludora"
+  ],
+  "includeVersion": true
+}}).
+2026-09-05T21:51:46.635Z [INFO] [Tool.invoke] do invoke.
+2026-09-05T21:51:49.807Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following maven installations in your system:\n\n1. Maven \n   📁 Path: /usr/share/maven/bin\n   🏷️ Source: PATH,others\n\nTotal: 1 Maven installation(s) found"
+}}).
+2026-09-05T21:51:49.807Z [INFO] ----------------------invoked appmod-list-mavens----------------------
