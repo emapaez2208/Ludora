@@ -18,12 +18,14 @@ services:
       - mysql_data:/var/lib/mysql
 
   app:
-    build: .
+    build: ./backend
     container_name: Ludora-app
     depends_on:
       - db
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USER}
