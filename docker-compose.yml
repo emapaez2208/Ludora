@@ -13,7 +13,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3309:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -38,6 +38,15 @@ services:
 
       MERCADOPAGO_ACCESS: ${MERCADOPAGO_ACCESS}
       APP_BASE_URL: ${APP_BASE_URL}
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: Ludora-front
+    depends_on:
+      - app
+    ports:
+      - "80:80"
     restart: always
 
 volumes:
