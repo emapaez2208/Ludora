@@ -40,5 +40,14 @@ services:
       APP_BASE_URL: ${APP_BASE_URL}
     restart: always
 
+  frontend:
+    build: ./frontend
+    container_name: Ludora-front
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    restart: always
+
 volumes:
   mysql_data:
