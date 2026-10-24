@@ -37,4 +37,6 @@ public interface IDeveloperService {
     void changePassword(ChangePasswordDTO passwordDTO);
 
     void changeEmail(ChangeEmailDTO emailDTO);
+
+    List<String> getCompanies();
 }

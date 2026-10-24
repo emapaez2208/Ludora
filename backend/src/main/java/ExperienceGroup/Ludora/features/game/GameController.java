@@ -48,7 +48,7 @@ public class GameController {
             @Parameter(description = "Minimum price") @RequestParam(required = false) BigDecimal minPrice,
             @Parameter(description = "Minimum release date (YYYY-MM-DD)") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate minReleaseDate,
             @Parameter(description = "Maximum release date (YYYY-MM-DD)") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate maxReleaseDate,
-            @Parameter(description = "List of genre names") @RequestParam(required = false) List<String> genreName,
+            @Parameter(description = "List of genre names") @RequestParam(required = false) List<String> genreNames,
             @Parameter(description = "Range name") @RequestParam(required = false) String rangeName,
             @Parameter(description = "Developer company name") @RequestParam(required = false) String developerCompany
     ) {
@@ -60,7 +60,7 @@ public class GameController {
                 minPrice,
                 minReleaseDate,
                 maxReleaseDate,
-                genreName,
+                genreNames,
                 rangeName,
                 developerCompany));
     }

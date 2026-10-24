@@ -1,5 +1,107 @@
 <div class="container">
-  <h2>Catálogo de Videojuegos</h2>
+  <h2>Tienda</h2>
+
+  <div class="filters-bar">
+    <button class="btn btn-filters" (click)="toggleFilters()">
+      Filtros {{ showFilters() ? '▲' : '▼' }}
+    </button>
+  
+
+@if (showFilters()) {
+  <div class="filters-panel">
+    
+    <label>
+      Nombre
+      <input
+        type="text"
+        placeholder="Buscar juego..."
+        [value]="filters().name ?? ''"
+        (input)="update('name', $any($event.target).value)"
+        (keydown.enter)="search()" />
+    </label>
+
+    <label>
+      Desarrolladora
+      <select
+        [value]="filters().developerCompany ?? ''"
+        (change)="update('developerCompany', $any($event.target).value)">
+        <option value="">Todas</option>
+        @for (c of companies(); track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Precio mínimo
+      <input type="number" min="0" placeholder="0"
+        [value]="filters().minPrice ?? ''"
+        (input)="update('minPrice', $any($event.target).value)" />
+    </label>
+
+    <label>
+      Precio máximo
+      <input type="number" min="0" placeholder="Sin límite"
+        [value]="filters().maxPrice ?? ''"
+        (input)="update('maxPrice', $any($event.target).value)" />
+    </label>
+    @if (priceInvalid) {
+      <p class="filter-error">El precio mínimo no puede ser mayor que el máximo.</p>
+    }
+
+    <label>
+      Lanzado desde
+      <input type="date" [max]="today"
+        [value]="filters().minReleaseDate ?? ''"
+        (input)="update('minReleaseDate', $any($event.target).value)" />
+    </label>
+
+    <label>
+      Lanzado hasta
+      <input type="date" [max]="today"
+        [value]="filters().maxReleaseDate ?? ''"
+        (input)="update('maxReleaseDate', $any($event.target).value)" />
+    </label>
+    @if (dateInvalid) {
+      <p class="filter-error">La fecha inicial no puede ser posterior a la final.</p>
+    }
+
+    <label>
+      Clasificación por edad
+      <select
+        [value]="filters().rangeName ?? ''"
+        (change)="update('rangeName', $any($event.target).value)">
+        <option value="">Todas</option>
+        @for (range of ageRanges(); track range.externalId) {
+          <option [value]="range.rangeName">{{ range.rangeName }} (+{{ range.minAge }})</option>
+        }
+      </select>
+    </label>
+
+    <fieldset class="genre-fieldset">
+      <legend>Géneros</legend>
+      <div class="genre-options">
+        @for (genre of genres(); track genre.name) {
+          <label class="check" [title]="genre.description">
+            <input
+              type="checkbox"
+              [checked]="hasGenre(genre.name)"
+              (change)="toggleGenre(genre.name)" />
+            {{ genre.name }}
+          </label>
+        }
+      </div>
+    </fieldset>
+
+    <div class="filter-actions">
+      <button class="btn" (click)="search()">Aplicar</button>
+      <button class="btn btn-secondary" (click)="reset()">Limpiar</button>
+    </div>
+  </div>
+  
+}
+
+</div>
 
   @if (isLoading()) {
     <p>Cargando juegos...</p>
@@ -33,5 +135,39 @@
         <p>No hay videojuegos disponibles en este momento.</p>
     }
     </div>
+
+    @if (totalPages() > 1) {
+      <div class="pagination-container">
+        <button 
+          class="page-btn" 
+          (click)="prevPage()" 
+          [disabled]="page() === 0">
+          Anterior
+        </button>
+
+        <div class="pagination-numbers">
+          @for (p of visiblePages(); track $index) {
+            @if (p === '...') {
+              <span class="pagination-ellipsis">...</span>
+            } @else {
+              <button 
+                class="page-number-btn" 
+                [class.active]="page() + 1 === p"
+                (click)="goToPage(p)">
+                {{ p }}
+              </button>
+            }
+          }
+        </div>
+
+        <button 
+          class="page-btn" 
+          (click)="nextPage()" 
+          [disabled]="page() >= totalPages() - 1">
+          Siguiente
+        </button>
+      </div>
+    }
+
   }
 </div>

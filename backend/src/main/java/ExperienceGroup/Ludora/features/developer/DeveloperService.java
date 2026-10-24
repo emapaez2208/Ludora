@@ -154,6 +154,11 @@ public class DeveloperService implements IDeveloperService {
     }
 
     @Override
+    public List<String> getCompanies() {
+        return developerRepository.findDistinctCompanies();
+    }
+
+    @Override
     @PreAuthorize("hasAuthority('DELETE_USERS') or #externalId == authentication.principal.externalId")
     public void delete(UUID externalId) {
 

@@ -67,6 +67,15 @@ public class DeveloperController {
     }
 
     @Operation(
+            summary = "List developer companies",
+            description = "Returns the distinct company names. Public endpoint used by the catalog filters."
+    )
+    @GetMapping("/companies")
+    ResponseEntity<List<String>> getCompanies() {
+        return ResponseEntity.ok(developerService.getCompanies());
+    }
+
+    @Operation(
             summary = "Get developer by ID",
             description = "Fetches the data logs of a specific developer profile using their external unique identifier (UUID)."
     )

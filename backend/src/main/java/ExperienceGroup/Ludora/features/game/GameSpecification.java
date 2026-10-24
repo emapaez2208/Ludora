@@ -1,7 +1,13 @@
 package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.features.game.domain.GameEntity;
+import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import org.springframework.data.jpa.domain.PredicateSpecification;
+
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -71,13 +77,18 @@ public class GameSpecification {
                 : cb.equal(root.get("statusBlocked"), status);
     }
 
-    public static PredicateSpecification<GameEntity> hasGenreNames(List<String> genreNames) {
-        return (root, cb) -> {
-            if (genreNames == null || genreNames.isEmpty()) {
-                return cb.conjunction();
-            }
-            return root.join("genres").get("name").in(genreNames);
-        };
+    public static Specification<GameEntity> hasGenreNames(List<String> genreNames) {
+        return (root, query, cb) -> {
+        if (genreNames == null || genreNames.isEmpty()) {
+            return cb.conjunction();
+        }
+        Subquery<Integer> sub = query.subquery(Integer.class);
+        Root<GameEntity> correlated = sub.correlate(root);
+        Join<GameEntity, GenreEntity> genres = correlated.join("genres");
+        sub.select(cb.literal(1))
+           .where(genres.get("name").in(genreNames));
+        return cb.exists(sub);
+    };
     }
 
     public static PredicateSpecification<GameEntity> hasAgeRangeName(String rangeName){

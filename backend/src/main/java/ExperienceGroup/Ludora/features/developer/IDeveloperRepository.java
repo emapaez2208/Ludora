@@ -5,9 +5,11 @@ import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 public interface IDeveloperRepository extends JpaRepository<DeveloperEntity, Long>, JpaSpecificationExecutor<DeveloperEntity> {
 
@@ -18,4 +20,7 @@ public interface IDeveloperRepository extends JpaRepository<DeveloperEntity, Lon
     Boolean existsByEmail(Email email);
 
     Boolean existsByUserName(String userName);
+
+    @Query("SELECT DISTINCT d.company FROM DeveloperEntity d ORDER BY d.company")
+    List<String> findDistinctCompanies();
 }

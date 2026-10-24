@@ -13,13 +13,21 @@
     justify-content: center;
     align-items: center;
 }
-.icono{
+
+.p3 a {
     height: 70%;
-    transition: 2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.icono:hover{
-    transform: rotate(720deg);
+
+.icono{
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
 }
+
 .p2{
     color: var(--color-texto);
     align-items: end;
