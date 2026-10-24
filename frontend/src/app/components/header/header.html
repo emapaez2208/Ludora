@@ -27,6 +27,11 @@
     <a class="item" href="" (click)="closeMenu()"><p>Mis juegos</p></a>
     <a class="item" routerLink="/profile" (click)="closeMenu()"><p>Mi perfil</p></a>
     <a class="item" routerLink="/know" (click)="closeMenu()"><p>Conocenos</p></a>
-    <a class="item" routerLink="/login" (click)="closeMenu()"><p>Iniciar sesión</p></a>
+
+    @if (isLogged()) {
+      <a class="item" (click)="logout()"><p>Cerrar sesión</p></a>
+    }@else {
+      <a class="item" routerLink="/login" (click)="closeMenu()"><p>Iniciar sesión</p></a>
+    }
   </nav>
 </div>

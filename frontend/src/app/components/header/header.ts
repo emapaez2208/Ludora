@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   imports: [RouterLink],
@@ -9,6 +10,16 @@ import { RouterLink } from '@angular/router';
 })
 export class Header {
   isMenuOpen: boolean = false;
+  authService = inject(AuthService)
+  router = inject(Router)
+
+  isLogged = this.authService.isLoggedIn$;
+
+  logout() {
+    this.closeMenu()
+    this.authService.logout();
+    this.router.navigate(['/home']);
+  }
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
@@ -17,4 +28,6 @@ export class Header {
   closeMenu(): void {
     this.isMenuOpen = false;
   }
+
+  
 }
