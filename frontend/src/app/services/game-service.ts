@@ -37,4 +37,5 @@ export class GameService {
 
       return this.http.get<PageResponse<Game>>(this.url, { params });
     } 
+    
 }
