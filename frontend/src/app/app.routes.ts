@@ -8,6 +8,7 @@ import { Catalog } from './pages/catalog/catalog';
 import { Know } from './pages/know/know';
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
+import { SolicitudList } from './pages/solicitud-list/solicitud-list';
 
 export const routes: Routes = [
     {path: 'home', component: Home},
@@ -17,5 +18,6 @@ export const routes: Routes = [
     {path: 'profile', component: Profile, canActivate: [authGuard]},
     {path: 'catalog', component: Catalog},
     {path: 'know', component: Know},
+    {path: 'application', component: SolicitudList , canActivate:[adminGuard]},
     {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];

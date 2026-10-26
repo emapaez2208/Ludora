@@ -1,1 +1,31 @@
-<p>solicitud-list works!</p>
+<div class="container">
+  <h2>Gestión de Solicitudes y Revisiones</h2>
+
+  <!-- Botones para cambiar entre vistas o filtros -->
+  <div class="filters mb-3">
+    <button class="btn btn-secondary me-2" (click)="loadSolicitudes(undefined)">Todos</button>
+    <button class="btn btn-warning me-2" (click)="loadSolicitudes(true)">Bloqueados</button>
+    <button class="btn btn-info me-2 text-white" (click)="loadGamesNeedRevision()">Necesitan Revisión</button>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Estado Bloqueado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let game of games()">
+        <td>{{ game.name }}</td>
+        <td>{{ game.statusBlocked ? 'Bloqueado' : 'Activo' }}</td>
+        <td>
+          <button class="btn btn-success btn-sm" (click)="authorizeGame(game.externalId)">
+            Desbloquear / Aprobar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -19,7 +19,24 @@ export class SolicitudService {
         return this.http.get<PageResponse<Game>>(this.url ,{params})
     }
 
-    putGames( game : Game){ 
-        return this.http.put<Game>(`${this.url}/${game.externalId}`,game)
-    }
+    /**
+   * Obtiene los juegos que necesitan revisión (/api/games/needRevision)
+   */
+  getGamesNeedRevision(){
+    return this.http.get<Game[]>(`${this.url}/needRevision`);
+  }
+
+  /**
+   * Actualización general (para developers)
+   */
+  putGames(game: Game){
+    return this.http.put<Game>(`${this.url}/${game.externalId}`, game);
+  }
+
+  /**
+   * Autoriza / Desbloquea el juego (Endpoint exclusivo de Admin para poner statusBlocked y needRevision en false)
+   */
+  authorizeGame(externalId: string){
+    return this.http.put<Game>(`${this.url}/${externalId}/authorized`, {});
+  }
 }
