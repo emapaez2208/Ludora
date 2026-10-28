@@ -437,6 +437,266 @@ public class CargaBDDPrueba {
                 credentialsRepository.save(credsCliente3);
                 System.out.println("====== Cliente alanbrito cargado con éxito ======");
             }
+             //Cliente 4: Lucía Fernández
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("luciafernandez"))) {
+                ClientEntity cl2 = new ClientEntity();
+                cl2.setExternalId(java.util.UUID.randomUUID());
+                cl2.setName("Lucía");
+                cl2.setLastName("Fernández");
+                cl2.setUserName("luciafernandez");
+                cl2.setEmail(new Email("lucia.fernandez@gmail.com"));
+                cl2.setStatusBlocked(false);
+                cl2.setPhone(2235123456L);
+                cl2.setStreet("Colón");
+                cl2.setNumberStreet(1450);
+                cl2.setBirthDate(LocalDate.parse("1995-03-22"));
+                cl2.setPoints(1500);
+                cl2 = clientRepository.save(cl2);
+ 
+                CredentialsEntity credsCliente2 = CredentialsEntity.builder()
+                        .externalId(cl2.getExternalId())
+                        .username(cl2.getUserName())
+                        .password(passwordEncoder.encode("Lucia123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl2)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente2);
+                System.out.println("====== Cliente luciafernandez cargado con éxito ======");
+            }
+ 
+            //Cliente 5: Martín Gómez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("martingomez"))) {
+                ClientEntity cl3 = new ClientEntity();
+                cl3.setExternalId(java.util.UUID.randomUUID());
+                cl3.setName("Martín");
+                cl3.setLastName("Gómez");
+                cl3.setUserName("martingomez");
+                cl3.setEmail(new Email("martin.gomez@gmail.com"));
+                cl3.setStatusBlocked(false);
+                cl3.setPhone(2236234567L);
+                cl3.setStreet("Independencia");
+                cl3.setNumberStreet(3120);
+                cl3.setBirthDate(LocalDate.parse("1990-07-08"));
+                cl3.setPoints(4200);
+                cl3 = clientRepository.save(cl3);
+ 
+                CredentialsEntity credsCliente3 = CredentialsEntity.builder()
+                        .externalId(cl3.getExternalId())
+                        .username(cl3.getUserName())
+                        .password(passwordEncoder.encode("Martin123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl3)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente3);
+                System.out.println("====== Cliente martingomez cargado con éxito ======");
+            }
+ 
+            //Cliente 6: Camila Rodríguez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("camilarodriguez"))) {
+                ClientEntity cl4 = new ClientEntity();
+                cl4.setExternalId(java.util.UUID.randomUUID());
+                cl4.setName("Camila");
+                cl4.setLastName("Rodríguez");
+                cl4.setUserName("camilarodriguez");
+                cl4.setEmail(new Email("camila.rodriguez@gmail.com"));
+                cl4.setStatusBlocked(false);
+                cl4.setPhone(2234345678L);
+                cl4.setStreet("Güemes");
+                cl4.setNumberStreet(980);
+                cl4.setBirthDate(LocalDate.parse("2000-11-30"));
+                cl4.setPoints(250);
+                cl4 = clientRepository.save(cl4);
+ 
+                CredentialsEntity credsCliente4 = CredentialsEntity.builder()
+                        .externalId(cl4.getExternalId())
+                        .username(cl4.getUserName())
+                        .password(passwordEncoder.encode("Camila123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl4)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente4);
+                System.out.println("====== Cliente camilarodriguez cargado con éxito ======");
+            }
+ 
+            //Cliente 7: Tomás Pérez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("tomasperez"))) {
+                ClientEntity cl5 = new ClientEntity();
+                cl5.setExternalId(java.util.UUID.randomUUID());
+                cl5.setName("Tomás");
+                cl5.setLastName("Pérez");
+                cl5.setUserName("tomasperez");
+                cl5.setEmail(new Email("tomas.perez@gmail.com"));
+                cl5.setStatusBlocked(true);
+                cl5.setPhone(2235456789L);
+                cl5.setStreet("Rivadavia");
+                cl5.setNumberStreet(2210);
+                cl5.setBirthDate(LocalDate.parse("1988-05-17"));
+                cl5.setPoints(0);
+                cl5 = clientRepository.save(cl5);
+ 
+                CredentialsEntity credsCliente5 = CredentialsEntity.builder()
+                        .externalId(cl5.getExternalId())
+                        .username(cl5.getUserName())
+                        .password(passwordEncoder.encode("Tomas123"))
+                        .enabled(true)
+                        .accountNonLocked(false)
+                        .user(cl5)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente5);
+                System.out.println("====== Cliente tomasperez cargado con éxito ======");
+            }
+ 
+            //Cliente 8: Valentina Sosa
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("valentinasosa"))) {
+                ClientEntity cl6 = new ClientEntity();
+                cl6.setExternalId(java.util.UUID.randomUUID());
+                cl6.setName("Valentina");
+                cl6.setLastName("Sosa");
+                cl6.setUserName("valentinasosa");
+                cl6.setEmail(new Email("valentina.sosa@gmail.com"));
+                cl6.setStatusBlocked(false);
+                cl6.setPhone(2236567890L);
+                cl6.setStreet("Alberti");
+                cl6.setNumberStreet(1735);
+                cl6.setBirthDate(LocalDate.parse("1997-09-04"));
+                cl6.setPoints(8700);
+                cl6 = clientRepository.save(cl6);
+ 
+                CredentialsEntity credsCliente6 = CredentialsEntity.builder()
+                        .externalId(cl6.getExternalId())
+                        .username(cl6.getUserName())
+                        .password(passwordEncoder.encode("Valentina123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl6)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente6);
+                System.out.println("====== Cliente valentinasosa cargado con éxito ======");
+            }
+ 
+            //Cliente 9: Nicolás Acosta
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("nicolasacosta"))) {
+                ClientEntity cl7 = new ClientEntity();
+                cl7.setExternalId(java.util.UUID.randomUUID());
+                cl7.setName("Nicolás");
+                cl7.setLastName("Acosta");
+                cl7.setUserName("nicolasacosta");
+                cl7.setEmail(new Email("nicolas.acosta@gmail.com"));
+                cl7.setStatusBlocked(false);
+                cl7.setPhone(2234678901L);
+                cl7.setStreet("Luro");
+                cl7.setNumberStreet(4050);
+                cl7.setBirthDate(LocalDate.parse("1993-02-12"));
+                cl7.setPoints(12300);
+                cl7 = clientRepository.save(cl7);
+ 
+                CredentialsEntity credsCliente7 = CredentialsEntity.builder()
+                        .externalId(cl7.getExternalId())
+                        .username(cl7.getUserName())
+                        .password(passwordEncoder.encode("Nicolas123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl7)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente7);
+                System.out.println("====== Cliente nicolasacosta cargado con éxito ======");
+            }
+ 
+            //Cliente 10: Sofía Benítez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("sofiabenitez"))) {
+                ClientEntity cl8 = new ClientEntity();
+                cl8.setExternalId(java.util.UUID.randomUUID());
+                cl8.setName("Sofía");
+                cl8.setLastName("Benítez");
+                cl8.setUserName("sofiabenitez");
+                cl8.setEmail(new Email("sofia.benitez@gmail.com"));
+                cl8.setStatusBlocked(false);
+                cl8.setPhone(2235789012L);
+                cl8.setStreet("Av. Constitución");
+                cl8.setNumberStreet(5600);
+                cl8.setBirthDate(LocalDate.parse("2001-06-25"));
+                cl8.setPoints(560);
+                cl8 = clientRepository.save(cl8);
+ 
+                CredentialsEntity credsCliente8 = CredentialsEntity.builder()
+                        .externalId(cl8.getExternalId())
+                        .username(cl8.getUserName())
+                        .password(passwordEncoder.encode("Sofia123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl8)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente8);
+                System.out.println("====== Cliente sofiabenitez cargado con éxito ======");
+            }
+ 
+            //Cliente 11: Joaquín Molina
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("joaquinmolina"))) {
+                ClientEntity cl9 = new ClientEntity();
+                cl9.setExternalId(java.util.UUID.randomUUID());
+                cl9.setName("Joaquín");
+                cl9.setLastName("Molina");
+                cl9.setUserName("joaquinmolina");
+                cl9.setEmail(new Email("joaquin.molina@gmail.com"));
+                cl9.setStatusBlocked(false);
+                cl9.setPhone(2236890123L);
+                cl9.setStreet("Belgrano");
+                cl9.setNumberStreet(3345);
+                cl9.setBirthDate(LocalDate.parse("1985-12-01"));
+                cl9.setPoints(31000);
+                cl9 = clientRepository.save(cl9);
+ 
+                CredentialsEntity credsCliente9 = CredentialsEntity.builder()
+                        .externalId(cl9.getExternalId())
+                        .username(cl9.getUserName())
+                        .password(passwordEncoder.encode("Joaquin123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl9)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente9);
+                System.out.println("====== Cliente joaquinmolina cargado con éxito ======");
+            }
+ 
+            //Cliente 12: Agustina Ramírez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("agustinaramirez"))) {
+                ClientEntity cl10 = new ClientEntity();
+                cl10.setExternalId(java.util.UUID.randomUUID());
+                cl10.setName("Agustina");
+                cl10.setLastName("Ramírez");
+                cl10.setUserName("agustinaramirez");
+                cl10.setEmail(new Email("agustina.ramirez@gmail.com"));
+                cl10.setStatusBlocked(false);
+                cl10.setPhone(2234901234L);
+                cl10.setStreet("Falucho");
+                cl10.setNumberStreet(1120);
+                cl10.setBirthDate(LocalDate.parse("1998-08-19"));
+                cl10.setPoints(77500);
+                cl10 = clientRepository.save(cl10);
+ 
+                CredentialsEntity credsCliente10 = CredentialsEntity.builder()
+                        .externalId(cl10.getExternalId())
+                        .username(cl10.getUserName())
+                        .password(passwordEncoder.encode("Agustina123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl10)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente10);
+                System.out.println("====== Cliente agustinaramirez cargado con éxito ======");
+            }
 
             // Recuperamos las 3 instancias globales limpias de la BDD
             dbClients = clientRepository.findAll();
