@@ -14,7 +14,7 @@ import { developerGuard } from './guards/developer-guard';
 import { loginGuard } from './guards/login-guard';
 
 export const routes: Routes = [
-    {path: '', component: Home},
+    {path: '/home', component: Home},
     {path: 'login', component: Login, canActivate: [loginGuard]},
     {path: 'register', component: Register, canActivate: [loginGuard]},
     {path: 'user-list', component: UserList, canActivate: [adminGuard]},
@@ -22,7 +22,6 @@ export const routes: Routes = [
     {path: 'catalog', component: Catalog},
     {path: 'about', component: Know},
     {path: 'catalog/:id', component: GameDetail},
-    {path: '', redirectTo: '', pathMatch: 'full'},
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
