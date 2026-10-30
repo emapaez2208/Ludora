@@ -1,55 +1,55 @@
-@if(client(); as client){
+@if(userStateService.client(); as client){
 
     <section class="profile">
         <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
 
         <div class="dates">
             <h3>Usuario: {{client.userName}}</h3>
-            <p><strong>Nombre:</strong> {{client.name}} {{client.lastName}}</p>
+            <p><strong>Nombre Completo:</strong> {{client.name}} {{client.lastName}}</p>
             <p><strong>Email:</strong> {{client.email}}</p>
             <p><strong>Estado:</strong> {{client.statusBlocked? 'Bloqueado' : 'Activo'}}</p>
             <p><strong>Teléfono:</strong> {{client.phone}}</p>
             <p><strong>Dirección:</strong> {{client.street}} {{client.numberStreet}}</p>
             <p><strong>Fecha Nacimiento:</strong> {{client.birthDate}}</p>
             <p><strong>Puntos Acumulados:</strong> {{client.points}}</p>
-            <a class="btn" routerLink="/EDIT">Editar</a>
+            <a class="btn" routerLink="/profile/edit">Editar</a>
         </div>
     </section>   
 
-}@else if (developer(); as developer) {
+}@else if (userStateService.developer(); as developer) {
 
     <section class="profile">
         <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
 
         <div class="dates">
             <h3>Usuario: {{developer.userName}}</h3>
-            <p><strong>Nombre:</strong> {{developer.name}} {{developer.lastName}}</p>
+            <p><strong>Nombre Completo:</strong> {{developer.name}} {{developer.lastName}}</p>
             <p><strong>Email:</strong> {{developer.email}}</p>
             <p><strong>Estado:</strong> {{developer.statusBlocked? 'Bloqueado' : 'Activo'}}</p>
             <p><strong>Compañia:</strong> {{developer.company}}</p>
-            <a class="btn" routerLink="/EDIT">Editar</a>
+            <a class="btn" routerLink="/profile/edit">Editar</a>
         </div>
     </section>
 
-}@else if (admin(); as admin) {
+}@else if (userStateService.admin(); as admin) {
 
     <section class="profile">
         <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
 
         <div class="dates">
             <h3>Usuario: {{admin.userName}}</h3>
-            <p><strong>Nombre:</strong> {{admin.name}} {{admin.lastName}}</p>
+            <p><strong>Nombre Completo:</strong> {{admin.name}} {{admin.lastName}}</p>
             <p><strong>Email:</strong> {{admin.email}}</p>
             <p><strong>ID empleado:</strong> {{admin.employeeId}}</p>
-            <a class="btn" routerLink="/EDIT">Editar</a>
+            <a class="btn" routerLink="/profile/edit">Editar</a>
         </div>
     </section>
 
-}@else if(msjError()) {
+}@else if(userStateService.msjError()) {
     <section class="profile">
         <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
 
-        <p>{{msjError()}}</p>
+        <p>{{userStateService.msjError()}}</p>
     </section>
 }@else {
 <h3>Cargando...</h3>

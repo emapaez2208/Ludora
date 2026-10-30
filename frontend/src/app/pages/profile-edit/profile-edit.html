@@ -1,0 +1,73 @@
+@if(userStateService.client(); as client){
+    
+    <section class="profile">
+        <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
+
+        <form [formGroup]="clientForm" class="dates" (ngSubmit)="onSubmitClient()">
+            <h3>Usuario: {{client.userName}}</h3>
+            
+            
+            <fieldset>
+                <label for="name"><strong>Nombre y Apellido:</strong></label>
+                <div class="input-group">
+                    <input type="text" id="name" formControlName="name" placeholder="Juancito">
+                    <input type="text" id="lastName" formControlName="lastName" placeholder="Perez">
+                </div>
+                @if(clientForm.get('name')?.hasError('required') || clientForm.get('lastName')?.hasError('required')){
+                    <p class="msj-error">El nombre y apellido son obligatorios</p>
+                }@else if (clientForm.get('name')?.hasError('minlength') || clientForm.get('lastName')?.hasError('minlength') ||
+                         clientForm.get('name')?.hasError('maxlength') || clientForm.get('lastName')?.hasError('maxlength')) {
+                    <p class="msj-error">El nombre y apellido deben tener entre 3 y 32 caracteres</p>
+                }
+            </fieldset>
+
+            <p><strong>Email:</strong> {{client.email}}</p>
+            <p><strong>Estado:</strong> {{client.statusBlocked? 'Bloqueado' : 'Activo'}}</p>
+
+            
+            <fieldset>
+                <label for="phone"><strong>Teléfono:</strong></label>
+                <input type="text" inputmode="numeric" id="phone" placeholder="2235534212" formControlName="phone">
+                
+                @if(clientForm.get('phone')?.hasError('required')){
+                    <p class="msj-error">El teléfono es obligatorio</p>
+                }@else if(clientForm.get('phone')?.hasError('pattern')){
+                    <p class="msj-error">El teléfono solo debe contener números</p>
+                }@else if(clientForm.get('phone')?.hasError('min') || clientForm.get('phone')?.hasError('max')){
+                    <p class="msj-error">Ingrese un número de teléfono válido</p>
+                }
+            </fieldset>
+
+            
+            <fieldset>
+                <label for="street"><strong>Dirección:</strong></label>
+                <div class="input-group">
+                    <input type="text" id="street" placeholder="Av Colon" formControlName="street">
+                    <input type="text" inputmode="numeric" id="numberStreet" placeholder="1234" formControlName="numberStreet">
+                </div>
+
+                @if(clientForm.get('street')?.hasError('required') || clientForm.get('numberStreet')?.hasError('required')){
+                    <p class="msj-error">La calle y la altura son obligatorias</p>
+                }@else if(clientForm.get('street')?.hasError('maxlength')){
+                    <p class="msj-error">La calle no puede superar los 25 caracteres</p>
+                }@else if(clientForm.get('numberStreet')?.hasError('min') || clientForm.get('numberStreet')?.hasError('max') || clientForm.get('numberStreet')?.hasError('pattern')){
+                    <p class="msj-error">La altura de la calle no es válida</p>
+                }
+            </fieldset>
+
+           
+            <fieldset>
+                <label for="birthDate"><strong>Fecha Nacimiento:</strong></label>
+                <input type="date" [max]="today" id="birthDate" formControlName="birthDate">
+                
+                @if(clientForm.get('birthDate')?.hasError('required')){
+                    <p class="msj-error">La fecha de nacimiento es obligatoria</p>
+                }
+            </fieldset>
+
+            <p><strong>Puntos Acumulados:</strong> {{client.points}}</p>
+
+            <button type="submit" class="btn" [disabled]="clientForm.invalid">Confirmar</button>
+        </form>
+    </section>
+}

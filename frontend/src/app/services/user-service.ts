@@ -4,6 +4,7 @@ import { ClientRequest } from '../models/client-request';
 import { ClientResponse } from '../models/client-response';
 import { Developer, Page } from '../models/developer';
 import { AdminResponse } from '../models/admin-response';
+import { ClientUpdate } from '../models/client-update';
 
 @Service()
 export class UserService {
@@ -28,7 +29,7 @@ export class UserService {
     }
 
     
-     //-------------------------------------------------------------------------------------------//
+    //---------------------------------- GET PROFILE -------------------------------------//
 
 
     clientProfile(){
@@ -43,6 +44,12 @@ export class UserService {
         return this.http.get<AdminResponse>(`${this.url}/admins/profile`)
     }
     
+    //---------------------------------- UPDATE PROFILE -------------------------------------//
+
+    clientUpdate(id : string, client : ClientUpdate){
+        return this.http.put<ClientResponse>(`${this.url}/clients/${id}`, client)
+    }
+
 
     // client user
     addUser(clientRequest : ClientRequest){

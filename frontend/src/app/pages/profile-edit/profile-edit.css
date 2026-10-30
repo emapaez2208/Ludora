@@ -1,0 +1,194 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+.profile {
+    background-color: var(--color-secundario);
+    color: var(--color-texto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 800px;
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--color-principal);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    margin: auto;
+}
+
+.img-profile {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-principal);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.dates {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+
+    h3 {
+        font-size: 1.8rem;
+        color: var(--color-principal);
+        border-bottom: 2px solid var(--color-principal);
+        padding-bottom: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+
+    
+    p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.4;
+        display: flex;
+        gap: 0.4rem;
+        padding: 0.3rem 0;
+
+        strong {
+            color: var(--color-texto-muted);
+            min-width: 130px; /* Alinea los valores estáticos perfectamente */
+        }
+    }
+
+    
+    fieldset {
+        border: none;
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        align-items: center;
+        gap: 0.5rem 1rem;
+        position: relative;
+        padding-bottom: 1.3rem; 
+        margin: 0;
+
+        label {
+            font-size: 1rem;
+            
+            strong {
+                color: var(--color-texto-muted);
+            }
+        }
+
+        
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+        }
+    }
+
+    
+    input {
+        background-color: var(--color-base);
+        border: none;
+        outline: none;
+        padding: 0.55rem 0.8rem;
+        border-radius: 8px;
+        color: var(--color-texto);
+        font-size: 0.95rem;
+        transition: box-shadow 0.15s ease;
+        width: 100%;
+        box-sizing: border-box;
+
+        &::placeholder {
+            color: var(--color-texto-muted);
+            opacity: 0.8;
+        }
+
+        &:focus {
+            outline: 1px solid var(--color-principal);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 20%, transparent);
+        }
+    }
+
+    input[type="date"] {
+        cursor: text;
+        color-scheme: dark;
+    }
+
+    
+    .msj-error {
+        color: #ff6b6b;
+        font-size: 0.78rem;
+        position: absolute;
+        bottom: 0px;
+        left: 140px; 
+        font-weight: 500;
+    }
+
+    
+    .btn {
+        align-self: flex-start;
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+    .profile {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .dates {
+        align-items: center;
+        width: 100%;
+
+        h3 {
+            width: 100%;
+            text-align: center;
+        }
+
+        p {
+            justify-content: center;
+            
+            strong {
+                min-width: auto;
+            }
+        }
+
+        fieldset {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+            gap: 0.3rem;
+            
+            label {
+                text-align: left;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+        }
+
+        .msj-error {
+            position: static; 
+            text-align: left;
+            margin-top: 2px;
+        }
+
+        .btn {
+            align-self: center;
+            width: 100%;
+        }
+    }
+}
