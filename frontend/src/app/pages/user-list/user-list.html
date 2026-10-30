@@ -73,8 +73,7 @@
   }
 </div>
 
-<div class="pager">
-  <button type="button" class="btn" [disabled]="page() === 0" (click)="goTo(page() - 1)">Anterior</button>
-  <span>{{page() + 1}} / {{totalPages()}}</span>
-  <button type="button" class="btn" [disabled]="page() + 1 >= totalPages()" (click)="goTo(page() + 1)">Siguiente</button>
-</div>
+<app-pagination
+  [page]="page()"
+  [totalPages]="totalPages()"
+  (pageChange)="goToPage($event)" />
