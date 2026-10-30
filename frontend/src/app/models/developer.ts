@@ -8,18 +8,3 @@ export interface Developer {
   statusBlocked: boolean;
 }
  
-//paginacion 
-
-export interface Page<T> {
-  content: T[];
-  totalPages?: number;
-  totalElements?: number;
-  number?: number;
-  size?: number;
-  page?: {
-    totalPages: number;
-    totalElements: number;
-    number: number;
-    size: number;
-  };
-}

@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable, Service } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PageResponse } from '../models/game';
 import { Review, ReviewRequest } from '../models/review';
+import { PageResponse } from '../models/page-response';
 
 export interface ReviewFilterParams {
   page: number;
