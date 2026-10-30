@@ -1,71 +1,83 @@
 <h2>Únete a Ludora</h2>
 
-<form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+<button class="btn"  type="button"  [class.active]="user() === 'client'"  (click)="elegirRole('client')">Cliente</button>
+<button  class="btn" type="button"  [class.active]="user() === 'develop'"  (click)="elegirRole('develop')">Develo</button>
+
+<!-- <select [(ngModel)]="opcionSeleccionada">
+  <option value="opcion1">Opción 1</option>
+  <option value="opcion2">Opción 2</option>
+</select> -->
+
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
     <fieldset>
         <label for="name">Nombre:</label>
-        <input type="text" name="name" id="name" formControlName="nameT">
-        @if (clientForm.get('nameT')?.hasError('required') && clientForm.get('nameT')?.touched) {
+        <input type="text" name="name" id="name" formControlName="name">
+        @if (userForm.get('name')?.hasError('required') && userForm.get('name')?.touched) {
             <p>*El nombre es obligatorio</p>
-        }@else if (clientForm.get('nameT')?.hasError('minlength') || clientForm.get('nameT')?.hasError('maxlength')) {
+        }@else if (userForm.get('name')?.hasError('minlength') || userForm.get('name')?.hasError('maxlength')) {
             <p>*El nombre debe tener un minimo de 3 caractres y un maximo de 32</p>
         }
     </fieldset>
 
     <fieldset>
         <label for="lastName">Apellido:</label>
-        <input type="text" name="lastName" id="lastName" formControlName="lastNameT" >
-         @if (clientForm.get('lastNameT')?.hasError('required') && clientForm.get('lastNameT')?.touched) {
+        <input type="text" name="lastName" id="lastName" formControlName="lastName" >
+         @if (userForm.get('lastName')?.hasError('required') && userForm.get('lastName')?.touched) {
             <p>*El apellido es obligatorio</p>
-        }@else if (clientForm.get('lastNameT')?.hasError('minlength') || clientForm.get('lastNameT')?.hasError('maxlength')) {
+        }@else if (userForm.get('lastName')?.hasError('minlength') || userForm.get('lastName')?.hasError('maxlength')) {
             <p>*El apellido debe tener un minimo de 3 caractres y un maximo de 32</p>
         }
     </fieldset>
 
     <fieldset>
         <label for="userName">Nombre de usuario:</label>
-        <input type="text" name="userName" id="userName" formControlName="userNameT" >
-        @if( clientForm.get('userNameT')?.hasError('required') && clientForm.get('userNameT')?.touched){
+        <input type="text" name="userName" id="userName" formControlName="userName" >
+        @if( userForm.get('userName')?.hasError('required') && userForm.get('userName')?.touched){
             <p>*El nombre de usuario es obligatorio</p>
-        }@else if (clientForm.get('userNameT')?.hasError('minlength') || clientForm.get('lastNameT')?.hasError('maxlength')) {
+        }@else if (userForm.get('userName')?.hasError('minlength') || userForm.get('lastName')?.hasError('maxlength')) {
             <p>*El nombre de usuario debe tener un minimo de 5 caracteres y un maximo de 20</p>
         }
     </fieldset>
 
     <fieldset>
         <label for="Email">Email:</label>
-        <input type="text" name="Email" id="Email" formControlName="emailT">
-        @if (clientForm.get('emailT')?.hasError('required') && clientForm.get('emailT')?.touched) {
+        <input type="text" name="Email" id="Email" formControlName="email">
+        @if (userForm.get('email')?.hasError('required') && userForm.get('email')?.touched) {
             <p>*EL email es obligatorio</p>
-        }@else if (clientForm.get('emailT')?.hasError('email')) {
+        }@else if (userForm.get('email')?.hasError('email')) {
             <p>*Por favor , introduce un correo electronico valido </p>
         }
     </fieldset>
 
     <fieldset>
         <label for="password">Contraseña:</label>
-        <input type="password" name="password" id="password" placeholder="Introduce aqui tu contraseña" formControlName="passwordT">
-        @if(clientForm.get('passwordT')?.hasError('required') && clientForm.get('passwordT')?.touched){
+        <input type="password" name="password" id="password" placeholder="Introduce aqui tu contraseña" formControlName="password">
+        @if(userForm.get('password')?.hasError('required') && userForm.get('password')?.touched){
             <p>*El password es obligatorio</p>
         }
     </fieldset>
 
+    @if(userForm.get('password')?.valid){
     <fieldset>
         <label for="password2">Confirmar Contraseña:</label>
-        <input type="password" name="password2" id="password2" placeholder="Introducir devuelta su contraseña" formControlName="password2T">
-         @if(clientForm.get('password2T')?.hasError('required') && clientForm.get('password2T')?.touched){
+        <input type="password" name="password2" id="password2" placeholder="Introducir devuelta su contraseña" formControlName="password2">
+         @if(userForm.get('password2')?.hasError('required') && userForm.get('password2')?.touched){
             <p>*El password es obligatorio</p>
-        }@else if (clientForm.get('passwordT')?.value !== clientForm.get('password2T')?.value) {
+        }@else if (userForm.get('password')?.value !== userForm.get('password2')?.value) {
             <p>*Las password tienen que ser iguales</p>
         }
     </fieldset>
+}
+
+    @if(user() === 'client'){
 
     <fieldset>
         <label for="phone">Telefono:</label>
-        <input type="tel" name="phone" id="phone" placeholder="+34 612 34 56 78" formControlName="phoneT" >
-        @if(clientForm.get('phoneT')?.hasError('required') && clientForm.get('phoneT')?.touched){
+        <input type="tel" name="phone" id="phone" placeholder="+34 612 34 56 78" formControlName="phone" >
+        @if(userForm.get('phone')?.hasError('required') && userForm.get('phone')?.touched){
             <p>*El telefono es obligatorio</p>
-        }@else if (clientForm.get('phoneT')?.hasError('min') && clientForm.get('phoneT')?.touched || clientForm.get('phoneT')?.hasError('max') && clientForm.get('phoneT')?.touched) {
+        }@else if (userForm.get('phone')?.hasError('min') && userForm.get('phone')?.touched || userForm.get('phone')?.hasError('max') && userForm.get('phone')?.touched) {
             <p>*El numero de telefono debe tener entre 7 y 11 digitos</p>
         }
     </fieldset>
@@ -73,22 +85,22 @@
     <h3 class="direccion">Direccion:</h3>
     <fieldset>
         <label for="street">-Calle:</label>
-        <input type="text" name="street" id="street" formControlName="streetT">
-        @if (clientForm.get('streetT')?.hasError('required') && clientForm.get('streetT')?.touched) {
+        <input type="text" name="street" id="street" formControlName="street">
+        @if (userForm.get('street')?.hasError('required') && userForm.get('street')?.touched) {
             <p>*Este campo es obligatorio</p>
-        }@else if (clientForm.get('streetT')?.hasError('minlenght')) {
+        }@else if (userForm.get('street')?.hasError('minlenght')) {
             <p>*El nombre de la calle no puede tener mas de 25 caracteres</p>
         }
     </fieldset>
 
     <fieldset>
         <label for="numberStreet">-Numero:</label>
-        <input type="number" name="numberStreet" id="numberStreet" placeholder="Numero de calle" formControlName="numberStreetT">
-        @if(clientForm.get('numberStreetT')?.hasError('required') && clientForm.get('numberStreetT')?.touched){
+        <input type="number" name="numberStreet" id="numberStreet" placeholder="Numero de calle" formControlName="numberStreet">
+        @if(userForm.get('numberStreet')?.hasError('required') && userForm.get('numberStreet')?.touched){
             <p>*El numero de la direccion es obligatorio</p>
-        }@else if (clientForm.get('numberStreetT')?.hasError('pattern')) {
+        }@else if (userForm.get('numberStreet')?.hasError('pattern')) {
             <p>*Solos numeros digito del 0 al 9</p>
-        }@else if (clientForm.get('numberStreetT')?.hasError('min') || clientForm.get('numberStreetT')?.hasError('max')) {
+        }@else if (userForm.get('numberStreet')?.hasError('min') || userForm.get('numberStreet')?.hasError('max')) {
             <p>*No se acepta un numero negativo y mas de 5 digitos</p>
         }
     
@@ -97,11 +109,20 @@
 
     <fieldset>
         <label for="birthdate">Fecha de nacimiento:</label>
-        <input type="date" name="birthdate" id="birthdate" formControlName="birthDateT">
-        @if (clientForm.get('birthDateT')?.hasError('required') && clientForm.get('birthDateT')?.touched) {
+        <input type="date" name="birthdate" id="birthdate" formControlName="birthDate">
+        @if (userForm.get('birthDate')?.hasError('required') && userForm.get('birthDate')?.touched) {
             <p>*Este campo es obligatorio</p>
         }
     </fieldset>
+    }@else {
 
-    <button class="btn" type="submit" [disabled]="clientForm.invalid">Registrarse</button>
+    <fieldset>
+        <label for="company">Compania:</label>
+        <textarea name="company" id="company"></textarea>
+        @if (userForm.get('company')?.hasError('required') && userForm.get('company')?.touched) {}
+    </fieldset>
+}
+
+    <button class="btn" type="submit" [disabled]="userForm.invalid">Registrarse</button>
+
 </form>
