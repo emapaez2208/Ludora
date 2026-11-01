@@ -2,15 +2,16 @@ import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClientResponse } from '../../models/client-response';
-import { Developer, Page } from '../../models/developer';
+import { Developer } from '../../models/developer';
 import { UserService } from '../../services/user-service';
+import { Pagination } from '../../components/pagination/pagination';
 
 type Tab = 'clients' | 'developers';
 
 type Blockable = { externalId: string; statusBlocked: boolean }
 
 @Component({
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, Pagination],
   selector: 'app-user-list',
   styleUrl: './user-list.css',
   templateUrl: './user-list.html',
@@ -23,11 +24,11 @@ export class UserList implements OnInit {
   clients = signal<ClientResponse[]>([])
   developers = signal<Developer[]>([])
   page = signal(0)
-  totalPages = signal(1)
+  size = signal(18);
+  totalPages = signal(0)
   loading = signal(false)
   error = signal('')
   busyId = signal<string | null>(null)
-  readonly size = 10
 
   ngOnInit(): void {
     this.load()
@@ -40,28 +41,23 @@ export class UserList implements OnInit {
     this.load()
   }
 
-  goTo(page: number) {
-    this.page.set(page)
-    this.load()
-  }
-
   load() {
     this.loading.set(true)
     this.error.set('')
 
     if (this.tab() === 'clients') {
-      this.userService.getClients(this.page(), this.size).subscribe({
-        next: res => {
+      this.userService.getClients(this.page(), this.size()).subscribe({
+        next: (res) => {
           this.clients.set(res.content)
-          this.setTotalPages(res)
+          this.totalPages.set(res.totalPages);
         },
         error: e => this.fail('clientes', e),
       })
     } else {
-      this.userService.getDevelopers(this.page(), this.size).subscribe({
+      this.userService.getDevelopers(this.page(), this.size()).subscribe({
         next: res => {
-          this.developers.set(res.content)
-          this.setTotalPages(res)
+          this.developers.set(res.content);
+          this.totalPages.set(res.totalPages);
         },
         error: e => this.fail('developers', e),
       })
@@ -96,14 +92,16 @@ export class UserList implements OnInit {
     return list.map(u => u.externalId === id ? { ...u, statusBlocked: blocked } : u)
   }
 
-  private setTotalPages(res: Page<unknown>) {
-    this.totalPages.set(res.totalPages ?? res.page?.totalPages ?? 1)
-    this.loading.set(false)
-  }
+  
 
   private fail(what: string, e: { status?: number }) {
     console.error(e)
     this.loading.set(false)
     this.error.set(`No se pudo cargar la lista de ${what} (código ${e.status ?? 'sin respuesta'}).`)
+  }
+
+  goToPage(page: number) {
+    this.page.set(page)
+    this.load()
   }
 }
