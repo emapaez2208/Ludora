@@ -41,6 +41,7 @@ export class Register  {
       userName: ['', [Validators.required , Validators.maxLength(20) , Validators.minLength(5)]] ,
       email: ['', [Validators.required , Validators.email]],
       password: ['', Validators.required ] ,
+      password2: ['', Validators.required],
       phone: ['', [Validators.required , Validators.min(1000000) , Validators.max(99999999999)]],
       street: ['',[ Validators.required , Validators.maxLength(25)]],
       numberStreet: ['', [Validators.required , Validators.min(1) , Validators.max(99999) , Validators.pattern('^[0-9]+$')]],
@@ -53,6 +54,7 @@ export class Register  {
       userName: ['', [Validators.required , Validators.maxLength(20) , Validators.minLength(5)]] ,
       email: ['', [Validators.required , Validators.email]],
       password: ['', Validators.required ] ,
+      password2: ['', Validators.required],
       company: ['' , Validators.required]
     });
   }
@@ -63,24 +65,24 @@ export class Register  {
 
   onSubmit(){
     if(this.user() ==='client'){
-    const clientData : ClientRequest = this.userForm.value;
+    const {password2, ...clientData} = this.userForm.value;
 
-    this.userService.addUser(clientData).subscribe({
+    this.userService.addUser(clientData as ClientRequest).subscribe({
       next: (data)=> {
         console.log('usuario cargado con exito',data);
-        this.router.navigate(['/login']);},
+        this.router.navigate(['/']);},
       error: (err) => {
         console.error('Error al registrar el usuario', err);
       }
     })
   }else{
-    const developData : DeveloperRequest = this.userForm.value;
+    const{password2, ...developData }= this.userForm.value;
 
     
-    this.userService.addDevelop(developData).subscribe({
+    this.userService.addDevelop(developData as DeveloperRequest).subscribe({
       next: (data)=> {
         console.log('usuario cargado con exito',data);
-        this.router.navigate(['/login']);},
+        this.router.navigate(['/']);},
       error: (err) => {
         console.error('Error al registrar el usuario', err);
       }
