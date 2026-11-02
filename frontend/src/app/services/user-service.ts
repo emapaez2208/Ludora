@@ -4,6 +4,7 @@ import { ClientRequest } from '../models/client-request';
 import { ClientResponse } from '../models/client-response';
 import { Developer } from '../models/developer';
 import { AdminResponse } from '../models/admin-response';
+import { DeveloperRequest } from '../models/developer-request';
 import { PageResponse } from '../models/page-response';
 
 @Service()
@@ -47,7 +48,15 @@ export class UserService {
 
     // client user
     addUser(clientRequest : ClientRequest){
-        return this.http.post<ClientRequest>(this.url,clientRequest)
+        return this.http.post<ClientResponse>(`${this.url}/clients`,clientRequest)
     }
+
+    // develop user
+
+    addDevelop ( developerRequest : DeveloperRequest){
+        return this.http.post<Developer>(`${this.url}/developers`, developerRequest)
+    }
+
+
 
 }
