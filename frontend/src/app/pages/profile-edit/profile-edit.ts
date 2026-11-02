@@ -1,11 +1,12 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { UserStateService } from '../../services/user-state-service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user-service';
+import { ChangePasswordModal } from './change-password-modal/change-password-modal';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ChangePasswordModal],
   selector: 'app-profile-edit',
   styleUrl: './profile-edit.css',
   templateUrl: './profile-edit.html',
@@ -21,6 +22,9 @@ export class ProfileEdit {
   fb = inject(FormBuilder)
   router = inject(Router)
   today = new Date().toLocaleDateString('en-CA')
+
+  showPasswordModal = signal(false)
+  showEmailModal = signal(false)
 
   constructor(){
     this.loadClientForm()
@@ -94,7 +98,6 @@ export class ProfileEdit {
     this.userService.clientUpdate(this.userStateService.client()!.externalId, this.clientForm.value)
       .subscribe({
         next: () => {
-          alert('Usuario actualizado con exito')
           this.userStateService.loadUser()
           this.router.navigate(['/profile'])
         },
@@ -111,7 +114,6 @@ export class ProfileEdit {
     this.userService.developerUpdate(this.userStateService.developer()!.externalId, this.developerForm.value)
       .subscribe({
         next: () => {
-          alert('Desarrollador actualizado con exito')
           this.userStateService.loadUser()
           this.router.navigate(['/profile'])
         },
@@ -128,7 +130,6 @@ export class ProfileEdit {
     this.userService.adminUpdate(this.userStateService.admin()!.externalId, this.adminForm.value)
       .subscribe({
         next: () => {
-          alert('Admin actualizado con exito')
           this.userStateService.loadUser()
           this.router.navigate(['/profile'])
         },
@@ -137,5 +138,24 @@ export class ProfileEdit {
           alert('No se pudo actualizar con exito')
         }
       })
+  }
+
+
+  // ------------- MODALES -------------------------- //
+
+  openPasswordModal() {
+    this.showPasswordModal.set(true);
+  }
+
+  openEmailModal() {
+    this.showEmailModal.set(true);
+  }
+
+  closePasswordModal() {
+    this.showPasswordModal.set(false);
+  }
+
+  closeEmailModal() {
+    this.showEmailModal.set(false);
   }
 }

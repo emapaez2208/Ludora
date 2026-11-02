@@ -6,14 +6,11 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
-import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.features.user.exception.*;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
+import ExperienceGroup.Ludora.common.utils.Password;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
-import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
-import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailException;
-import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
-import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
@@ -164,12 +161,17 @@ public class AdminService implements IAdminService{
     public void changePassword(ChangePasswordDTO passwordDTO) {
         CredentialsEntity credentials = searchCredentials(authenticatedUser.getCurrentUser().username());
 
-        if(passwordEncoder.matches(passwordDTO.oldPass().value(), credentials.getPassword())){ // verifica si son la misma password
-            credentials.setPassword(passwordEncoder.encode(passwordDTO.newPass().value()));
-            credentialsRepository.save(credentials);
-        }else{
-            throw new PasswordInvalidException("The old password is invalid");
+        // 1. Verificar contraseña actual
+        if (!passwordEncoder.matches(passwordDTO.oldPass(), credentials.getPassword())) {
+            throw new IlegalPasswordChangeException("The old password is invalid");
         }
+
+        // 2. Validar formato de la nueva contraseña
+        Password newPassword = new Password(passwordDTO.newPass());
+
+        // 3. Actualizar
+        credentials.setPassword(passwordEncoder.encode(newPassword.value()));
+        credentialsRepository.save(credentials);
     }
 
     /// -----------------------------------CAMBIO DE PASSWORD ------------------------

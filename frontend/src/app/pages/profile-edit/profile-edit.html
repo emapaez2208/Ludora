@@ -1,3 +1,4 @@
+
 @if(userStateService.client(); as client){
     
     <section class="profile">
@@ -21,7 +22,16 @@
             </fieldset>
 
             <p><strong>Email:</strong> {{client.email}}</p>
-            <p><strong>Estado:</strong> {{client.statusBlocked? 'Bloqueado' : 'Activo'}}</p>
+
+            <div class="profile-actions">
+                <button type="button" class="btn" (click)="openPasswordModal()">
+                    Cambiar contraseña
+                </button>
+
+                <button type="button" class="btn" (click)="openEmailModal()">
+                    Cambiar email
+                </button>
+            </div>
 
             <fieldset>
                 <label for="phone"><strong>Teléfono:</strong></label>
@@ -62,6 +72,7 @@
             </fieldset>
 
             <p><strong>Puntos Acumulados:</strong> {{client.points}}</p>
+            <p><strong>Estado:</strong> {{client.statusBlocked? 'Bloqueado' : 'Activo'}}</p>
 
             <button type="submit" class="btn" [disabled]="clientForm.invalid">Confirmar</button>
         </form>
@@ -93,6 +104,16 @@
             </fieldset>
 
             <p><strong>Email:</strong> {{developer.email}}</p>
+
+            <div class="profile-actions">
+                <button type="button" class="btn" (click)="openPasswordModal()">
+                    Cambiar contraseña
+                </button>
+
+                <button type="button" class="btn" (click)="openEmailModal()">
+                    Cambiar email
+                </button>
+            </div>
 
             <fieldset>
                 <label for="company"><strong>Empresa:</strong></label>
@@ -136,6 +157,16 @@
 
             <p><strong>Email:</strong> {{admin.email}}</p>
 
+            <div class="profile-actions">
+                <button type="button" class="btn" (click)="openPasswordModal()">
+                    Cambiar contraseña
+                </button>
+
+                <button type="button" class="btn" (click)="openEmailModal()">
+                    Cambiar email
+                </button>
+            </div>
+
             <fieldset>
                 <label for="employeeId"><strong>Número de empleado:</strong></label>
                 <input type="text" inputmode="numeric" id="employeeId" formControlName="employeeId" placeholder="12345">
@@ -161,4 +192,10 @@
 
     <p>Cargando perfil...</p>
 
+}
+
+@if(showPasswordModal()) {
+    <app-change-password-modal
+        (close)="closePasswordModal()">
+    </app-change-password-modal>
 }

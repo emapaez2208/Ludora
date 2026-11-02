@@ -8,6 +8,8 @@ import { ClientUpdate } from '../models/client-update';
 import { DeveloperUpdate } from '../models/developer-update';
 import { AdminUpdate } from '../models/admin-update';
 import { PageResponse } from '../models/page-response';
+import { ChangePassword } from '../models/change-password';
+import { ChangeEmail } from '../models/change-email';
 
 
 @Service()
@@ -62,9 +64,37 @@ export class UserService {
         return this.http.put<AdminResponse>(`${this.url}/admins/${id}`, admin)
     }
 
+    clientChangePassword(password : ChangePassword){
+        return this.http.put<void>(`${this.url}/clients/profile/changePassword`, password)
+    }
+
+    developerChangePassword(password : ChangePassword){
+        return this.http.put<void>(`${this.url}/developers/profile/changePassword`, password)
+    }
+
+    adminChangePassword(password : ChangePassword){
+        return this.http.put<void>(`${this.url}/admins/profile/changePassword`, password)
+    }
+
+    clientChangeEmail(email : ChangeEmail){
+        return this.http.put<void>(`${this.url}/clients/profile/changeEmail`, email)
+    }
+
+    developerChangeEmail(email : ChangeEmail){
+        return this.http.put<void>(`${this.url}/developers/profile/changeEmail`, email)
+    }
+
+    adminChangeEmail(email : ChangeEmail){
+        return this.http.put<void>(`${this.url}/admins/profile/changeEmail`, email)
+    }
+
+    // --------------------------------------------------------------------------------------//
+
     // client user
     addUser(clientRequest : ClientRequest){
         return this.http.post<ClientRequest>(this.url,clientRequest)
     }
+
+
 
 }
