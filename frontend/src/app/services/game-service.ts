@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Game, PageResponse } from '../models/game';
+import { Game } from '../models/game';
 import { Observable } from 'rxjs';
 import { GameFilters } from '../models/game-filters';
 import { GameRequest } from '../models/game-request';
+import { PageResponse } from '../models/page-response';
 
 @Injectable({
   providedIn: 'root'

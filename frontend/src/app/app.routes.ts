@@ -22,8 +22,6 @@ export const routes: Routes = [
     {path: 'catalog', component: Catalog},
     {path: 'about', component: Know},
     {path: 'catalog/:id', component: GameDetail},
-    {path: '', redirectTo: '', pathMatch: 'full'},
-    {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
     { path: '**', redirectTo: '' }

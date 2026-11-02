@@ -17,13 +17,13 @@
       <span></span>
     </button>
 
-    <a class="logo" routerLink="/home" (click)="closeMenu()">
+    <a class="logo" routerLink="/" (click)="closeMenu()">
         <img src="logo-modo-oscuro.png" alt="">
     </a>
   </div>
 
   <nav class="mitad m2" [class.active]="isMenuOpen">
-    <a class="item" routerLink="/home" (click)="closeMenu()"><p>Inicio</p></a>
+    <a class="item" routerLink="/" (click)="closeMenu()"><p>Inicio</p></a>
     <a class="item" routerLink="/catalog" (click)="closeMenu()"><p>Tienda</p></a>
     <a class="item" routerLink="/about" (click)="closeMenu()"><p>Conocenos</p></a>
     <a class="item" href="" (click)="closeMenu()"><p>Mis juegos</p></a>
