@@ -14,8 +14,19 @@
         </fieldset>
 
         <fieldset>
-            <label for="image">Enlace a imagen</label>
-            <input type="text" id="image" placeholder="https://www.imagen.com/myimage" formControlName="frontPage">
+            <label for="image">Portada</label>
+            <input type="file" id="image" accept="image/*" class="file-input-hidden" (change)="onFileSelected($event)">
+            
+            <label for="image" class="custom-file-upload">Seleccionar imagen</label>
+
+            @if(form.get('frontPage')?.value){
+                <div class="marco">
+                    <img [src]="form.get('frontPage')?.value" alt="Vista previa de portada" class="prevista">
+                </div>
+            }
+            @if (isUploading) {
+                <p class="avisoSubida">Subiendo portada...</p>
+            }
         </fieldset>
 
         <fieldset>
@@ -79,7 +90,7 @@
             }
         </fieldset>
 
-        <button type="submit" class="btn" [disabled]="form.invalid">{{gameId? 'Actualizar' : 'Crear' }}</button>
+        <button type="submit" class="btn" [disabled]="form.invalid || isUploading">{{gameId? 'Actualizar' : 'Crear' }}</button>
     </form>
 }@else {
     <h3>Cargando...</h3>
