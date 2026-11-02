@@ -15,6 +15,8 @@ import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
 import ExperienceGroup.Ludora.features.developer.IDeveloperRepository;
 import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
+import ExperienceGroup.Ludora.features.cart.ICartRepository;
+import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.review.IReviewRepository;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
 import ExperienceGroup.Ludora.common.utils.Email;
@@ -27,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -40,6 +43,7 @@ public class CargaBDDPrueba {
             IClientRepository clientRepository,
             IDeveloperRepository developerRepository,
             IReviewRepository reviewRepository,
+            ICartRepository cartRepository,
             CredentialsRepository credentialsRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder) {
@@ -1358,6 +1362,43 @@ mario.setFrontPage("https://assets.nintendo.com/image/upload/q_auto/f_auto/store
 
 
                 System.out.println("====== Matriz de reviews cruzadas verificadas y cargadas ======");
+            }
+
+            // ==========================================================
+            // CARRITOS DE PRUEBA
+            // (los clientes cargados por este runner no tienen carrito, solo los
+            // registrados por la API. Se crea uno con juegos para probar la vista)
+            // Solo se crea si el cliente todavía no tiene carrito.
+            // ==========================================================
+            java.util.Map<String, List<String>> carritosPrueba = java.util.Map.of(
+                    "alanbrito", List.of("God of War Ragnarok", "Red Dead Redemption 2", "GTA V"),
+                    "cosmejuega", List.of("Spider-Man 2", "The Last of Us Part I", "God of War"),
+                    "estebanquito", List.of("GTA IV", "L.A. Noire", "Uncharted: Legacy of Thieves")
+            );
+
+            List<GameEntity> todosLosJuegos = gameRepository.findAll();
+
+            for (var entrada : carritosPrueba.entrySet()) {
+                ClientEntity cliente = clientRepository.findAll().stream()
+                        .filter(c -> c.getUserName().equals(entrada.getKey()))
+                        .findFirst().orElse(null);
+
+                if (cliente == null || cartRepository.findByClient_ExternalId(cliente.getExternalId()).isPresent()) {
+                    continue;
+                }
+
+                List<GameEntity> juegos = todosLosJuegos.stream()
+                        .filter(g -> entrada.getValue().contains(g.getName()))
+                        .toList();
+
+                CartEntity cart = new CartEntity();
+                cart.setClient(cliente);
+                cart.setGames(new ArrayList<>(juegos));
+                cart.setTotalPrice(juegos.stream()
+                        .map(GameEntity::getPrice)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add));
+                cartRepository.save(cart);
+                System.out.println("====== Carrito de " + entrada.getKey() + " cargado con " + juegos.size() + " juegos ======");
             }
 
         };
