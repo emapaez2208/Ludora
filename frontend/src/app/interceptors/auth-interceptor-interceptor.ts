@@ -6,6 +6,10 @@ import { AuthService } from '../services/auth-service';
 
 export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
 
+  if (req.url.includes('api.cloudinary.com')) {
+    return next(req);
+  }
+  
   const router = inject(Router);
   const auth = inject(AuthService);
   const token = auth.getToken();
