@@ -369,7 +369,7 @@ public class CargaBDDPrueba {
                 cl1.setStreet("Av. Colón");
                 cl1.setNumberStreet(1234);
                 cl1.setBirthDate(LocalDate.parse("1995-04-12"));
-                cl1.setPoints(150);
+                cl1.setPoints(12000);
                 cl1 = clientRepository.save(cl1);
 
                 CredentialsEntity credsCliente = CredentialsEntity.builder()
