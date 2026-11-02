@@ -48,7 +48,7 @@
         <p>*El email es obligatorio</p>
     }
     @else if ((userForm.get('email')?.hasError('email') || userForm.get('email')?.hasError('pattern')) && userForm.get('email')?.touched) {
-        <p>*Por favor, introduce un correo electrónico válido (ej: usuario@email.com)</p>
+        <p>*Por favor, introduce un correo electronico valido == ej: usuario@email.com</p>
     }
 </fieldset>
 
@@ -63,7 +63,7 @@
             <p>*La contraseña debe tener entre 8 y 16 caracteres</p>
         }
         @else if(userForm.get('password')?.hasError('pattern') && userForm.get('password')?.touched){
-            <p>*Debe incluir al menos una minúscula, una mayúscula y un número</p>
+            <p>*Debe incluir al menos una minuscula, una mayuscula y un numero</p>
         }
     </fieldset>
 
@@ -98,7 +98,7 @@
         <input class="input" type="text" name="street" id="street" formControlName="street">
         @if (userForm.get('street')?.hasError('required') && userForm.get('street')?.touched) {
             <p>*Este campo es obligatorio</p>
-        }@else if (userForm.get('street')?.hasError('minlenght')) {
+        }@else if (userForm.get('street')?.hasError('maxlenght')) {
             <p>*El nombre de la calle no puede tener mas de 25 caracteres</p>
         }
     </fieldset>

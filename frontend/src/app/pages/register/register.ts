@@ -40,12 +40,8 @@ export class Register  {
       lastName: ['', [Validators.required , Validators.maxLength(32), Validators.minLength(3)]],
       userName: ['', [Validators.required , Validators.maxLength(20) , Validators.minLength(5)]] ,
       email: ['', [Validators.required , Validators.email,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-     password: ['', [
-    Validators.required, 
-    Validators.minLength(8), 
-    Validators.maxLength(16), 
-    Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/)
-  ]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16), 
+                      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/)]],
       password2: ['', Validators.required],
       phone: ['', [Validators.required , Validators.min(1000000) , Validators.max(99999999999)]],
       street: ['',[ Validators.required , Validators.maxLength(25)]],
@@ -57,8 +53,9 @@ export class Register  {
       name:  ['', [Validators.required , Validators.maxLength(32), Validators.minLength(3)]],
       lastName: ['', [Validators.required , Validators.maxLength(32), Validators.minLength(3)]],
       userName: ['', [Validators.required , Validators.maxLength(20) , Validators.minLength(5)]] ,
-      email: ['', [Validators.required , Validators.email]],
-      password: ['', Validators.required ] ,
+      email: ['', [Validators.required , Validators.email,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+      password: ['', [ Validators.required,  Validators.minLength(8),  Validators.maxLength(16), 
+                       Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/)]],
       password2: ['', Validators.required],
       company: ['' , Validators.required]
     });
