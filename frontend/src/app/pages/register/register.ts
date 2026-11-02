@@ -39,7 +39,7 @@ export class Register  {
       name:  ['', [Validators.required , Validators.maxLength(32), Validators.minLength(3)]],
       lastName: ['', [Validators.required , Validators.maxLength(32), Validators.minLength(3)]],
       userName: ['', [Validators.required , Validators.maxLength(20) , Validators.minLength(5)]] ,
-      email: ['', [Validators.required , Validators.email]],
+      email: ['', [Validators.required , Validators.email,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
      password: ['', [
     Validators.required, 
     Validators.minLength(8), 
@@ -72,7 +72,13 @@ export class Register  {
     if(this.user() ==='client'){
     const {password2, ...clientData} = this.userForm.value;
 
-    this.userService.addUser(clientData as ClientRequest).subscribe({
+    const formattedData = {
+      ...clientData,
+      phone: Number(clientData.phone),
+      numberStreet: Number(clientData.numberStreet)
+    };
+
+    this.userService.addUser(formattedData as ClientRequest).subscribe({
       next: (data)=> {
         console.log('usuario cargado con exito',data);
         this.router.navigate(['/']);},

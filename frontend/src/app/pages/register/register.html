@@ -40,15 +40,17 @@
         }
     </fieldset>
 
-    <fieldset>
-        <label for="Email">Email:</label>
-        <input class="input" type="text" name="Email" id="Email" formControlName="email">
-        @if (userForm.get('email')?.hasError('required') && userForm.get('email')?.touched) {
-            <p>*EL email es obligatorio</p>
-        }@else if (userForm.get('email')?.hasError('email')) {
-            <p>*Por favor , introduce un correo electronico valido </p>
-        }
-    </fieldset>
+   <fieldset>
+    <label for="email">Email:</label>
+    <input class="input" type="text" name="email" id="email" formControlName="email">
+    
+    @if (userForm.get('email')?.hasError('required') && userForm.get('email')?.touched) {
+        <p>*El email es obligatorio</p>
+    }
+    @else if ((userForm.get('email')?.hasError('email') || userForm.get('email')?.hasError('pattern')) && userForm.get('email')?.touched) {
+        <p>*Por favor, introduce un correo electrónico válido (ej: usuario@email.com)</p>
+    }
+</fieldset>
 
     <fieldset>
         <label for="password">Contraseña:</label>
