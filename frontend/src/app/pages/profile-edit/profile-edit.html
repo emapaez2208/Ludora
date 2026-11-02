@@ -199,3 +199,9 @@
         (close)="closePasswordModal()">
     </app-change-password-modal>
 }
+
+@if(showEmailModal()){
+    <app-change-email-modal
+        (close)="closeEmailModal()">
+    </app-change-email-modal>
+}

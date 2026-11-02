@@ -4,9 +4,10 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user-service';
 import { ChangePasswordModal } from './change-password-modal/change-password-modal';
+import { ChangeEmailModal } from './change-email-modal/change-email-modal';
 
 @Component({
-  imports: [ReactiveFormsModule, ChangePasswordModal],
+  imports: [ReactiveFormsModule, ChangePasswordModal, ChangeEmailModal],
   selector: 'app-profile-edit',
   styleUrl: './profile-edit.css',
   templateUrl: './profile-edit.html',
