@@ -35,7 +35,7 @@
         <input class="input" type="text" name="userName" id="userName" formControlName="userName" >
         @if( userForm.get('userName')?.hasError('required') && userForm.get('userName')?.touched){
             <p>*El nombre de usuario es obligatorio</p>
-        }@else if (userForm.get('userName')?.hasError('minlength') || userForm.get('lastName')?.hasError('maxlength')) {
+        }@else if (userForm.get('userName')?.hasError('minlength') || userForm.get('userName')?.hasError('maxlength')) {
             <p>*El nombre de usuario debe tener un minimo de 5 caracteres y un maximo de 20</p>
         }
     </fieldset>
@@ -53,8 +53,15 @@
     <fieldset>
         <label for="password">Contraseña:</label>
         <input class="input" type="password" name="password" id="password" placeholder="Introduce aqui tu contraseña" formControlName="password">
+        
         @if(userForm.get('password')?.hasError('required') && userForm.get('password')?.touched){
             <p>*El password es obligatorio</p>
+        }
+        @else if((userForm.get('password')?.hasError('minlength') || userForm.get('password')?.hasError('maxlength')) && userForm.get('password')?.touched){
+            <p>*La contraseña debe tener entre 8 y 16 caracteres</p>
+        }
+        @else if(userForm.get('password')?.hasError('pattern') && userForm.get('password')?.touched){
+            <p>*Debe incluir al menos una minúscula, una mayúscula y un número</p>
         }
     </fieldset>
 
