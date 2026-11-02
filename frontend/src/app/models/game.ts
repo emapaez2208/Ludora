@@ -9,14 +9,7 @@ export interface Game {
     ageRange: string;
     genres: string[];
     statusBlocked: boolean;
+    discountPercentage?: number; //prueba para tabla de ofertas en home
+    finalPrice?: number;
 }
 
-export interface PageResponse<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  first: boolean;
-  last: boolean;
-}

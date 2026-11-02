@@ -10,6 +10,7 @@ public record ReviewDTOResponse(UUID externalId,
                                 String comment,
                                 LocalDateTime date,
                                 String userName,
+                                UUID clientExternalId,
                                 String gameTitle
                                 ){
 

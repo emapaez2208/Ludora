@@ -78,6 +78,7 @@ img{
   text-decoration: none;
   position: relative;
   transition: background-color 0.25s ease, color 0.25s ease;
+  cursor: pointer;
 }
 
 .item p {

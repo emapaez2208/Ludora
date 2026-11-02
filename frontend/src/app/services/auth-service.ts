@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { Auth } from '../models/auth';
 import { AuthResponse } from '../models/auth-response';
-import { map } from 'rxjs';
+import { tap } from 'rxjs';
 
 @Service()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     
     login(auth : Auth){
         return this.http.post<AuthResponse>(`${this.url}/login`, auth).pipe(
-            map(auth => this.setToken(auth.token)))
+            tap(auth => this.setToken(auth.token)))
     }
 
     setToken(token: string): void {
@@ -63,6 +63,14 @@ export class AuthService {
 
     hasRole(role: string): boolean {
         return this.getRoles().includes(role);
+    }
+
+    getClientExternalId(): string | null {
+    return this.getPayload()?.externalId ?? null;
+    }
+
+    getUsername(): string | null {
+    return this.getPayload()?.sub ?? null;
     }
 
 }

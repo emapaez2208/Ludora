@@ -166,11 +166,14 @@ public class CartService implements ICartService {
                 client.getExternalId(),
                 client.getName(),
                 client.getLastName(),
+                client.getUserName(),
+                client.getEmail().value(),
                 client.getPhone(),
                 client.getStreet(),
                 client.getNumberStreet(),
                 client.getBirthDate(),
-                client.getPoints()
+                client.getPoints(),
+                client.getStatusBlocked()
         );
 
         return new CartDTOResponse(

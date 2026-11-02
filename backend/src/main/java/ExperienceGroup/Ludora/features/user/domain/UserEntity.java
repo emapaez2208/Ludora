@@ -45,7 +45,7 @@ public abstract class UserEntity {
             externalId = UUID.randomUUID();
 
         if(statusBlocked == null)
-            statusBlocked = true;
+            statusBlocked = false;
     }
 
 }

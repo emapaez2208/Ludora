@@ -8,9 +8,13 @@ import { AgeRange } from '../../models/age-range';
 import { GenreService } from '../../services/genre-service';
 import { Genre } from '../../models/genre';
 import { DeveloperService } from '../../services/developer-service';
+import { RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { Pagination } from '../../components/pagination/pagination';
 
 @Component({
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, Pagination],
+
   selector: 'app-catalog',
   styleUrl: './catalog.css',
   templateUrl: './catalog.html',
@@ -20,6 +24,7 @@ export class Catalog implements OnInit {
   private ageRangeService = inject(AgeRangeService);
   private genreService = inject(GenreService);
   private developerService = inject(DeveloperService);
+  private route = inject(ActivatedRoute)
 
   games = signal<Game[]>([]);
   isLoading = signal<boolean>(true);
@@ -34,21 +39,6 @@ export class Catalog implements OnInit {
   filters = signal<GameFilters>({});
 
   showFilters = signal(false);
-
-  visiblePages = computed(() => {
-    const total = this.totalPages();
-    const current = this.page() + 1;
-    if (total <= 5) {
-      return Array.from({ length: total }, (_, i) => i + 1);
-    }
-    if (current <= 3) {
-      return [1, 2, 3, 4, '...', total];
-    } else if (current >= total - 2) {
-      return [1, '...', total - 3, total - 2, total - 1, total];
-    } else {
-      return [1, '...', current - 1, current, current + 1, '...', total];
-    }
-  });
 
   toggleFilters() {
     this.showFilters.update(v => !v);
@@ -96,17 +86,24 @@ export class Catalog implements OnInit {
     this.search();
   }
 
-  goToPage(pageNumber: number | string) {
-    if (typeof pageNumber === 'number') {
-      this.page.set(pageNumber - 1); 
-      this.loadGames();
-    }
-  }
-
   ngOnInit() {
     this.loadFilterOptions();
+
+    this.route.queryParams.subscribe(params => {
+    const searchName = params['name']?.trim() || null;
+    const searchCategory = params['category']?.trim() || null;
+    const searchCompany = (params['company'] || params['developerCompany'])?.trim() || null;
+    
+    this.filters.set({
+      ...(searchName ? { name: searchName } : {}),
+      ...(searchCategory ? { genreNames: [searchCategory] } : {}),
+      ...(searchCompany ? { developerCompany: searchCompany } : {})
+    });
+
+    this.page.set(0);
     this.loadGames();
-  }
+  });
+}
 
   private loadFilterOptions() {
     this.ageRangeService.getAgeRanges().subscribe({
@@ -143,18 +140,9 @@ export class Catalog implements OnInit {
     });
   }
 
-  nextPage() {
-    if (this.page() < this.totalPages() - 1) {
-      this.page.update(p => p + 1);
-      this.loadGames();
-    }
-  }
-
-  prevPage() {
-    if (this.page() > 0) {
-      this.page.update(p => p - 1);
-      this.loadGames();
-    }
+  goToPage(page: number) {
+    this.page.set(page);
+    this.loadGames();
   }
 
 }

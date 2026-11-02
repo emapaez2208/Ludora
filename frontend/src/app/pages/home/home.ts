@@ -1,118 +1,91 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DatePipe, CurrencyPipe } from '@angular/common';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Game } from '../../models/game';
+import { Carousel } from './components/carousel/carousel';
+import { GameService } from '../../services/game-service';
+import { CategorySlide } from './components/category-slide/category-slide';
+import { Genre } from '../../models/genre';
+import { GenreService } from '../../services/genre-service'; 
+import { Search } from './components/search/search';
+import { CompanySlide } from './components/company-slide/company-slide';
+import { DeveloperService } from '../../services/developer-service';
+import { GameTabs } from './components/game-tabs/game-tabs';
+import { RouterLink } from '@angular/router';
 
-export interface Game {
-  externalId: string;
-  name: string;
-  price: number;
-  developer: string;
-  description: string;
-  releaseDate: Date;
-  agerange: string;
-  genres: string[];
-  imageUrl: string;
+export interface FilterChip {
+  id: string;
+  label: string;
+  queryParam: string;
 }
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [DatePipe, CurrencyPipe],
+  imports: [CommonModule, Search, Carousel, CategorySlide, GameTabs, CompanySlide, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home implements OnInit, OnDestroy {
-  currentIndex: number = 0;
-  private autoPlayTimer: any;
-  readonly intervalMs: number = 4500;
+export class Home implements OnInit {
+  private gameService = inject(GameService);
+  private genreService = inject(GenreService);
+  private devService = inject(DeveloperService)
 
-games: Game[] = [
-    {
-      externalId: 'ext-gow-ragnarok',
-      name: 'God of War Ragnarök',
-      price: 59.99,
-      developer: 'Santa Monica Studio',
-      description: 'Kratos y Atreus se embarcan en una mítica aventura en busca de respuestas antes de la batalla profetizada que acabará con el mundo.',
-      releaseDate: new Date('2022-11-09'),
-      agerange: '+18',
-      genres: ['Acción', 'Aventura', 'Mitología'],
-      imageUrl: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/header.jpg?t=1776465233'
-    },
-    {
-      externalId: 'ext-spiderman-2018',
-      name: "Marvel's Spider-Man",
-      price: 39.99,
-      developer: 'Insomniac Games',
-      description: 'Recorré las calles de Nueva York balanceándote con telarañas y enfrentate a villanos icónicos mientras equilibrás la doble vida de Peter Parker.',
-      releaseDate: new Date('2018-09-07'),
-      agerange: '+16',
-      genres: ['Acción', 'Mundo Abierto', 'Superhéroes'],
-      imageUrl: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2651280/header.jpg?t=1763569811'
-    },
-    {
-      externalId: 'ext-warcraft-3',
-      name: 'Warcraft III: Reign of Chaos',
-      price: 19.99,
-      developer: 'Blizzard Entertainment',
-      description: 'Comandá humanos, orcos, no-muertos y elfos de la noche en el legendario RTS que definió la historia de Azeroth.',
-      releaseDate: new Date('2002-07-03'),
-      agerange: '+13',
-      genres: ['Estrategia', 'RTS', 'Fantasía'],
-      imageUrl: 'https://i.blogs.es/juegos/2647/warcraft_iii_reign_of_chaos/fotos/noticias/warcraft_iii_reign_of_chaos-3960289.jpg'
-    },
-    {
-      externalId: 'ext-bg3',
-      name: "Baldur's Gate 3",
-      price: 59.99,
-      developer: 'Larian Studios',
-      description: 'Reuní a tu grupo y regresá a los Reinos Olvidados en un RPG por turnos de toma de decisiones profundas ambientado en Dungeons & Dragons.',
-      releaseDate: new Date('2023-08-03'),
-      agerange: '+18',
-      genres: ['RPG', 'Estrategia por turnos', 'Fantasía'],
-      imageUrl: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/48a2fcbda8565bb45025e98fd8ebde8a7203f6a0/header.jpg?t=1777363040'
-    }
-  ];
+  featuredGames = signal<Game[]>([]);
+  tabGames = signal<Game[]>([]);
+  genres = signal<Genre[]>([]);
+  isLoading = signal<boolean>(true);
+  companies = signal<string[]>([]);
 
   ngOnInit(): void {
-    this.startAutoPlay();
+    this.loadFeaturedGames();
+    this.loadTabGames();
+    this.loadGenres(); 
+    this.loadCompanies();
   }
 
-  ngOnDestroy(): void {
-    this.stopAutoPlay();
+  loadFeaturedGames(): void {
+    this.isLoading.set(true);
+    this.gameService.getGames(0, 8).subscribe({
+      next: (data) => {
+        this.featuredGames.set(data.content);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar juegos destacados para el home', err);
+        this.isLoading.set(false);
+      }
+    });
   }
 
-  startAutoPlay(): void {
-    this.stopAutoPlay();
-    this.autoPlayTimer = setInterval(() => {
-      this.next();
-    }, this.intervalMs);
+  loadTabGames(): void {
+    // Pedimos 30 o 40 juegos para tener variedad de precios y géneros
+    this.gameService.getGames(0, 30).subscribe({
+      next: (data) => {
+        this.tabGames.set(data.content);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar juegos para tabs', err);
+        this.isLoading.set(false);
+      }
+    });
   }
 
-  stopAutoPlay(): void {
-    if (this.autoPlayTimer) {
-      clearInterval(this.autoPlayTimer);
-    }
+  loadGenres(): void {
+    this.genreService.getGenres().subscribe({
+      next: (data) => {
+        this.genres.set(data);
+      },
+      error: (err) => {
+        console.error('Error al cargar generos en el home', err);
+      }
+    });
+  }
+  loadCompanies():void{
+    this.devService.getCompanies().subscribe({
+      next: (data) => this.companies.set(data),
+      error: (err) => console.error('Error al cargar empresas:', err)
+    });
   }
 
-  /* metodos para botones de navegacion */
-  next(): void {
-    this.currentIndex = (this.currentIndex + 1) % this.games.length;
-    this.resetTimer();
-  }
-
-  prev(): void {
-    this.currentIndex = (this.currentIndex - 1 + this.games.length) % this.games.length;
-    this.resetTimer();
-  }
-
-  goTo(index: number): void {
-    this.currentIndex = index;
-    this.resetTimer();
-  }
-
-  /* reseteo del temporizador */
-
-  private resetTimer(): void {
-    this.stopAutoPlay();
-    this.startAutoPlay();
-  }
 }

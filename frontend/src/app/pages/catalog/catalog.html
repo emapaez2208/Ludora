@@ -110,12 +110,16 @@
       @for (game of games(); track game.externalId) {
         <div class="game-card">
           
-            <div class="game-image-container">
-                <img [src]="game.frontPage" [alt]="game.name" class="game-cover" />
-            </div>
+            <a [routerLink]="['/catalog', game.externalId]" class="game-image-container">
+              <div class="game-image-container">
+                  <img [src]="game.frontPage" [alt]="game.name" class="game-cover" />
+              </div>
+            </a>
 
             <div class="game-info">
-                <h3>{{ game.name }}</h3>
+                <h3>
+                  <a [routerLink]="['/catalog', game.externalId]" class="game-link">{{ game.name }}</a>
+                </h3>
                 <p class="price">${{ game.price }}</p>
                 <p class="age">Edad: {{ game.ageRange }}</p>
                 <div class="genres">
@@ -136,38 +140,12 @@
     }
     </div>
 
-    @if (totalPages() > 1) {
-      <div class="pagination-container">
-        <button 
-          class="page-btn" 
-          (click)="prevPage()" 
-          [disabled]="page() === 0">
-          Anterior
-        </button>
-
-        <div class="pagination-numbers">
-          @for (p of visiblePages(); track $index) {
-            @if (p === '...') {
-              <span class="pagination-ellipsis">...</span>
-            } @else {
-              <button 
-                class="page-number-btn" 
-                [class.active]="page() + 1 === p"
-                (click)="goToPage(p)">
-                {{ p }}
-              </button>
-            }
-          }
-        </div>
-
-        <button 
-          class="page-btn" 
-          (click)="nextPage()" 
-          [disabled]="page() >= totalPages() - 1">
-          Siguiente
-        </button>
-      </div>
-    }
 
   }
+
+  <app-pagination
+    [page]="page()"
+    [totalPages]="totalPages()"
+    (pageChange)="goToPage($event)" />
+
 </div>

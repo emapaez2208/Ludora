@@ -1,0 +1,179 @@
+:host {
+  display: contents;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: var(--color-secundario, #161f2c);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modal-header h4 {
+  margin: 0;
+  color: var(--color-texto);
+  font-size: 1.15rem;
+}
+
+.btn-cerrar-modal {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-texto-muted, #a0a0a0);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-cerrar-modal:hover {
+  color: var(--color-texto);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.modal-usuario-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal-usuario-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--color-principal) 20%, #0b1118);
+  border: 1px solid var(--color-principal);
+  color: var(--color-principal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.meta-usuario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nombreUsuario {
+  color: var(--color-texto);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.fecha {
+  font-size: 0.75rem;
+  color: var(--color-texto-muted, #8a8a8a);
+}
+
+.modal-acciones-propietario {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-editar-modal {
+  background-color: transparent;
+  color: var(--color-principal);
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.btn-editar-modal:hover {
+  transform: scale(1.2);
+}
+
+.btn-eliminar-modal {
+  background-color: transparent;
+  color: var(--color-peligro, #ff5252);
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.btn-eliminar-modal:hover {
+  transform: scale(1.2);
+}
+
+.modal-rating {
+  font-size: 1.1rem;
+}
+
+.estrellas {
+  color: var(--color-principal);
+  letter-spacing: 2px;
+}
+
+.modal-comentario-box {
+  background-color: #0b1118;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.comentario {
+  color: var(--color-texto);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}

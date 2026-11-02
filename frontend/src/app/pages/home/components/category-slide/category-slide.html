@@ -1,0 +1,17 @@
+<section class="seccionBarraOpciones">
+  <div class="chips-track">
+    @for (repeat of repetitions; track repeat) {
+      <div class="chips-group" [attr.aria-hidden]="repeat > 1 ? 'true' : null">
+        @for (genre of genres(); track genre.name + '-' + $index) {          
+          <button 
+            type="button" 
+            class="chip" 
+            [routerLink]="['/catalog']"
+            [queryParams]="{ category: genre.name }">
+            {{ genre.name }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+</section>

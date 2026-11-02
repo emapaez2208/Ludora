@@ -1,32 +1,79 @@
 <h2>Usuarios</h2>
 
-@for (client of clients(); track client.externalId) {
+<div class="tabs">
+  <button type="button" class="btn" [class.active]="tab() === 'clients'" (click)="setTab('clients')">Clientes</button>
+  <button type="button" class="btn" [class.active]="tab() === 'developers'" (click)="setTab('developers')">Developers</button>
+</div>
 
-  <section class="card">
-    <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
-
-    <div class="dates">
-      <h3>Usuario: {{client.userName}}</h3>
-      <p><strong>Nombre:</strong> {{client.name}} {{client.lastName}}</p>
-      <p><strong>Email:</strong> {{client.email}}</p>
-      <p><strong>Estado:</strong> {{client.statusBlocked ? 'Activo' : 'Bloqueado'}}</p>
-      <p><strong>Teléfono:</strong> {{client.phone}}</p>
-      <p><strong>Dirección:</strong> {{client.street}} {{client.numberStreet}}</p>
-      <p><strong>Fecha Nacimiento:</strong> {{client.birthDate}}</p>
-      <p><strong>Puntos Acumulados:</strong> {{client.points}}</p>
-
-      <div class="actions">
-        <button class="btn" [routerLink]="['/users', client.externalId, 'edit']">Editar</button>
-
-        @if (client.statusBlocked) {
-          <button type="button" class="btn" (click)="setBlocked(client, false)">Bloquear</button>
-        } @else {
-          <button type="button" class="btn" (click)="setBlocked(client, true)">Desbloquear</button>
-        }
-      </div>
-    </div>
-  </section>
-
-} @empty {
-  <p>No hay usuarios para mostrar.</p>
+@if (error()) {
+  <p class="error">{{error()}}</p>
 }
+
+@if (loading()) {
+  <p>Cargando...</p>
+}
+
+<div class="user-grid">
+  @if (tab() === 'clients') {
+    @for (client of clients(); track client.externalId) {
+      <section class="card">
+        <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
+
+        <div class="dates">
+          <h3>{{client.name}} {{client.lastName}}</h3>
+          @if (client.statusBlocked) {
+            <span class="badge-blocked">Bloqueado</span>
+          }
+          <p><strong>Teléfono:</strong> {{client.phone}}</p>
+          <p><strong>Dirección:</strong> {{client.street}} {{client.numberStreet}}</p>
+          <p><strong>Fecha Nacimiento:</strong> {{client.birthDate | date:'dd/MM/yyyy'}}</p>
+          <p><strong>Puntos Acumulados:</strong> {{client.points}}</p>
+
+          <div class="actions">
+            <button class="btn" [routerLink]="['/users', client.externalId, 'edit']">Editar</button>
+            <button type="button" class="btn" [class.danger]="!client.statusBlocked"
+                    [disabled]="busyId() === client.externalId" (click)="toggleBlock(client)">
+              {{ client.statusBlocked ? 'Desbloquear' : 'Bloquear' }}
+            </button>
+          </div>
+        </div>
+      </section>
+    } @empty {
+      @if (!loading() && !error()) {
+        <p>No hay clientes para mostrar.</p>
+      }
+    }
+  } @else {
+    @for (dev of developers(); track dev.externalId) {
+      <section class="card">
+        <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
+
+        <div class="dates">
+          <h3>Usuario: {{dev.userName}}</h3>
+          @if (dev.statusBlocked) {
+            <span class="badge-blocked">Bloqueado</span>
+          }
+          <p><strong>Empresa:</strong> {{dev.company}}</p>
+          <p><strong>Representante:</strong> {{dev.name}} {{dev.lastName}}</p>
+
+          <div class="actions">
+            <button class="btn" [routerLink]="['/users', dev.externalId, 'edit']">Editar</button>
+            <button type="button" class="btn" [class.danger]="!dev.statusBlocked"
+                    [disabled]="busyId() === dev.externalId" (click)="toggleBlock(dev)">
+              {{ dev.statusBlocked ? 'Desbloquear' : 'Bloquear' }}
+            </button>
+          </div>
+        </div>
+      </section>
+    } @empty {
+      @if (!loading() && !error()) {
+        <p>No hay developers para mostrar.</p>
+      }
+    }
+  }
+</div>
+
+<app-pagination
+  [page]="page()"
+  [totalPages]="totalPages()"
+  (pageChange)="goToPage($event)" />

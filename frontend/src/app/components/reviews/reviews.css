@@ -1,0 +1,341 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+  box-sizing: border-box;
+}
+
+.reseñas {
+  width: 100%;
+  max-width: 1200px;
+  background-color: var(--color-secundario);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Navbar y Cabecera */
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1rem;
+}
+
+.titulo-seccion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.navbar h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  margin: 0;
+  border-left: 4px solid var(--color-principal);
+  padding-left: 0.75rem;
+}
+
+.promedio-general {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.promedio-numero {
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+.total-reseñas {
+  color: var(--color-texto-muted, #8a8a8a);
+  font-size: 0.8rem;
+}
+
+/* Opciones y Filtros */
+.opc {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.btn-filtro {
+  background-color: transparent;
+  color: var(--color-texto-muted, #a0a0a0);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-filtro:hover,
+.btn-filtro.active {
+  color: var(--color-principal);
+  border-color: var(--color-principal);
+  background-color: color-mix(in srgb, var(--color-principal) 12%, transparent);
+}
+
+.opc select {
+  background-color: var(--color-base);
+  color: var(--color-principal);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-nueva-reseña {
+  background-color: var(--color-principal);
+  color: #0b1118;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-nueva-reseña:hover {
+  transform: translateY(-2px);
+}
+
+/* Formulario */
+.formularioReseña {
+  background-color: color-mix(in srgb, var(--color-secundario) 70%, black);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formularioReseña h4 {
+  margin: 0;
+  color: var(--color-texto);
+  font-size: 1.1rem;
+}
+
+.selector-calificacion {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-texto-muted, #a0a0a0);
+  font-size: 0.9rem;
+}
+
+.estrellas-selector {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.estrella-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  padding: 0;
+}
+
+.estrella-btn.active {
+  color: var(--color-principal);
+}
+
+.formularioReseña textarea {
+  width: 100%;
+  background-color: #0b1118;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: var(--color-texto);
+  font-size: 0.95rem;
+  resize: vertical;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.formularioReseña textarea:focus {
+  border-color: var(--color-principal);
+}
+
+.acciones-form {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn-cancelar {
+  background: transparent;
+  color: var(--color-texto-muted, #a0a0a0);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+}
+
+.btn-publicar {
+  background-color: var(--color-principal);
+  color: #0b1118;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Lista y Tarjetas */
+.listaReseñas {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.reseñaIndividual {
+  width: 100%;
+  border-radius: 12px;
+  background-color: color-mix(in srgb, var(--color-secundario) 75%, black);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.25rem 1.5rem;
+  padding: 1.2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reseñaIndividual.propia {
+  border-color: color-mix(in srgb, var(--color-principal) 40%, transparent);
+}
+
+.headerReseña {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--color-principal) 20%, #0b1118);
+  border: 1px solid var(--color-principal);
+  color: var(--color-principal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.meta-usuario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.nombreUsuario {
+  color: var(--color-texto);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.fecha {
+  font-size: 0.75rem;
+  color: var(--color-texto-muted, #8a8a8a);
+}
+
+.valoracion-acciones {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.estrellas {
+  color: var(--color-principal);
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+
+.btn-info {
+  background: color-mix(in srgb, var(--color-principal) 15%, transparent);
+  border: 1px solid var(--color-principal);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-principal);
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.btn-info:hover {
+  background-color: var(--color-principal);
+  color: #0b1118;
+  transform: scale(1.1);
+}
+
+.comentario {
+  color: var(--color-texto);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.fin-reseñas {
+  color: var(--color-texto-muted, #8a8a8a);
+  font-size: 0.85rem;
+  margin: 0;
+  text-align: center;
+}
+.aviso-sesion {
+  font-size: 0.85rem;
+  color: var(--color-texto-muted, #a0a0a0);
+  font-style: italic;
+  padding: 0.4rem 0.6rem;
+}
+
+.mensaje-error {
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}

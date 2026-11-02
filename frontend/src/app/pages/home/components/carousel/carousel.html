@@ -1,0 +1,63 @@
+<div 
+  class="carousel-wrapper"
+  (mouseenter)="stopAutoPlay()" 
+  (mouseleave)="startAutoPlay()"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)">
+
+  <!-- cuadro principal (recuadro de la foto y texto con bordes redondeados) -->
+  <div class="carousel-viewport">
+    <div 
+      class="carrusel" 
+      [class.no-transition]="!withTransition"
+      [style.transform]="'translateX(-' + (currentIndex * 100) + '%)'"
+      (transitionend)="onTransitionEnd()">
+      
+      @for (game of displayGames; track $index) {
+        <a [routerLink]="['/catalog', game.externalId]" class="slide">
+          <div class="imagen">
+            <img [src]="game.frontPage" [alt]="game.name">
+          </div>
+          <div class="info">
+            <h2 class="titulo">{{ game.name }}</h2>
+            <div class="top">
+              @if (game.ageRange) {
+                <span class="rangoedad">{{ game.ageRange }}</span>
+              }
+            </div>
+            <span class="dev-fecha">
+              <strong>{{ game.developer }}</strong>
+              @if (game.releaseDate) {
+                Lanzamiento: {{ game.releaseDate | date:'mediumDate' }}
+              }
+            </span>
+            <p class="descripcion">{{ game.description }}</p>
+            <div class="slideBajo">
+              <div class="containerPrecio">
+                <span class="precio">${{ game.price }}</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+
+    <!-- botones de flecha dentro del cuadro de imagen -->
+    <button class="boton prev" (click)="$event.stopPropagation(); prev()" aria-label="Anterior">&#10094;</button>
+    <button class="boton next" (click)="$event.stopPropagation(); next()" aria-label="Siguiente">&#10095;</button>
+  </div>
+
+  <!-- barra de puntitos centrados por fuera y por debajo del cuadro -->
+  <div class="dots">
+    @for (game of items(); track game.externalId || $index; let i =$index) {
+      <button 
+        type="button"
+        class="dot" 
+        [class.active]="i === activeDotIndex" 
+        (click)="goTo(i)"
+        [attr.aria-label]="'Ir a la diapositiva ' + (i + 1)">
+      </button>
+    }
+  </div>
+
+</div>

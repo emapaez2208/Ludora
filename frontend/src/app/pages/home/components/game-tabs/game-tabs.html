@@ -1,0 +1,91 @@
+<div class="container">
+  <!-- pestañas -->
+  <nav class="tabs-header">
+    @for (tab of tabs; track tab.id) {
+      <button 
+        type="button" 
+        class="tab-btn" 
+        [class.active]="activeTab() === tab.id"
+        (click)="selectTab(tab.id)">
+        {{ tab.label }}
+      </button>
+    }
+  </nav>
+
+  <!-- cuerpo de lista + previsualización -->
+  <div class="tabs-layout">
+    
+    <!-- columna izquierda - lista de juegos -->
+    <div class="games-list">
+      @for (game of currentGames(); track game.externalId || $index) {
+        <a 
+          [routerLink]="['/catalog', game.externalId]" 
+          class="game-row"
+          [class.selected]="hoveredGame()?.externalId === game.externalId"
+          (mouseenter)="hoveredGame.set(game)">
+          
+          <div class="game-thumb">
+            <img [src]="game.frontPage" [alt]="game.name" loading="lazy">
+          </div>
+
+          <div class="game-details">
+            <h4 class="game-title">{{ game.name }}</h4>
+            <div class="game-meta">
+              <span class="game-tags">
+                {{ game.genres?.join(', ') || 'Videojuego' }}
+              </span>
+              @if (game.releaseDate) {
+                <span class="game-date">Lanzamiento: {{ game.releaseDate | date:'dd MMM yyyy' }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="game-price-wrapper">
+            @if (game.discountPercentage) {
+                <span class="discount-badge">-{{ game.discountPercentage }}%</span>
+                <span class="original-price">${{ game.price }}</span>
+                <span class="final-price">${{ game.finalPrice }}</span>
+            } @else if (game.price === 0) {
+                <span class="final-price free">Gratis</span>
+            } @else {
+                <span class="final-price">${{ game.price }}</span>
+            }
+            </div>
+        </a>
+      } @empty {
+        <div class="empty-state">No hay juegos disponibles en esta sección.</div>
+      }
+    </div>
+
+    <!-- columna derecha: vista previa fija al hacer hover -->
+    <aside class="preview-panel">
+      @if (hoveredGame(); as game) {
+        <div class="preview-card">
+          <h3 class="preview-title">{{ game.name }}</h3>
+          
+          <div class="preview-media">
+            <img [src]="game.frontPage" [alt]="game.name">
+          </div>
+
+          <div class="preview-info">
+            <div class="rating-badge">
+              <span>Valoración general:</span>
+              <strong class="positive">Muy positivas</strong>
+            </div>
+
+            <p class="preview-desc">{{ game.description }}</p>
+
+            @if (game.ageRange) {
+              <span class="tag-age">Clasificación: {{ game.ageRange }}</span>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="preview-placeholder">
+          <p>Pasa el cursor sobre un juego para ver los detalles</p>
+        </div>
+      }
+    </aside>
+
+  </div>
+</div>

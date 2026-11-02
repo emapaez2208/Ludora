@@ -204,6 +204,9 @@ public class AdminService implements IAdminService{
         CredentialsEntity credentials = credentialsRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new CredentialsNotFoundException("Credentials not found for user: " + externalId));
         credentials.setAccountNonLocked(false);
+        if (credentials.getUser() != null) {
+            credentials.getUser().setStatusBlocked(true);
+        }
         credentialsRepository.save(credentials);
     }
 
@@ -215,6 +218,9 @@ public class AdminService implements IAdminService{
         CredentialsEntity credentials = credentialsRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new CredentialsNotFoundException("Credentials not found for user: " + externalId));
         credentials.setAccountNonLocked(true);
+        if (credentials.getUser() != null) {
+            credentials.getUser().setStatusBlocked(false);
+        }
         credentialsRepository.save(credentials);
     }
 

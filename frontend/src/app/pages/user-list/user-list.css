@@ -51,3 +51,23 @@
   gap: 8px;
   margin-top: 8px;
 }
+
+.badge-blocked {
+  align-self: flex-start;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #b3261e;
+  color: #fff;
+}
+
+.btn.danger {
+  background-color: #b3261e;
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

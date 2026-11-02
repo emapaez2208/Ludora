@@ -18,6 +18,7 @@ export class Login implements OnInit{
   router = inject(Router)
   control = signal(false)
   logFalse = signal(false)
+  log403 = signal(false)
 
   ngOnInit(): void {
     this.createForm()
@@ -35,18 +36,22 @@ export class Login implements OnInit{
     if(this.form.invalid) return
 
     this.logFalse.set(false)
+    this.log403.set(false)
     this.control.set(true)
 
     this.service.login(this.form.value).subscribe({
       next: () => {
         console.log('loggeado')
-        this.router.navigate([''])
+        this.router.navigate(['/home'])
       },
       error: (e : HttpErrorResponse) => {
         console.error(e)
         if(e.status === 401){
           this.control.set(false)
           this.logFalse.set(true)
+        }else if(e.status === 403){
+          this.control.set(false)
+          this.log403.set(true)
         }
       }
     })

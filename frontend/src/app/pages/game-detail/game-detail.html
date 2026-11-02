@@ -1,0 +1,41 @@
+<div class="container">
+  <a routerLink="/catalog" class="back-link">← Volver a la tienda</a>
+    @if (isLoading()) {
+        <p>Cargando juego...</p>
+    } @else if (notFound() || !game()) {
+        <p>No encontramos este juego.</p>
+    } @else {
+        @let g = game()!;
+    <div class="detail">
+      <img [src]="g.frontPage" [alt]="g.name" class="detail-cover" />
+
+      <div class="detail-info">
+        <h2>{{ g.name }}</h2>
+
+        <div class="genres">
+          @for (genre of g.genres; track genre) {
+            <span class="badge">{{ genre }}</span>
+          }
+        </div>
+
+        <p class="description">{{ g.description }}</p>
+
+        <ul class="meta">
+          <li><span>Desarrolladora</span> {{ g.developer }}</li>
+          <li><span>Lanzamiento</span> {{ g.releaseDate }}</li>
+          <li><span>Clasificación</span> {{ g.ageRange }}</li>
+        </ul>
+
+        <p class="price">${{ g.price }}</p>
+
+        <button class="btn btn-buy">
+          <img src="/cart.svg" alt="Carrito" class="cart-icon" />
+          <span>Agregar al carrito</span>
+        </button>
+      </div>
+    </div>
+    }
+
+    <app-reviews [gameId] = "gameId()"></app-reviews>
+
+</div>

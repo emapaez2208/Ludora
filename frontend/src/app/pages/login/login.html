@@ -4,8 +4,8 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <div class="dates">
-        <input type="text" id="username" placeholder="Nombre de usuario" formControlName="username" (input)="logFalse.set(false)">
-        <input type="password" id="password" placeholder="Contraseña" formControlName="password" (input)="logFalse.set(false)">
+        <input type="text" id="username" placeholder="Nombre de usuario" formControlName="username" (input)="logFalse.set(false); log403.set(false)">
+        <input type="password" id="password" placeholder="Contraseña" formControlName="password" (input)="logFalse.set(false); log403.set(false)">
         
         @if (form.get('username')?.hasError('required') && form.get('username')?.touched 
             || form.get('password')?.hasError('required') && form.get('password')?.touched) {
@@ -13,6 +13,8 @@
         }
         @if (logFalse()){
             <p class="msj-error">* Usuario o contraseña invalida</p>
+        }@else if (log403()) {
+            <p class="msj-error">* Usuario blockeado, comunicarse con soporte</p>
         }
         </div>
         <button type="submit" class="btn" [disabled]="form.invalid">{{control() ? 'Ingresando..' : 'Acceder' }}</button>

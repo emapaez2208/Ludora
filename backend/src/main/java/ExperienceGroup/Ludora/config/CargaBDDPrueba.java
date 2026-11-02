@@ -71,7 +71,7 @@ public class CargaBDDPrueba {
             // INTERRUPTOR
             // true  -> Escanea la BD en memoria e inserta SOLO los faltantes
             // false -> Carga desactivada. Si se borra en postman, queda borrado. hasta que esté true nuevamente.
-            boolean insertarTodo = false;
+            boolean insertarTodo = true;
 
             if (!insertarTodo) {
                 System.out.println("====== CARGA DESACTIVADA MANUALMENTE ======");
@@ -105,6 +105,7 @@ public class CargaBDDPrueba {
             // GÉNEROS
             List<GenreEntity> dbGenres = genreRepository.findAll();
 
+            // 1. Géneros originales
             if (dbGenres.stream().noneMatch(g -> g.getName().equals("Action"))) {
                 genreRepository.save(new GenreEntity(null, "Action", "Juegos de combate y reflejos."));
             }
@@ -124,6 +125,39 @@ public class CargaBDDPrueba {
                 genreRepository.save(new GenreEntity(null, "Survival Horror", "Supervivencia y terror."));
             }
 
+            // 2. Géneros nuevos
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Estrategia"))) {
+                genreRepository.save(new GenreEntity(null, "Estrategia", "Táctica, gestión y toma de decisiones por turnos o en tiempo real."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Indie"))) {
+                genreRepository.save(new GenreEntity(null, "Indie", "Títulos independientes con propuestas artísticas y mecánicas únicas."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Simulación"))) {
+                genreRepository.save(new GenreEntity(null, "Simulación", "Experiencias de recreación de la vida real, vehículos o profesiones."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Carreras"))) {
+                genreRepository.save(new GenreEntity(null, "Carreras", "Competencias de automovilismo, motos y velocidad arcade o simulador."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Plataformas"))) {
+                genreRepository.save(new GenreEntity(null, "Plataformas", "Saltos, precisión y obstáculos en escenarios 2D y 3D."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Puzzles"))) {
+                genreRepository.save(new GenreEntity(null, "Puzzles", "Rompecabezas, acertijos y resolución lógica."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Lucha"))) {
+                genreRepository.save(new GenreEntity(null, "Lucha", "Enfrentamientos cuerpo a cuerpo, combos y artes marciales."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Mundo Abierto"))) {
+                genreRepository.save(new GenreEntity(null, "Mundo Abierto", "Mapas masivos y libertad total de desplazamiento y objetivos."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Multijugador"))) {
+                genreRepository.save(new GenreEntity(null, "Multijugador", "Partidas online competitivas y cooperativas con otros jugadores."));
+            }
+            if (dbGenres.stream().noneMatch(g -> g.getName().equals("Roguelike"))) {
+                genreRepository.save(new GenreEntity(null, "Roguelike", "Generación procedural, muerte permanente y progresión por partidas."));
+            }
+
+            // 3. Recarga y mapeo a entidades listas para usar
             dbGenres = genreRepository.findAll();
             GenreEntity action = dbGenres.stream().filter(g -> g.getName().equals("Action")).findFirst().orElse(null);
             GenreEntity rpg = dbGenres.stream().filter(g -> g.getName().equals("RPG")).findFirst().orElse(null);
@@ -131,6 +165,17 @@ public class CargaBDDPrueba {
             GenreEntity shooter = dbGenres.stream().filter(g -> g.getName().equals("Shooter")).findFirst().orElse(null);
             GenreEntity sports = dbGenres.stream().filter(g -> g.getName().equals("Deporte")).findFirst().orElse(null);
             GenreEntity terror = dbGenres.stream().filter(g -> g.getName().equals("Survival Horror")).findFirst().orElse(null);
+            GenreEntity estrategia = dbGenres.stream().filter(g -> g.getName().equals("Estrategia")).findFirst().orElse(null);
+            GenreEntity indie = dbGenres.stream().filter(g -> g.getName().equals("Indie")).findFirst().orElse(null);
+            GenreEntity simulacion = dbGenres.stream().filter(g -> g.getName().equals("Simulación")).findFirst().orElse(null);
+            GenreEntity carreras = dbGenres.stream().filter(g -> g.getName().equals("Carreras")).findFirst().orElse(null);
+            GenreEntity plataformas = dbGenres.stream().filter(g -> g.getName().equals("Plataformas")).findFirst().orElse(null);
+            GenreEntity puzzles = dbGenres.stream().filter(g -> g.getName().equals("Puzzles")).findFirst().orElse(null);
+            GenreEntity lucha = dbGenres.stream().filter(g -> g.getName().equals("Lucha")).findFirst().orElse(null);
+            GenreEntity mundoAbierto = dbGenres.stream().filter(g -> g.getName().equals("Mundo Abierto")).findFirst().orElse(null);
+            GenreEntity multijugador = dbGenres.stream().filter(g -> g.getName().equals("Multijugador")).findFirst().orElse(null);
+            GenreEntity roguelike = dbGenres.stream().filter(g -> g.getName().equals("Roguelike")).findFirst().orElse(null);
+
             System.out.println("====== Géneros verificados ======");
 
             // ==========================================================
@@ -392,6 +437,266 @@ public class CargaBDDPrueba {
                 credentialsRepository.save(credsCliente3);
                 System.out.println("====== Cliente alanbrito cargado con éxito ======");
             }
+             //Cliente 4: Lucía Fernández
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("luciafernandez"))) {
+                ClientEntity cl2 = new ClientEntity();
+                cl2.setExternalId(java.util.UUID.randomUUID());
+                cl2.setName("Lucía");
+                cl2.setLastName("Fernández");
+                cl2.setUserName("luciafernandez");
+                cl2.setEmail(new Email("lucia.fernandez@gmail.com"));
+                cl2.setStatusBlocked(false);
+                cl2.setPhone(2235123456L);
+                cl2.setStreet("Colón");
+                cl2.setNumberStreet(1450);
+                cl2.setBirthDate(LocalDate.parse("1995-03-22"));
+                cl2.setPoints(1500);
+                cl2 = clientRepository.save(cl2);
+ 
+                CredentialsEntity credsCliente2 = CredentialsEntity.builder()
+                        .externalId(cl2.getExternalId())
+                        .username(cl2.getUserName())
+                        .password(passwordEncoder.encode("Lucia123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl2)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente2);
+                System.out.println("====== Cliente luciafernandez cargado con éxito ======");
+            }
+ 
+            //Cliente 5: Martín Gómez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("martingomez"))) {
+                ClientEntity cl3 = new ClientEntity();
+                cl3.setExternalId(java.util.UUID.randomUUID());
+                cl3.setName("Martín");
+                cl3.setLastName("Gómez");
+                cl3.setUserName("martingomez");
+                cl3.setEmail(new Email("martin.gomez@gmail.com"));
+                cl3.setStatusBlocked(false);
+                cl3.setPhone(2236234567L);
+                cl3.setStreet("Independencia");
+                cl3.setNumberStreet(3120);
+                cl3.setBirthDate(LocalDate.parse("1990-07-08"));
+                cl3.setPoints(4200);
+                cl3 = clientRepository.save(cl3);
+ 
+                CredentialsEntity credsCliente3 = CredentialsEntity.builder()
+                        .externalId(cl3.getExternalId())
+                        .username(cl3.getUserName())
+                        .password(passwordEncoder.encode("Martin123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl3)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente3);
+                System.out.println("====== Cliente martingomez cargado con éxito ======");
+            }
+ 
+            //Cliente 6: Camila Rodríguez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("camilarodriguez"))) {
+                ClientEntity cl4 = new ClientEntity();
+                cl4.setExternalId(java.util.UUID.randomUUID());
+                cl4.setName("Camila");
+                cl4.setLastName("Rodríguez");
+                cl4.setUserName("camilarodriguez");
+                cl4.setEmail(new Email("camila.rodriguez@gmail.com"));
+                cl4.setStatusBlocked(false);
+                cl4.setPhone(2234345678L);
+                cl4.setStreet("Güemes");
+                cl4.setNumberStreet(980);
+                cl4.setBirthDate(LocalDate.parse("2000-11-30"));
+                cl4.setPoints(250);
+                cl4 = clientRepository.save(cl4);
+ 
+                CredentialsEntity credsCliente4 = CredentialsEntity.builder()
+                        .externalId(cl4.getExternalId())
+                        .username(cl4.getUserName())
+                        .password(passwordEncoder.encode("Camila123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl4)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente4);
+                System.out.println("====== Cliente camilarodriguez cargado con éxito ======");
+            }
+ 
+            //Cliente 7: Tomás Pérez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("tomasperez"))) {
+                ClientEntity cl5 = new ClientEntity();
+                cl5.setExternalId(java.util.UUID.randomUUID());
+                cl5.setName("Tomás");
+                cl5.setLastName("Pérez");
+                cl5.setUserName("tomasperez");
+                cl5.setEmail(new Email("tomas.perez@gmail.com"));
+                cl5.setStatusBlocked(true);
+                cl5.setPhone(2235456789L);
+                cl5.setStreet("Rivadavia");
+                cl5.setNumberStreet(2210);
+                cl5.setBirthDate(LocalDate.parse("1988-05-17"));
+                cl5.setPoints(0);
+                cl5 = clientRepository.save(cl5);
+ 
+                CredentialsEntity credsCliente5 = CredentialsEntity.builder()
+                        .externalId(cl5.getExternalId())
+                        .username(cl5.getUserName())
+                        .password(passwordEncoder.encode("Tomas123"))
+                        .enabled(true)
+                        .accountNonLocked(false)
+                        .user(cl5)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente5);
+                System.out.println("====== Cliente tomasperez cargado con éxito ======");
+            }
+ 
+            //Cliente 8: Valentina Sosa
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("valentinasosa"))) {
+                ClientEntity cl6 = new ClientEntity();
+                cl6.setExternalId(java.util.UUID.randomUUID());
+                cl6.setName("Valentina");
+                cl6.setLastName("Sosa");
+                cl6.setUserName("valentinasosa");
+                cl6.setEmail(new Email("valentina.sosa@gmail.com"));
+                cl6.setStatusBlocked(false);
+                cl6.setPhone(2236567890L);
+                cl6.setStreet("Alberti");
+                cl6.setNumberStreet(1735);
+                cl6.setBirthDate(LocalDate.parse("1997-09-04"));
+                cl6.setPoints(8700);
+                cl6 = clientRepository.save(cl6);
+ 
+                CredentialsEntity credsCliente6 = CredentialsEntity.builder()
+                        .externalId(cl6.getExternalId())
+                        .username(cl6.getUserName())
+                        .password(passwordEncoder.encode("Valentina123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl6)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente6);
+                System.out.println("====== Cliente valentinasosa cargado con éxito ======");
+            }
+ 
+            //Cliente 9: Nicolás Acosta
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("nicolasacosta"))) {
+                ClientEntity cl7 = new ClientEntity();
+                cl7.setExternalId(java.util.UUID.randomUUID());
+                cl7.setName("Nicolás");
+                cl7.setLastName("Acosta");
+                cl7.setUserName("nicolasacosta");
+                cl7.setEmail(new Email("nicolas.acosta@gmail.com"));
+                cl7.setStatusBlocked(false);
+                cl7.setPhone(2234678901L);
+                cl7.setStreet("Luro");
+                cl7.setNumberStreet(4050);
+                cl7.setBirthDate(LocalDate.parse("1993-02-12"));
+                cl7.setPoints(12300);
+                cl7 = clientRepository.save(cl7);
+ 
+                CredentialsEntity credsCliente7 = CredentialsEntity.builder()
+                        .externalId(cl7.getExternalId())
+                        .username(cl7.getUserName())
+                        .password(passwordEncoder.encode("Nicolas123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl7)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente7);
+                System.out.println("====== Cliente nicolasacosta cargado con éxito ======");
+            }
+ 
+            //Cliente 10: Sofía Benítez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("sofiabenitez"))) {
+                ClientEntity cl8 = new ClientEntity();
+                cl8.setExternalId(java.util.UUID.randomUUID());
+                cl8.setName("Sofía");
+                cl8.setLastName("Benítez");
+                cl8.setUserName("sofiabenitez");
+                cl8.setEmail(new Email("sofia.benitez@gmail.com"));
+                cl8.setStatusBlocked(false);
+                cl8.setPhone(2235789012L);
+                cl8.setStreet("Av. Constitución");
+                cl8.setNumberStreet(5600);
+                cl8.setBirthDate(LocalDate.parse("2001-06-25"));
+                cl8.setPoints(560);
+                cl8 = clientRepository.save(cl8);
+ 
+                CredentialsEntity credsCliente8 = CredentialsEntity.builder()
+                        .externalId(cl8.getExternalId())
+                        .username(cl8.getUserName())
+                        .password(passwordEncoder.encode("Sofia123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl8)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente8);
+                System.out.println("====== Cliente sofiabenitez cargado con éxito ======");
+            }
+ 
+            //Cliente 11: Joaquín Molina
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("joaquinmolina"))) {
+                ClientEntity cl9 = new ClientEntity();
+                cl9.setExternalId(java.util.UUID.randomUUID());
+                cl9.setName("Joaquín");
+                cl9.setLastName("Molina");
+                cl9.setUserName("joaquinmolina");
+                cl9.setEmail(new Email("joaquin.molina@gmail.com"));
+                cl9.setStatusBlocked(false);
+                cl9.setPhone(2236890123L);
+                cl9.setStreet("Belgrano");
+                cl9.setNumberStreet(3345);
+                cl9.setBirthDate(LocalDate.parse("1985-12-01"));
+                cl9.setPoints(31000);
+                cl9 = clientRepository.save(cl9);
+ 
+                CredentialsEntity credsCliente9 = CredentialsEntity.builder()
+                        .externalId(cl9.getExternalId())
+                        .username(cl9.getUserName())
+                        .password(passwordEncoder.encode("Joaquin123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl9)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente9);
+                System.out.println("====== Cliente joaquinmolina cargado con éxito ======");
+            }
+ 
+            //Cliente 12: Agustina Ramírez
+            if (dbClients.stream().noneMatch(c -> c.getUserName().equals("agustinaramirez"))) {
+                ClientEntity cl10 = new ClientEntity();
+                cl10.setExternalId(java.util.UUID.randomUUID());
+                cl10.setName("Agustina");
+                cl10.setLastName("Ramírez");
+                cl10.setUserName("agustinaramirez");
+                cl10.setEmail(new Email("agustina.ramirez@gmail.com"));
+                cl10.setStatusBlocked(false);
+                cl10.setPhone(2234901234L);
+                cl10.setStreet("Falucho");
+                cl10.setNumberStreet(1120);
+                cl10.setBirthDate(LocalDate.parse("1998-08-19"));
+                cl10.setPoints(77500);
+                cl10 = clientRepository.save(cl10);
+ 
+                CredentialsEntity credsCliente10 = CredentialsEntity.builder()
+                        .externalId(cl10.getExternalId())
+                        .username(cl10.getUserName())
+                        .password(passwordEncoder.encode("Agustina123"))
+                        .enabled(true)
+                        .accountNonLocked(true)
+                        .user(cl10)
+                        .roles(java.util.Set.of(clientRole))
+                        .build();
+                credentialsRepository.save(credsCliente10);
+                System.out.println("====== Cliente agustinaramirez cargado con éxito ======");
+            }
 
             // Recuperamos las 3 instancias globales limpias de la BDD
             dbClients = clientRepository.findAll();
@@ -413,7 +718,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("God of War Ragnarok"))) {
                 GameEntity gow = new GameEntity();
                 gow.setName("God of War Ragnarok");
-                gow.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2322010/header.jpg");
+                gow.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367919/gow-ragnarok.jpg");
                 gow.setPrice(new BigDecimal("69.99"));
                 gow.setDescription("Kratos y Atreus en el fin del mundo nórdico.");
                 gow.setReleaseDate(LocalDate.parse("2022-11-09"));
@@ -428,7 +733,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("God of War"))) {
                 GameEntity gow2018 = new GameEntity();
                 gow2018.setName("God of War");
-                gow2018.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1593500/header.jpg");
+                gow2018.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793198636/god-of-war-portada.webp");
                 gow2018.setPrice(new BigDecimal("19.99"));
                 gow2018.setDescription("El reinicio de la saga nórdica en tierras salvajes.");
                 gow2018.setReleaseDate(LocalDate.parse("2018-04-20"));
@@ -443,7 +748,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Spider-Man 2"))) {
                 GameEntity spider = new GameEntity();
                 spider.setName("Spider-Man 2");
-                spider.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1817070/header.jpg");
+                spider.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367942/spiderman.jpg");
                 spider.setPrice(new BigDecimal("69.99"));
                 spider.setDescription("Peter Parker y Miles Morales defienden Nueva York.");
                 spider.setReleaseDate(LocalDate.parse("2023-10-20"));
@@ -458,7 +763,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("The Last of Us Part I"))) {
                 GameEntity tlou = new GameEntity();
                 tlou.setName("The Last of Us Part I");
-                tlou.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1888930/header.jpg");
+                tlou.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367901/tlou1.avif");
                 tlou.setPrice(new BigDecimal("59.99"));
                 tlou.setDescription("Historia cruda de supervivencia y lazos humanos mutuos.");
                 tlou.setReleaseDate(LocalDate.parse("2022-09-02"));
@@ -473,7 +778,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Uncharted: Legacy of Thieves"))) {
                 GameEntity unch = new GameEntity();
                 unch.setName("Uncharted: Legacy of Thieves");
-                unch.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1659420/header.jpg");
+                unch.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367904/uncharted-legacy-of-thieves.webp");
                 unch.setPrice(new BigDecimal("49.99"));
                 unch.setDescription("Búsqueda de tesoros históricos con Nathan Drake y Chloe Frazer.");
                 unch.setReleaseDate(LocalDate.parse("2022-01-28"));
@@ -492,8 +797,8 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("GTA V"))) {
                 GameEntity gta = new GameEntity();
                 gta.setName("GTA V");
-                gta.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg");
                 gta.setPrice(new BigDecimal("29.99"));
+                gta.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367925/gta5.jpg");
                 gta.setDescription("Crimen, asaltos y caos en la ciudad de Los Santos.");
                 gta.setReleaseDate(LocalDate.parse("2013-09-17"));
                 gta.setDeveloper(francoDev);
@@ -507,7 +812,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Red Dead Redemption 2"))) {
                 GameEntity rdr2 = new GameEntity();
                 rdr2.setName("Red Dead Redemption 2");
-                rdr2.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg");
+                rdr2.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367935/rdr2.jpg");
                 rdr2.setPrice(new BigDecimal("59.99"));
                 rdr2.setDescription("La épica y cruda caída de la banda de forajidos de Arthur Morgan.");
                 rdr2.setReleaseDate(LocalDate.parse("2018-10-26"));
@@ -522,7 +827,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("GTA IV"))) {
                 GameEntity gta4 = new GameEntity();
                 gta4.setName("GTA IV");
-                gta4.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/12210/header.jpg");
+                gta4.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367923/gta4.jpg");
                 gta4.setPrice(new BigDecimal("14.99"));
                 gta4.setDescription("Niko Bellic busca escapar de su pasado en Liberty City.");
                 gta4.setReleaseDate(LocalDate.parse("2008-04-29"));
@@ -537,7 +842,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("L.A. Noire"))) {
                 GameEntity lanoire = new GameEntity();
                 lanoire.setName("L.A. Noire");
-                lanoire.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/110800/header.jpg");
+                lanoire.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367927/lanoire.jpg");
                 lanoire.setPrice(new BigDecimal("19.99"));
                 lanoire.setDescription("Investigaciones policiales y conspiraciones criminales en Los Ángeles de 1940.");
                 lanoire.setReleaseDate(LocalDate.parse("2011-05-17"));
@@ -552,7 +857,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Max Payne 3"))) {
                 GameEntity max = new GameEntity();
                 max.setName("Max Payne 3");
-                max.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/204100/header.jpg");
+                max.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367931/maxpayne3.jpg");
                 max.setPrice(new BigDecimal("19.99"));
                 max.setDescription("Acción armada y tiempo bala en los suburbios de São Paulo.");
                 max.setReleaseDate(LocalDate.parse("2012-05-15"));
@@ -571,7 +876,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Super Mario Odyssey"))) {
                 GameEntity mario = new GameEntity();
                 mario.setName("Super Mario Odyssey");
-                mario.setFrontPage("https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/store/software/switch/70010000001130/c42553b4fd0312c31e70ec7468c6c9bccd739f340152925b9600631f2d29f8b5");
+                mario.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367944/super-mario-odyssey.avif");
                 mario.setPrice(new BigDecimal("59.99"));
                 mario.setDescription("Aventura en 3D junto a Cappy para rescatar a la princesa Peach.");
                 mario.setReleaseDate(LocalDate.parse("2017-10-27"));
@@ -586,7 +891,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("The Legend of Zelda: BotW"))) {
                 GameEntity zelda = new GameEntity();
                 zelda.setName("The Legend of Zelda: BotW");
-                zelda.setFrontPage("https://i.blogs.es/15da49/zelda00/1366_2000.jpg");
+                zelda.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367947/the-legend-of-zelda-breath-of-the-wild.jpg");
                 zelda.setPrice(new BigDecimal("59.99"));
                 zelda.setDescription("Explorá el vasto reino de Hyrule en un mundo abierto sin límites.");
                 zelda.setReleaseDate(LocalDate.parse("2017-03-03"));
@@ -601,7 +906,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Mario Kart 8 Deluxe"))) {
                 GameEntity mk8 = new GameEntity();
                 mk8.setName("Mario Kart 8 Deluxe");
-                mk8.setFrontPage("https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000000153/de697f487a36d802dd9a5ff0341f717c8486221f2f1219b675af37aca63bc453");
+                mk8.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367929/martio-kart-8.avif");
                 mk8.setPrice(new BigDecimal("49.99"));
                 mk8.setDescription("Carreras vertiginosas desafiando la gravedad con tus personajes favoritos.");
                 mk8.setReleaseDate(LocalDate.parse("2017-04-28"));
@@ -616,7 +921,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Animal Crossing: New Horizons"))) {
                 GameEntity ac = new GameEntity();
                 ac.setName("Animal Crossing: New Horizons");
-                ac.setFrontPage("https://imagen.nextn.es/wp-content/uploads/2019/06/1906-11-Animal-Crossing-New-Horizons-01.jpg?strip=all&sharp=1");
+                ac.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367906/animal-crossing.jpg");
                 ac.setPrice(new BigDecimal("59.99"));
                 ac.setDescription("Diseñá, construí y gestioná tu propia comunidad en una isla desierta.");
                 ac.setReleaseDate(LocalDate.parse("2020-03-20"));
@@ -631,7 +936,7 @@ public class CargaBDDPrueba {
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Super Smash Bros. Ultimate"))) {
                 GameEntity smash = new GameEntity();
                 smash.setName("Super Smash Bros. Ultimate");
-                smash.setFrontPage("https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000012332/ac4d1fc9824876ce756406f0525d50c57ded4b2a666f6dfe40a6ac5c3563fad9");
+                smash.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367945/super-smash-bros.avif");
                 smash.setPrice(new BigDecimal("59.99"));
                 smash.setDescription("El mayor crossover de peleas de la historia de los videojuegos.");
                 smash.setReleaseDate(LocalDate.parse("2018-12-07"));
@@ -641,15 +946,16 @@ public class CargaBDDPrueba {
                 smash.setStatusBlocked(false);
                 gameRepository.save(smash);
             }
+
             // ----------------------------------------------------------
             // 5 JUEGOS DE CD PROJEKT RED (cdpDev)
             // ----------------------------------------------------------
 
-            // Juego 16: The Witcher 3: Wild Hunt (Steam AppID: 292030)
+            // Juego 16: The Witcher 3: Wild Hunt
             if (dbGames.stream().noneMatch(g -> g.getName().equals("The Witcher 3: Wild Hunt"))) {
                 GameEntity tw3 = new GameEntity();
                 tw3.setName("The Witcher 3: Wild Hunt");
-                tw3.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg");
+                tw3.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367900/the-witcher3.jpg");
                 tw3.setPrice(new BigDecimal("39.99"));
                 tw3.setDescription("Geralt de Rivia busca a la Niña de la Profecía en un continente en guerra.");
                 tw3.setReleaseDate(LocalDate.parse("2015-05-18"));
@@ -660,11 +966,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(tw3);
             }
 
-            // Juego 17: Cyberpunk 2077 (Steam AppID: 1091500)
+            // Juego 17: Cyberpunk 2077
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Cyberpunk 2077"))) {
                 GameEntity cp = new GameEntity();
                 cp.setName("Cyberpunk 2077");
-                cp.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg");
+                cp.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367910/cyberpunk.jpg");
                 cp.setPrice(new BigDecimal("59.99"));
                 cp.setDescription("Un mercenario cibernético busca un implante que otorga la inmortalidad en Night City.");
                 cp.setReleaseDate(LocalDate.parse("2020-12-10"));
@@ -675,11 +981,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(cp);
             }
 
-            // Juego 18: Cyberpunk 2077: Phantom Liberty (Steam AppID: 2138330)
+            // Juego 18: Cyberpunk 2077: Phantom Liberty
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Phantom Liberty"))) {
                 GameEntity pl = new GameEntity();
                 pl.setName("Phantom Liberty");
-                pl.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2138330/header.jpg");
+                pl.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367912/cyberpunk-phantom-liberty.jpg");
                 pl.setPrice(new BigDecimal("29.99"));
                 pl.setDescription("Aventura de suspenso y espionaje en el distrito más peligroso de Night City: Dogtown.");
                 pl.setReleaseDate(LocalDate.parse("2023-09-26"));
@@ -690,11 +996,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(pl);
             }
 
-            // Juego 19: The Witcher 2: Assassins of Kings (Steam AppID: 20920)
+            // Juego 19: The Witcher 2: Assassins of Kings
             if (dbGames.stream().noneMatch(g -> g.getName().equals("The Witcher 2"))) {
                 GameEntity tw2 = new GameEntity();
                 tw2.setName("The Witcher 2");
-                tw2.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/20920/header.jpg");
+                tw2.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367951/the-witcher2.jpg");
                 tw2.setPrice(new BigDecimal("19.99"));
                 tw2.setDescription("Intrigas políticas y regicidio en los Reinos del Norte con Geralt.");
                 tw2.setReleaseDate(LocalDate.parse("2011-05-17"));
@@ -705,11 +1011,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(tw2);
             }
 
-            // Juego 20: The Witcher: Enhanced Edition (Steam AppID: 20900)
+            // Juego 20: The Witcher: Enhanced Edition
             if (dbGames.stream().noneMatch(g -> g.getName().equals("The Witcher 1"))) {
                 GameEntity tw1 = new GameEntity();
                 tw1.setName("The Witcher 1");
-                tw1.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/20900/header.jpg");
+                tw1.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367949/the-witcher1.jpg");
                 tw1.setPrice(new BigDecimal("9.99"));
                 tw1.setDescription("El inicio de la leyenda de Geralt de Rivia en Vizima.");
                 tw1.setReleaseDate(LocalDate.parse("2008-09-16"));
@@ -724,11 +1030,11 @@ public class CargaBDDPrueba {
             // 5 JUEGOS DE FROMSOFTWARE (hidetakaDev)
             // ----------------------------------------------------------
 
-            // Juego 21: Elden Ring (Steam AppID: 1245620)
+            // Juego 21: Elden Ring
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Elden Ring"))) {
                 GameEntity elden = new GameEntity();
                 elden.setName("Elden Ring");
-                elden.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg");
+                elden.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367921/elden-ring.jpg");
                 elden.setPrice(new BigDecimal("59.99"));
                 elden.setDescription("Levántate, Sinluz, y déjate guiar por la gracia hacia las Tierras Intermedias.");
                 elden.setReleaseDate(LocalDate.parse("2022-02-25"));
@@ -739,7 +1045,7 @@ public class CargaBDDPrueba {
                 gameRepository.save(elden);
             }
 
-            // Juego 22: Sekiro: Shadows Die Twice (Steam AppID: 814380)
+            // Juego 22: Sekiro: Shadows Die Twice
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Sekiro: Shadows Die Twice"))) {
                 GameEntity sekiro = new GameEntity();
                 sekiro.setName("Sekiro: Shadows Die Twice");
@@ -754,11 +1060,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(sekiro);
             }
 
-            // Juego 23: Dark Souls III (Steam AppID: 374320)
+            // Juego 23: Dark Souls III
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Dark Souls III"))) {
                 GameEntity ds3 = new GameEntity();
                 ds3.setName("Dark Souls III");
-                ds3.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/374320/header.jpg");
+                ds3.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367915/dark-souls3.jpg");
                 ds3.setPrice(new BigDecimal("59.99"));
                 ds3.setDescription("Las cenizas buscan un Señor en un mundo en descomposición total.");
                 ds3.setReleaseDate(LocalDate.parse("2016-04-12"));
@@ -769,11 +1075,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(ds3);
             }
 
-            // Juego 24: Dark Souls Remastered (Steam AppID: 570940)
+            // Juego 24: Dark Souls Remastered
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Dark Souls Remastered"))) {
                 GameEntity ds1 = new GameEntity();
                 ds1.setName("Dark Souls Remastered");
-                ds1.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/570940/header.jpg");
+                ds1.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367913/darksouls1.jpg");
                 ds1.setPrice(new BigDecimal("39.99"));
                 ds1.setDescription("Y entonces hubo fuego. Vuelve a encender la llama en Lordran.");
                 ds1.setReleaseDate(LocalDate.parse("2018-05-24"));
@@ -784,11 +1090,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(ds1);
             }
 
-            // Juego 25: Armored Core VI: Fires of Rubicon (Steam AppID: 1888160)
+            // Juego 25: Armored Core VI: Fires of Rubicon
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Armored Core VI"))) {
                 GameEntity ac6 = new GameEntity();
                 ac6.setName("Armored Core VI");
-                ac6.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1888160/header.jpg");
+                ac6.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367908/armored-gore4.jpg");
                 ac6.setPrice(new BigDecimal("59.99"));
                 ac6.setDescription("Combates vertiginosos de mechas gigantes personalizables en el planeta Rubicón 3.");
                 ac6.setReleaseDate(LocalDate.parse("2023-08-25"));
@@ -803,11 +1109,11 @@ public class CargaBDDPrueba {
             // 5 JUEGOS DE CAPCOM (capcomDev)
             // ----------------------------------------------------------
 
-            // Juego 26: Resident Evil 4 Remake (Steam AppID: 2050650)
+            // Juego 26: Resident Evil 4 Remake
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Resident Evil 4 Remake"))) {
                 GameEntity re4 = new GameEntity();
                 re4.setName("Resident Evil 4 Remake");
-                re4.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg");
+                re4.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367938/re4.jpg");
                 re4.setPrice(new BigDecimal("59.99"));
                 re4.setDescription("Leon S. Kennedy rescata a la hija del presidente en una siniestra aldea europea.");
                 re4.setReleaseDate(LocalDate.parse("2023-03-24"));
@@ -818,7 +1124,7 @@ public class CargaBDDPrueba {
                 gameRepository.save(re4);
             }
 
-            // Juego 27: Resident Evil 2 Remake (Steam AppID: 883710)
+            // Juego 27: Resident Evil 2 Remake
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Resident Evil 2 Remake"))) {
                 GameEntity re2 = new GameEntity();
                 re2.setName("Resident Evil 2 Remake");
@@ -833,11 +1139,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(re2);
             }
 
-            // Juego 28: Resident Evil Village (Steam AppID: 1196590)
+            // Juego 28: Resident Evil Village
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Resident Evil Village"))) {
                 GameEntity rev = new GameEntity();
                 rev.setName("Resident Evil Village");
-                rev.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1196590/header.jpg");
+                rev.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367936/re2.jpg");
                 rev.setPrice(new BigDecimal("39.99"));
                 rev.setDescription("Ethan Winters busca a su hija secuestrada enfrentando los horrores del castillo Dimitrescu.");
                 rev.setReleaseDate(LocalDate.parse("2021-05-07"));
@@ -848,11 +1154,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(rev);
             }
 
-            // Juego 29: Devil May Cry 5 (Steam AppID: 601150)
+            // Juego 29: Devil May Cry 5
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Devil May Cry 5"))) {
                 GameEntity dmc5 = new GameEntity();
                 dmc5.setName("Devil May Cry 5");
-                dmc5.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/601150/header.jpg");
+                dmc5.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367917/devilmaycray5.jpg");
                 dmc5.setPrice(new BigDecimal("29.99"));
                 dmc5.setDescription("Dante, Nero y V cazan demonios con el combate hack and slash más estilizado.");
                 dmc5.setReleaseDate(LocalDate.parse("2019-03-08"));
@@ -863,11 +1169,11 @@ public class CargaBDDPrueba {
                 gameRepository.save(dmc5);
             }
 
-            // Juego 30: Monster Hunter: World (Steam AppID: 582010)
+            // Juego 30: Monster Hunter: World
             if (dbGames.stream().noneMatch(g -> g.getName().equals("Monster Hunter: World"))) {
                 GameEntity mhw = new GameEntity();
                 mhw.setName("Monster Hunter: World");
-                mhw.setFrontPage("https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/582010/header.jpg");
+                mhw.setFrontPage("https://res.cloudinary.com/cbttd5ya/image/upload/v1793367933/monsterhunter.jpg");
                 mhw.setPrice(new BigDecimal("29.99"));
                 mhw.setDescription("Caza bestias colosales en ecosistemas vivos para forjar armaduras y armas épicas.");
                 mhw.setReleaseDate(LocalDate.parse("2018-08-09"));
@@ -879,7 +1185,7 @@ public class CargaBDDPrueba {
             }
             System.out.println("====== Catálogo de juegos verificado y cargado ======");
 
-// ==========================================================
+            // ==========================================================
             // REVIEWS
             // ==========================================================
             if (clientCosme != null && clientEsteban != null && clientAlan != null) {
@@ -887,7 +1193,7 @@ public class CargaBDDPrueba {
                 List<ReviewEntity> dbReviews = reviewRepository.findAll();
 
                 // ------------------------------------------------------
-                // REVIEWS: God of War Ragnarok
+                // REVIEWS EN: God of War Ragnarok
                 // ------------------------------------------------------
                 GameEntity dbGow = dbGames.stream().filter(g -> g.getName().equals("God of War Ragnarok")).findFirst().orElse(null);
                 if (dbGow != null) {
@@ -912,7 +1218,7 @@ public class CargaBDDPrueba {
                 }
 
                 // ------------------------------------------------------
-                // REVIEWS: GTA V
+                // REVIEWS EN: GTA V
                 // ------------------------------------------------------
                 GameEntity dbGta = dbGames.stream().filter(g -> g.getName().equals("GTA V")).findFirst().orElse(null);
                 if (dbGta != null) {
@@ -937,7 +1243,7 @@ public class CargaBDDPrueba {
                 }
 
                 // ------------------------------------------------------
-                // REVIEWS: Super Mario Odyssey
+                // REVIEWS EN: Super Mario Odyssey
                 // ------------------------------------------------------
                 GameEntity dbMario = dbGames.stream().filter(g -> g.getName().equals("Super Mario Odyssey")).findFirst().orElse(null);
                 if (dbMario != null) {
@@ -962,7 +1268,7 @@ public class CargaBDDPrueba {
                 }
 
                 // ------------------------------------------------------
-                // REVIEWS: Red Dead Redemption 2
+                // REVIEWS EN: Red Dead Redemption 2
                 // ------------------------------------------------------
                 GameEntity dbRdr2 = dbGames.stream().filter(g -> g.getName().equals("Red Dead Redemption 2")).findFirst().orElse(null);
                 if (dbRdr2 != null) {
@@ -977,7 +1283,7 @@ public class CargaBDDPrueba {
                     }
                 }
 
-                // ------------------------------------------------------
+                 // ------------------------------------------------------
                 // REVIEWS: Elden Ring (FromSoftware)
                 // ------------------------------------------------------
                 GameEntity dbElden = dbGames.stream().filter(g -> g.getName().equals("Elden Ring")).findFirst().orElse(null);
@@ -1049,6 +1355,7 @@ public class CargaBDDPrueba {
                         reviewRepository.save(r12);
                     }
                 }
+
 
                 System.out.println("====== Matriz de reviews cruzadas verificadas y cargadas ======");
             }

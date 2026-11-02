@@ -1,0 +1,118 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 16px auto 12px auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  box-sizing: border-box;
+  border-bottom: 3px solid var(--color-principal);
+}
+
+h2 {
+  color: var(--color-texto);
+  margin: 0;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.buscador {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid var(--color-texto-muted);
+  background-color: var(--color-base);
+  padding: 0 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 12px;
+}
+
+.buscador:focus-within {
+  border-color: var(--color-principal);
+  box-shadow: 0 0 8px rgba(40, 160, 80, 0.25);
+}
+
+.lupa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-texto-muted);
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 6px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.buscador:focus-within .lupa {
+  color: var(--color-principal);
+}
+
+.inputBuscador {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  color: var(--color-texto);
+  font-size: 0.9rem;
+  border-left: 1px solid var(--color-texto-muted);
+}
+
+.inputBuscador::placeholder {
+  font-family: inherit;
+  color: var(--color-texto-muted);
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px auto 14px auto;
+    padding: 0 16px;
+    gap: 0;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    text-align: left;
+  }
+
+  .buscador {
+    width: 260px;
+    height: 42px;
+    margin-bottom: 10px;
+  }
+
+  .inputBuscador {
+    font-size: 0.92rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    margin: 24px auto 16px auto;
+    padding: 0;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  .buscador {
+    width: 280px;
+  }
+}

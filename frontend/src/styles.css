@@ -12,6 +12,7 @@
     --color-secundario: #2D2D2D;      /* Superficies */
     --color-texto: #FCFCFC;           /* Texto principal*/
     --color-texto-muted: #5a5f5c;     /* Detalles y textos secundarios*/
+    --color-peligro: #d93838;         /* Sectores donde requiera atencion y rojos fuertes */
 
     /*
     Colores modo claro
@@ -23,6 +24,14 @@
     */
 }
 
+html, body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-base);
+    color: var(--color-texto);
+    overflow-x: hidden;
+}
 
 .btn{
     margin-top: 1.25rem;

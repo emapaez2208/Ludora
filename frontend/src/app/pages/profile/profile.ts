@@ -1,7 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { Client } from '../../models/client';
+import { Component, inject, signal } from '@angular/core';
 import { UserService } from '../../services/user-service';
 import { RouterLink } from '@angular/router';
+import { ClientResponse } from '../../models/client-response';
+import { Developer } from '../../models/developer';
+import { AdminResponse } from '../../models/admin-response';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   imports: [RouterLink],
@@ -9,36 +12,46 @@ import { RouterLink } from '@angular/router';
   styleUrl: './profile.css',
   templateUrl: './profile.html',
 })
-export class Profile implements OnInit{
+export class Profile{
 
-  client = signal<Client>({
-    externalId : '1',
-    name : 'Maximiliano',
-    lastName : 'Suarez',
-    userName : 'maxiSiuuu',
-    email : 'maxisuarez@email.com',
-    statusBlocked : true,
-    phone : 2235658440,
-    street : 'Av algo',
-    numberStreet : 123,
-    birthDate : '22-08-1994',
-    points : 350,
-  })
+  client = signal<ClientResponse | null>(null)
+  developer = signal<Developer | null>(null)
+  admin = signal<AdminResponse | null>(null)
+  msjError = signal('')
 
-  clientService = inject(UserService)
+  userService = inject(UserService)
+  authService = inject(AuthService)
 
-
-  ngOnInit(): void {
-    this.loadClient()
+  constructor(){
+    this.loadUser()
   }
 
-  loadClient(){
-    this.clientService.getMyUser().subscribe({
-      next: data => {}, /*this.client.set(data)*/
-      error: e => {
-        // alert('Hubo un error al cargar sus datos')
-        // console.error(e)
-      }
-    })
+  loadUser(){
+    if(this.authService.hasRole('ROLE_ADMIN')){
+      this.userService.adminProfile().subscribe({
+        next: data => this.admin.set(data),
+        error: e => {
+          console.error('Error al traer al admin', e)
+          this.msjError.set('No se pudo cargar el perfil de Administrador')
+        }
+      })
+    }else if(this.authService.hasRole('ROLE_DEVELOPER')){
+      this.userService.developerProfile().subscribe({
+        next: data => this.developer.set(data),
+        error: e => {
+          console.error('Error al traer al desarrollador', e)
+          this.msjError.set('No se pudo cargar el perfil de Desarrollador')
+        }
+      })
+    }else if(this.authService.hasRole('ROLE_CLIENT')){
+      this.userService.clientProfile().subscribe({
+        next: data => this.client.set(data),
+        error: e => {
+          console.error('Error al traer al cliente', e)
+          this.msjError.set('No se pudo cargar el perfil de Usuario')
+        }
+      })
+    }
   }
+
 }
