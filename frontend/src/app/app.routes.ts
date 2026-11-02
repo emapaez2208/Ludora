@@ -12,6 +12,7 @@ import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
 import { developerGuard } from './guards/developer-guard';
 import { loginGuard } from './guards/login-guard';
+import { Cart } from './pages/cart/cart';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -24,5 +25,6 @@ export const routes: Routes = [
     {path: 'catalog/:id', component: GameDetail},
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
+     {path: 'cart', component: Cart},
     { path: '**', redirectTo: '' }
 ];
