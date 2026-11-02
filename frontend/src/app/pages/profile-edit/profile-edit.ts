@@ -16,13 +16,20 @@ export class ProfileEdit {
   userService = inject(UserService)
 
   clientForm! : FormGroup
+  developerForm! : FormGroup
+  adminForm! : FormGroup
   fb = inject(FormBuilder)
   router = inject(Router)
   today = new Date().toLocaleDateString('en-CA')
 
   constructor(){
     this.loadClientForm()
+    this.loadDeveloperForm()
+    this.loadAdminForm()
+
     this.effectUsers()
+    this.effectDevelopers()
+    this.effectAdmin()
   }
 
   loadClientForm(){
@@ -37,11 +44,45 @@ export class ProfileEdit {
     })
   }
 
+  loadDeveloperForm(){
+    this.developerForm = this.fb.group({
+      name : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
+      lastName : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
+      company : ['', Validators.required]
+    })
+  }
+
+  loadAdminForm(){
+    this.adminForm = this.fb.group({
+      name : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
+      lastName : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
+      employeeId : ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.min(1)]]
+    })
+  }
+
   effectUsers(){
     effect(() => {
       const client = this.userStateService.client()
       if(client){
         this.clientForm.patchValue(client)
+      }
+    })
+  }
+
+  effectDevelopers(){
+    effect(() => {
+      const develop = this.userStateService.developer()
+      if(develop){
+        this.developerForm.patchValue(develop)
+      }
+    })
+  }
+
+  effectAdmin(){
+    effect(() => {
+      const admin = this.userStateService.admin()
+      if(admin){
+        this.adminForm.patchValue(admin)
       }
     })
   }
@@ -54,6 +95,40 @@ export class ProfileEdit {
       .subscribe({
         next: () => {
           alert('Usuario actualizado con exito')
+          this.userStateService.loadUser()
+          this.router.navigate(['/profile'])
+        },
+        error: e => {
+          console.error('Hubo un error al actualizar ', e)
+          alert('No se pudo actualizar con exito')
+        }
+      })
+  }
+
+  onSubmitDeveloper(){
+    if(this.developerForm.invalid) return
+
+    this.userService.developerUpdate(this.userStateService.developer()!.externalId, this.developerForm.value)
+      .subscribe({
+        next: () => {
+          alert('Desarrollador actualizado con exito')
+          this.userStateService.loadUser()
+          this.router.navigate(['/profile'])
+        },
+        error: e => {
+          console.error('Hubo un error al actualizar ', e)
+          alert('No se pudo actualizar con exito')
+        }
+      })
+  }
+
+  onSubmitAdmin(){
+    if(this.adminForm.invalid) return
+
+    this.userService.adminUpdate(this.userStateService.admin()!.externalId, this.adminForm.value)
+      .subscribe({
+        next: () => {
+          alert('Admin actualizado con exito')
           this.userStateService.loadUser()
           this.router.navigate(['/profile'])
         },

@@ -1,4 +1,4 @@
-import { inject, Service, signal } from '@angular/core';
+import { effect, inject, Service, signal } from '@angular/core';
 import { ClientResponse } from '../models/client-response';
 import { Developer } from '../models/developer';
 import { AdminResponse } from '../models/admin-response';
@@ -18,7 +18,14 @@ export class UserStateService {
     authService = inject(AuthService)
 
     constructor(){
-        this.loadUser()
+        effect(() => {
+            if(this.authService.isLoggedIn$()){
+                this.loadUser()
+            }else{
+                this.clearUser()
+            } 
+        })
+        
     }
 
     loadUser(){

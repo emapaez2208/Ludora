@@ -6,7 +6,6 @@
         <form [formGroup]="clientForm" class="dates" (ngSubmit)="onSubmitClient()">
             <h3>Usuario: {{client.userName}}</h3>
             
-            
             <fieldset>
                 <label for="name"><strong>Nombre y Apellido:</strong></label>
                 <div class="input-group">
@@ -24,7 +23,6 @@
             <p><strong>Email:</strong> {{client.email}}</p>
             <p><strong>Estado:</strong> {{client.statusBlocked? 'Bloqueado' : 'Activo'}}</p>
 
-            
             <fieldset>
                 <label for="phone"><strong>Teléfono:</strong></label>
                 <input type="text" inputmode="numeric" id="phone" placeholder="2235534212" formControlName="phone">
@@ -38,7 +36,6 @@
                 }
             </fieldset>
 
-            
             <fieldset>
                 <label for="street"><strong>Dirección:</strong></label>
                 <div class="input-group">
@@ -55,7 +52,6 @@
                 }
             </fieldset>
 
-           
             <fieldset>
                 <label for="birthDate"><strong>Fecha Nacimiento:</strong></label>
                 <input type="date" [max]="today" id="birthDate" formControlName="birthDate">
@@ -70,4 +66,99 @@
             <button type="submit" class="btn" [disabled]="clientForm.invalid">Confirmar</button>
         </form>
     </section>
+
+}@else if (userStateService.developer(); as developer) {
+
+    <section class="profile">
+        <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
+
+        <form [formGroup]="developerForm" class="dates" (ngSubmit)="onSubmitDeveloper()">
+            <h3>Editar perfil de desarrollador</h3>
+
+            <p><strong>Usuario:</strong> {{developer.userName}}</p>
+
+            <fieldset>
+                <label for="dev-name"><strong>Nombre y Apellido:</strong></label>
+                <div class="input-group">
+                    <input type="text" id="dev-name" formControlName="name" placeholder="Juancito">
+                    <input type="text" id="dev-lastName" formControlName="lastName" placeholder="Perez">
+                </div>
+
+                @if(developerForm.get('name')?.hasError('required') || developerForm.get('lastName')?.hasError('required')){
+                    <p class="msj-error">El nombre y apellido son obligatorios</p>
+                }@else if(developerForm.get('name')?.hasError('minlength') || developerForm.get('lastName')?.hasError('minlength') ||
+                          developerForm.get('name')?.hasError('maxlength') || developerForm.get('lastName')?.hasError('maxlength')){
+                    <p class="msj-error">El nombre y apellido deben tener entre 3 y 32 caracteres</p>
+                }
+            </fieldset>
+
+            <p><strong>Email:</strong> {{developer.email}}</p>
+
+            <fieldset>
+                <label for="company"><strong>Empresa:</strong></label>
+                <input type="text" id="company" formControlName="company" placeholder="Nombre de la empresa">
+
+                @if(developerForm.get('company')?.hasError('required')){
+                    <p class="msj-error">El nombre de la empresa es obligatorio</p>
+                }
+            </fieldset>
+
+            <p><strong>Estado:</strong> {{developer.statusBlocked ? 'Bloqueado' : 'Activo'}}</p>
+
+            <button type="submit" class="btn" [disabled]="developerForm.invalid">Confirmar</button>
+        </form>
+    </section>
+
+}@else if (userStateService.admin(); as admin) {
+
+    <section class="profile">
+        <img src="images/profile-base.jpeg" alt="imagen de perfil" class="img-profile">
+
+        <form [formGroup]="adminForm" class="dates" (ngSubmit)="onSubmitAdmin()">
+            <h3>Editar perfil de administrador</h3>
+
+            <p><strong>Usuario:</strong> {{admin.userName}}</p>
+
+            <fieldset>
+                <label for="admin-name"><strong>Nombre y Apellido:</strong></label>
+                <div class="input-group">
+                    <input type="text" id="admin-name" formControlName="name" placeholder="Juancito">
+                    <input type="text" id="admin-lastName" formControlName="lastName" placeholder="Perez">
+                </div>
+
+                @if(adminForm.get('name')?.hasError('required') || adminForm.get('lastName')?.hasError('required')){
+                    <p class="msj-error">El nombre y apellido son obligatorios</p>
+                }@else if(adminForm.get('name')?.hasError('minlength') || adminForm.get('lastName')?.hasError('minlength') ||
+                          adminForm.get('name')?.hasError('maxlength') || adminForm.get('lastName')?.hasError('maxlength')){
+                    <p class="msj-error">El nombre y apellido deben tener entre 3 y 32 caracteres</p>
+                }
+            </fieldset>
+
+            <p><strong>Email:</strong> {{admin.email}}</p>
+
+            <fieldset>
+                <label for="employeeId"><strong>Número de empleado:</strong></label>
+                <input type="text" inputmode="numeric" id="employeeId" formControlName="employeeId" placeholder="12345">
+
+                @if(adminForm.get('employeeId')?.hasError('required')){
+                    <p class="msj-error">El número de empleado es obligatorio</p>
+                }@else if(adminForm.get('employeeId')?.hasError('pattern')){
+                    <p class="msj-error">El número de empleado solo debe contener números enteros</p>
+                }@else if(adminForm.get('employeeId')?.hasError('min')){
+                    <p class="msj-error">El número de empleado debe ser mayor a cero</p>
+                }
+            </fieldset>
+
+            <button type="submit" class="btn" [disabled]="adminForm.invalid">Confirmar</button>
+        </form>
+    </section>
+
+}@else if (userStateService.msjError(); as msjError) {
+
+    <p class="msj-error">{{msjError}}</p>
+
+}@else {
+
+    <p>Cargando perfil...</p>
+
 }

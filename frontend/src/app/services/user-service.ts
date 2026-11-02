@@ -5,6 +5,8 @@ import { ClientResponse } from '../models/client-response';
 import { Developer, Page } from '../models/developer';
 import { AdminResponse } from '../models/admin-response';
 import { ClientUpdate } from '../models/client-update';
+import { DeveloperUpdate } from '../models/developer-update';
+import { AdminUpdate } from '../models/admin-update';
 
 @Service()
 export class UserService {
@@ -50,6 +52,13 @@ export class UserService {
         return this.http.put<ClientResponse>(`${this.url}/clients/${id}`, client)
     }
 
+    developerUpdate(id : string, developer : DeveloperUpdate){
+        return this.http.put<Developer>(`${this.url}/developers/${id}`, developer)
+    }
+
+    adminUpdate(id : string, admin : AdminUpdate){
+        return this.http.put<AdminResponse>(`${this.url}/admins/${id}`, admin)
+    }
 
     // client user
     addUser(clientRequest : ClientRequest){
