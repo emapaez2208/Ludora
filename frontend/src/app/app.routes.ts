@@ -19,6 +19,7 @@ export const routes: Routes = [
     {path: 'login', component: Login, canActivate: [loginGuard]},
     {path: 'register', component: Register, canActivate: [loginGuard]},
     {path: 'user-list', component: UserList, canActivate: [adminGuard]},
+    {path: 'application-list', component: SolicitudList},
     {path: 'profile', component: Profile, canActivate: [authGuard]},
     {path: 'catalog', component: Catalog},
     {path: 'application', component: SolicitudList , canActivate:[adminGuard]},

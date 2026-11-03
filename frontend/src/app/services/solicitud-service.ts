@@ -46,6 +46,11 @@ export class SolicitudService {
    // Autoriza / Desbloquea el juego (Endpoint exclusivo de Admin para poner statusBlocked y needRevision en false)
    
   authorizeGame(externalId: string){
-    return this.http.put<Game>(`${this.url}/${externalId}/authorized`, {});
+    return this.http.patch<Game>(`${this.url}/${externalId}/authorized`,{});
+  }
+
+  desautorizedGame(externalId: string){
+    return this.http.delete<Game>(`${this.url}/${externalId}/DesAuthorizedGam`,{});
+
   }
 }

@@ -16,16 +16,29 @@
         <th>Acciones</th>
       </tr>
     </thead>
-    <tbody>
-      <tr *ngFor="let game of games()">
-        <td>{{ game.name }}</td>
-        <td>{{ game.statusBlocked ? 'Bloqueado' : 'Activo' }}</td>
-        <td>
-          <button class="btn btn-success btn-sm" (click)="authorizeGame(game.externalId)">
-            Desbloquear / Aprobar
-          </button>
-        </td>
-      </tr>
-    </tbody>
+   <ul>
+
+    @for (game of games(); track game.externalId) {
+
+      <li><p>Nombre : {{game.name}} </p>
+           <p>Estado : {{game.statusBlocked}}</p>
+      <!-- Si está bloqueado, mostramos el botón para Autorizar/Desbloquear -->
+      @if (game.statusBlocked) {
+        <button class="btn btn-success" (click)="authorizeGame(game.externalId)">
+          Aprobar / Desbloquear
+        </button>
+      } @else {
+        <!-- Si está activo/aprobado, mostramos el botón para Desautorizar -->
+        <button class="btn btn-danger" (click)="desautorizedGame(game.externalId)">
+          Desautorizar
+        </button>}
+        </li>
+      }
+   </ul>
   </table>
+
+  <app-pagination 
+    [page]="page()" 
+    [totalPages]="totalPages()" 
+    (pageChange)="goToPage($event)" />
 </div>
