@@ -1,35 +1,58 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Game } from '../../models/game'; 
 import { SolicitudService } from '../../services/solicitud-service';
+import { RouterLink } from '@angular/router';
+import { Pagination } from '../../components/pagination/pagination';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
-  imports: [],
+  imports: [RouterLink , DatePipe ,Pagination],
   selector: 'app-solicitud-list',
   styleUrl: './solicitud-list.css',
   templateUrl: './solicitud-list.html',
 })
 export class SolicitudList implements OnInit {
 
- games = signal<Game[]>([]);
   private sSolicitud = inject(SolicitudService);
 
+  games = signal<Game[]>([]);
   status = signal<boolean | undefined>(undefined);
-  
   // Variable opcional para saber si estás viendo la vista de revisión
   isRevisionView = signal<boolean>(false);
+
+  //Variables para la Paginacion
+  page = signal(0)
+  size = signal(18);
+  totalPages = signal(0)
+  loading = signal(false)
+  error = signal('')
 
   ngOnInit(): void {
     this.loadSolicitudes();
   }
 
+
   // Cargar por estado de bloqueo
-  loadSolicitudes(statusBlocked?: boolean): void {
+  loadSolicitudes(statusBlocked?: boolean , resetPage : boolean = true): void {
+    if(resetPage){
+      this.page.set(0);
+    }
+    
     this.isRevisionView.set(false);
     this.status.set(statusBlocked);
+    this.loading.set(true);
+    this.error.set('');
 
-    this.sSolicitud.getGamesStatusBloked(statusBlocked).subscribe({
-      next: (data) => this.games.set(data.content), 
-      error: (e) => console.log('Error al cargar solicitudes:', e)
+    this.sSolicitud.getGamesStatusBloked(statusBlocked , this.page() , this.size()).subscribe({
+      next: (data) =>{this.games.set(data.content);
+                      this.totalPages.set(data.totalPages);
+                      this.loading.set(false);
+        },
+      error: (e) => {console.log('Error al cargar solicitudes:', e);
+                     this.loading.set(false);
+                     this.error.set('No se pudieron cargar...')
+      }
     });
   }
 
