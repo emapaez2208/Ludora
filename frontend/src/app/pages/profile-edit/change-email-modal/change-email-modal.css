@@ -14,7 +14,7 @@
 .modal-content {
   width: 100%;
   max-width: 480px;
-  background: var(--color-fondo-secundario, #202020);
+  background: var(--color-secundario, #202020);
   border: 1px solid var(--color-borde, #383838);
   border-radius: 14px;
   overflow: hidden;
@@ -38,14 +38,14 @@
 
 .modal-header p {
   margin: 0.5rem 0 0;
-  color: var(--color-texto-secundario, #aaa);
+  color: var(--color-texto-muted, #aaa);
   font-size: 0.9rem;
 }
 
 .btn-close {
   border: none;
   background: transparent;
-  color: var(--color-texto-secundario, #aaa);
+  color: var(--color-texto-muted, #aaa);
   font-size: 1.8rem;
   line-height: 1;
   cursor: pointer;
@@ -79,7 +79,7 @@
   padding: 0.85rem 1rem;
   border: 1px solid var(--color-borde, #444);
   border-radius: 8px;
-  background: var(--color-fondo, #171717);
+  background: var(--color-base, #171717);
   color: var(--color-texto, #fff);
   font-size: 0.9rem;
   outline: none;
@@ -87,11 +87,11 @@
 }
 
 .form-group input::placeholder {
-  color: var(--color-texto-secundario, #777);
+  color: var(--color-texto-muted, #777);
 }
 
 .form-group input:focus {
-  border-color: var(--color-primario, #7c5cff);
+  border-color: var(--color-principal, #7c5cff);
   box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.15);
 }
 
@@ -102,12 +102,12 @@
 }
 
 .error-backend {
-  background-color: rgba(255, 82, 82, 0.1);
-  border: 1px solid rgba(255, 82, 82, 0.4);
+  background-color: rgba(217, 56, 56, 0.1);
+  border: 1px solid rgba(217, 56, 56, 0.4);
   border-radius: 7px;
-  padding: 0.8rem 1rem;
-  margin-bottom: 1.25rem;
-  color: var(--color-peligro, #ff5252);
+  padding: 0.7rem 0.9rem;
+  margin-top: 1rem;
+  color: var(--color-peligro);
   font-size: 0.85rem;
   line-height: 1.4;
 }
@@ -140,8 +140,8 @@
 }
 
 .btn-submit {
-  background: var(--color-primario, #7c5cff);
-  border: 1px solid var(--color-primario, #7c5cff);
+  background: var(--color-principal, #7c5cff);
+  border: 1px solid var(--color-principal, #7c5cff);
   color: #fff;
 }
 
@@ -153,6 +153,11 @@
 .btn-submit:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.header-info {
+  flex: 1;
+  min-width: 0;
 }
 
 @keyframes fadeIn {

@@ -6,6 +6,8 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.features.client.IClientRepository;
+import ExperienceGroup.Ludora.features.developer.IDeveloperRepository;
 import ExperienceGroup.Ludora.features.user.exception.*;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
@@ -36,6 +38,8 @@ import java.util.UUID;
 public class AdminService implements IAdminService{
 
     private final IAdminRepository adminRepository;
+    private final IClientRepository clientRepository;
+    private final IDeveloperRepository developerRepository;
     private final IMapper<AdminEntity, AdminDTOResponse> responseMapper;
     private final IMapper<AdminEntity, AdminDTORequest> requestMapper;
     private final CredentialsRepository credentialsRepository;
@@ -97,7 +101,9 @@ public class AdminService implements IAdminService{
     @Transactional
     public AdminDTOResponse save(AdminDTORequest adminDTO) {
 
-        if(adminRepository.existsByEmail(adminDTO.email())){
+        if(adminRepository.existsByEmail(adminDTO.email()) ||
+            clientRepository.existsByEmail(adminDTO.email()) ||
+            developerRepository.existsByEmail(adminDTO.email())){
             throw new UserExistsWithEmailException("User with this email exists");
         }
 
@@ -182,7 +188,9 @@ public class AdminService implements IAdminService{
     @Transactional
     public void changeEmail(ChangeEmailDTO emailDTO) {
 
-        if(adminRepository.existsByEmail(emailDTO.newEmail())){
+        if(adminRepository.existsByEmail(emailDTO.newEmail()) ||
+                clientRepository.existsByEmail(emailDTO.newEmail()) ||
+                developerRepository.existsByEmail(emailDTO.newEmail())){
             throw new UserExistsWithEmailException("User exists with this email");
         }
 

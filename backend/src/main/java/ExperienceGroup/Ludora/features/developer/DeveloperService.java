@@ -6,6 +6,8 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.features.admin.IAdminRepository;
+import ExperienceGroup.Ludora.features.client.IClientRepository;
 import ExperienceGroup.Ludora.features.user.exception.*;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
@@ -39,6 +41,8 @@ import java.util.UUID;
 public class DeveloperService implements IDeveloperService {
 
     private final IDeveloperRepository developerRepository;
+    private final IClientRepository clientRepository;
+    private final IAdminRepository adminRepository;
     private final IMapper<DeveloperEntity, DeveloperDtoResponse> responseMapper;
     private final IMapper<DeveloperEntity, DeveloperDtoRequest> requestMapper;
     private final IGameResponseMapper gameResponseMapper;
@@ -94,7 +98,9 @@ public class DeveloperService implements IDeveloperService {
     @Transactional
     public DeveloperDtoResponse save(DeveloperDtoRequest developerDtoRequest) {
 
-        if(developerRepository.existsByEmail(developerDtoRequest.email())){
+        if(developerRepository.existsByEmail(developerDtoRequest.email()) ||
+                clientRepository.existsByEmail(developerDtoRequest.email()) ||
+                        adminRepository.existsByEmail(developerDtoRequest.email())){
             throw new UserExistsWithEmailException("User exists with email register");
         }
 
@@ -192,7 +198,9 @@ public class DeveloperService implements IDeveloperService {
     @Transactional
     public void changeEmail(ChangeEmailDTO emailDTO) {
 
-        if(developerRepository.existsByEmail(emailDTO.newEmail())){
+        if(developerRepository.existsByEmail(emailDTO.newEmail()) ||
+            clientRepository.existsByEmail(emailDTO.newEmail()) ||
+            adminRepository.existsByEmail(emailDTO.newEmail())){
             throw new UserExistsWithEmailException("User exists with this email");
         }
 

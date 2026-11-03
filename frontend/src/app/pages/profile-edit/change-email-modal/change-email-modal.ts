@@ -27,7 +27,7 @@ export class ChangeEmailModal {
 
   loadForm(){
     this.emailForm = this.fb.group({
-          oldEmail : ['', Validators.required],
+          oldEmail : ['', [Validators.required, Validators.pattern(/^[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,}$/i)]],
           newEmail : ['', [Validators.required, Validators.pattern(/^[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,}$/i)]],
           confirmEmail : ['', Validators.required]
         })
@@ -54,7 +54,21 @@ export class ChangeEmailModal {
           console.error('Error al actualizar el email :', e)
         
           switch(e.status){
-            //terminar
+            case 404:
+              this.errorMessage.set('El usuario no fue encontrado, inicie sesion nuevamente.')
+              break
+
+            case 409:
+              this.errorMessage.set('El nuevo email ya corresponde a otro usuario, ingrese otro.')
+              break
+
+            case 422:
+              this.errorMessage.set('El email actual ingresado no es correcto.')
+              break
+
+            default:
+              this.errorMessage.set('No se pudo actualizar el email. Intentá nuevamente.')
+              break
           }
         }
       })
@@ -69,7 +83,22 @@ export class ChangeEmailModal {
           console.error('Error al actualizar el email :', e)
         
           switch(e.status){
-            //terminar
+            case 404:
+              this.errorMessage.set('El usuario no fue encontrado, inicie sesion nuevamente.')
+              break
+
+            case 409:
+              this.errorMessage.set('El nuevo email ya corresponde a otro usuario, ingrese otro.')
+              break
+
+            case 422:
+              this.errorMessage.set('El email actual ingresado no es correcto.')
+              break
+
+            default:
+              this.errorMessage.set('No se pudo actualizar el email. Intentá nuevamente.')
+              console.error('error email: ', e.status)
+              break
           }
         }
       })
@@ -84,7 +113,21 @@ export class ChangeEmailModal {
           console.error('Error al actualizar el email :', e)
         
           switch(e.status){
-            //terminar
+            case 404:
+              this.errorMessage.set('El usuario no fue encontrado, inicie sesion nuevamente.')
+              break
+
+            case 409:
+              this.errorMessage.set('El nuevo email ya corresponde a otro usuario, ingrese otro.')
+              break
+
+            case 422:
+              this.errorMessage.set('El email actual ingresado no es correcto.')
+              break
+
+            default:
+              this.errorMessage.set('No se pudo actualizar el email. Intentá nuevamente.')
+              break
           }
         }
       })

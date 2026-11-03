@@ -6,6 +6,8 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.features.admin.IAdminRepository;
+import ExperienceGroup.Ludora.features.developer.IDeveloperRepository;
 import ExperienceGroup.Ludora.features.user.exception.*;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
@@ -41,6 +43,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ClientService implements IClientService{
     private final IClientRepository repository;
+    private final IAdminRepository adminRepository;
+    private final IDeveloperRepository developerRepository;
     private final IGameRepository gameRepository;
     private final IMapper<ClientEntity,ClientDTOResponse> mapperResponse;
     private final IMapper<ClientEntity,ClientDTORequest> mapperRequest;
@@ -120,7 +124,9 @@ public class ClientService implements IClientService{
     @Transactional
     public ClientDTOResponse save(ClientDTORequest clientDTORequest) {
 
-        if(repository.existsByEmail(clientDTORequest.email())){
+        if(repository.existsByEmail(clientDTORequest.email()) ||
+            adminRepository.existsByEmail(clientDTORequest.email()) ||
+            developerRepository.existsByEmail(clientDTORequest.email())){
             throw new UserExistsWithEmailException("User exists with this email");
         }
 
@@ -208,7 +214,9 @@ public class ClientService implements IClientService{
     @Transactional
     public void changeEmail(ChangeEmailDTO emailDTO) {
 
-        if(repository.existsByEmail(emailDTO.newEmail())){
+        if(repository.existsByEmail(emailDTO.newEmail()) ||
+                adminRepository.existsByEmail(emailDTO.newEmail()) ||
+                developerRepository.existsByEmail(emailDTO.newEmail())){
             throw new UserExistsWithEmailException("User exists with this email");
         }
 
