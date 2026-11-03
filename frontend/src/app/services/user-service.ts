@@ -7,6 +7,7 @@ import { AdminResponse } from '../models/admin-response';
 import { ClientUpdate } from '../models/client-update';
 import { DeveloperUpdate } from '../models/developer-update';
 import { AdminUpdate } from '../models/admin-update';
+import { DeveloperRequest } from '../models/developer-request';
 import { PageResponse } from '../models/page-response';
 import { ChangePassword } from '../models/change-password';
 import { ChangeEmail } from '../models/change-email';
@@ -92,9 +93,13 @@ export class UserService {
 
     // client user
     addUser(clientRequest : ClientRequest){
-        return this.http.post<ClientRequest>(this.url,clientRequest)
+        return this.http.post<ClientResponse>(`${this.url}/clients`,clientRequest)
     }
 
+    // develop user
 
+    addDevelop ( developerRequest : DeveloperRequest){
+        return this.http.post<Developer>(`${this.url}/developers`, developerRequest)
+    }
 
 }

@@ -10,6 +10,7 @@ import { FormGame } from './pages/form-game/form-game';
 import { GameDetail } from './pages/game-detail/game-detail';
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
+import { SolicitudList } from './pages/solicitud-list/solicitud-list';
 import { developerGuard } from './guards/developer-guard';
 import { loginGuard } from './guards/login-guard';
 import { ProfileEdit } from './pages/profile-edit/profile-edit';
@@ -22,6 +23,7 @@ export const routes: Routes = [
     {path: 'profile', component: Profile, canActivate: [authGuard]},
     {path: 'profile/edit', component: ProfileEdit, canActivate: []},
     {path: 'catalog', component: Catalog},
+    {path: 'application', component: SolicitudList , canActivate:[adminGuard]},
     {path: 'about', component: Know},
     {path: 'catalog/:id', component: GameDetail},
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
