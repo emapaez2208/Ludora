@@ -28,7 +28,7 @@
 
         <p class="price">${{ g.price }}</p>
 
-        <button class="btn btn-buy">
+        <button class="btn btn-buy" (click)="cartService.add(g)">
           <img src="/cart.svg" alt="Carrito" class="cart-icon" />
           <span>Agregar al carrito</span>
         </button>

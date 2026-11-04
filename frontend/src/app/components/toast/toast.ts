@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ToastService } from '../../services/toast-service';
+import { ToastMessage } from '../../models/toast-message';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [],
@@ -6,4 +9,13 @@ import { Component } from '@angular/core';
   styleUrl: './toast.css',
   templateUrl: './toast.html',
 })
-export class Toast {}
+export class Toast {
+  toastService = inject(ToastService);
+  private router = inject(Router);
+
+  open(t: ToastMessage) {
+    if (!t.link) return;
+    this.router.navigateByUrl(t.link);
+    this.toastService.dismiss(t.id);
+  }
+}

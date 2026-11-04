@@ -1,1 +1,17 @@
-<p>toast works!</p>
+<div class="toast-container" aria-live="polite">
+  @for (t of toastService.toasts(); track t.id) {
+    <div class="toast"
+      [class.error]="t.type === 'error'"
+      [class.info]="t.type === 'info'"
+      [class.clickable]="!!t.link"
+      [attr.role]="t.link ? 'link' : 'status'"
+      [attr.tabindex]="t.link ? 0 : null"
+      (click)="open(t)"
+      (keydown.enter)="open(t)">
+      <span>{{ t.message }}</span>
+      <button class="toast-close"
+              (click)="$event.stopPropagation(); toastService.dismiss(t.id)"
+              aria-label="Cerrar">✕</button>
+    </div>
+  }
+</div>
