@@ -108,49 +108,26 @@
   } @else {
     <div class="games-grid">
       @for (game of games(); track game.externalId) {
-        <div class="game-card">
-          
-            <a [routerLink]="['/catalog', game.externalId]" class="game-image-container">
-              <div class="game-image-container">
-                  <img [src]="game.frontPage" [alt]="game.name" class="game-cover" />
-              </div>
-            </a>
-
-            <div class="game-info">
-                <h3>
-                  <a [routerLink]="['/catalog', game.externalId]" class="game-link">{{ game.name }}</a>
-                </h3>
-                <p class="price">${{ game.price }}</p>
-                <p class="age">Edad: {{ game.ageRange }}</p>
-                <div class="genres">
-                @for (genre of game.genres; track genre) {
-                    <span class="badge">{{ genre }}</span>
-                }
-                </div>
-
-                @if (cartService.has(game.externalId)) {
+        <app-game-card [game]="game">
+          @if (cartService.has(game.externalId)) {
                   <a routerLink="/cart" class="btn btn-in-cart">
                     <span>Ya está en tu carrito</span>
                   </a>
                 } @else {
-                  <button class="btn" (click)="cartService.add(game)">
+                  <button class="btn" (click)="cartService.add({ externalId: game.externalId, name: game.name })">
                     <img src="/cart.svg" alt="Carrito" class="cart-icon" />
                     <span>Agregar al carrito</span>
                   </button>
                 }
-            </div>
-        </div>
+        </app-game-card>       
     } @empty {
         <p>No hay videojuegos disponibles en este momento.</p>
     }
     </div>
-
-
   }
 
   <app-pagination
     [page]="page()"
     [totalPages]="totalPages()"
     (pageChange)="goToPage($event)" />
-
 </div>

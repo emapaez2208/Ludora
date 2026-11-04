@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { GameService } from '../../services/game-service';
 import { Game } from '../../models/game';
 import { CommonModule } from '@angular/common';
@@ -12,10 +12,10 @@ import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Pagination } from '../../components/pagination/pagination';
 import { CartService } from '../../services/cart-service';
-import { ToastService } from '../../services/toast-service';
+import { GameCard } from '../../components/game-card/game-card';
 
 @Component({
-  imports: [CommonModule, RouterLink, Pagination],
+  imports: [CommonModule, RouterLink, Pagination, GameCard],
 
   selector: 'app-catalog',
   styleUrl: './catalog.css',
