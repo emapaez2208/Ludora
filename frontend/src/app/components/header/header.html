@@ -64,6 +64,13 @@
                   <li>
                     <span class="cart-name">{{ g.name }}</span>
                     <span class="cart-price">${{ g.discountedPrice ?? g.price }}</span>
+                    <button 
+                      type="button" 
+                      class="cart-remove-btn" 
+                      (click)="onRemoveGame(g, $event)"
+                      aria-label="Eliminar {{ g.name }}">
+                      <img src="/eliminar.png" alt="" class="remove-icon" />
+                    </button>
                   </li>
                 }
               </ul>

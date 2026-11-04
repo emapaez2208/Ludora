@@ -9,6 +9,13 @@
       (click)="open(t)"
       (keydown.enter)="open(t)">
       <span>{{ t.message }}</span>
+      @if (t.action) {
+        <button class="toast-action-btn" 
+                type="button"
+                (click)="onActionClick(t, $event)">
+          {{ t.action.label }}
+        </button>
+      }
       <button class="toast-close"
               (click)="$event.stopPropagation(); toastService.dismiss(t.id)"
               aria-label="Cerrar">✕</button>

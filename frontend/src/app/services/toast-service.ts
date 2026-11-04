@@ -8,9 +8,9 @@ export class ToastService {
     private nextId = 0;
     toasts = signal<ToastMessage[]>([]);
 
-    show(message: string, type: ToastMessage['type'] = 'success', ms = 3000, link?: string) {
+    show(message: string, type: ToastMessage['type'] = 'success', ms = 3000, link?: string, action?: { label: string; fn: () => void }) {
         const id = this.nextId++;
-        this.toasts.update(t => [...t, { id, message, type, link }]);
+        this.toasts.update(t => [...t, { id, message, type, link, action }]);
         setTimeout(() => this.dismiss(id), ms);
     }
 

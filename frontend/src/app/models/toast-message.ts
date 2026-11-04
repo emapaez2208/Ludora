@@ -3,4 +3,8 @@ export interface ToastMessage {
     message: string;
     type: 'success' | 'error' | 'info';
     link?: string;
+    action?: { 
+        label: string; 
+        fn: () => void 
+    }
 }

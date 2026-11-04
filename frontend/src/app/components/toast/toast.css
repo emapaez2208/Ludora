@@ -10,7 +10,6 @@
 
 .toast {
     --toast-color: var(--color-principal);
-
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -58,6 +57,25 @@
 
 .toast.clickable:hover {
     transform: translateY(-2px);
+}
+
+.toast-action-btn {
+    background-color: var(--color-base);
+    color: var(--toast-color);
+    border: 1px solid var(--toast-color);
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.toast-action-btn:hover {
+    background-color: var(--toast-color);
+    color: var(--color-base);
+    transform: scale(1.05);
 }
 
 @keyframes toast-in {

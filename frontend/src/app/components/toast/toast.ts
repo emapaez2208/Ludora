@@ -18,4 +18,12 @@ export class Toast {
     this.router.navigateByUrl(t.link);
     this.toastService.dismiss(t.id);
   }
+
+  onActionClick(t: ToastMessage, event: MouseEvent) {
+    event.stopPropagation();
+    if (t.action) {
+      t.action.fn(); //
+      this.toastService.dismiss(t.id);
+    }
+  }
 }
