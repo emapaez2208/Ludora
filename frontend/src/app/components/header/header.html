@@ -20,6 +20,7 @@
     <a class="logo" routerLink="/" (click)="closeMenu()">
         <img src="logo-modo-oscuro.png" alt="">
     </a>
+
   </div>
 
   <nav class="mitad m2" [class.active]="isMenuOpen">
@@ -36,4 +37,44 @@
       <a class="item" routerLink="/login" (click)="closeMenu()"><p>Iniciar sesión</p></a>
     }
   </nav>
+
+  @if (isClient()) {
+      <div class="cart-wrapper">
+        <button
+          class="cart-button"
+          type="button"
+          (click)="toggleCart()"
+          aria-label="Ver carrito"
+          [attr.aria-expanded]="cartOpen()">
+          <img src="/cart.svg" alt="" class="cart-icon" />
+          @if (cartService.count() > 0) {
+            <span class="cart-badge">{{ cartService.count() }}</span>
+          }
+        </button>
+
+        @if (cartOpen()) {
+          <div class="cart-preview">
+            <h4>Tu carrito</h4>
+
+            @if (cartService.count() === 0) {
+              <p class="cart-empty">Todavía no agregaste juegos.</p>
+            } @else {
+              <ul>
+                @for (g of cartService.cart()!.games; track g.externalId) {
+                  <li>
+                    <span class="cart-name">{{ g.name }}</span>
+                    <span class="cart-price">${{ g.discountedPrice ?? g.price }}</span>
+                  </li>
+                }
+              </ul>
+              <div class="cart-total">
+                <span>Total</span>
+                <strong>${{ cartService.total() }}</strong>
+              </div>
+              <a routerLink="/cart" class="btn" (click)="cartOpen.set(false)">Ir al carrito</a>
+            }
+          </div>
+        }
+      </div>
+    }
 </div>

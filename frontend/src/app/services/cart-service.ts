@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Service, signal } from '@angular/core';
+import { computed, effect, inject, Service, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
 import { AuthService } from './auth-service';
@@ -18,7 +18,21 @@ export class CartService {
   private url = '/api/clients/cart';
 
   readonly cart = signal<Cart | null>(null);
+  readonly count = computed(() => this.cart()?.games.length ?? 0);
+  readonly total = computed(() => this.cart()?.totalPrice ?? 0);
 
+  constructor() {
+    effect(() => {
+      const logged = this.authService.isLoggedIn$();
+      if (logged && this.authService.isClient()) {
+        this.load().subscribe({ error: () => {} });
+      } else {
+        this.cart.set(null);
+      }
+    });
+  }
+
+  
   //carga de carrito 
 
   load(): Observable<Cart> {
@@ -30,12 +44,17 @@ export class CartService {
   //agregar juego al carrito
 
   add(game: { externalId: string; name: string }) {
-    const clientId = this.authService.getClientExternalId();
-
-    if (!clientId) {
+    if (!this.authService.isLoggedIn()) {
       this.askLogin();
       return;
     }
+
+    if (!this.authService.isClient()) {
+      this.toast.show('Solo los clientes pueden comprar juegos', 'info');
+      return;
+    }
+
+    const clientId = this.authService.getClientExternalId();
 
     this.http.post<Cart>(`${this.url}/${clientId}/games/${game.externalId}`, null).subscribe({
       next: (cart) => {
@@ -67,5 +86,9 @@ export class CartService {
   private askLogin() {
     this.toast.show('Iniciá sesión para agregar juegos al carrito', 'info');
     this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+  }
+
+  has(gameId: string): boolean {
+    return this.cart()?.games.some(g => g.externalId === gameId) ?? false;
   }
 }
