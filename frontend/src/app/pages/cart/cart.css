@@ -215,5 +215,93 @@ h2 {
 }
 
 
+/* Tablet: el resumen pasa debajo de la lista */
+@media (max-width: 1024px) {
+    .cart-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .summary {
+        position: static;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem 1rem 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .cart-layout {
+        gap: 1.5rem;
+    }
+
+    .cart-item {
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: 0.9rem;
+        padding: 0.85rem;
+    }
+
+    .item-image {
+        height: 75px;
+    }
+
+    .item-info h3 {
+        font-size: 1.05rem;
+    }
+
+    /* precio y botón pasan a una fila propia, debajo */
+    .item-side {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .item-prices {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 0.6rem;
+    }
+
+    .summary {
+        padding: 1.25rem;
+    }
+
+    .total {
+        font-size: 1.5rem;
+    }
+
+    .total span {
+        font-size: 1.1rem;
+    }
+}
+
+/* Celulares chicos */
+@media (max-width: 420px) {
+    .cart-item {
+        grid-template-columns: 90px minmax(0, 1fr);
+    }
+
+    .item-image {
+        height: 65px;
+    }
+
+    .item-info h3 {
+        font-size: 1rem;
+    }
+
+    .price {
+        font-size: 1.2rem;
+    }
+}
+
 
 

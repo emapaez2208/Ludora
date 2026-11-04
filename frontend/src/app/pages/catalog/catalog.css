@@ -284,3 +284,16 @@ p {
     border-color: var(--color-principal);
     color: var(--color-principal);
 }
+
+.btn-in-cart {
+    background-color: transparent;
+    color: var(--color-principal);
+    border: 1px solid var(--color-principal);
+    text-decoration: none;
+}
+
+.btn-in-cart:hover,
+.btn-in-cart:focus-visible {
+    background-color: color-mix(in srgb, var(--color-principal) 15%, transparent);
+    box-shadow: none;
+}

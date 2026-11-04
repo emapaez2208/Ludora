@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Game } from '../models/game';
-import { PageResponse } from '../models/game';
+import { PageResponse } from '../models/page-response';
 
 @Service()
 export class SolicitudService {

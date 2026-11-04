@@ -72,5 +72,8 @@ export class AuthService {
     getUsername(): string | null {
     return this.getPayload()?.sub ?? null;
     }
-
+    
+    isClient(): boolean {
+        return this.hasRole('ROLE_CLIENT');
+    }
 }

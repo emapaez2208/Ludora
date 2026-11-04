@@ -28,10 +28,16 @@
 
         <p class="price">${{ g.price }}</p>
 
-        <button class="btn btn-buy">
-          <img src="/cart.svg" alt="Carrito" class="cart-icon" />
-          <span>Agregar al carrito</span>
-        </button>
+        @if (cartService.has(g.externalId)) {
+          <a routerLink="/cart" class="btn btn-buy btn-in-cart">
+            <span>Ya está en tu carrito</span>
+          </a>
+        } @else {
+          <button class="btn btn-buy" (click)="cartService.add(g)">
+            <img src="/cart.svg" alt="Carrito" class="cart-icon" />
+            <span>Agregar al carrito</span>
+          </button>
+        }
       </div>
     </div>
     }
