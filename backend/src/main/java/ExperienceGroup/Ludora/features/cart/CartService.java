@@ -145,7 +145,9 @@ public class CartService implements ICartService {
                     : null;
 
             return new InfoGameDTOResponse(
+                    game.getExternalId(),
                     game.getName(),
+                    game.getFrontPage(),
                     basePrice,
                     discountedPrice,
                     game.getDeveloper().getCompany()

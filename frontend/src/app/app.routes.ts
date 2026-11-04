@@ -14,6 +14,8 @@ import { SolicitudList } from './pages/solicitud-list/solicitud-list';
 import { developerGuard } from './guards/developer-guard';
 import { loginGuard } from './guards/login-guard';
 import { ProfileEdit } from './pages/profile-edit/profile-edit';
+import { Cart } from './pages/cart/cart';
+import { clientGuard } from './guards/client-guard';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -28,5 +30,6 @@ export const routes: Routes = [
     {path: 'catalog/:id', component: GameDetail},
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
+     {path: 'cart', component: Cart,canActivate: [clientGuard]},
     { path: '**', redirectTo: '' }
 ];
