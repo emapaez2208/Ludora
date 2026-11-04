@@ -222,6 +222,11 @@ public class GlobalHandlerException {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(IlegalPasswordChangeException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerPasswordInvalidChange(IlegalPasswordChangeException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     /// ---------------------- MSJ ERROR CONSTRUCTOR ----------------------------------- ///
     private ResponseEntity<ErrorResponseDTO> buildResponse(HttpStatus status, String message){
         ErrorResponseDTO error = new ErrorResponseDTO(

@@ -13,6 +13,7 @@ import { adminGuard } from './guards/admin-guard';
 import { SolicitudList } from './pages/solicitud-list/solicitud-list';
 import { developerGuard } from './guards/developer-guard';
 import { loginGuard } from './guards/login-guard';
+import { ProfileEdit } from './pages/profile-edit/profile-edit';
 import { Cart } from './pages/cart/cart';
 import { clientGuard } from './guards/client-guard';
 
@@ -22,6 +23,7 @@ export const routes: Routes = [
     {path: 'register', component: Register, canActivate: [loginGuard]},
     {path: 'user-list', component: UserList, canActivate: [adminGuard]},
     {path: 'profile', component: Profile, canActivate: [authGuard]},
+    {path: 'profile/edit', component: ProfileEdit, canActivate: []},
     {path: 'catalog', component: Catalog},
     {path: 'application', component: SolicitudList , canActivate:[adminGuard]},
     {path: 'about', component: Know},
