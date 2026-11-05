@@ -1,8 +1,50 @@
-/* ==========================================================================
-   ESTILOS PARA LA TABLA DE GESTIÓN Y ADMINISTRACIÓN (Complemento)
-   ========================================================================== */
+.contenedor {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    color: var(--color-texto);
+    background-color: var(--color-base);
+    min-height: calc(100vh - 10vh);
+}
 
-/* Contenedor responsivo de la tabla con los mismos estilos de tarjeta */
+.titulloh2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--color-texto);
+    letter-spacing: 0.5px;
+    border-left: 4px solid var(--color-principal);
+    padding-left: 0.75rem;
+}
+
+/* Barra de filtros superior */
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.filtros .btn {
+    width: auto;
+    padding: 0.6rem 1.25rem;
+    background-color: var(--color-secundario);
+    color: var(--color-texto);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.filtros .btn:hover {
+    border-color: var(--color-principal);
+    color: var(--color-principal);
+    transform: translateY(-2px);
+}
+
+/* Contenedor responsivo de la tabla */
 .table-responsive {
     background-color: var(--color-secundario);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -10,6 +52,7 @@
     padding: 0.5rem;
     overflow-x: auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
 }
 
 /* Estilización general de la tabla */
@@ -56,6 +99,11 @@
     border-bottom: none;
 }
 
+/* Clase de utilidad para centrar texto */
+.textCenter {
+    text-align: center;
+}
+
 /* Ajustes para los Badges dentro de la tabla (Bloqueado / Activo) */
 .table .badge {
     padding: 0.4rem 0.85rem;
@@ -66,14 +114,14 @@
     display: inline-block;
 }
 
-/* Badge de Estado Activo (Usa tu color principal: Verde) */
+/* Badge de Estado Activo (Verde) */
 .table .badge.bg-success {
     background-color: color-mix(in srgb, var(--color-principal) 15%, var(--color-secundario)) !important;
     color: var(--color-principal) !important;
     border: 1px solid color-mix(in srgb, var(--color-principal) 30%, transparent);
 }
 
-/* Badge de Estado Bloqueado (Usa tu color de peligro: Rojo) */
+/* Badge de Estado Bloqueado (Rojo peligro) */
 .table .badge.bg-danger {
     background-color: color-mix(in srgb, var(--color-peligro) 15%, var(--color-secundario)) !important;
     color: var(--color-peligro) !important;
@@ -81,39 +129,40 @@
 }
 
 /* Botones de acción dentro de la tabla (Aprobar / Desautorizar) */
-.table .btn {
+.table td .btn {
     border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 0.5rem 1rem;
     transition: all 0.2s ease;
-    box-shadow: none;
+    width: auto;
+    cursor: pointer;
 }
 
-/* Botón de Aprobar / Desbloquear (Verde principal) */
-.table .btn-success {
-    background-color: color-mix(in srgb, var(--color-principal) 20%, var(--color-secundario));
-    color: var(--color-principal);
-    border: 1px solid color-mix(in srgb, var(--color-principal) 40%, transparent);
-}
-
-.table .btn-success:hover {
-    background-color: var(--color-principal);
-    color: var(--color-base);
-    box-shadow: 0 0 15px rgba(40, 160, 80, 0.3);
-    transform: translateY(-2px);
-}
-
-/* Botón de Desautorizar (Rojo peligro) */
-.table .btn-danger {
+/* Botón por defecto en las filas (si es para desautorizar, estilo rojo sutil) */
+.table td .btn:not(:has-text("Aprobar")) {
     background-color: color-mix(in srgb, var(--color-peligro) 15%, var(--color-secundario));
     color: var(--color-peligro);
     border: 1px solid color-mix(in srgb, var(--color-peligro) 30%, transparent);
 }
 
-.table .btn-danger:hover {
+.table td .btn:not(:has-text("Aprobar")):hover {
     background-color: var(--color-peligro);
     color: var(--color-texto);
     box-shadow: 0 0 15px rgba(217, 56, 56, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Botón específico de Aprobar / Desbloquear (Verde principal) */
+.table td .btn {
+    background-color: color-mix(in srgb, var(--color-principal) 20%, var(--color-secundario));
+    color: var(--color-principal);
+    border: 1px solid color-mix(in srgb, var(--color-principal) 40%, transparent);
+}
+
+.table td .btn:hover {
+    background-color: var(--color-principal);
+    color: var(--color-base);
+    box-shadow: 0 0 15px rgba(40, 160, 80, 0.3);
     transform: translateY(-2px);
 }
