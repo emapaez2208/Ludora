@@ -11,6 +11,8 @@ import { DeveloperService } from '../../services/developer-service';
 import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Pagination } from '../../components/pagination/pagination';
+import { CartService } from '../../services/cart-service';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   imports: [CommonModule, RouterLink, Pagination],
@@ -24,7 +26,9 @@ export class Catalog implements OnInit {
   private ageRangeService = inject(AgeRangeService);
   private genreService = inject(GenreService);
   private developerService = inject(DeveloperService);
-  private route = inject(ActivatedRoute)
+  private route = inject(ActivatedRoute);
+  
+  cartService = inject(CartService)
 
   games = signal<Game[]>([]);
   isLoading = signal<boolean>(true);

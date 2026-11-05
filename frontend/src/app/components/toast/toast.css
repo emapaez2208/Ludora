@@ -1,0 +1,95 @@
+.toast-container {
+    position: fixed;
+    top: 5.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.toast {
+    --toast-color: var(--color-principal);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 280px;
+    max-width: 380px;
+    padding: 1rem 1.25rem;
+    background-color: color-mix(in srgb, var(--toast-color) 18%, var(--color-secundario));
+    color: var(--color-texto);
+    border: 1px solid var(--toast-color);
+    border-left: 6px solid var(--toast-color);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6),
+                0 0 18px color-mix(in srgb, var(--toast-color) 35%, transparent);
+    animation: toast-in 0.3s ease;
+}
+
+.toast.error { --toast-color: var(--color-peligro); }
+.toast.info  { --toast-color: var(--color-texto); }
+
+.toast span {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: var(--color-texto);
+    opacity: 0.6;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.2s ease;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+.toast.clickable {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.toast.clickable:hover {
+    transform: translateY(-2px);
+}
+
+.toast-action-btn {
+    background-color: var(--color-base);
+    color: var(--toast-color);
+    border: 1px solid var(--toast-color);
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.toast-action-btn:hover {
+    background-color: var(--toast-color);
+    color: var(--color-base);
+    transform: scale(1.05);
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .toast-container {
+        left: 1rem;
+        right: 1rem;
+    }
+
+    .toast {
+        max-width: none;
+    }
+}
