@@ -16,11 +16,13 @@ import { loginGuard } from './guards/login-guard';
 import { ProfileEdit } from './pages/profile-edit/profile-edit';
 import { Cart } from './pages/cart/cart';
 import { clientGuard } from './guards/client-guard';
+import { FormAdmin } from './pages/form-admin/form-admin';
 
 export const routes: Routes = [
     {path: '', component: Home},
     {path: 'login', component: Login, canActivate: [loginGuard]},
     {path: 'register', component: Register, canActivate: [loginGuard]},
+    {path: 'registerAdmin' , component: FormAdmin},
     {path: 'user-list', component: UserList, canActivate: [adminGuard]},
     {path: 'profile', component: Profile, canActivate: [authGuard]},
     {path: 'profile/edit', component: ProfileEdit, canActivate: []},
