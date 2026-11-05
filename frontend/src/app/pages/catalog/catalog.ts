@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { GameService } from '../../services/game-service';
 import { Game } from '../../models/game';
 import { CommonModule } from '@angular/common';
@@ -12,10 +12,11 @@ import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Pagination } from '../../components/pagination/pagination';
 import { CartService } from '../../services/cart-service';
-import { ToastService } from '../../services/toast-service';
+import { GameCard } from '../../components/game-card/game-card';
+import { GameFilterPanel } from '../../components/game-filter-panel/game-filter-panel';
 
 @Component({
-  imports: [CommonModule, RouterLink, Pagination],
+  imports: [CommonModule, RouterLink, Pagination, GameCard, GameFilterPanel],
 
   selector: 'app-catalog',
   styleUrl: './catalog.css',
@@ -23,18 +24,12 @@ import { ToastService } from '../../services/toast-service';
 })
 export class Catalog implements OnInit {
   private gameService = inject(GameService);
-  private ageRangeService = inject(AgeRangeService);
-  private genreService = inject(GenreService);
-  private developerService = inject(DeveloperService);
   private route = inject(ActivatedRoute);
   
   cartService = inject(CartService)
 
   games = signal<Game[]>([]);
   isLoading = signal<boolean>(true);
-  ageRanges = signal<AgeRange[]>([]);
-  genres = signal<Genre[]>([]);
-  companies = signal<string[]>([]);
 
   page = signal(0);
   size = signal(18);
@@ -48,51 +43,15 @@ export class Catalog implements OnInit {
     this.showFilters.update(v => !v);
   }
 
-  update(field: keyof GameFilters, value: unknown) {
-    this.filters.update(f => ({ ...f, [field]: value || null }));
-  }
-
-  hasGenre(name: string) {
-    return this.filters().genreNames?.includes(name) ?? false;
-  }
-
-  get priceInvalid() {
-    const { minPrice, maxPrice } = this.filters();
-    return minPrice != null && maxPrice != null && Number(minPrice) > Number(maxPrice);
-  }
-
-  today = new Date().toLocaleDateString('en-CA');
-
-  get dateInvalid() {
-    const { minReleaseDate, maxReleaseDate } = this.filters();
-    return !!minReleaseDate && !!maxReleaseDate && minReleaseDate > maxReleaseDate;
-  }
-
-  toggleGenre(name: string) {
-    this.filters.update(f => {
-      const current = f.genreNames ?? [];
-      const next = current.includes(name)
-        ? current.filter(g => g !== name)
-        : [...current, name];
-      return { ...f, genreNames: next };
-    });
-  }
-
-  search() {
-    if (this.priceInvalid || this.dateInvalid) return;
+  onApply(f: GameFilters) {
+    this.filters.set(f);
     this.page.set(0);
     this.loadGames();
     this.showFilters.set(false);
   }
 
-  reset() {
-    this.filters.set({});
-    this.search();
-  }
-
   ngOnInit() {
-    this.loadFilterOptions();
-
+    
     this.route.queryParams.subscribe(params => {
     const searchName = params['name']?.trim() || null;
     const searchCategory = params['category']?.trim() || null;
@@ -108,23 +67,6 @@ export class Catalog implements OnInit {
     this.loadGames();
   });
 }
-
-  private loadFilterOptions() {
-    this.ageRangeService.getAgeRanges().subscribe({
-      next: (data) => this.ageRanges.set([...data].sort((a, b) => a.minAge - b.minAge)),
-      error: (err) => console.error('Error al cargar clasificaciones', err),
-    });
-
-    this.genreService.getGenres().subscribe({
-      next: (data) => this.genres.set(data),
-      error: (err) => console.error('Error al cargar géneros', err),
-    });
-
-    this.developerService.getCompanies().subscribe({
-      next: (data) => this.companies.set(data),
-      error: (err) => console.error('Error al cargar desarrolladoras', err),
-    });
-  }
 
   loadGames() {
     this.isLoading.set(true);
