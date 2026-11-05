@@ -1,5 +1,5 @@
-<div class="container">
-  <h2>Gestión de Solicitudes y Revisiones</h2>
+<div class="container mt-4">
+  <h2 class="mb-4">Gestión de Solicitudes y Revisiones</h2>
 
   <!-- Botones para cambiar entre vistas o filtros -->
   <div class="filters mb-3">
@@ -8,35 +8,51 @@
     <button class="btn btn-info me-2 text-white" (click)="loadGamesNeedRevision()">Necesitan Revisión</button>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Estado Bloqueado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-   <ul>
+  <!-- Tabla estructurada correctamente -->
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Estado Bloqueado</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (game of games(); track game.externalId) {
+          <tr>
+            <td><strong>{{ game.name }}</strong></td>
+            <td>
+              <!-- Indicador visual del estado -->
+              <span class="badge" [class.bg-danger]="game.statusBlocked" [class.bg-success]="!game.statusBlocked">
+                {{ game.statusBlocked ? 'Bloqueado' : 'Activo' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <!-- Si está bloqueado, botón para Aprobar/Desbloquear -->
+              @if (game.statusBlocked) {
+                <button class="btn btn-success btn-sm" (click)="authorizeGame(game.externalId)">
+                  Aprobar / Desbloquear
+                </button>
+              } @else {
+                <!-- Si está activo, botón para Desautorizar -->
+                <button class="btn btn-danger btn-sm" (click)="desautorizedGame(game.externalId)">
+                  Desautorizar
+                </button>
+              }
+            </td>
+          } @empty {
+          <tr>
+            <td colspan="3" class="text-center text-muted py-4">
+              No hay juegos para mostrar.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 
-    @for (game of games(); track game.externalId) {
-
-      <li><p>Nombre : {{game.name}} </p>
-           <p>Estado : {{game.statusBlocked}}</p>
-      <!-- Si está bloqueado, mostramos el botón para Autorizar/Desbloquear -->
-      @if (game.statusBlocked) {
-        <button class="btn btn-success" (click)="authorizeGame(game.externalId)">
-          Aprobar / Desbloquear
-        </button>
-      } @else {
-        <!-- Si está activo/aprobado, mostramos el botón para Desautorizar -->
-        <button class="btn btn-danger" (click)="desautorizedGame(game.externalId)">
-          Desautorizar
-        </button>}
-        </li>
-      }
-   </ul>
-  </table>
-
+  <!-- Paginación -->
   <app-pagination 
     [page]="page()" 
     [totalPages]="totalPages()" 

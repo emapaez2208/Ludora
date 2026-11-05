@@ -1,0 +1,119 @@
+/* ==========================================================================
+   ESTILOS PARA LA TABLA DE GESTIÓN Y ADMINISTRACIÓN (Complemento)
+   ========================================================================== */
+
+/* Contenedor responsivo de la tabla con los mismos estilos de tarjeta */
+.table-responsive {
+    background-color: var(--color-secundario);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 0.5rem;
+    overflow-x: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilización general de la tabla */
+.table {
+    width: 100%;
+    margin-bottom: 0;
+    color: var(--color-texto);
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* Cabecera de la tabla */
+.table th {
+    background-color: transparent;
+    color: var(--color-texto-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.25rem;
+}
+
+/* Celdas de la tabla */
+.table td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 0.95rem;
+    color: var(--color-texto);
+}
+
+/* Efecto hover sutil en las filas de la tabla */
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Eliminar la línea del último elemento */
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Ajustes para los Badges dentro de la tabla (Bloqueado / Activo) */
+.table .badge {
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    display: inline-block;
+}
+
+/* Badge de Estado Activo (Usa tu color principal: Verde) */
+.table .badge.bg-success {
+    background-color: color-mix(in srgb, var(--color-principal) 15%, var(--color-secundario)) !important;
+    color: var(--color-principal) !important;
+    border: 1px solid color-mix(in srgb, var(--color-principal) 30%, transparent);
+}
+
+/* Badge de Estado Bloqueado (Usa tu color de peligro: Rojo) */
+.table .badge.bg-danger {
+    background-color: color-mix(in srgb, var(--color-peligro) 15%, var(--color-secundario)) !important;
+    color: var(--color-peligro) !important;
+    border: 1px solid color-mix(in srgb, var(--color-peligro) 30%, transparent);
+}
+
+/* Botones de acción dentro de la tabla (Aprobar / Desautorizar) */
+.table .btn {
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+    box-shadow: none;
+}
+
+/* Botón de Aprobar / Desbloquear (Verde principal) */
+.table .btn-success {
+    background-color: color-mix(in srgb, var(--color-principal) 20%, var(--color-secundario));
+    color: var(--color-principal);
+    border: 1px solid color-mix(in srgb, var(--color-principal) 40%, transparent);
+}
+
+.table .btn-success:hover {
+    background-color: var(--color-principal);
+    color: var(--color-base);
+    box-shadow: 0 0 15px rgba(40, 160, 80, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Botón de Desautorizar (Rojo peligro) */
+.table .btn-danger {
+    background-color: color-mix(in srgb, var(--color-peligro) 15%, var(--color-secundario));
+    color: var(--color-peligro);
+    border: 1px solid color-mix(in srgb, var(--color-peligro) 30%, transparent);
+}
+
+.table .btn-danger:hover {
+    background-color: var(--color-peligro);
+    color: var(--color-texto);
+    box-shadow: 0 0 15px rgba(217, 56, 56, 0.3);
+    transform: translateY(-2px);
+}
