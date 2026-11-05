@@ -12,7 +12,7 @@ export class UserStateService {
     developer = signal<Developer | null>(null)
     admin = signal<AdminResponse | null>(null)
     msjError = signal('')
-    loadded = signal(false)
+    loaded = signal(false)
 
     userService = inject(UserService)
     authService = inject(AuthService)
@@ -36,40 +36,40 @@ export class UserStateService {
         this.userService.adminProfile().subscribe({
             next: data => {
                 this.admin.set(data)
-                this.loadded.set(true)
+                this.loaded.set(true)
             },
             error: e => {
             console.error('Error al traer al admin', e)
             this.msjError.set('No se pudo cargar el perfil de Administrador')
-            this.loadded.set(true)
+            this.loaded.set(true)
             }
         })
         }else if(this.authService.hasRole('ROLE_DEVELOPER')){
         this.userService.developerProfile().subscribe({
             next: data => {
                 this.developer.set(data)
-                this.loadded.set(true)
+                this.loaded.set(true)
             },
             error: e => {
             console.error('Error al traer al desarrollador', e)
             this.msjError.set('No se pudo cargar el perfil de Desarrollador')
-            this.loadded.set(true)
+            this.loaded.set(true)
             }
         })
         }else if(this.authService.hasRole('ROLE_CLIENT')){
         this.userService.clientProfile().subscribe({
             next: data => {
                 this.client.set(data)
-                this.loadded.set(true)
+                this.loaded.set(true)
             },
             error: e => {
             console.error('Error al traer al cliente', e)
             this.msjError.set('No se pudo cargar el perfil de Usuario')
-            this.loadded.set(true)
+            this.loaded.set(true)
             }
         })
         }else{
-            this.loadded.set(true)
+            this.loaded.set(true)
         }
     }
 
@@ -78,6 +78,6 @@ export class UserStateService {
         this.developer.set(null);
         this.admin.set(null);
         this.msjError.set('');
-        this.loadded.set(false);
+        this.loaded.set(false);
     }
 }

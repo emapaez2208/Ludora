@@ -35,7 +35,7 @@ export class Library {
 
   constructor() {
     effect(() => {
-        if (this.userState.loadded()) {
+        if (this.userState.loaded()) {
             untracked(() => this.loadGames())
         }
     })
