@@ -56,4 +56,13 @@ export class GameService {
     editGame(id : string, game : GameRequest){
       return this.http.put<Game>(`${this.url}/${id}`, game)
     }
+
+
+    getClientGames(){
+      return this.http.get<Game[]>('/api/clients/library')
+    }
+    
+    getDeveloperGames(id : string){
+      return this.http.get<Game[]>(`/api/developers/${id}/games`)
+    }
 }
