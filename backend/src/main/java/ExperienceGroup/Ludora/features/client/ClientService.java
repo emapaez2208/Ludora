@@ -235,7 +235,7 @@ public class ClientService implements IClientService{
     public List<GameDTOResponse> getMyGames(){
         return  gameRepository.findAllByClients_ExternalId(
                 authenticatedUser.getCurrentUser().externalId()
-                ).orElseThrow(() -> new GameNotFoundException("The user not contain games"))
+                )
                     .stream()
                     .map(mapperGamesResponse::toDTO)
                     .toList();
