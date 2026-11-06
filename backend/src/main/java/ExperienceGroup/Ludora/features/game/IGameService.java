@@ -20,7 +20,9 @@ public interface IGameService {
                                       LocalDate maxReleaseDate,
                                       List<String> genreNames,
                                       String rangeName,
-                                      String developerCompany);
+                                      String developerCompany,
+                                      String sortBy,
+                                      String sortDirection);
     GameDTOResponse getByExternalId (UUID externalId);
     GameDTOResponse save (GameDTORequest gameDTORequest);
     GameDTOResponse update (UUID externalId, GameDTORequest gameDTORequest);
