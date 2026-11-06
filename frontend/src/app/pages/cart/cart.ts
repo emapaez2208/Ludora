@@ -1,6 +1,8 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart-service';
+import { SaleService } from '../../services/sale-service';
+import { SaleRequest } from '../../models/sale-request';
 
 @Component({
   imports: [RouterLink],
@@ -11,6 +13,8 @@ import { CartService } from '../../services/cart-service';
 export class Cart implements OnInit {
 
   private cartService = inject(CartService);
+  private router = inject(Router)
+  private saleService = inject(SaleService)
 
   cart = this.cartService.cart;
   games = computed(() => this.cart()?.games ?? []);
@@ -47,5 +51,20 @@ export class Cart implements OnInit {
         this.removingId.set(null);
       }
     });
+  }
+
+  payCart(){
+    if(this.games().length === 0 && !this.cart()) return
+
+    const saleRequest : SaleRequest = {clientExternalId : this.cart()!.client.externalId}
+
+    this.saleService.createSale(saleRequest).subscribe({
+      next: data => {
+        this.router.navigate(['/sales', data.externalId])
+      },
+      error: e => {
+        console.error('Error al crear la Sale: ', e)
+      }
+    })
   }
 }
