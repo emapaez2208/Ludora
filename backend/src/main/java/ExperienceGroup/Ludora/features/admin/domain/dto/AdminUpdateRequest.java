@@ -10,6 +10,9 @@ public record AdminUpdateRequest (@Schema(description = "The user's name", examp
                                   @NotBlank
                                   String name,
 
+                                  @Schema(description = "The avatar image URL hosted in Cloudinary", example = "https://res.cloudinary.com/...", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+                                  String avatarUrl,
+                                
                                   @Schema(description = "The user's last name", example = "Doe", required = true)
                                   @Size(min = 3, max = 32, message = "The last name must be between 3 and 32 characters long")
                                   @NotBlank

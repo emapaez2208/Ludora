@@ -180,6 +180,7 @@ public class ClientService implements IClientService{
 
         clientEntity.setName(dto.name());
         clientEntity.setLastName(dto.lastName());
+        clientEntity.setAvatarUrl(dto.avatarUrl());
         clientEntity.setPhone(dto.phone());
         clientEntity.setStreet(dto.street());
         clientEntity.setNumberStreet(dto.numberStreet());

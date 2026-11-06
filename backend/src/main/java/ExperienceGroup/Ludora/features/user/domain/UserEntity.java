@@ -23,6 +23,9 @@ public abstract class UserEntity {
     @Column(nullable = false, unique = true, updatable = false)
     private UUID externalId;
 
+    @Column(name = "avatar_url", nullable = true, )
+    private String avatarUrl;
+
     @Column(nullable = false)
     private String name;
 

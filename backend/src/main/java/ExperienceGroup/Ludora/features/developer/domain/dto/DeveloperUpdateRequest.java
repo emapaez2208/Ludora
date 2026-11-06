@@ -19,6 +19,9 @@ public record DeveloperUpdateRequest(
         @Size(min = 3, max = 32, message = "The last name must be between 3 and 32 characters long")
         @NotBlank
         String lastName,
+        
+        @Schema(description = "The avatar image URL hosted in Cloudinary", example = "https://res.cloudinary.com/...", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String avatarUrl,                      
 
         @Schema(description = "The developer's company", example = "Rito Games", required = true)
         @NotBlank
