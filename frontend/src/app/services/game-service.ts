@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { GameFilters } from '../models/game-filters';
 import { GameRequest } from '../models/game-request';
 import { PageResponse } from '../models/page-response';
+import { GameSortOptions } from '../models/game-sort-options';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,14 @@ export class GameService {
     getGames(
       page: number = 0, 
       size: number = 50,
-      filters: GameFilters = {}  
+      filters: GameFilters = {},
+      sort: GameSortOptions = { sortBy: 'name', sortDirection: 'asc' }
     ): Observable<PageResponse<Game>> {
       let params = new HttpParams()
         .set('page', page.toString())
-        .set('size', size.toString());
+        .set('size', size.toString())
+        .set('sortBy', sort.sortBy)
+        .set('sortDirection', sort.sortDirection);
 
       const { genreNames, ...simple} = filters;
 

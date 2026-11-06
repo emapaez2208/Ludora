@@ -45,6 +45,8 @@ public class GameService implements IGameService{
     private final IGenreRepository genreRepository;
     private final AuthenticatedUserProvider authenticatedUserProvider;
 
+    private static final List<String> SORT_FIELDS = List.of("name", "price", "releaseDate");
+
 
     /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) ------------------------------
     @Override
@@ -57,7 +59,9 @@ public class GameService implements IGameService{
                                              LocalDate maxReleaseDate,
                                              List<String> genreNames,
                                              String rangeName,
-                                             String developerCompany) {
+                                             String developerCompany,
+                                             String sortBy,
+                                             String sortDirection) {
 
         if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("The minimum price cannot be negative.");
@@ -82,6 +86,19 @@ public class GameService implements IGameService{
             throw new IllegalArgumentException("The end date cannot be in the future.");
         }
 
+        if (sortBy == null || !SORT_FIELDS.contains(sortBy)) {
+            throw new IllegalArgumentException("Invalid sort field. Allowed: name, price, releaseDate.");
+        }
+
+        Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection)
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        Sort sort = Sort.by(direction, sortBy);
+        if (!sortBy.equals("name")) {
+            sort = sort.and(Sort.by(Sort.Direction.ASC, "name"));
+        }
+
         PredicateSpecification<GameEntity> spec = PredicateSpecification.allOf(
                 GameSpecification.nameContains(name),
                 GameSpecification.priceLesserThan(maxPrice),
@@ -93,7 +110,7 @@ public class GameService implements IGameService{
                 GameSpecification.hasDeveloperCompany(developerCompany)
         );
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Specification<GameEntity> finalSpec = Specification.where(spec)
             .and(GameSpecification.hasGenreNames(genreNames));

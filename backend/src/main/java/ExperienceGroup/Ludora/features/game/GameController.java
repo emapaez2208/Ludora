@@ -50,7 +50,9 @@ public class GameController {
             @Parameter(description = "Maximum release date (YYYY-MM-DD)") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate maxReleaseDate,
             @Parameter(description = "List of genre names") @RequestParam(required = false) List<String> genreNames,
             @Parameter(description = "Range name") @RequestParam(required = false) String rangeName,
-            @Parameter(description = "Developer company name") @RequestParam(required = false) String developerCompany
+            @Parameter(description = "Developer company name") @RequestParam(required = false) String developerCompany,
+            @Parameter(description = "Sort field: name, price or releaseDate") @RequestParam(required = false, defaultValue = "name") String sortBy,
+            @Parameter(description = "Sort direction: asc or desc") @RequestParam(required = false, defaultValue = "asc") String sortDirection
     ) {
         return ResponseEntity.ok(gameService.getAllGames(
                 page,
@@ -62,7 +64,9 @@ public class GameController {
                 maxReleaseDate,
                 genreNames,
                 rangeName,
-                developerCompany));
+                developerCompany,
+                sortBy,
+                sortDirection));
     }
 
     /// -------------------- TRAEMOS UN JUEGO EXTERNAL----------------------

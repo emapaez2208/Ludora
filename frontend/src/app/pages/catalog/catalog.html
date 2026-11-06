@@ -5,13 +5,15 @@
     <button class="btn btn-filters" (click)="toggleFilters()">
       Filtros {{ showFilters() ? '▲' : '▼' }}
     </button>
+
+    <app-game-sort [sort]="sort()" (sortChange)="onSortChange($event)" />
+  </div>
   
 
-@if (showFilters()) {
-  <app-game-filter-panel [initial]="filters()" (apply)="onApply($event)" />
-}
+  @if (showFilters()) {
+    <app-game-filter-panel [initial]="filters()" (apply)="onApply($event)" />
+  }
 
-</div>
 
   @if (isLoading()) {
     <p>Cargando juegos...</p>
