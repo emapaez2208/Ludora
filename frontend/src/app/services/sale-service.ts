@@ -15,10 +15,10 @@ export class SaleService {
     }
 
     paySale(saleId : string){
-        return this.http.post<string>(`${this.url}/${saleId}`, undefined)
+        return this.http.post<string>(`${this.url}/pay/${saleId}`, {}, { responseType: 'text' })
     }
 
-    getSale(saleId : string){
+    getSale(saleId : string){ 
         return this.http.get<SaleResponse>(`${this.url}/${saleId}`)
     }
 
