@@ -3,20 +3,17 @@ import { GameService } from '../../services/game-service';
 import { Game } from '../../models/game';
 import { CommonModule } from '@angular/common';
 import { GameFilters } from '../../models/game-filters';
-import { AgeRangeService } from '../../services/age-range-service';
-import { AgeRange } from '../../models/age-range';
-import { GenreService } from '../../services/genre-service';
-import { Genre } from '../../models/genre';
-import { DeveloperService } from '../../services/developer-service';
 import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Pagination } from '../../components/pagination/pagination';
 import { CartService } from '../../services/cart-service';
 import { GameCard } from '../../components/game-card/game-card';
 import { GameFilterPanel } from '../../components/game-filter-panel/game-filter-panel';
+import { GameSort } from '../../components/game-sort/game-sort';
+import { GameSortOptions } from '../../models/game-sort-options';
 
 @Component({
-  imports: [CommonModule, RouterLink, Pagination, GameCard, GameFilterPanel],
+  imports: [CommonModule, RouterLink, Pagination, GameCard, GameFilterPanel, GameSort],
 
   selector: 'app-catalog',
   styleUrl: './catalog.css',
@@ -37,6 +34,8 @@ export class Catalog implements OnInit {
 
   filters = signal<GameFilters>({});
 
+  sort = signal<GameSortOptions>({ sortBy: 'name', sortDirection: 'asc'});
+
   showFilters = signal(false);
 
   toggleFilters() {
@@ -48,6 +47,12 @@ export class Catalog implements OnInit {
     this.page.set(0);
     this.loadGames();
     this.showFilters.set(false);
+  }
+
+  onSortChange(s: GameSortOptions) {
+    this.sort.set(s);
+    this.page.set(0);
+    this.loadGames();
   }
 
   ngOnInit() {
@@ -73,7 +78,7 @@ export class Catalog implements OnInit {
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    this.gameService.getGames(this.page(), this.size(), this.filters()).subscribe({
+    this.gameService.getGames(this.page(), this.size(), this.filters(), this.sort()).subscribe({
       next: (data) => {
         this.games.set(data.content);
         this.totalPages.set(data.totalPages);
