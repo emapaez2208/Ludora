@@ -153,7 +153,8 @@
     box-shadow: none;
 }
 
-.admin-panel {
+.admin-panel,
+.owner-panel {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -180,6 +181,10 @@
 
 .tag-revision { 
     color: #e6b422; 
+}
+
+.btn-edit {
+    text-decoration: none;
 }
 
 .btn-danger {

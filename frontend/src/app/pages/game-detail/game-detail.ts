@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GameService } from '../../services/game-service';
 import { Game } from '../../models/game';
@@ -6,6 +6,7 @@ import { Reviews } from '../../components/reviews/reviews';
 import { CartService } from '../../services/cart-service';
 import { ToastService } from '../../services/toast-service';
 import { AuthService } from '../../services/auth-service';
+import { UserStateService } from '../../services/user-state-service';
 
 @Component({
   imports: [RouterLink, Reviews],
@@ -18,7 +19,8 @@ export class GameDetail implements OnInit{
   private route = inject(ActivatedRoute);
   private gameService = inject(GameService);
   private toastService = inject(ToastService);
-  
+  private userState = inject(UserStateService);
+
   cartService = inject(CartService);
   authService = inject(AuthService);
 
@@ -26,7 +28,19 @@ export class GameDetail implements OnInit{
   game = signal<Game | null>(null);
   isLoading = signal(true);
   notFound = signal(false);
-  isActing = signal(false); 
+  isActing = signal(false);
+  isOwner = signal(false);
+
+  constructor() {
+    effect(() => {
+      const developer = this.userState.developer();
+      const game = this.game();
+
+      if (developer && game) { 
+        untracked(() => this.checkOwner(developer.externalId, game.externalId)); // chequea si el developer es el dueño del juego
+      }
+    });
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -50,6 +64,16 @@ export class GameDetail implements OnInit{
         this.notFound.set(true);
         this.isLoading.set(false);
       },
+    });
+  }
+
+  checkOwner(developerId: string, gameId: string) {
+
+    this.gameService.getDeveloperGames(developerId).subscribe({
+      
+      next: (games) => this.isOwner.set(games.some(g => g.externalId === gameId)),
+      
+      error: () => this.isOwner.set(false)
     });
   }
 

@@ -55,6 +55,24 @@
 
           </div>
 
+        } @else if (isOwner()) {
+
+          <div class="owner-panel">
+
+            @if (g.needRevision) {
+              <span class="status-tag tag-revision">En revisión</span>
+            } @else if (g.statusBlocked) {
+              <span class="status-tag tag-blocked">Bloqueado</span>
+            } @else {
+              <span class="status-tag tag-available">Disponible</span>
+            }
+
+            <a [routerLink]="['/games/edit', g.externalId]" class="btn btn-buy btn-edit">
+              Editar juego
+            </a>
+
+          </div>
+
         } @else if (!authService.isLoggedIn() || isClient()) {
 
           @if (cartService.has(g.externalId)) {
