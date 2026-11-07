@@ -730,6 +730,7 @@ public class CargaBDDPrueba {
                 gow.setAgeRange(mas18);
                 gow.setGenres(List.of(action, adventure));
                 gow.setStatusBlocked(false);
+                gow.setNeedRevision(false);
                 gameRepository.save(gow);
             }
 
@@ -745,6 +746,7 @@ public class CargaBDDPrueba {
                 gow2018.setAgeRange(mas18);
                 gow2018.setGenres(List.of(action, adventure));
                 gow2018.setStatusBlocked(false);
+                gow2018.setNeedRevision(false);
                 gameRepository.save(gow2018);
             }
 
@@ -760,6 +762,7 @@ public class CargaBDDPrueba {
                 spider.setAgeRange(mas13);
                 spider.setGenres(List.of(action, adventure));
                 spider.setStatusBlocked(false);
+                spider.setNeedRevision(false);
                 gameRepository.save(spider);
             }
 
@@ -775,6 +778,7 @@ public class CargaBDDPrueba {
                 tlou.setAgeRange(mas18);
                 tlou.setGenres(List.of(action, adventure));
                 tlou.setStatusBlocked(false);
+                tlou.setNeedRevision(false);
                 gameRepository.save(tlou);
             }
 
@@ -790,6 +794,7 @@ public class CargaBDDPrueba {
                 unch.setAgeRange(mas13);
                 unch.setGenres(List.of(action, adventure));
                 unch.setStatusBlocked(false);
+                unch.setNeedRevision(false);
                 gameRepository.save(unch);
             }
 
@@ -809,6 +814,7 @@ public class CargaBDDPrueba {
                 gta.setAgeRange(mas18);
                 gta.setGenres(List.of(action, adventure));
                 gta.setStatusBlocked(false);
+                gta.setNeedRevision(false);
                 gameRepository.save(gta);
             }
 
@@ -824,6 +830,7 @@ public class CargaBDDPrueba {
                 rdr2.setAgeRange(mas18);
                 rdr2.setGenres(List.of(action, adventure));
                 rdr2.setStatusBlocked(false);
+                rdr2.setNeedRevision(false);
                 gameRepository.save(rdr2);
             }
 
@@ -839,6 +846,7 @@ public class CargaBDDPrueba {
                 gta4.setAgeRange(mas18);
                 gta4.setGenres(List.of(action, adventure));
                 gta4.setStatusBlocked(false);
+                gta4.setNeedRevision(false);
                 gameRepository.save(gta4);
             }
 
@@ -854,6 +862,7 @@ public class CargaBDDPrueba {
                 lanoire.setAgeRange(mas18);
                 lanoire.setGenres(List.of(action, adventure));
                 lanoire.setStatusBlocked(false);
+                lanoire.setNeedRevision(false);
                 gameRepository.save(lanoire);
             }
 
@@ -869,6 +878,7 @@ public class CargaBDDPrueba {
                 max.setAgeRange(mas18);
                 max.setGenres(List.of(action, shooter));
                 max.setStatusBlocked(false);
+                max.setNeedRevision(false);
                 gameRepository.save(max);
             }
 
@@ -888,6 +898,7 @@ public class CargaBDDPrueba {
                 mario.setAgeRange(atp);
                 mario.setGenres(List.of(adventure));
                 mario.setStatusBlocked(false);
+                mario.setNeedRevision(false);
                 gameRepository.save(mario);
             }
 
@@ -903,6 +914,7 @@ public class CargaBDDPrueba {
                 zelda.setAgeRange(mas13);
                 zelda.setGenres(List.of(adventure, rpg));
                 zelda.setStatusBlocked(false);
+                zelda.setNeedRevision(false);
                 gameRepository.save(zelda);
             }
 
@@ -918,6 +930,7 @@ public class CargaBDDPrueba {
                 mk8.setAgeRange(atp);
                 mk8.setGenres(List.of(sports));
                 mk8.setStatusBlocked(false);
+                mk8.setNeedRevision(false);
                 gameRepository.save(mk8);
             }
 
@@ -933,6 +946,7 @@ public class CargaBDDPrueba {
                 ac.setAgeRange(atp);
                 ac.setGenres(List.of(adventure));
                 ac.setStatusBlocked(false);
+                ac.setNeedRevision(false);
                 gameRepository.save(ac);
             }
 
@@ -948,6 +962,7 @@ public class CargaBDDPrueba {
                 smash.setAgeRange(mas13);
                 smash.setGenres(List.of(action));
                 smash.setStatusBlocked(false);
+                smash.setNeedRevision(false);
                 gameRepository.save(smash);
             }
 
@@ -967,6 +982,7 @@ public class CargaBDDPrueba {
                 tw3.setAgeRange(mas18);
                 tw3.setGenres(List.of(rpg, adventure));
                 tw3.setStatusBlocked(false);
+                tw3.setNeedRevision(false);
                 gameRepository.save(tw3);
             }
 
@@ -982,6 +998,7 @@ public class CargaBDDPrueba {
                 cp.setAgeRange(mas18);
                 cp.setGenres(List.of(rpg, shooter, action));
                 cp.setStatusBlocked(false);
+                cp.setNeedRevision(false);
                 gameRepository.save(cp);
             }
 
@@ -997,6 +1014,7 @@ public class CargaBDDPrueba {
                 pl.setAgeRange(mas18);
                 pl.setGenres(List.of(rpg, action));
                 pl.setStatusBlocked(false);
+                pl.setNeedRevision(false);
                 gameRepository.save(pl);
             }
 
@@ -1012,6 +1030,7 @@ public class CargaBDDPrueba {
                 tw2.setAgeRange(mas18);
                 tw2.setGenres(List.of(rpg, action));
                 tw2.setStatusBlocked(false);
+                tw2.setNeedRevision(false);
                 gameRepository.save(tw2);
             }
 
@@ -1027,6 +1046,7 @@ public class CargaBDDPrueba {
                 tw1.setAgeRange(mas18);
                 tw1.setGenres(List.of(rpg));
                 tw1.setStatusBlocked(false);
+                tw1.setNeedRevision(false);
                 gameRepository.save(tw1);
             }
 
@@ -1046,6 +1066,7 @@ public class CargaBDDPrueba {
                 elden.setAgeRange(mas18);
                 elden.setGenres(List.of(action, rpg));
                 elden.setStatusBlocked(false);
+                elden.setNeedRevision(false);
                 gameRepository.save(elden);
             }
 
@@ -1061,6 +1082,7 @@ public class CargaBDDPrueba {
                 sekiro.setAgeRange(mas18);
                 sekiro.setGenres(List.of(action, adventure));
                 sekiro.setStatusBlocked(false);
+                sekiro.setNeedRevision(false);
                 gameRepository.save(sekiro);
             }
 
@@ -1075,7 +1097,8 @@ public class CargaBDDPrueba {
                 ds3.setDeveloper(hidetakaDev);
                 ds3.setAgeRange(mas18);
                 ds3.setGenres(List.of(action, rpg));
-                ds3.setStatusBlocked(false);
+                ds3.setStatusBlocked(true);
+                ds3.setNeedRevision(false);
                 gameRepository.save(ds3);
             }
 
@@ -1090,7 +1113,8 @@ public class CargaBDDPrueba {
                 ds1.setDeveloper(hidetakaDev);
                 ds1.setAgeRange(mas18);
                 ds1.setGenres(List.of(action, rpg));
-                ds1.setStatusBlocked(false);
+                ds1.setStatusBlocked(true);
+                ds1.setNeedRevision(true);
                 gameRepository.save(ds1);
             }
 
@@ -1106,6 +1130,7 @@ public class CargaBDDPrueba {
                 ac6.setAgeRange(mas13);
                 ac6.setGenres(List.of(action, shooter));
                 ac6.setStatusBlocked(false);
+                ac6.setNeedRevision(false);
                 gameRepository.save(ac6);
             }
 
@@ -1125,6 +1150,7 @@ public class CargaBDDPrueba {
                 re4.setAgeRange(mas18);
                 re4.setGenres(List.of(action, terror));
                 re4.setStatusBlocked(false);
+                re4.setNeedRevision(false);
                 gameRepository.save(re4);
             }
 
@@ -1140,6 +1166,7 @@ public class CargaBDDPrueba {
                 re2.setAgeRange(mas18);
                 re2.setGenres(List.of(terror, action));
                 re2.setStatusBlocked(false);
+                re2.setNeedRevision(false);
                 gameRepository.save(re2);
             }
 
@@ -1155,6 +1182,7 @@ public class CargaBDDPrueba {
                 rev.setAgeRange(mas18);
                 rev.setGenres(List.of(terror, action));
                 rev.setStatusBlocked(false);
+                rev.setNeedRevision(false);
                 gameRepository.save(rev);
             }
 
@@ -1170,6 +1198,7 @@ public class CargaBDDPrueba {
                 dmc5.setAgeRange(mas18);
                 dmc5.setGenres(List.of(action));
                 dmc5.setStatusBlocked(false);
+                dmc5.setNeedRevision(false);
                 gameRepository.save(dmc5);
             }
 
@@ -1185,6 +1214,7 @@ public class CargaBDDPrueba {
                 mhw.setAgeRange(mas13);
                 mhw.setGenres(List.of(action, rpg));
                 mhw.setStatusBlocked(false);
+                mhw.setNeedRevision(false);
                 gameRepository.save(mhw);
             }
             System.out.println("====== Catálogo de juegos verificado y cargado ======");

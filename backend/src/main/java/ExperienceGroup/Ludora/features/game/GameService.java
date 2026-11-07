@@ -49,8 +49,54 @@ public class GameService implements IGameService{
 
 
     /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) ------------------------------
+    
     @Override
-    public Page<GameDTOResponse> getAllGames(int page,
+    public Page<GameDTOResponse> getAllGames(int page, 
+                                            int size, 
+                                            String name,
+                                            BigDecimal maxPrice, 
+                                            BigDecimal minPrice,
+                                            LocalDate minReleaseDate, 
+                                            LocalDate maxReleaseDate,
+                                            List<String> genreNames, 
+                                            String rangeName,
+                                            String developerCompany, 
+                                            String sortBy, 
+                                            String sortDirection) {
+
+        return searchGames(page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                genreNames, rangeName, developerCompany, sortBy, sortDirection,
+                false, false);
+    }
+
+     @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<GameDTOResponse> getAdminGames(int page, 
+                                                int size, 
+                                                String name,
+                                                BigDecimal maxPrice, 
+                                                BigDecimal minPrice,
+                                                LocalDate minReleaseDate, 
+                                                LocalDate maxReleaseDate,
+                                                List<String> genreNames, 
+                                                String rangeName,
+                                                String developerCompany, 
+                                                String sortBy,
+                                                String sortDirection, 
+                                                String status) {
+        return switch (status == null ? "all" : status) {
+            case "all" -> searchGames(page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                    genreNames, rangeName, developerCompany, sortBy, sortDirection, null, null);
+            case "blocked" -> searchGames(page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                    genreNames, rangeName, developerCompany, sortBy, sortDirection, true, false);
+            case "needRevision" -> searchGames(page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                    genreNames, rangeName, developerCompany, sortBy, sortDirection, null, true);
+            default -> throw new IllegalArgumentException("Invalid status. Allowed: all, blocked, needRevision.");
+        };
+    }
+
+    
+    private Page<GameDTOResponse> searchGames(int page,
                                              int size,
                                              String name,
                                              BigDecimal maxPrice,
@@ -61,7 +107,9 @@ public class GameService implements IGameService{
                                              String rangeName,
                                              String developerCompany,
                                              String sortBy,
-                                             String sortDirection) {
+                                             String sortDirection,
+                                             Boolean statusBlocked,
+                                             Boolean needRevision) {
 
         if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("The minimum price cannot be negative.");
@@ -105,7 +153,8 @@ public class GameService implements IGameService{
                 GameSpecification.priceGreaterThan(minPrice),
                 GameSpecification.releaseDateAfter(minReleaseDate),
                 GameSpecification.releaseDateBefore(maxReleaseDate),
-                GameSpecification.statusBlockedEquals(false),
+                GameSpecification.statusBlockedEquals(statusBlocked),
+                GameSpecification.needRevisionEquals(needRevision),
                 GameSpecification.hasAgeRangeName(rangeName),
                 GameSpecification.hasDeveloperCompany(developerCompany)
         );
