@@ -153,6 +153,49 @@
     box-shadow: none;
 }
 
+.admin-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.status-tag {
+    align-self: flex-start;
+    padding: 0.25rem 0.7rem;
+    border: 1px solid currentColor;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.tag-available { 
+    color: var(--color-principal); 
+}
+
+.tag-blocked { 
+    color: var(--color-peligro); 
+}
+
+.tag-revision { 
+    color: #e6b422; 
+}
+
+.btn-danger {
+    background-color: transparent;
+    color: var(--color-peligro);
+    border: 1px solid var(--color-peligro);
+}
+
+.btn-danger:hover,
+.btn-danger:focus-visible {
+    background-color: color-mix(in srgb, var(--color-peligro) 15%, transparent);
+    border-color: var(--color-peligro);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-peligro) 35%, transparent);
+    outline: none;
+}
+
 @media (max-width: 900px) {
     .detail {
         grid-template-columns: 1fr;

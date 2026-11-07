@@ -32,7 +32,7 @@
 
       @for (game of games(); track game.externalId) {
 
-        <app-game-card [game]="game">
+        <app-game-card [game]="game" [showStatus]="isDeveloper()" [developerView]="isDeveloper()">
         </app-game-card>
 
       } @empty {

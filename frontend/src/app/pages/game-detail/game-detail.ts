@@ -17,14 +17,16 @@ export class GameDetail implements OnInit{
 
   private route = inject(ActivatedRoute);
   private gameService = inject(GameService);
-  private authService = inject(AuthService);
+  private toastService = inject(ToastService);
   
   cartService = inject(CartService);
+  authService = inject(AuthService);
 
   gameId = signal<string>(''); 
   game = signal<Game | null>(null);
   isLoading = signal(true);
-  notFound = signal(false); 
+  notFound = signal(false);
+  isActing = signal(false); 
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -37,10 +39,12 @@ export class GameDetail implements OnInit{
     this.gameId.set(id);
 
     this.gameService.getGameById(id).subscribe({
+      
       next: (data) => {
         this.game.set(data);
         this.isLoading.set(false);
       },
+
       error: (err) => {
         console.error('Error al cargar el juego', err);
         this.notFound.set(true);
@@ -49,8 +53,52 @@ export class GameDetail implements OnInit{
     });
   }
 
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
   isClient(): boolean {
     return this.authService.isClient();
   }
+
+  approve() {
+    this.isActing.set(true);
+
+    this.gameService.authorizeGame(this.gameId()).subscribe({
+      next: (data) => {
+        this.game.set(data);
+        this.isActing.set(false);
+        this.toastService.show('El juego quedó disponible para la venta.', 'info');
+      },
+
+      error: () => {
+        this.isActing.set(false);
+        this.toastService.show('No se pudo completar la acción.', 'error');
+      }
+    });
+  }
+
+  block() {
+    this.isActing.set(true);
+
+    this.gameService.blockGame(this.gameId()).subscribe({
+      next: () => {
+        this.gameService.getGameById(this.gameId()).subscribe({
+          next: (data) => {
+            this.game.set(data);
+            this.isActing.set(false);
+            this.toastService.show('El juego fue bloqueado.', 'info');
+          },
+          error: () => this.isActing.set(false)
+        });
+      },
+
+      error: () => {
+        this.isActing.set(false);
+        this.toastService.show('No se pudo completar la acción.', 'error');
+      }
+    });
+  }
+
 
 }

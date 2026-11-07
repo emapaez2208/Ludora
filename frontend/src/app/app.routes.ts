@@ -24,7 +24,6 @@ export const routes: Routes = [
     {path: '', component: Home},
     {path: 'login', component: Login, canActivate: [loginGuard]},
     {path: 'register', component: Register, canActivate: [loginGuard]},
-    {path: 'user-management', component: UserList, canActivate: [adminGuard]},
     {path: 'profile', component: Profile, canActivate: [authGuard]},
     {path: 'profile/edit', component: ProfileEdit, canActivate: []},
     {path: 'catalog', component: Catalog},
@@ -35,6 +34,14 @@ export const routes: Routes = [
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
     {path: 'cart', component: Cart,canActivate: [clientGuard]},
     {path: 'library', component: Library, canActivate: [clientOrDeveloperGuard]},
-    {path: 'game-management', component: GameManagement, canActivate: [adminGuard]},
+    {
+        path: 'management',
+        canActivate: [adminGuard],
+        children: [
+            { path: '', pathMatch: 'full', redirectTo: 'games' },
+            { path: 'games', component: GameManagement },
+            { path: 'users', component: UserList },
+        ],
+    },
     { path: '**', redirectTo: ''}
 ];

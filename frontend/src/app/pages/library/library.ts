@@ -33,6 +33,13 @@ export class Library {
     this.showFilters.update(v => !v)
   }
 
+  isDeveloper(): boolean {
+    if (this.userState.developer()) {
+      return true;
+    }
+    return false;
+  }
+
   constructor() {
     effect(() => {
         if (this.userState.loaded()) {

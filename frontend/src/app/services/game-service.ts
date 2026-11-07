@@ -92,6 +92,13 @@ export class GameService {
       return this.http.put<Game>(`${this.url}/${id}`, game)
     }
 
+    authorizeGame(id: string) {
+      return this.http.patch<Game>(`${this.url}/${id}/AuthorizedGame`, {});
+    }
+
+    blockGame(id: string) {
+      return this.http.delete<void>(`${this.url}/${id}/DesAuthorizedGame`);
+    }
 
     getClientGames(){
       return this.http.get<Game[]>('/api/clients/library')

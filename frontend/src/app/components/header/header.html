@@ -37,8 +37,8 @@
 
         @if (adminOpen()) {
           <div class="admin-dropdown">
-            <a routerLink="/game-management" (click)="closeMenu()">Juegos</a>
-            <a routerLink="/user-management" (click)="closeMenu()">Usuarios</a>
+            <a routerLink="/management/games" (click)="closeMenu()">Juegos</a>
+            <a routerLink="/management/users" (click)="closeMenu()">Usuarios</a>
           </div>
         }
       </div>

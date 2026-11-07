@@ -1,5 +1,7 @@
 <div class="container">
-  <a routerLink="/catalog" class="back-link">← Volver a la tienda</a>
+  <a routerLink="isAdmin() ? '/management/games' : /catalog" class="back-link">
+    ← {{ isAdmin() ? 'Volver a la gestión de juegos' : 'Volver a la tienda' }}
+  </a>
     @if (isLoading()) {
         <p>Cargando juego...</p>
     } @else if (notFound() || !game()) {
@@ -28,7 +30,32 @@
 
         <p class="price">${{ g.price }}</p>
         
-        @if (!authService.isLoggedIn() || isClient()) {
+        @if (isAdmin()) {
+
+          <div class="admin-panel">
+
+            @if (g.needRevision) {
+              <span class="status-tag tag-revision">Necesita revisión</span>
+              <button class="btn btn-buy" [disabled]="isActing()" (click)="approve()">
+                Aprobar juego
+              </button>
+
+            } @else if (g.statusBlocked) {
+              <span class="status-tag tag-blocked">Bloqueado</span>
+              <button class="btn btn-buy" [disabled]="isActing()" (click)="approve()">
+                Desbloquear juego
+              </button>
+
+            } @else {
+              <span class="status-tag tag-available">Disponible</span>
+              <button class="btn btn-buy btn-danger" [disabled]="isActing()" (click)="block()">
+                Bloquear juego
+              </button>
+            }
+
+          </div>
+
+        } @else if (!authService.isLoggedIn() || isClient()) {
 
           @if (cartService.has(g.externalId)) {
             <a routerLink="/cart" class="btn btn-buy btn-in-cart">
@@ -41,7 +68,7 @@
               <img src="/cart.svg" alt="Carrito" class="cart-icon" />
               <span>Agregar al carrito</span>
             </button>
-            
+
           }
         }
       </div>
