@@ -17,6 +17,7 @@ import { ProfileEdit } from './pages/profile-edit/profile-edit';
 import { Cart } from './pages/cart/cart';
 import { clientGuard } from './guards/client-guard';
 import { SalesDetails } from './pages/sales-details/sales-details';
+import { Payment } from './pages/payment/payment';
 import { Sales } from './pages/sales/sales';
 
 export const routes: Routes = [
@@ -35,5 +36,6 @@ export const routes: Routes = [
     {path: 'cart', component: Cart,canActivate: [clientGuard]},
     {path: 'sales', component: Sales, canActivate: [clientGuard]},
     {path: 'sales/:id', component: SalesDetails, canActivate: [clientGuard]},
+    {path: 'pay/:type', component: Payment},
     { path: '**', redirectTo: '' }
 ];

@@ -1,0 +1,185 @@
+.payment-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: var(--color-base);
+  color: var(--color-texto);
+}
+
+.payment-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--color-secundario);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+  animation: appear 0.4s ease;
+}
+
+.status-icon {
+  width: 85px;
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.success-icon {
+  color: var(--color-principal);
+  background: rgba(40, 160, 80, 0.15);
+  border: 2px solid var(--color-principal);
+}
+
+.failure-icon {
+  color: var(--color-peligro);
+  background: rgba(217, 56, 56, 0.12);
+  border: 2px solid var(--color-peligro);
+}
+
+.pending-icon {
+  color: #e6b84a;
+  background: rgba(230, 184, 74, 0.12);
+  border: 2px solid #e6b84a;
+}
+
+.status-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 0.8rem;
+}
+
+.success-label {
+  color: var(--color-principal);
+}
+
+.failure-label {
+  color: var(--color-peligro);
+}
+
+.pending-label {
+  color: #e6b84a;
+}
+
+.payment-card h1 {
+  font-size: 1.8rem;
+  margin: 0 0 1rem;
+  font-weight: 700;
+}
+
+.description {
+  max-width: 390px;
+  color: #b5b5b5;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1.8rem;
+}
+
+.redirect-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.9rem 1rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  background: rgba(40, 160, 80, 0.1);
+  color: #c5c5c5;
+  font-size: 0.85rem;
+}
+
+.redirect-message strong {
+  color: var(--color-principal);
+}
+
+.loader {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(40, 160, 80, 0.25);
+  border-top-color: var(--color-principal);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.3rem;
+}
+
+.library-button {
+  width: 100%;
+  padding: 0.95rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  background: var(--color-principal);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.library-button:hover {
+  background: #218943;
+  transform: translateY(-2px);
+}
+
+.library-button span {
+  font-size: 1.2rem;
+}
+
+.catalog-link {
+  margin-top: 1.3rem;
+  color: #aaa;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.catalog-link:hover {
+  color: var(--color-principal);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 550px) {
+  .payment-page {
+    padding: 1rem;
+  }
+
+  .payment-card {
+    padding: 2.5rem 1.3rem;
+  }
+
+  .payment-card h1 {
+    font-size: 1.5rem;
+  }
+}
