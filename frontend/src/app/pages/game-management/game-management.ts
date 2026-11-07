@@ -17,12 +17,6 @@ import { Pagination } from '../../components/pagination/pagination';
 export class GameManagement implements OnInit {
   private gameService = inject(GameService);
 
-  tabs = [
-    { key: 'all', label: 'Todos los juegos' },
-    { key: 'blocked', label: 'Bloqueados' },
-    { key: 'needRevision', label: 'Necesitan revisión' },
-  ];
-
   tab = signal('all');
 
   games = signal<Game[]>([]);

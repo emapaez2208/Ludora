@@ -45,15 +45,27 @@ p {
     transition: all 0.2s ease;
 }
 
+.tab-all { 
+    --tab-color: var(--color-principal); 
+}
+
+.tab-blocked { 
+    --tab-color: var(--color-peligro); 
+}
+
+.tab-revision { 
+    --tab-color: #e6b422; 
+}
+
 .tab:hover {
-    border-color: var(--color-principal);
-    color: var(--color-principal);
+    border-color: var(--tab-color);
+    color: var(--tab-color);
 }
 
 .tab.active {
-    background-color: var(--color-principal);
+    background-color: var(--tab-color);
     color: #000000;
-    border-color: var(--color-principal);
+    border-color: var(--tab-color);
 }
 
 .filters-bar {
