@@ -1,0 +1,52 @@
+<div class="container">
+  <h2>Gestión de juegos</h2>
+
+  <div class="tabs">
+    @for (t of tabs; track t.key) {
+
+      <button class="tab" [class.active]="tab() === t.key" (click)="selectTab(t.key)">
+        {{ t.label }}
+      </button>
+    }
+
+  </div>
+
+  <div class="filters-bar">
+
+    <button class="btn btn-filters" (click)="toggleFilters()">
+      Filtros {{ showFilters() ? '▲' : '▼' }}
+    </button>
+
+    <app-game-sort [sort]="sort()" (sortChange)="onSortChange($event)" />
+
+  </div>
+
+  @if (showFilters()) {
+    <app-game-filter-panel [initial]="filters()" (apply)="onApply($event)" />
+  }
+
+  @if (isLoading()) {
+    <p>Cargando juegos...</p>
+
+  } @else if (errorMsg()) {
+    <p>{{ errorMsg() }}</p>
+
+  } @else {
+    <div class="games-grid">
+
+      @for (game of games(); track game.externalId) {
+        <app-game-card [game]="game" [showStatus]="true" />
+
+      } @empty {
+        <p>No hay juegos en esta categoría.</p>
+      }
+
+    </div>
+  }
+
+  <app-pagination
+    [page]="page()"
+    [totalPages]="totalPages()"
+    (pageChange)="goToPage($event)" />
+    
+</div>

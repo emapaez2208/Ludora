@@ -92,3 +92,39 @@
     letter-spacing: 0.3px;
     border: 1px solid color-mix(in srgb, var(--color-principal) 30%, transparent);
 }
+
+.game-card.card-available { 
+    border-color: var(--color-principal); 
+}
+
+.game-card.card-blocked { 
+    border-color: var(--color-peligro); 
+}
+
+.game-card.card-revision { 
+    border-color: #e6b422; 
+}
+
+.status-tag {
+    align-self: flex-start;
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0.7rem;
+    border: 1px solid currentColor;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.tag-available { 
+    color: var(--color-principal); 
+}
+
+.tag-blocked { 
+    color: var(--color-peligro); 
+}
+
+.tag-revision { 
+    color: #e6b422; 
+}

@@ -10,4 +10,5 @@ import { RouterLink } from '@angular/router';
 })
 export class GameCard {
   game = input.required<Game>();
+  showStatus = input(false);
 }

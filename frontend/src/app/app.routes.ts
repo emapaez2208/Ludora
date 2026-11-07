@@ -18,6 +18,7 @@ import { Cart } from './pages/cart/cart';
 import { clientGuard } from './guards/client-guard';
 import { Library } from './pages/library/library';
 import { clientOrDeveloperGuard } from './guards/client-or-developer-guard';
+import { GameManagement } from './pages/game-management/game-management';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -34,5 +35,6 @@ export const routes: Routes = [
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
     {path: 'cart', component: Cart,canActivate: [clientGuard]},
     {path: 'library', component: Library, canActivate: [clientOrDeveloperGuard]},
+    {path: 'game-management', component: GameManagement, canActivate: [adminGuard]},
     { path: '**', redirectTo: ''}
 ];

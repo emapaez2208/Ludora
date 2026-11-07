@@ -1,0 +1,75 @@
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    color: var(--color-texto);
+    background-color: var(--color-base);
+    min-height: calc(100vh - 10vh);
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--color-texto);
+    letter-spacing: 0.5px;
+    border-left: 4px solid var(--color-principal);
+    padding-left: 0.75rem;
+}
+
+p {
+    color: var(--color-texto-muted);
+    font-size: 1rem;
+}
+
+.btn {
+    width: 100%;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.tab {
+    padding: 0.6rem 1.25rem;
+    background-color: var(--color-secundario);
+    color: var(--color-texto);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    border-color: var(--color-principal);
+    color: var(--color-principal);
+}
+
+.tab.active {
+    background-color: var(--color-principal);
+    color: #000000;
+    border-color: var(--color-principal);
+}
+
+.filters-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.btn-filters {
+    width: auto;
+    padding: 0.6rem 1.25rem;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
