@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.auth.dto.AuthUser;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
@@ -24,6 +25,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -174,9 +177,34 @@ public class GameService implements IGameService{
 
     @Override
     public GameDTOResponse getByExternalId(UUID externalId) {
-        return gameRepository.findByExternalId(externalId)
-                .map(responseMapper::toDTO)
-                .orElseThrow(() -> new GameNotFoundException("Game not found"));
+        GameEntity game = gameRepository.findByExternalId(externalId)
+            .orElseThrow(() -> new GameNotFoundException("Game not found"));
+
+        boolean restricted = Boolean.TRUE.equals(game.getStatusBlocked())
+            || Boolean.TRUE.equals(game.getNeedRevision());
+
+        if (restricted && !canSeeRestricted(game)) {
+            throw new GameNotFoundException("Game not found");
+        }
+
+        return responseMapper.toDTO(game);
+    }
+
+
+
+    private boolean canSeeRestricted(GameEntity game) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        // sin sesión
+        if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof AuthUser user)) {
+            return false;
+        }
+
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (isAdmin) return true;
+
+        return game.getDeveloper().getExternalId().equals(user.externalId());
     }
 
     /// -------------------CREACION DE JUEGO PARA DEVELOPERS ---------------------
