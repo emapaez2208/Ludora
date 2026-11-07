@@ -5,6 +5,7 @@ import { Game } from '../../models/game';
 import { Reviews } from '../../components/reviews/reviews';
 import { CartService } from '../../services/cart-service';
 import { ToastService } from '../../services/toast-service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   imports: [RouterLink, Reviews],
@@ -16,6 +17,7 @@ export class GameDetail implements OnInit{
 
   private route = inject(ActivatedRoute);
   private gameService = inject(GameService);
+  private authService = inject(AuthService);
   
   cartService = inject(CartService);
 
@@ -45,6 +47,10 @@ export class GameDetail implements OnInit{
         this.isLoading.set(false);
       },
     });
+  }
+
+  isClient(): boolean {
+    return this.authService.isClient();
   }
 
 }
