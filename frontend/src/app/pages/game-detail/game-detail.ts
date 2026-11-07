@@ -3,6 +3,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GameService } from '../../services/game-service';
 import { Game } from '../../models/game';
 import { Reviews } from '../../components/reviews/reviews';
+import { CartService } from '../../services/cart-service';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   imports: [RouterLink, Reviews],
@@ -14,6 +16,8 @@ export class GameDetail implements OnInit{
 
   private route = inject(ActivatedRoute);
   private gameService = inject(GameService);
+  
+  cartService = inject(CartService);
 
   gameId = signal<string>(''); 
   game = signal<Game | null>(null);
@@ -42,7 +46,5 @@ export class GameDetail implements OnInit{
       },
     });
   }
-
-
 
 }

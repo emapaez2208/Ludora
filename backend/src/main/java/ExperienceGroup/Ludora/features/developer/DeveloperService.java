@@ -6,12 +6,12 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
-import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.features.admin.IAdminRepository;
+import ExperienceGroup.Ludora.features.client.IClientRepository;
+import ExperienceGroup.Ludora.features.user.exception.*;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
-import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
-import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
-import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
+import ExperienceGroup.Ludora.common.utils.Password;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoRequest;
@@ -19,7 +19,6 @@ import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperDtoResponse
 import ExperienceGroup.Ludora.features.developer.domain.dto.DeveloperUpdateRequest;
 import ExperienceGroup.Ludora.features.game.domain.dto.GameDTOResponse;
 import ExperienceGroup.Ludora.features.game.domain.mappers.IGameResponseMapper;
-import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -42,6 +41,8 @@ import java.util.UUID;
 public class DeveloperService implements IDeveloperService {
 
     private final IDeveloperRepository developerRepository;
+    private final IClientRepository clientRepository;
+    private final IAdminRepository adminRepository;
     private final IMapper<DeveloperEntity, DeveloperDtoResponse> responseMapper;
     private final IMapper<DeveloperEntity, DeveloperDtoRequest> requestMapper;
     private final IGameResponseMapper gameResponseMapper;
@@ -97,7 +98,9 @@ public class DeveloperService implements IDeveloperService {
     @Transactional
     public DeveloperDtoResponse save(DeveloperDtoRequest developerDtoRequest) {
 
-        if(developerRepository.existsByEmail(developerDtoRequest.email())){
+        if(developerRepository.existsByEmail(developerDtoRequest.email()) ||
+                clientRepository.existsByEmail(developerDtoRequest.email()) ||
+                        adminRepository.existsByEmail(developerDtoRequest.email())){
             throw new UserExistsWithEmailException("User exists with email register");
         }
 
@@ -177,12 +180,17 @@ public class DeveloperService implements IDeveloperService {
     public void changePassword(ChangePasswordDTO passwordDTO) {
         CredentialsEntity credentials = searchCredentials(authenticatedUser.getCurrentUser().username());
 
-        if(passwordEncoder.matches(passwordDTO.oldPass().value(), credentials.getPassword())){ // verifica si son la misma password
-            credentials.setPassword(passwordEncoder.encode(passwordDTO.newPass().value()));
-            credentialsRepository.save(credentials);
-        }else{
-            throw new PasswordInvalidException("The old password is invalid");
+        // 1. Verificar contraseña actual
+        if (!passwordEncoder.matches(passwordDTO.oldPass(), credentials.getPassword())) {
+            throw new IlegalPasswordChangeException("The old password is invalid");
         }
+
+        // 2. Validar formato de la nueva contraseña
+        Password newPassword = new Password(passwordDTO.newPass());
+
+        // 3. Actualizar
+        credentials.setPassword(passwordEncoder.encode(newPassword.value()));
+        credentialsRepository.save(credentials);
     }
 
     @Override
@@ -190,7 +198,9 @@ public class DeveloperService implements IDeveloperService {
     @Transactional
     public void changeEmail(ChangeEmailDTO emailDTO) {
 
-        if(developerRepository.existsByEmail(emailDTO.newEmail())){
+        if(developerRepository.existsByEmail(emailDTO.newEmail()) ||
+            clientRepository.existsByEmail(emailDTO.newEmail()) ||
+            adminRepository.existsByEmail(emailDTO.newEmail())){
             throw new UserExistsWithEmailException("User exists with this email");
         }
 

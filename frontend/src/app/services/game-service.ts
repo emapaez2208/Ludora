@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Game, PageResponse } from '../models/game';
+import { Game } from '../models/game';
 import { Observable } from 'rxjs';
 import { GameFilters } from '../models/game-filters';
 import { GameRequest } from '../models/game-request';
+import { PageResponse } from '../models/page-response';
 
 @Injectable({
   providedIn: 'root'
@@ -54,5 +55,14 @@ export class GameService {
 
     editGame(id : string, game : GameRequest){
       return this.http.put<Game>(`${this.url}/${id}`, game)
+    }
+
+
+    getClientGames(){
+      return this.http.get<Game[]>('/api/clients/library')
+    }
+    
+    getDeveloperGames(id : string){
+      return this.http.get<Game[]>(`/api/developers/${id}/games`)
     }
 }

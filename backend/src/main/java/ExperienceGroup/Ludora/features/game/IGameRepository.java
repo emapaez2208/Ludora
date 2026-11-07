@@ -24,7 +24,7 @@ public interface IGameRepository extends JpaRepository<GameEntity, Long>, JpaSpe
 
     List<GameEntity> findByAgeRange_RangeNameIgnoreCase(String ageRange);
 
-    Optional<List<GameEntity>> findAllByClients_ExternalId(UUID externalId);
+    List<GameEntity> findAllByClients_ExternalId(UUID externalId);
 
     List<GameEntity> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
 

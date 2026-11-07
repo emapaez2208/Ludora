@@ -1,0 +1,338 @@
+@if (userStateService.client(); as client) {
+  <section class="profile">
+
+    <div class="profile-header">
+      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+
+      <div class="profile-heading">
+        <span class="profile-role">Editar cuenta de usuario</span>
+        <h2>{{ client.userName }}</h2>
+
+        <span class="status"
+          [class.status-blocked]="client.statusBlocked"
+          [class.status-active]="!client.statusBlocked">
+          {{ client.statusBlocked ? 'Bloqueado' : 'Activo' }}
+        </span>
+      </div>
+    </div>
+
+    <form [formGroup]="clientForm" class="profile-content" (ngSubmit)="onSubmitClient()">
+
+      <h3>Información personal</h3>
+
+      <div class="data-grid">
+
+        <fieldset class="data-item">
+          <label for="name">Nombre y apellido</label>
+
+          <div class="input-group">
+            <input type="text" id="name" formControlName="name" placeholder="Nombre">
+            <input type="text" id="lastName" formControlName="lastName" placeholder="Apellido">
+          </div>
+
+          @if (clientForm.get('name')?.touched || clientForm.get('lastName')?.touched) {
+            @if (clientForm.get('name')?.hasError('required') ||
+                 clientForm.get('lastName')?.hasError('required')) {
+              <span class="msj-error">El nombre y apellido son obligatorios.</span>
+            } @else if (
+              clientForm.get('name')?.hasError('minlength') ||
+              clientForm.get('lastName')?.hasError('minlength') ||
+              clientForm.get('name')?.hasError('maxlength') ||
+              clientForm.get('lastName')?.hasError('maxlength')
+            ) {
+              <span class="msj-error">El nombre y apellido deben tener entre 3 y 32 caracteres.</span>
+            }
+          }
+        </fieldset>
+
+        <div class="data-item">
+          <span class="data-label">Email</span>
+          <span class="data-value">{{ client.email }}</span>
+
+          <div class="email-actions">
+            <button type="button" class="btn-secondary" (click)="openEmailModal()">
+              Cambiar email
+            </button>
+
+            <button type="button" class="btn-secondary" (click)="openPasswordModal()">
+              Cambiar contraseña
+            </button>
+          </div>
+        </div>
+
+        <fieldset class="data-item">
+          <label for="phone">Teléfono</label>
+
+          <input type="text" inputmode="numeric" id="phone"
+            placeholder="2235534212" formControlName="phone">
+
+          @if (clientForm.get('phone')?.touched) {
+            @if (clientForm.get('phone')?.hasError('required')) {
+              <span class="msj-error">El teléfono es obligatorio.</span>
+            } @else if (clientForm.get('phone')?.hasError('pattern')) {
+              <span class="msj-error">El teléfono solo debe contener números.</span>
+            } @else if (
+              clientForm.get('phone')?.hasError('min') ||
+              clientForm.get('phone')?.hasError('max')
+            ) {
+              <span class="msj-error">Ingrese un número de teléfono válido.</span>
+            }
+          }
+        </fieldset>
+
+        <fieldset class="data-item">
+          <label for="street">Dirección</label>
+
+          <div class="input-group">
+            <input type="text" id="street" placeholder="Calle" formControlName="street">
+            <input type="text" inputmode="numeric" id="numberStreet"
+              placeholder="Altura" formControlName="numberStreet">
+          </div>
+
+          @if (clientForm.get('street')?.touched ||
+               clientForm.get('numberStreet')?.touched) {
+            @if (clientForm.get('street')?.hasError('required') ||
+                 clientForm.get('numberStreet')?.hasError('required')) {
+              <span class="msj-error">La calle y la altura son obligatorias.</span>
+            } @else if (clientForm.get('street')?.hasError('maxlength')) {
+              <span class="msj-error">La calle no puede superar los 25 caracteres.</span>
+            } @else if (
+              clientForm.get('numberStreet')?.hasError('min') ||
+              clientForm.get('numberStreet')?.hasError('max') ||
+              clientForm.get('numberStreet')?.hasError('pattern')
+            ) {
+              <span class="msj-error">La altura de la calle no es válida.</span>
+            }
+          }
+        </fieldset>
+
+        <fieldset class="data-item">
+          <label for="birthDate">Fecha de nacimiento</label>
+
+          <input type="date" [max]="today" id="birthDate" formControlName="birthDate">
+
+          @if (clientForm.get('birthDate')?.touched &&
+               clientForm.get('birthDate')?.hasError('required')) {
+            <span class="msj-error">La fecha de nacimiento es obligatoria.</span>
+          }
+        </fieldset>
+
+      </div>
+
+      <div class="points-card">
+        <div class="points-icon">
+          <span>★</span>
+        </div>
+
+        <div class="points-info">
+          <span class="points-label">Tus puntos</span>
+          <strong>{{ client.points }}</strong>
+          <span class="points-description">Puntos acumulados en Ludora</span>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button type="submit" class="btn-primary" [disabled]="clientForm.invalid">
+          Confirmar cambios
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+} @else if (userStateService.developer(); as developer) {
+
+  <section class="profile">
+
+    <div class="profile-header">
+      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+
+      <div class="profile-heading">
+        <span class="profile-role">Editar cuenta de desarrollador</span>
+        <h2>{{ developer.userName }}</h2>
+
+        <span class="status"
+          [class.status-blocked]="developer.statusBlocked"
+          [class.status-active]="!developer.statusBlocked">
+          {{ developer.statusBlocked ? 'Bloqueado' : 'Activo' }}
+        </span>
+      </div>
+    </div>
+
+    <form [formGroup]="developerForm" class="profile-content" (ngSubmit)="onSubmitDeveloper()">
+
+      <h3>Información personal</h3>
+
+      <div class="data-grid">
+
+        <fieldset class="data-item">
+          <label for="dev-name">Nombre y apellido</label>
+
+          <div class="input-group">
+            <input type="text" id="dev-name" formControlName="name" placeholder="Nombre">
+            <input type="text" id="dev-lastName" formControlName="lastName" placeholder="Apellido">
+          </div>
+
+          @if (developerForm.get('name')?.touched ||
+               developerForm.get('lastName')?.touched) {
+            @if (developerForm.get('name')?.hasError('required') ||
+                 developerForm.get('lastName')?.hasError('required')) {
+              <span class="msj-error">El nombre y apellido son obligatorios.</span>
+            } @else if (
+              developerForm.get('name')?.hasError('minlength') ||
+              developerForm.get('lastName')?.hasError('minlength') ||
+              developerForm.get('name')?.hasError('maxlength') ||
+              developerForm.get('lastName')?.hasError('maxlength')
+            ) {
+              <span class="msj-error">El nombre y apellido deben tener entre 3 y 32 caracteres.</span>
+            }
+          }
+        </fieldset>
+
+        <div class="data-item">
+          <span class="data-label">Email</span>
+          <span class="data-value">{{ developer.email }}</span>
+
+          <div class="email-actions">
+            <button type="button" class="btn-secondary" (click)="openEmailModal()">
+              Cambiar email
+            </button>
+
+            <button type="button" class="btn-secondary" (click)="openPasswordModal()">
+              Cambiar contraseña
+            </button>
+          </div>
+        </div>
+
+        <fieldset class="data-item">
+          <label for="company">Empresa</label>
+
+          <input type="text" id="company" formControlName="company"
+            placeholder="Nombre de la empresa">
+
+          @if (developerForm.get('company')?.touched &&
+               developerForm.get('company')?.hasError('required')) {
+            <span class="msj-error">El nombre de la empresa es obligatorio.</span>
+          }
+        </fieldset>
+
+      </div>
+
+      <div class="profile-actions">
+        <button type="submit" class="btn-primary" [disabled]="developerForm.invalid">
+          Confirmar cambios
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+} @else if (userStateService.admin(); as admin) {
+
+  <section class="profile">
+
+    <div class="profile-header">
+      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+
+      <div class="profile-heading">
+        <span class="profile-role">Editar cuenta de administrador</span>
+        <h2>{{ admin.userName }}</h2>
+      </div>
+    </div>
+
+    <form [formGroup]="adminForm" class="profile-content" (ngSubmit)="onSubmitAdmin()">
+
+      <h3>Información personal</h3>
+
+      <div class="data-grid">
+
+        <fieldset class="data-item">
+          <label for="admin-name">Nombre y apellido</label>
+
+          <div class="input-group">
+            <input type="text" id="admin-name" formControlName="name" placeholder="Nombre">
+            <input type="text" id="admin-lastName" formControlName="lastName" placeholder="Apellido">
+          </div>
+
+          @if (adminForm.get('name')?.touched ||
+               adminForm.get('lastName')?.touched) {
+            @if (adminForm.get('name')?.hasError('required') ||
+                 adminForm.get('lastName')?.hasError('required')) {
+              <span class="msj-error">El nombre y apellido son obligatorios.</span>
+            } @else if (
+              adminForm.get('name')?.hasError('minlength') ||
+              adminForm.get('lastName')?.hasError('minlength') ||
+              adminForm.get('name')?.hasError('maxlength') ||
+              adminForm.get('lastName')?.hasError('maxlength')
+            ) {
+              <span class="msj-error">El nombre y apellido deben tener entre 3 y 32 caracteres.</span>
+            }
+          }
+        </fieldset>
+
+        <div class="data-item">
+          <span class="data-label">Email</span>
+          <span class="data-value">{{ admin.email }}</span>
+
+          <div class="email-actions">
+            <button type="button" class="btn-secondary" (click)="openEmailModal()">
+              Cambiar email
+            </button>
+
+            <button type="button" class="btn-secondary" (click)="openPasswordModal()">
+              Cambiar contraseña
+            </button>
+          </div>
+        </div>
+
+        <fieldset class="data-item">
+          <label for="employeeId">Número de empleado</label>
+
+          <input type="text" inputmode="numeric" id="employeeId"
+            formControlName="employeeId" placeholder="12345">
+
+          @if (adminForm.get('employeeId')?.touched) {
+            @if (adminForm.get('employeeId')?.hasError('required')) {
+              <span class="msj-error">El número de empleado es obligatorio.</span>
+            } @else if (adminForm.get('employeeId')?.hasError('pattern')) {
+              <span class="msj-error">El número de empleado solo debe contener números enteros.</span>
+            } @else if (adminForm.get('employeeId')?.hasError('min')) {
+              <span class="msj-error">El número de empleado debe ser mayor a cero.</span>
+            }
+          }
+        </fieldset>
+
+      </div>
+
+      <div class="profile-actions">
+        <button type="submit" class="btn-primary" [disabled]="adminForm.invalid">
+          Confirmar cambios
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+} @else if (userStateService.msjError(); as msjError) {
+
+  <section class="profile error-profile">
+    <p class="msj-error">{{ msjError }}</p>
+  </section>
+
+} @else {
+
+  <p class="loading">Cargando perfil...</p>
+
+}
+
+@if (showPasswordModal()) {
+  <app-change-password-modal
+    (close)="closePasswordModal()">
+  </app-change-password-modal>
+}
+
+@if (showEmailModal()) {
+  <app-change-email-modal
+    (close)="closeEmailModal()">
+  </app-change-email-modal>
+}
