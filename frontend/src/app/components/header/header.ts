@@ -26,6 +26,14 @@ export class Header {
     return this.authService.isClient();
   }
 
+  isDeveloper(): boolean {
+    return this.authService.isDeveloper();
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
   toggleCart(): void {
     this.cartOpen.update(v => !v);
   }
