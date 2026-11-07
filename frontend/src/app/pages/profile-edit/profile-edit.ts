@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../../services/user-service';
 import { ChangePasswordModal } from './change-password-modal/change-password-modal';
 import { ChangeEmailModal } from './change-email-modal/change-email-modal';
+import { CloudinaryService } from '../../services/cloudinary';
 
 @Component({
   imports: [ReactiveFormsModule, ChangePasswordModal, ChangeEmailModal],
@@ -16,6 +17,9 @@ export class ProfileEdit {
   
   userStateService = inject(UserStateService)
   userService = inject(UserService)
+
+  cloudinaryService = inject(CloudinaryService)
+  isUploading = signal(false)
 
   clientForm! : FormGroup
   developerForm! : FormGroup
@@ -40,6 +44,7 @@ export class ProfileEdit {
   loadClientForm(){
 
     this.clientForm = this.fb.group({
+      avatarUrl: [''],
       name : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
       lastName : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
       phone : ['', [Validators.required, Validators.min(1000000), Validators.max(99999999999), Validators.pattern(/^[0-9]+$/)]],
@@ -51,6 +56,7 @@ export class ProfileEdit {
 
   loadDeveloperForm(){
     this.developerForm = this.fb.group({
+      avatarUrl: [''],
       name : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
       lastName : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
       company : ['', Validators.required]
@@ -59,10 +65,34 @@ export class ProfileEdit {
 
   loadAdminForm(){
     this.adminForm = this.fb.group({
+      avatarUrl: [''],
       name : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
       lastName : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
       employeeId : ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.min(1)]]
     })
+  }
+
+  onAvatarSelected(event: Event, form: FormGroup): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file: File = input.files[0];
+      this.isUploading.set(true);
+
+      this.cloudinaryService.uploadAvatar(file).subscribe({
+        next: (url: string) => {
+          form.patchValue({ avatarUrl: url });
+          this.isUploading.set(false);
+          input.value = '';
+        },
+        error: (err) => {
+          console.error('Error al subir foto de perfil:', err);
+          alert('No se pudo subir la foto de perfil');
+          this.isUploading.set(false);
+          input.value = '';
+        }
+      });
+    }
   }
 
   effectUsers(){
@@ -94,7 +124,7 @@ export class ProfileEdit {
 
   onSubmitClient(){
 
-    if(this.clientForm.invalid) return
+    if (this.clientForm.invalid || this.isUploading()) return;
 
     this.userService.clientUpdate(this.userStateService.client()!.externalId, this.clientForm.value)
       .subscribe({
@@ -110,7 +140,7 @@ export class ProfileEdit {
   }
 
   onSubmitDeveloper(){
-    if(this.developerForm.invalid) return
+    if(this.developerForm.invalid || this.isUploading()) return;
 
     this.userService.developerUpdate(this.userStateService.developer()!.externalId, this.developerForm.value)
       .subscribe({
@@ -126,7 +156,7 @@ export class ProfileEdit {
   }
 
   onSubmitAdmin(){
-    if(this.adminForm.invalid) return
+    if(this.adminForm.invalid || this.isUploading()) return;
 
     this.userService.adminUpdate(this.userStateService.admin()!.externalId, this.adminForm.value)
       .subscribe({
