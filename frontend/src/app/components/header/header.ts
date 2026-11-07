@@ -21,6 +21,7 @@ export class Header {
 
   isLogged = this.authService.isLoggedIn$;
   cartOpen = signal(false);
+  adminOpen = signal(false);
 
   isClient(): boolean {
     return this.authService.isClient();
@@ -36,6 +37,12 @@ export class Header {
 
   toggleCart(): void {
     this.cartOpen.update(v => !v);
+  }
+
+  toggleAdmin(event: MouseEvent): void {
+    event.stopPropagation();   
+    this.cartOpen.set(false);
+    this.adminOpen.update(v => !v);
   }
 
   onRemoveGame(game: { externalId: string; name: string }, event: MouseEvent) {
@@ -62,9 +69,10 @@ export class Header {
   });
 }
 
-  // cierra el desplegable del carrito al hacer click afuera del header
+  // cierra el desplegable al hacer click afuera del header
   @HostListener('document:click', ['$event'])
   onDocClick(e: MouseEvent): void {
+    this.adminOpen.set(false);
     if (!this.el.nativeElement.contains(e.target)) {
       this.cartOpen.set(false);
     }
