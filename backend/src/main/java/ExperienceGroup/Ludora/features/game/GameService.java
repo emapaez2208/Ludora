@@ -263,14 +263,14 @@ public class GameService implements IGameService{
     @PreAuthorize("hasRole('ADMIN')")
     public GameDTOResponse authorized(UUID externalId) {
 
-        GameEntity habilitarGame= gameRepository.findByExternalId(externalId)
+        GameEntity game= gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
-        habilitarGame.setStatusBlocked(false);
-        habilitarGame.setNeedRevision(false);
-        gameRepository.save(habilitarGame);
+        game.setStatusBlocked(false);
+        game.setNeedRevision(false);
+        gameRepository.save(game);
 
-        return responseMapper.toDTO(habilitarGame);
+        return responseMapper.toDTO(game);
     }
 
 
@@ -280,11 +280,12 @@ public class GameService implements IGameService{
     @PreAuthorize("hasRole('ADMIN')")
     public void desauthorized(UUID externalId) {
 
-        GameEntity habilitarGame= gameRepository.findByExternalId(externalId)
+        GameEntity game = gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
-        habilitarGame.setStatusBlocked(true);
-        gameRepository.save(habilitarGame);
+        game.setStatusBlocked(true);
+        game.setNeedRevision(false);
+        gameRepository.save(game);
 
     }
 

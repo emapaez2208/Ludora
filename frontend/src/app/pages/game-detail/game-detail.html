@@ -1,6 +1,11 @@
 <div class="container">
-  <a routerLink="isAdmin() ? '/management/games' : /catalog" class="back-link">
-    ← {{ isAdmin() ? 'Volver a la gestión de juegos' : 'Volver a la tienda' }}
+  <a [routerLink]="
+    isAdmin() ? '/management/games' : 
+    (isOwner() ? '/library' : '/catalog')" 
+    class="back-link">
+    ← {{ isAdmin() ? 'Volver a la gestión de juegos' : 
+        (isOwner() ? 'Volver a mis juegos' : 'Volver a la tienda') 
+      }}
   </a>
     @if (isLoading()) {
         <p>Cargando juego...</p>
@@ -36,19 +41,25 @@
 
             @if (g.needRevision) {
               <span class="status-tag tag-revision">Necesita revisión</span>
-              <button class="btn btn-buy" [disabled]="isActing()" (click)="approve()">
-                Aprobar juego
-              </button>
+              
+              <div class="admin-actions">
+                <button class="btn btn-action btn-approve" [disabled]="isActing()" (click)="approve()">
+                  Aprobar juego
+                </button>
+                <button class="btn btn-action btn-reject" [disabled]="isActing()" (click)="block('El juego fue desaprobado.')">
+                  Desaprobar juego
+                </button>
+              </div>
 
             } @else if (g.statusBlocked) {
               <span class="status-tag tag-blocked">Bloqueado</span>
-              <button class="btn btn-buy" [disabled]="isActing()" (click)="approve()">
+              <button class="btn btn-action btn-approve" [disabled]="isActing()" (click)="approve()">
                 Desbloquear juego
               </button>
 
             } @else {
               <span class="status-tag tag-available">Disponible</span>
-              <button class="btn btn-buy btn-danger" [disabled]="isActing()" (click)="block()">
+              <button class="btn btn-action btn-reject" [disabled]="isActing()" (click)="block('El juego fue bloqueado.')">
                 Bloquear juego
               </button>
             }

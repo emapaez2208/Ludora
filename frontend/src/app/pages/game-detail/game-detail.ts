@@ -102,7 +102,7 @@ export class GameDetail implements OnInit{
     });
   }
 
-  block() {
+  block(message: string) {
     this.isActing.set(true);
 
     this.gameService.blockGame(this.gameId()).subscribe({
@@ -111,7 +111,7 @@ export class GameDetail implements OnInit{
           next: (data) => {
             this.game.set(data);
             this.isActing.set(false);
-            this.toastService.show('El juego fue bloqueado.', 'info');
+            this.toastService.show(message, 'info');
           },
           error: () => this.isActing.set(false)
         });

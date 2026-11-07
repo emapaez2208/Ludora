@@ -160,6 +160,15 @@
     gap: 0.75rem;
 }
 
+.admin-panel {
+    align-items: stretch; 
+}
+
+.admin-panel > .btn.btn-action {
+    width: 100%;
+    flex: 0 0 auto;
+}
+
 .status-tag {
     align-self: flex-start;
     padding: 0.25rem 0.7rem;
@@ -199,6 +208,42 @@
     border-color: var(--color-peligro);
     box-shadow: 0 4px 12px color-mix(in srgb, var(--color-peligro) 35%, transparent);
     outline: none;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.btn-action {
+    flex: 1 1 140px;
+    width: auto;
+    background-color: var(--color-base);
+    border: 1px solid var(--action-color);
+    color: var(--action-color);
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-approve { 
+    --action-color: var(--color-principal); 
+}
+
+.btn-reject { 
+    --action-color: var(--color-peligro); 
+}
+
+.btn-action:hover:not(:disabled),
+.btn-action:focus-visible {
+    background-color: var(--action-color);
+    color: #000000;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--action-color) 35%, transparent);
+    outline: none;
+}
+
+.btn-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 @media (max-width: 900px) {
