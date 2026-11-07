@@ -139,6 +139,7 @@ public class AdminService implements IAdminService{
         entity.setName(adminDTO.name());
         entity.setLastName(adminDTO.lastName());
         entity.setEmployeeId(adminDTO.employeeId());
+        entity.setAvatarUrl(adminDTO.avatarUrl());
 
         AdminEntity saved = adminRepository.save(entity);
 
