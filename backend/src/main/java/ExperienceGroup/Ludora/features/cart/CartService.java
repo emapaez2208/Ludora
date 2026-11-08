@@ -166,6 +166,7 @@ public class CartService implements ICartService {
 
         ClientDTOResponse clientDto = new ClientDTOResponse(
                 client.getExternalId(),
+                client.getAvatarUrl(),
                 client.getName(),
                 client.getLastName(),
                 client.getUserName(),
