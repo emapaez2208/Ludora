@@ -1,7 +1,7 @@
 export interface SaleFilters {
-    status? : string
-    minDate? : string
-    maxDate? : string
-    minPrice? : number
-    maxPrice? : number
+    status? : string | null
+    minDate? : string | null
+    maxDate? : string | null
+    minPrice? : number | null
+    maxPrice? : number | null
 }

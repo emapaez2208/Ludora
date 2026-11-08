@@ -19,7 +19,12 @@ import ExperienceGroup.Ludora.features.cart.ICartRepository;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.review.IReviewRepository;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
+import ExperienceGroup.Ludora.common.utils.BusinessRules;
 import ExperienceGroup.Ludora.common.utils.Email;
+import ExperienceGroup.Ludora.features.sale.ESaleStatus;
+import ExperienceGroup.Ludora.features.sale.ISaleRepository;
+import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
+import ExperienceGroup.Ludora.features.sale.domain.SaleItemEntity;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +32,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,6 +50,7 @@ public class CargaBDDPrueba {
             IDeveloperRepository developerRepository,
             IReviewRepository reviewRepository,
             ICartRepository cartRepository,
+            ISaleRepository saleRepository,
             CredentialsRepository credentialsRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder) {
@@ -1431,7 +1438,96 @@ public class CargaBDDPrueba {
                 System.out.println("====== Carrito de " + entrada.getKey() + " cargado con " + juegos.size() + " juegos ======");
             }
 
+            // ==========================================================
+            // VENTAS DE PRUEBA (para la vista de ventas del admin)
+            // Solo se cargan si la tabla de ventas está vacía.
+            // Fechas repartidas en ~45 días, con estados mezclados.
+            // ==========================================================
+            if (saleRepository.count() == 0) {
+                LocalDateTime ahora = LocalDateTime.now();
+
+                List<VentaPrueba> ventasPrueba = List.of(
+                        new VentaPrueba("cosmejuega",      ESaleStatus.APPROVED, ahora.minusDays(45), List.of("God of War Ragnarok", "Elden Ring")),
+                        new VentaPrueba("estebanquito",    ESaleStatus.APPROVED, ahora.minusDays(38), List.of("GTA V", "Red Dead Redemption 2", "Cyberpunk 2077")),
+                        new VentaPrueba("alanbrito",       ESaleStatus.APPROVED, ahora.minusDays(30), List.of("Super Mario Odyssey")),
+                        new VentaPrueba("luciafernandez",  ESaleStatus.APPROVED, ahora.minusDays(27), List.of("The Witcher 3: Wild Hunt", "Phantom Liberty")),
+                        new VentaPrueba("martingomez",     ESaleStatus.APPROVED, ahora.minusDays(21), List.of("Resident Evil 4 Remake", "Devil May Cry 5")),
+                        new VentaPrueba("camilarodriguez", ESaleStatus.REJECTED, ahora.minusDays(18), List.of("Mario Kart 8 Deluxe")),
+                        new VentaPrueba("valentinasosa",   ESaleStatus.APPROVED, ahora.minusDays(15), List.of("Animal Crossing: New Horizons", "Super Smash Bros. Ultimate")),
+                        new VentaPrueba("nicolasacosta",   ESaleStatus.APPROVED, ahora.minusDays(12), List.of("Dark Souls III", "Dark Souls Remastered", "Sekiro: Shadows Die Twice")),
+                        new VentaPrueba("sofiabenitez",    ESaleStatus.PENDING,  ahora.minusDays(9),  List.of("Spider-Man 2")),
+                        new VentaPrueba("joaquinmolina",   ESaleStatus.APPROVED, ahora.minusDays(7),  List.of("The Last of Us Part I", "God of War", "Uncharted: Legacy of Thieves")),
+                        new VentaPrueba("agustinaramirez", ESaleStatus.APPROVED, ahora.minusDays(5),  List.of("Armored Core VI", "Monster Hunter: World")),
+                        new VentaPrueba("cosmejuega",      ESaleStatus.REJECTED, ahora.minusDays(3),  List.of("GTA IV")),
+                        new VentaPrueba("estebanquito",    ESaleStatus.APPROVED, ahora.minusDays(2),  List.of("Resident Evil Village", "Resident Evil 2 Remake")),
+                        new VentaPrueba("alanbrito",       ESaleStatus.PENDING,  ahora.minusDays(1),  List.of("The Witcher 2", "The Witcher 1", "L.A. Noire")),
+                        new VentaPrueba("luciafernandez",  ESaleStatus.APPROVED, ahora.minusHours(2), List.of("Max Payne 3"))
+                );
+
+                List<ClientEntity> clientesVenta = clientRepository.findAll();
+                List<GameEntity> juegosVenta = gameRepository.findAll();
+                int cargadas = 0;
+
+                for (VentaPrueba v : ventasPrueba) {
+                    ClientEntity cliente = clientesVenta.stream()
+                            .filter(c -> c.getUserName().equals(v.usuario()))
+                            .findFirst().orElse(null);
+
+                    List<GameEntity> juegos = juegosVenta.stream()
+                            .filter(g -> v.juegos().contains(g.getName()))
+                            .toList();
+
+                    if (cliente == null || juegos.isEmpty()) {
+                        continue;
+                    }
+
+                    saleRepository.save(armarVenta(cliente, v, juegos));
+                    cargadas++;
+                }
+                System.out.println("====== " + cargadas + " ventas de prueba cargadas ======");
+            }
+
         };
 
+    }
+
+    // Datos de una venta de prueba
+    private record VentaPrueba(String usuario, ESaleStatus status, LocalDateTime fecha, List<String> juegos) {}
+
+    // Arma la venta igual que SaleService.create: descuento por puntos, precio por ítem, total y puntos ganados
+    private static SaleEntity armarVenta(ClientEntity cliente, VentaPrueba v, List<GameEntity> juegos) {
+        boolean conDescuento = cliente.getPoints() >= BusinessRules.POINTS_THRESHOLD;
+
+        SaleEntity venta = new SaleEntity();
+        venta.setClient(cliente);
+        venta.setStatus(v.status());
+        venta.setDate(v.fecha());
+        venta.setHasDiscount(conDescuento);
+
+        List<SaleItemEntity> items = new ArrayList<>();
+        for (GameEntity juego : juegos) {
+            BigDecimal precio = conDescuento
+                    ? juego.getPrice().multiply(BigDecimal.ONE.subtract(BusinessRules.DISCOUNT_PERCENTAGE))
+                            .setScale(2, RoundingMode.HALF_UP)
+                    : juego.getPrice().setScale(2, RoundingMode.HALF_UP);
+
+            SaleItemEntity item = new SaleItemEntity();
+            item.setSale(venta);
+            item.setGame(juego);
+            item.setPriceAtSale(precio);
+            items.add(item);
+        }
+
+        BigDecimal total = items.stream()
+                .map(SaleItemEntity::getPriceAtSale)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        venta.setItems(items);
+        venta.setTotalPrice(total);
+        venta.setEarnedPoints(total.multiply(BusinessRules.REWARD_POINTS_PERCENTAGE)
+                .setScale(0, RoundingMode.FLOOR)
+                .intValue());
+
+        return venta;
     }
 }
