@@ -133,6 +133,7 @@ public class DeveloperService implements IDeveloperService {
         DeveloperEntity entity = developerRepository.findByExternalId(externalId)
                                 .orElseThrow(() -> new UserNotFoundException("User not found, userID: " + externalId));
 
+        entity.setAvatarUrl(request.avatarUrl());
         entity.setName(request.name());
         entity.setLastName(request.lastName());
         entity.setCompany(request.company());

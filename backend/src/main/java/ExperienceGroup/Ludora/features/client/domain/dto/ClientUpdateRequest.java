@@ -11,12 +11,15 @@ public record ClientUpdateRequest(@Schema(description = "The user's name", examp
                                   @Size(min = 3, max = 32, message = "The name must be between 3 and 32 characters long")
                                   @NotBlank
                                   String name,
-
+                                  
                                   @Schema(description = "The user's last name", example = "Doe", required = true)
                                   @Size(min = 3, max = 32, message = "The last name must be between 3 and 32 characters long")
                                   @NotBlank
                                   String lastName,
 
+                                  @Schema(description = "The avatar image URL hosted in Cloudinary", example = "https://res.cloudinary.com/...", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+                                  String avatarUrl,
+                                
                                   @Schema(description = "Phone number",example = "123" , required = true)
                                   @Positive(message = "Cannot be a negative number")
                                   @NotNull

@@ -1,4 +1,5 @@
 export interface ClientUpdate {
+    avatarUrl?: string
     name : string
     lastName : string
     phone : number

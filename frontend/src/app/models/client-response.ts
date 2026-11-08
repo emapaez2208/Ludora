@@ -1,4 +1,5 @@
 export interface ClientResponse {
+  avatarUrl?: string
   externalId: string;
   name: string;
   lastName: string;
