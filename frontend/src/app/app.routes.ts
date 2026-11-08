@@ -16,6 +16,7 @@ import { loginGuard } from './guards/login-guard';
 import { ProfileEdit } from './pages/profile-edit/profile-edit';
 import { Cart } from './pages/cart/cart';
 import { clientGuard } from './guards/client-guard';
+import { FormAdmin } from './pages/form-admin/form-admin';
 import { Library } from './pages/library/library';
 import { clientOrDeveloperGuard } from './guards/client-or-developer-guard';
 import { SalesList } from './pages/sales-list/sales-list';
@@ -24,6 +25,7 @@ export const routes: Routes = [
     {path: '', component: Home},
     {path: 'login', component: Login, canActivate: [loginGuard]},
     {path: 'register', component: Register, canActivate: [loginGuard]},
+    {path: 'registerAdmin' , component: FormAdmin, canActivate: [authGuard]},
     {path: 'user-list', component: UserList, canActivate: [adminGuard]},
     {path: 'application-list', component: SolicitudList},
     {path: 'profile', component: Profile, canActivate: [authGuard]},
