@@ -70,6 +70,48 @@ p {
   color: var(--color-texto-muted);
 }
 
+/* Pestañas (solo developer) */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  padding: 0.6rem 1.25rem;
+  background-color: var(--color-secundario);
+  color: var(--color-texto);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-all { 
+  --tab-color: var(--color-principal); 
+}
+
+.tab-blocked { 
+  --tab-color: var(--color-peligro); 
+}
+
+.tab-revision { 
+  --tab-color: #e6b422; 
+}
+
+.tab:hover {
+  border-color: var(--tab-color);
+  color: var(--tab-color);
+}
+
+.tab.active {
+  background-color: var(--tab-color);
+  color: #000000;
+  border-color: var(--tab-color);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .container {

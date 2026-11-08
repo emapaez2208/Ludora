@@ -29,8 +29,24 @@ export class Library {
   size = signal(18);
   totalPages = signal(0);
 
+  tab = signal('all');
+
   toggleFilters() {
     this.showFilters.update(v => !v)
+  }
+
+  isDeveloper(): boolean {
+    if (this.userState.developer()) {
+      return true;
+    }
+    return false;
+  }
+
+  selectTab(key: string) {
+    if (key === this.tab()) return;
+    this.tab.set(key);
+    this.page.set(0);
+    this.applyFilters();
   }
 
   constructor() {
@@ -98,6 +114,14 @@ export class Library {
 
     let filtered = [...this.allGames()];
 
+    if (this.tab() === 'needRevision') {
+      filtered = filtered.filter(g => g.needRevision);
+    }
+
+    if (this.tab() === 'blocked') {
+      filtered = filtered.filter(g => g.statusBlocked && !g.needRevision);
+    }
+    
     if (f.name?.trim()) {
 
       filtered = filtered.filter(game =>

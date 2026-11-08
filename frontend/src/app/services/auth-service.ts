@@ -76,4 +76,12 @@ export class AuthService {
     isClient(): boolean {
         return this.hasRole('ROLE_CLIENT');
     }
+
+    isDeveloper(): boolean {
+        return this.hasRole('ROLE_DEVELOPER');
+    }
+
+    isAdmin(): boolean {
+        return this.hasRole('ROLE_ADMIN');
+    }
 }

@@ -44,6 +44,37 @@ export class GameService {
       return this.http.get<PageResponse<Game>>(this.url, { params });
     } 
 
+    getAdminGames(
+      page: number,
+      size: number,
+      filters: GameFilters,
+      sort: GameSortOptions,
+      status: string
+    ): Observable<PageResponse<Game>> {
+
+      let params = new HttpParams()
+        .set('page', page.toString())
+        .set('size', size.toString())
+        .set('sortBy', sort.sortBy)
+        .set('sortDirection', sort.sortDirection)
+        .set('status', status);
+
+      const { genreNames, ...simple } = filters;
+
+      Object.entries(simple).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && value !== '') {
+          params = params.set(key, String(value));
+        }
+        
+      });
+
+      genreNames?.forEach(g => {
+        params = params.append('genreNames', g);
+      });
+
+      return this.http.get<PageResponse<Game>>(`${this.url}/admin`, { params });
+    }
+
     getGameById(externalId: string): Observable<Game> {
       return this.http.get<Game>(`${this.url}/${externalId}`);
     }
@@ -61,6 +92,13 @@ export class GameService {
       return this.http.put<Game>(`${this.url}/${id}`, game)
     }
 
+    authorizeGame(id: string) {
+      return this.http.patch<Game>(`${this.url}/${id}/AuthorizedGame`, {});
+    }
+
+    blockGame(id: string) {
+      return this.http.delete<void>(`${this.url}/${id}/DesAuthorizedGame`);
+    }
 
     getClientGames(){
       return this.http.get<Game[]>('/api/clients/library')

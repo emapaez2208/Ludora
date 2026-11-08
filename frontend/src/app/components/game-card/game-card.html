@@ -1,4 +1,22 @@
-<div class="game-card">
+<div class="game-card"
+    [class.card-revision]="showStatus() && game().needRevision"
+    [class.card-blocked]="showStatus() && !game().needRevision && game().statusBlocked"
+    [class.card-available]="showStatus() && !game().needRevision && !game().statusBlocked">
+
+    @if (showStatus()) {
+      @if (game().needRevision) {
+        <span class="status-tag tag-revision">
+          {{ developerView() ? 'En revisión' : 'Necesita revisión' }}
+        </span>
+      } @else if (game().statusBlocked) {
+        <span class="status-tag tag-blocked">Bloqueado</span>
+      } @else {
+        <span class="status-tag tag-available">
+          {{ developerView() ? 'Publicado' : 'Disponible' }}
+        </span>
+      }
+    }
+
   <a [routerLink]="['/catalog', game().externalId]" class="game-image-container">
     <img [src]="game().frontPage" [alt]="game().name" class="game-cover" />
   </a>

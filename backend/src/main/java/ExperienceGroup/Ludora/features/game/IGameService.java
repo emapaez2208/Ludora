@@ -31,4 +31,18 @@ public interface IGameService {
     List<GameDTOResponse> getGamesNeedRevision();
     GameDTOResponse askForReviewGame(UUID gameId);
 
+    Page<GameDTOResponse> getAdminGames(int page,
+                                        int size,
+                                        String name,
+                                        BigDecimal maxPrice,
+                                        BigDecimal minPrice,
+                                        LocalDate minReleaseDate,
+                                        LocalDate maxReleaseDate,
+                                        List<String> genreNames,
+                                        String rangeName,
+                                        String developerCompany,
+                                        String sortBy,
+                                        String sortDirection,
+                                        String status);
+
 }
