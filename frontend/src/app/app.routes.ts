@@ -38,7 +38,6 @@ export const routes: Routes = [
     {path: 'catalog/:id', component: GameDetail},
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
-    {path: 'sales', component: SalesList, canActivate: [adminGuard]},
     {path: 'sales/:id', component: SalesDetails, canActivate: [clientGuard]},
     {path: 'cart', component: Cart,canActivate: [clientGuard]},
     {path: 'library', component: Library, canActivate: [clientOrDeveloperGuard]},
@@ -49,6 +48,7 @@ export const routes: Routes = [
             { path: '', pathMatch: 'full', redirectTo: 'games' },
             { path: 'games', component: GameManagement },
             { path: 'users', component: UserList },
+            { path: 'sales', component: SalesList }
         ],
     },
     {path: 'pay/:type', component: Payment},
