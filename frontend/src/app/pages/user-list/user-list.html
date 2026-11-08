@@ -1,8 +1,10 @@
-<h2>Usuarios</h2>
+<div class="container">
+
+<h2>Gestión de usuarios</h2>
 
 <div class="tabs">
-  <button type="button" class="btn" [class.active]="tab() === 'clients'" (click)="setTab('clients')">Clientes</button>
-  <button type="button" class="btn" [class.active]="tab() === 'developers'" (click)="setTab('developers')">Developers</button>
+  <button type="button" class="tab" [class.active]="tab() === 'clients'" (click)="setTab('clients')">Clientes</button>
+  <button type="button" class="tab" [class.active]="tab() === 'developers'" (click)="setTab('developers')">Developers</button>
 </div>
 
 @if (error()) {
@@ -77,3 +79,6 @@
   [page]="page()"
   [totalPages]="totalPages()"
   (pageChange)="goToPage($event)" />
+
+
+</div>

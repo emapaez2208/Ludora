@@ -38,6 +38,7 @@ export class UserList implements OnInit {
     if (tab === this.tab()) return
     this.tab.set(tab)
     this.page.set(0)
+    this.totalPages.set(0)
     this.load()
   }
 
@@ -49,7 +50,8 @@ export class UserList implements OnInit {
       this.userService.getClients(this.page(), this.size()).subscribe({
         next: (res) => {
           this.clients.set(res.content)
-          this.totalPages.set(res.totalPages);
+          this.totalPages.set(res.totalPages)
+          this.loading.set(false)
         },
         error: e => this.fail('clientes', e),
       })
@@ -58,6 +60,7 @@ export class UserList implements OnInit {
         next: res => {
           this.developers.set(res.content);
           this.totalPages.set(res.totalPages);
+          this.loading.set(false)
         },
         error: e => this.fail('developers', e),
       })
