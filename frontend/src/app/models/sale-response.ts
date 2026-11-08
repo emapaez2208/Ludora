@@ -1,15 +1,12 @@
-import { SaleItem } from './sale-item';
- 
-export type SaleStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
- 
+import { SaleItem } from "./sale-item"
+
 export interface SaleResponse {
-  externalId: string;
-  date: string;
-  status: SaleStatus;
-  totalPrice: number;
-  earnedPoints: number;
-  hasDiscount: boolean;
-  userName: string;
-  items: SaleItem[];
+    externalId : string
+    date : string
+    status : string
+    totalPrice : number
+    earnedPoints : number
+    hasDiscount : boolean
+    userName : string
+    items : SaleItem[]
 }
- 

@@ -11,6 +11,7 @@ import { DeveloperRequest } from '../models/developer-request';
 import { PageResponse } from '../models/page-response';
 import { ChangePassword } from '../models/change-password';
 import { ChangeEmail } from '../models/change-email';
+import { AdminRequest } from '../models/admin-request';
 
 
 @Service()
@@ -100,6 +101,12 @@ export class UserService {
 
     addDevelop ( developerRequest : DeveloperRequest){
         return this.http.post<Developer>(`${this.url}/developers`, developerRequest)
+    }
+
+    //
+
+    addAdmin ( AdminRequest : AdminRequest){
+        return this.http.post<AdminResponse>(`${this.url}/admins`,AdminRequest)
     }
 
 }

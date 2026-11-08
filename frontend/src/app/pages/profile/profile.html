@@ -1,7 +1,8 @@
 @if (userStateService.client(); as client) {
+
   <section class="profile">
     <div class="profile-header">
-      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+      <img [src]="client.avatarUrl || 'images/profile-base.jpeg'" alt="Imagen de perfil" class="img-profile">
 
       <div class="profile-heading">
         <span class="profile-role">Cuenta de usuario</span>
@@ -65,10 +66,82 @@
     </div>
   </section>
 
+  <section class="recent-sales">
+    <div class="sales-header">
+      <div>
+        <span class="sales-subtitle">TU ACTIVIDAD</span>
+        <h3>Mis compras recientes</h3>
+      </div>
+
+      <a routerLink="/sales" class="view-all-sales">
+        Ver todas las compras →
+      </a>
+    </div>
+
+    @if (salesLoading()) {
+      <p class="sales-message">Cargando tus compras...</p>
+
+    } @else if (salesError()) {
+      <p class="sales-message">No se pudieron cargar tus compras.</p>
+
+    } @else if (recentSales().length === 0) {
+      <div class="empty-sales">
+        <span class="empty-sales-icon">🛒</span>
+        <h4>Todavía no realizaste compras</h4>
+        <p>Cuando compres un videojuego, aparecerá acá.</p>
+        <a routerLink="/catalog">Explorar catálogo</a>
+      </div>
+
+    } @else {
+      <div class="sales-list">
+        @for (sale of recentSales(); track sale.externalId) {
+          <a [routerLink]="['/sales', sale.externalId]" class="sale-card">
+
+            <div class="sale-main">
+              <div class="sale-info">
+                <span class="sale-date">
+                  {{ sale.date | date:'dd/MM/yyyy' }}
+                </span>
+
+                <h4>
+                  {{ sale.items.length }}
+                  {{ sale.items.length === 1 ? 'videojuego' : 'videojuegos' }}
+                </h4>
+
+                <div class="sale-games">
+                  @for (item of sale.items.slice(0, 3); track $index) {
+                    <span>{{ item.gameName }}</span>
+                  }
+
+                  @if (sale.items.length > 3) {
+                    <span>+{{ sale.items.length - 3 }} más</span>
+                  }
+                </div>
+              </div>
+
+              <div class="sale-details">
+                <strong>${{ sale.totalPrice }}</strong>
+
+                <span class="sale-status"
+                  [class.approved]="sale.status === 'APPROVED'"
+                  [class.pending]="sale.status === 'PENDING'"
+                  [class.rejected]="sale.status === 'REJECTED'">
+                  {{ sale.status }}
+                </span>
+              </div>
+            </div>
+
+            <span class="sale-arrow">→</span>
+          </a>
+        }
+      </div>
+    }
+  </section>
+
 } @else if (userStateService.developer(); as developer) {
   <section class="profile">
     <div class="profile-header">
-      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+      <img [src]="developer.avatarUrl || 'images/profile-base.jpeg'" alt="Imagen de perfil" class="img-profile">
 
       <div class="profile-heading">
         <span class="profile-role">Cuenta de desarrollador</span>
@@ -113,7 +186,7 @@
 } @else if (userStateService.admin(); as admin) {
   <section class="profile">
     <div class="profile-header">
-      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+      <img [src]="admin.avatarUrl || 'images/profile-base.jpeg'" alt="Imagen de perfil" class="img-profile">
 
       <div class="profile-heading">
         <span class="profile-role">Cuenta de administrador</span>

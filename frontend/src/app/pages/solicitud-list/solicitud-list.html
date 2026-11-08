@@ -1,31 +1,49 @@
-<div class="container">
-  <h2>Gestión de Solicitudes y Revisiones</h2>
+<div class="contenedor">
+  <h2 class="titulloh2">Gestión de Solicitudes y Revisiones</h2>
 
-  <!-- Botones para cambiar entre vistas o filtros -->
-  <div class="filters mb-3">
-    <button class="btn btn-secondary me-2" (click)="loadSolicitudes(undefined)">Todos</button>
-    <button class="btn btn-warning me-2" (click)="loadSolicitudes(true)">Bloqueados</button>
-    <button class="btn btn-info me-2 text-white" (click)="loadGamesNeedRevision()">Necesitan Revisión</button>
+  <div class="filtros">
+    <button class="btn" (click)="loadSolicitudes(undefined)">Todos</button>
+    <button class="btn" (click)="loadSolicitudes(true)">Bloqueados</button>
+    <button class="btn" (click)="loadGamesNeedRevision()">Necesitan Revisión</button>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Estado Bloqueado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let game of games()">
-        <td>{{ game.name }}</td>
-        <td>{{ game.statusBlocked ? 'Bloqueado' : 'Activo' }}</td>
-        <td>
-          <button class="btn btn-success btn-sm" (click)="authorizeGame(game.externalId)">
-            Desbloquear / Aprobar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table ">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Estado Bloqueado</th>
+          <th class="textCenter">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (game of games(); track game.externalId) {
+          <tr>
+            <td><strong>{{ game.name }}</strong></td>
+            <td>
+              <span class="badge" [class.bg-danger]="game.statusBlocked" [class.bg-success]="!game.statusBlocked">
+                {{ game.statusBlocked ? 'Bloqueado' : 'Activo' }}
+              </span>
+            </td>
+            <td class="textCenter">
+              @if (game.statusBlocked) {
+                <button class="btn " (click)="authorizeGame(game.externalId)"> Aprobar / Desbloquear</button>
+              } @else {
+                <button class="btn" (click)="desautorizedGame(game.externalId)"> Desautorizar</button>
+              }
+            </td>
+          } @empty {
+          <tr>
+            <td colspan="3" class="textCenter">
+              No hay juegos para mostrar.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <app-pagination 
+    [page]="page()" 
+    [totalPages]="totalPages()" 
+    (pageChange)="goToPage($event)" />
 </div>
