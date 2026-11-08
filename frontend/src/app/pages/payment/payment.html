@@ -1,0 +1,83 @@
+<main class="payment-page">
+
+  <section class="payment-card">
+
+    @if (success()) {
+      <div class="status-icon success-icon">
+        ✓
+      </div>
+
+      <span class="status-label success-label">PAGO APROBADO</span>
+
+      <h1>¡Compra exitosa!</h1>
+
+      <p class="description">
+        ¡Felicitaciones! Tu pago se realizó correctamente.
+        Ya podés disfrutar de tus nuevos videojuegos.
+      </p>
+
+      <div class="redirect-message">
+        <span class="loader"></span>
+        Serás redirigido a tu biblioteca en
+        <strong>{{ countdown() }} segundos</strong>
+      </div>
+
+    } @else if (failure()) {
+      <div class="status-icon failure-icon">
+        ✕
+      </div>
+
+      <span class="status-label failure-label">PAGO RECHAZADO</span>
+
+      <h1>No se pudo completar el pago</h1>
+
+      <p class="description">
+        Mercado Pago no pudo procesar tu pago.
+        Podés revisar el estado de tu compra e intentar nuevamente.
+      </p>
+
+    } @else if (pending()) {
+      <div class="status-icon pending-icon">
+        !
+      </div>
+
+      <span class="status-label pending-label">PAGO PENDIENTE</span>
+
+      <h1>Estamos procesando tu pago</h1>
+
+      <p class="description">
+        Tu pago todavía no fue confirmado.
+        Cuando Mercado Pago actualice su estado, podrás consultar
+        tu compra desde Ludora.
+      </p>
+
+    } @else {
+      <div class="status-icon failure-icon">
+        !
+      </div>
+
+      <span class="status-label failure-label">ERROR</span>
+
+      <h1>Algo salió mal</h1>
+
+      <p class="description">
+        {{ msjError() }}
+      </p>
+    }
+
+    <button type="button" class="library-button" (click)="goToDestination()">
+      @if (success()) {
+        Ir a mi biblioteca
+      } @else {
+        Volver a mis compras
+      }
+      <span>→</span>
+    </button>
+
+    <a routerLink="/catalog" class="catalog-link">
+      Volver al catálogo
+    </a>
+
+  </section>
+
+</main>

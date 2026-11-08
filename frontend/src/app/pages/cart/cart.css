@@ -214,6 +214,9 @@ h2 {
     text-decoration: none;
 }
 
+.btn{
+    width: 100%;
+}
 
 /* Tablet: el resumen pasa debajo de la lista */
 @media (max-width: 1024px) {

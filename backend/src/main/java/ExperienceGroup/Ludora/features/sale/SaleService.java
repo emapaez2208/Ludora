@@ -1,4 +1,5 @@
 package ExperienceGroup.Ludora.features.sale;
+import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.mercadoPago.MercadoPagoService;
 import ExperienceGroup.Ludora.features.sale.domain.SaleItemEntity;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
@@ -42,6 +43,8 @@ public class SaleService  implements ISaleService{
     private final IClientRepository clientRepository;
     private final ICartService cartService;
     private final MercadoPagoService mercadoPago;
+
+    private final AuthenticatedUserProvider authenticatedUser;
 
     @Override
     @Transactional
@@ -115,11 +118,16 @@ public class SaleService  implements ISaleService{
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CLIENT')")
     public SaleDTOResponse getByExternalId(UUID externalId) {
-        return saleRepository.findByExternalId(externalId)
+        SaleDTOResponse sale = saleRepository.findByExternalId(externalId)
                 .map(responseMapper::toDTO)
                 .orElseThrow(() -> new SaleNotFoundException("Sale not found"));
+
+        if(sale.userName().equalsIgnoreCase(authenticatedUser.getCurrentUser().username())){
+            return sale;
+        }
+        throw new SaleNotFoundException("The sale is not associated with your user account.");
     }
 
     @Override

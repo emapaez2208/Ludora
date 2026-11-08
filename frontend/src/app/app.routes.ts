@@ -16,6 +16,9 @@ import { loginGuard } from './guards/login-guard';
 import { ProfileEdit } from './pages/profile-edit/profile-edit';
 import { Cart } from './pages/cart/cart';
 import { clientGuard } from './guards/client-guard';
+import { SalesDetails } from './pages/sales-details/sales-details';
+import { Payment } from './pages/payment/payment';
+import { Sales } from './pages/sales/sales';
 import { FormAdmin } from './pages/form-admin/form-admin';
 import { Library } from './pages/library/library';
 import { clientOrDeveloperGuard } from './guards/client-or-developer-guard';
@@ -37,7 +40,9 @@ export const routes: Routes = [
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
     {path: 'sales', component: SalesList, canActivate: [adminGuard]},
+    {path: 'sales/:id', component: SalesDetails, canActivate: [clientGuard]},
     {path: 'cart', component: Cart,canActivate: [clientGuard]},
     {path: 'library', component: Library, canActivate: [clientOrDeveloperGuard]},
+    {path: 'pay/:type', component: Payment},
     { path: '**', redirectTo: ''}
 ];
