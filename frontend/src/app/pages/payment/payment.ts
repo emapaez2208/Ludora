@@ -46,15 +46,20 @@ export class Payment implements OnInit {
         this.countdown.update(value => value - 1);
       } else {
         this.clearCountdown();
-        this.goToLibrary();
+        this.goToDestination();
       }
     }, 1000);
   }
 
-  goToLibrary() {
-    this.clearCountdown();
+  goToDestination() {
+  this.clearCountdown();
+
+  if (this.success()) {
     this.router.navigate(['/library']);
+  } else {
+    this.router.navigate(['/sales']);
   }
+}
 
   clearCountdown() {
     if (this.intervalId) {

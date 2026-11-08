@@ -65,12 +65,12 @@
       </p>
     }
 
-    <button
-      type="button"
-      class="library-button"
-      (click)="goToLibrary()"
-    >
-      Ir a mi biblioteca
+    <button type="button" class="library-button" (click)="goToDestination()">
+      @if (success()) {
+        Ir a mi biblioteca
+      } @else {
+        Volver a mis compras
+      }
       <span>→</span>
     </button>
 
