@@ -25,7 +25,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.transaction.support.TransactionTemplate;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,7 +46,8 @@ public class CargaBDDPrueba {
             ICartRepository cartRepository,
             CredentialsRepository credentialsRepository,
             RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            TransactionTemplate tx) {
 
         return args -> {
             System.out.println("\n" + "=".repeat(70));
@@ -1189,38 +1190,42 @@ public class CargaBDDPrueba {
             }
             System.out.println("====== Catálogo de juegos verificado y cargado ======");
 
+           // ==========================================================
+            // BIBLIOTECA DE PRUEBA (juegos "comprados" por cada cliente)
+            // ==========================================================
+            java.util.Map<String, List<String>> bibliotecaPrueba = java.util.Map.of(
+                    "cosmejuega",   List.of("God of War Ragnarok", "GTA V"),
+                    "estebanquito", List.of("GTA V", "Super Mario Odyssey", "God of War Ragnarok"),
+                    "alanbrito",    List.of("God of War Ragnarok")
+            );
+
+            tx.executeWithoutResult(status -> {
+                List<GameEntity> todos = gameRepository.findAll();
+
+                for (var entrada : bibliotecaPrueba.entrySet()) {
+                    ClientEntity cliente = clientRepository.findAll().stream()
+                            .filter(c -> c.getUserName().equals(entrada.getKey()))
+                            .findFirst().orElse(null);
+                    if (cliente == null) continue;
+
+                    List<GameEntity> biblioteca = new ArrayList<>(cliente.getGames());
+
+                    for (GameEntity juego : todos) {
+                        boolean yaLoTiene = biblioteca.stream().anyMatch(g -> g.getId().equals(juego.getId()));
+                        if (entrada.getValue().contains(juego.getName()) && !yaLoTiene) {
+                            biblioteca.add(juego);
+                        }
+                    }
+
+                    cliente.setGames(biblioteca);
+                    clientRepository.save(cliente);
+                }
+            });
+            System.out.println("====== Bibliotecas de prueba cargadas ======");
+
             // ==========================================================
             // REVIEWS
             // ==========================================================
-            if (clientCosme != null && clientEsteban != null && clientAlan != null) {
-                dbGames = gameRepository.findAll();
-                List<ReviewEntity> dbReviews = reviewRepository.findAll();
-
-                // ------------------------------------------------------
-                // REVIEWS EN: God of War Ragnarok
-                // ------------------------------------------------------
-                GameEntity dbGow = dbGames.stream().filter(g -> g.getName().equals("God of War Ragnarok")).findFirst().orElse(null);
-                if (dbGow != null) {
-                    if (dbReviews.stream().noneMatch(r -> r.getGame().getId().equals(dbGow.getId()) && r.getClient().getId().equals(clientCosme.getId()))) {
-                        ReviewEntity r1 = new ReviewEntity();
-                        r1.setRating(5);
-                        r1.setComment("God of War es una locura, el final me hizo lagrimear.");
-                        r1.setDate(LocalDateTime.now().minusDays(2));
-                        r1.setGame(dbGow);
-                        r1.setClient(clientCosme);
-                        reviewRepository.save(r1);
-                    }
-                    if (dbReviews.stream().noneMatch(r -> r.getGame().getId().equals(dbGow.getId()) && r.getClient().getId().equals(clientAlan.getId()))) {
-                        ReviewEntity r2 = new ReviewEntity();
-                        r2.setRating(3);
-                        r2.setComment("Visualmente es hermoso, pero tiene demasiado diálogo para mi gusto.");
-                        r2.setDate(LocalDateTime.now().minusDays(5));
-                        r2.setGame(dbGow);
-                        r2.setClient(clientAlan);
-                        reviewRepository.save(r2);
-                    }
-                }
-
                 // ------------------------------------------------------
                 // REVIEWS EN: GTA V
                 // ------------------------------------------------------

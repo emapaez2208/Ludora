@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Review } from '../../../../models/review';
-import { AuthService } from '../../../../services/auth-service';
+import { UserStateService } from '../../../../services/user-state-service';
 
 @Component({
   selector: 'app-review-detail-modal',
@@ -11,7 +11,7 @@ import { AuthService } from '../../../../services/auth-service';
   styleUrl: './review-detail-modal.css',
 })
 export class ReviewDetailModalComponent {
-  private authService = inject(AuthService);
+  private userStateService = inject(UserStateService)
 
   review = input.required<Review>();
 
@@ -21,9 +21,13 @@ export class ReviewDetailModalComponent {
 
   // Evalúa si el usuario autenticado es el autor
   isOwner = computed(() => {
-  const me = this.authService.getUsername();
-  return !!me && this.review().userName === me;
-});
+  const me = this.userStateService.client()?.externalId;
+  return !!me && this.review().clientExternalId === me;
+  });
+
+  isAdmin = computed(() => !!this.userStateService.admin());
+
+  canDelete = computed(() => this.isOwner() || this.isAdmin());
 
   onClose(): void {
     this.close.emit();

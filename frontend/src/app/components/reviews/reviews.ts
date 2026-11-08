@@ -1,10 +1,12 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ReviewService } from '../../services/review-service';
 import { Review, ReviewRequest } from '../../models/review';
 import { AuthService } from '../../services/auth-service';
 import { ReviewDetailModalComponent } from './components/review-detail-modal/review-detail-modal';
+import { UserStateService } from '../../services/user-state-service';
+import { GameService } from '../../services/game-service';
 
 @Component({
   selector: 'app-reviews',
@@ -18,6 +20,8 @@ export class Reviews {
 
   private reviewService = inject(ReviewService);
   private authService = inject(AuthService);
+  private userStateService = inject(UserStateService);
+  private gameService = inject(GameService);
 
   reviews = signal<Review[]>([]);
   currentPage = signal<number>(0);
@@ -32,15 +36,20 @@ export class Reviews {
   newRating: number = 5;
   newComment: string = '';
 
+  ownsGame = signal<boolean>(false) //booleano para determinar si el viewer de la reseña tiene el juego adquirido
+
   errorMessage = signal<string | null>(null);
 
   selectedReview = signal<Review | null>(null);
 
   // id del usuario logueado desde el token
   currentUserId = computed(() => this.authService.getClientExternalId());
-
+  isClient = computed(() => !!this.userStateService.client());
+  isDeveloper = computed(() => !!this.userStateService.developer());
+  isAdmin = computed(() => !!this.userStateService.admin());
+  
   canWriteReview = computed(() => {
-  return this.isLoggedIn() && !this.userHasReviewed();
+  return this.isClient() && this.ownsGame() && !this.userHasReviewed();
   });
 
   currentUsername = computed(() => this.authService.getUsername());
@@ -52,6 +61,18 @@ export class Reviews {
     if (!myId) return false;
     return this.reviews().some(r => r.clientExternalId === myId);
   });
+
+  checkOwnerShips(): void{
+    if(!this.isClient()){
+      this.ownsGame.set(false);
+      return;
+    }
+
+    this.gameService.getClientGames().subscribe({
+      next:(games) => this.ownsGame.set(games.some(g => g.externalId === this.gameId())),
+      error: () => this.ownsGame.set(false)
+    });
+  }
   
 
   averageRating = computed(() => {
@@ -68,6 +89,11 @@ export class Reviews {
         this.fetchReviews();
       }
     });
+    effect(() => {
+    this.isClient();   // dependencias: el rol y el juego
+    this.gameId();
+    untracked(() => this.checkOwnerShips());
+});
   }
 
   fetchReviews(): void {

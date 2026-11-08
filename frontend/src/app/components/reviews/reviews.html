@@ -29,14 +29,16 @@
         </select>
 
         @if (canWriteReview()) {
-    <button type="button" class="btn-nueva-reseña" (click)="toggleForm()">
-      {{ showForm() ? 'Cerrar formulario' : '+ Escribir reseña' }}
-    </button>
-  } @else if (!isLoggedIn()) {
-    <span class="aviso-sesion">Inicia sesión para opinar</span>
-  } @else if (userHasReviewed()) {
-    <span class="aviso-sesion">Ya publicaste una reseña</span>
-  }
+  <button type="button" class="btn-nueva-reseña" (click)="toggleForm()">
+    {{ showForm() ? 'Cerrar formulario' : '+ Escribir reseña' }}
+  </button>
+} @else if (!isLoggedIn()) {
+  <span class="aviso-sesion">Inicia sesión para opinar</span>
+} @else if (isClient() && userHasReviewed()) {
+  <span class="aviso-sesion">Ya publicaste una reseña</span>
+} @else if (isClient() && !ownsGame()) {
+  <span class="aviso-sesion">Comprá este juego para poder opinar</span>
+}
 </div>
 </div>
 
