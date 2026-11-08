@@ -20,6 +20,7 @@ export class GameFilterPanel implements OnInit {
   
   initial = input<GameFilters>({});
   apply = output<GameFilters>();
+  libraryMode = input(false);
 
   filters = signal<GameFilters>({});
   ageRanges = signal<AgeRange[]>([]);

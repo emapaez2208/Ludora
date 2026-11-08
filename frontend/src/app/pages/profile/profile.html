@@ -1,7 +1,7 @@
 @if (userStateService.client(); as client) {
   <section class="profile">
     <div class="profile-header">
-      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+      <img [src]="client.avatarUrl || 'images/profile-base.jpeg'" alt="Imagen de perfil" class="img-profile">
 
       <div class="profile-heading">
         <span class="profile-role">Cuenta de usuario</span>
@@ -68,7 +68,7 @@
 } @else if (userStateService.developer(); as developer) {
   <section class="profile">
     <div class="profile-header">
-      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+      <img [src]="developer.avatarUrl || 'images/profile-base.jpeg'" alt="Imagen de perfil" class="img-profile">
 
       <div class="profile-heading">
         <span class="profile-role">Cuenta de desarrollador</span>
@@ -113,7 +113,7 @@
 } @else if (userStateService.admin(); as admin) {
   <section class="profile">
     <div class="profile-header">
-      <img src="images/profile-base.jpeg" alt="Imagen de perfil" class="img-profile">
+      <img [src]="admin.avatarUrl || 'images/profile-base.jpeg'" alt="Imagen de perfil" class="img-profile">
 
       <div class="profile-heading">
         <span class="profile-role">Cuenta de administrador</span>

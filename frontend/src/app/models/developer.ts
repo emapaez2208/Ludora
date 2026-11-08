@@ -1,4 +1,5 @@
 export interface Developer {
+  avatarUrl?: string
   externalId: string;
   name: string;
   lastName: string;

@@ -11,65 +11,67 @@
       (keydown.enter)="submit()" />
   
 </label>
+  @if(!libraryMode()){
+    <label>
+      Desarrolladora
+      
+      <select
+        [value]="filters().developerCompany ?? ''"
+        (change)="update('developerCompany', $any($event.target).value)">
+        <option value="">Todas</option>
+        @for (c of companies(); track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
 
-  <label>
-    Desarrolladora
-    
-    <select
-      [value]="filters().developerCompany ?? ''"
-      (change)="update('developerCompany', $any($event.target).value)">
-      <option value="">Todas</option>
-      @for (c of companies(); track c) {
-        <option [value]="c">{{ c }}</option>
-      }
-    </select>
+    </label>
 
-  </label>
+    <label>
+      Precio mínimo
+      
+      <input type="number" min="0" placeholder="0"
+        [value]="filters().minPrice ?? ''"
+        (input)="update('minPrice', $any($event.target).value)" />
 
-  <label>
-    Precio mínimo
-    
-    <input type="number" min="0" placeholder="0"
-      [value]="filters().minPrice ?? ''"
-      (input)="update('minPrice', $any($event.target).value)" />
+    </label>
 
-  </label>
+    <label>
+      Precio máximo
+      
+      <input type="number" min="0" placeholder="Sin límite"
+        [value]="filters().maxPrice ?? ''"
+        (input)="update('maxPrice', $any($event.target).value)" />
 
-  <label>
-    Precio máximo
-    
-    <input type="number" min="0" placeholder="Sin límite"
-      [value]="filters().maxPrice ?? ''"
-      (input)="update('maxPrice', $any($event.target).value)" />
-
-  </label>
+    </label>
 
 
-  @if (priceInvalid) {
-    <p class="filter-error">El precio mínimo no puede ser mayor que el máximo.</p>
+    @if (priceInvalid) {
+      <p class="filter-error">El precio mínimo no puede ser mayor que el máximo.</p>
+    }
+
+    <label>
+      Lanzado desde
+
+      <input type="date" [max]="today"
+        [value]="filters().minReleaseDate ?? ''"
+        (input)="update('minReleaseDate', $any($event.target).value)" />
+
+    </label>
+
+    <label>
+      Lanzado hasta
+
+      <input type="date" [max]="today"
+        [value]="filters().maxReleaseDate ?? ''"
+        (input)="update('maxReleaseDate', $any($event.target).value)" />
+
+    </label>
+
+    @if (dateInvalid) {
+      <p class="filter-error">La fecha inicial no puede ser posterior a la final.</p>
+    }
   }
-
-  <label>
-    Lanzado desde
-
-    <input type="date" [max]="today"
-      [value]="filters().minReleaseDate ?? ''"
-      (input)="update('minReleaseDate', $any($event.target).value)" />
-
-  </label>
-
-  <label>
-    Lanzado hasta
-
-    <input type="date" [max]="today"
-      [value]="filters().maxReleaseDate ?? ''"
-      (input)="update('maxReleaseDate', $any($event.target).value)" />
-
-  </label>
-
-  @if (dateInvalid) {
-    <p class="filter-error">La fecha inicial no puede ser posterior a la final.</p>
-  }
+  
 
   <label>
     Clasificación por edad

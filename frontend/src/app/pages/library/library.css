@@ -1,0 +1,107 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  color: var(--color-texto);
+  background-color: var(--color-base);
+  min-height: calc(100vh - 10vh);
+}
+
+/* Título */
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--color-texto);
+  letter-spacing: 0.5px;
+  border-left: 4px solid var(--color-principal);
+  padding-left: 0.75rem;
+}
+
+/* Barra de filtros */
+.filters-bar {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Grilla de juegos */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Botones */
+.btn {
+  width: 100%;
+}
+
+.btn-filters {
+  width: auto;
+  padding: 0.6rem 1.25rem;
+}
+
+/* Mensajes */
+p {
+  color: var(--color-texto-muted);
+  font-size: 1rem;
+}
+
+.error-message {
+  color: var(--color-peligro);
+  background-color: color-mix(in srgb, var(--color-peligro) 10%, transparent);
+  border-left: 3px solid var(--color-peligro);
+  padding: 0.9rem 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+.empty-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: var(--color-secundario);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  color: var(--color-texto-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .btn-filters {
+    width: 100%;
+  }
+}

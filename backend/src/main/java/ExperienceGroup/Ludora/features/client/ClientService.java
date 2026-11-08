@@ -180,6 +180,7 @@ public class ClientService implements IClientService{
 
         clientEntity.setName(dto.name());
         clientEntity.setLastName(dto.lastName());
+        clientEntity.setAvatarUrl(dto.avatarUrl());
         clientEntity.setPhone(dto.phone());
         clientEntity.setStreet(dto.street());
         clientEntity.setNumberStreet(dto.numberStreet());
@@ -235,7 +236,7 @@ public class ClientService implements IClientService{
     public List<GameDTOResponse> getMyGames(){
         return  gameRepository.findAllByClients_ExternalId(
                 authenticatedUser.getCurrentUser().externalId()
-                ).orElseThrow(() -> new GameNotFoundException("The user not contain games"))
+                )
                     .stream()
                     .map(mapperGamesResponse::toDTO)
                     .toList();
