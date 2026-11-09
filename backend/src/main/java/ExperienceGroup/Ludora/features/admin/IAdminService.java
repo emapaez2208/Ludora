@@ -1,5 +1,7 @@
 package ExperienceGroup.Ludora.features.admin;
 
+import ExperienceGroup.Ludora.common.utils.AdminChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.AdminChangePasswordDTO;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
@@ -33,6 +35,10 @@ public interface IAdminService {
     void changePassword(ChangePasswordDTO passwordDTO);
 
     void changeEmail(ChangeEmailDTO emailDTO);
+
+    void changeUserEmail(UUID externalId, AdminChangeEmailDTO emailDTO);
+
+    void changeUserPassword(UUID externalId, AdminChangePasswordDTO passwordDTO);
 
     void blockAccount(UUID externalId);
 
