@@ -19,14 +19,21 @@ import ExperienceGroup.Ludora.features.cart.ICartRepository;
 import ExperienceGroup.Ludora.features.cart.domain.CartEntity;
 import ExperienceGroup.Ludora.features.review.IReviewRepository;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
+import ExperienceGroup.Ludora.common.utils.BusinessRules;
 import ExperienceGroup.Ludora.common.utils.Email;
+import ExperienceGroup.Ludora.features.sale.ESaleStatus;
+import ExperienceGroup.Ludora.features.sale.ISaleRepository;
+import ExperienceGroup.Ludora.features.sale.domain.SaleEntity;
+import ExperienceGroup.Ludora.features.sale.domain.SaleItemEntity;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.support.TransactionTemplate;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +43,7 @@ import java.util.List;
 public class CargaBDDPrueba {
 
     @Bean
+    @Order(2)
     CommandLineRunner initCargaPrueba(
             IGenreRepository genreRepository,
             IAgeRangeRepository ageRangeRepository,
@@ -44,6 +52,7 @@ public class CargaBDDPrueba {
             IDeveloperRepository developerRepository,
             IReviewRepository reviewRepository,
             ICartRepository cartRepository,
+            ISaleRepository saleRepository,
             CredentialsRepository credentialsRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
@@ -731,6 +740,7 @@ public class CargaBDDPrueba {
                 gow.setAgeRange(mas18);
                 gow.setGenres(List.of(action, adventure));
                 gow.setStatusBlocked(false);
+                gow.setNeedRevision(false);
                 gameRepository.save(gow);
             }
 
@@ -746,6 +756,7 @@ public class CargaBDDPrueba {
                 gow2018.setAgeRange(mas18);
                 gow2018.setGenres(List.of(action, adventure));
                 gow2018.setStatusBlocked(false);
+                gow2018.setNeedRevision(false);
                 gameRepository.save(gow2018);
             }
 
@@ -761,6 +772,7 @@ public class CargaBDDPrueba {
                 spider.setAgeRange(mas13);
                 spider.setGenres(List.of(action, adventure));
                 spider.setStatusBlocked(false);
+                spider.setNeedRevision(false);
                 gameRepository.save(spider);
             }
 
@@ -776,6 +788,7 @@ public class CargaBDDPrueba {
                 tlou.setAgeRange(mas18);
                 tlou.setGenres(List.of(action, adventure));
                 tlou.setStatusBlocked(false);
+                tlou.setNeedRevision(false);
                 gameRepository.save(tlou);
             }
 
@@ -791,6 +804,7 @@ public class CargaBDDPrueba {
                 unch.setAgeRange(mas13);
                 unch.setGenres(List.of(action, adventure));
                 unch.setStatusBlocked(false);
+                unch.setNeedRevision(false);
                 gameRepository.save(unch);
             }
 
@@ -810,6 +824,7 @@ public class CargaBDDPrueba {
                 gta.setAgeRange(mas18);
                 gta.setGenres(List.of(action, adventure));
                 gta.setStatusBlocked(false);
+                gta.setNeedRevision(false);
                 gameRepository.save(gta);
             }
 
@@ -825,6 +840,7 @@ public class CargaBDDPrueba {
                 rdr2.setAgeRange(mas18);
                 rdr2.setGenres(List.of(action, adventure));
                 rdr2.setStatusBlocked(false);
+                rdr2.setNeedRevision(false);
                 gameRepository.save(rdr2);
             }
 
@@ -840,6 +856,7 @@ public class CargaBDDPrueba {
                 gta4.setAgeRange(mas18);
                 gta4.setGenres(List.of(action, adventure));
                 gta4.setStatusBlocked(false);
+                gta4.setNeedRevision(false);
                 gameRepository.save(gta4);
             }
 
@@ -855,6 +872,7 @@ public class CargaBDDPrueba {
                 lanoire.setAgeRange(mas18);
                 lanoire.setGenres(List.of(action, adventure));
                 lanoire.setStatusBlocked(false);
+                lanoire.setNeedRevision(false);
                 gameRepository.save(lanoire);
             }
 
@@ -870,6 +888,7 @@ public class CargaBDDPrueba {
                 max.setAgeRange(mas18);
                 max.setGenres(List.of(action, shooter));
                 max.setStatusBlocked(false);
+                max.setNeedRevision(false);
                 gameRepository.save(max);
             }
 
@@ -889,6 +908,7 @@ public class CargaBDDPrueba {
                 mario.setAgeRange(atp);
                 mario.setGenres(List.of(adventure));
                 mario.setStatusBlocked(false);
+                mario.setNeedRevision(false);
                 gameRepository.save(mario);
             }
 
@@ -904,6 +924,7 @@ public class CargaBDDPrueba {
                 zelda.setAgeRange(mas13);
                 zelda.setGenres(List.of(adventure, rpg));
                 zelda.setStatusBlocked(false);
+                zelda.setNeedRevision(false);
                 gameRepository.save(zelda);
             }
 
@@ -919,6 +940,7 @@ public class CargaBDDPrueba {
                 mk8.setAgeRange(atp);
                 mk8.setGenres(List.of(sports));
                 mk8.setStatusBlocked(false);
+                mk8.setNeedRevision(false);
                 gameRepository.save(mk8);
             }
 
@@ -934,6 +956,7 @@ public class CargaBDDPrueba {
                 ac.setAgeRange(atp);
                 ac.setGenres(List.of(adventure));
                 ac.setStatusBlocked(false);
+                ac.setNeedRevision(false);
                 gameRepository.save(ac);
             }
 
@@ -949,6 +972,7 @@ public class CargaBDDPrueba {
                 smash.setAgeRange(mas13);
                 smash.setGenres(List.of(action));
                 smash.setStatusBlocked(false);
+                smash.setNeedRevision(false);
                 gameRepository.save(smash);
             }
 
@@ -968,6 +992,7 @@ public class CargaBDDPrueba {
                 tw3.setAgeRange(mas18);
                 tw3.setGenres(List.of(rpg, adventure));
                 tw3.setStatusBlocked(false);
+                tw3.setNeedRevision(false);
                 gameRepository.save(tw3);
             }
 
@@ -983,6 +1008,7 @@ public class CargaBDDPrueba {
                 cp.setAgeRange(mas18);
                 cp.setGenres(List.of(rpg, shooter, action));
                 cp.setStatusBlocked(false);
+                cp.setNeedRevision(false);
                 gameRepository.save(cp);
             }
 
@@ -998,6 +1024,7 @@ public class CargaBDDPrueba {
                 pl.setAgeRange(mas18);
                 pl.setGenres(List.of(rpg, action));
                 pl.setStatusBlocked(false);
+                pl.setNeedRevision(false);
                 gameRepository.save(pl);
             }
 
@@ -1013,6 +1040,7 @@ public class CargaBDDPrueba {
                 tw2.setAgeRange(mas18);
                 tw2.setGenres(List.of(rpg, action));
                 tw2.setStatusBlocked(false);
+                tw2.setNeedRevision(false);
                 gameRepository.save(tw2);
             }
 
@@ -1028,6 +1056,7 @@ public class CargaBDDPrueba {
                 tw1.setAgeRange(mas18);
                 tw1.setGenres(List.of(rpg));
                 tw1.setStatusBlocked(false);
+                tw1.setNeedRevision(false);
                 gameRepository.save(tw1);
             }
 
@@ -1047,6 +1076,7 @@ public class CargaBDDPrueba {
                 elden.setAgeRange(mas18);
                 elden.setGenres(List.of(action, rpg));
                 elden.setStatusBlocked(false);
+                elden.setNeedRevision(false);
                 gameRepository.save(elden);
             }
 
@@ -1062,6 +1092,7 @@ public class CargaBDDPrueba {
                 sekiro.setAgeRange(mas18);
                 sekiro.setGenres(List.of(action, adventure));
                 sekiro.setStatusBlocked(false);
+                sekiro.setNeedRevision(false);
                 gameRepository.save(sekiro);
             }
 
@@ -1076,7 +1107,8 @@ public class CargaBDDPrueba {
                 ds3.setDeveloper(hidetakaDev);
                 ds3.setAgeRange(mas18);
                 ds3.setGenres(List.of(action, rpg));
-                ds3.setStatusBlocked(false);
+                ds3.setStatusBlocked(true);
+                ds3.setNeedRevision(false);
                 gameRepository.save(ds3);
             }
 
@@ -1091,7 +1123,8 @@ public class CargaBDDPrueba {
                 ds1.setDeveloper(hidetakaDev);
                 ds1.setAgeRange(mas18);
                 ds1.setGenres(List.of(action, rpg));
-                ds1.setStatusBlocked(false);
+                ds1.setStatusBlocked(true);
+                ds1.setNeedRevision(true);
                 gameRepository.save(ds1);
             }
 
@@ -1107,6 +1140,7 @@ public class CargaBDDPrueba {
                 ac6.setAgeRange(mas13);
                 ac6.setGenres(List.of(action, shooter));
                 ac6.setStatusBlocked(false);
+                ac6.setNeedRevision(false);
                 gameRepository.save(ac6);
             }
 
@@ -1126,6 +1160,7 @@ public class CargaBDDPrueba {
                 re4.setAgeRange(mas18);
                 re4.setGenres(List.of(action, terror));
                 re4.setStatusBlocked(false);
+                re4.setNeedRevision(false);
                 gameRepository.save(re4);
             }
 
@@ -1141,6 +1176,7 @@ public class CargaBDDPrueba {
                 re2.setAgeRange(mas18);
                 re2.setGenres(List.of(terror, action));
                 re2.setStatusBlocked(false);
+                re2.setNeedRevision(false);
                 gameRepository.save(re2);
             }
 
@@ -1156,6 +1192,7 @@ public class CargaBDDPrueba {
                 rev.setAgeRange(mas18);
                 rev.setGenres(List.of(terror, action));
                 rev.setStatusBlocked(false);
+                rev.setNeedRevision(false);
                 gameRepository.save(rev);
             }
 
@@ -1171,6 +1208,7 @@ public class CargaBDDPrueba {
                 dmc5.setAgeRange(mas18);
                 dmc5.setGenres(List.of(action));
                 dmc5.setStatusBlocked(false);
+                dmc5.setNeedRevision(false);
                 gameRepository.save(dmc5);
             }
 
@@ -1186,6 +1224,7 @@ public class CargaBDDPrueba {
                 mhw.setAgeRange(mas13);
                 mhw.setGenres(List.of(action, rpg));
                 mhw.setStatusBlocked(false);
+                mhw.setNeedRevision(false);
                 gameRepository.save(mhw);
             }
             System.out.println("====== Catálogo de juegos verificado y cargado ======");
@@ -1406,7 +1445,96 @@ public class CargaBDDPrueba {
                 System.out.println("====== Carrito de " + entrada.getKey() + " cargado con " + juegos.size() + " juegos ======");
             }
 
+            // ==========================================================
+            // VENTAS DE PRUEBA (para la vista de ventas del admin)
+            // Solo se cargan si la tabla de ventas está vacía.
+            // Fechas repartidas en ~45 días, con estados mezclados.
+            // ==========================================================
+            if (saleRepository.count() == 0) {
+                LocalDateTime ahora = LocalDateTime.now();
+
+                List<VentaPrueba> ventasPrueba = List.of(
+                        new VentaPrueba("cosmejuega",      ESaleStatus.APPROVED, ahora.minusDays(45), List.of("God of War Ragnarok", "Elden Ring")),
+                        new VentaPrueba("estebanquito",    ESaleStatus.APPROVED, ahora.minusDays(38), List.of("GTA V", "Red Dead Redemption 2", "Cyberpunk 2077")),
+                        new VentaPrueba("alanbrito",       ESaleStatus.APPROVED, ahora.minusDays(30), List.of("Super Mario Odyssey")),
+                        new VentaPrueba("luciafernandez",  ESaleStatus.APPROVED, ahora.minusDays(27), List.of("The Witcher 3: Wild Hunt", "Phantom Liberty")),
+                        new VentaPrueba("martingomez",     ESaleStatus.APPROVED, ahora.minusDays(21), List.of("Resident Evil 4 Remake", "Devil May Cry 5")),
+                        new VentaPrueba("camilarodriguez", ESaleStatus.REJECTED, ahora.minusDays(18), List.of("Mario Kart 8 Deluxe")),
+                        new VentaPrueba("valentinasosa",   ESaleStatus.APPROVED, ahora.minusDays(15), List.of("Animal Crossing: New Horizons", "Super Smash Bros. Ultimate")),
+                        new VentaPrueba("nicolasacosta",   ESaleStatus.APPROVED, ahora.minusDays(12), List.of("Dark Souls III", "Dark Souls Remastered", "Sekiro: Shadows Die Twice")),
+                        new VentaPrueba("sofiabenitez",    ESaleStatus.PENDING,  ahora.minusDays(9),  List.of("Spider-Man 2")),
+                        new VentaPrueba("joaquinmolina",   ESaleStatus.APPROVED, ahora.minusDays(7),  List.of("The Last of Us Part I", "God of War", "Uncharted: Legacy of Thieves")),
+                        new VentaPrueba("agustinaramirez", ESaleStatus.APPROVED, ahora.minusDays(5),  List.of("Armored Core VI", "Monster Hunter: World")),
+                        new VentaPrueba("cosmejuega",      ESaleStatus.REJECTED, ahora.minusDays(3),  List.of("GTA IV")),
+                        new VentaPrueba("estebanquito",    ESaleStatus.APPROVED, ahora.minusDays(2),  List.of("Resident Evil Village", "Resident Evil 2 Remake")),
+                        new VentaPrueba("alanbrito",       ESaleStatus.PENDING,  ahora.minusDays(1),  List.of("The Witcher 2", "The Witcher 1", "L.A. Noire")),
+                        new VentaPrueba("luciafernandez",  ESaleStatus.APPROVED, ahora.minusHours(2), List.of("Max Payne 3"))
+                );
+
+                List<ClientEntity> clientesVenta = clientRepository.findAll();
+                List<GameEntity> juegosVenta = gameRepository.findAll();
+                int cargadas = 0;
+
+                for (VentaPrueba v : ventasPrueba) {
+                    ClientEntity cliente = clientesVenta.stream()
+                            .filter(c -> c.getUserName().equals(v.usuario()))
+                            .findFirst().orElse(null);
+
+                    List<GameEntity> juegos = juegosVenta.stream()
+                            .filter(g -> v.juegos().contains(g.getName()))
+                            .toList();
+
+                    if (cliente == null || juegos.isEmpty()) {
+                        continue;
+                    }
+
+                    saleRepository.save(armarVenta(cliente, v, juegos));
+                    cargadas++;
+                }
+                System.out.println("====== " + cargadas + " ventas de prueba cargadas ======");
+            }
+
         };
 
+    }
+
+    // Datos de una venta de prueba
+    private record VentaPrueba(String usuario, ESaleStatus status, LocalDateTime fecha, List<String> juegos) {}
+
+    // Arma la venta igual que SaleService.create: descuento por puntos, precio por ítem, total y puntos ganados
+    private static SaleEntity armarVenta(ClientEntity cliente, VentaPrueba v, List<GameEntity> juegos) {
+        boolean conDescuento = cliente.getPoints() >= BusinessRules.POINTS_THRESHOLD;
+
+        SaleEntity venta = new SaleEntity();
+        venta.setClient(cliente);
+        venta.setStatus(v.status());
+        venta.setDate(v.fecha());
+        venta.setHasDiscount(conDescuento);
+
+        List<SaleItemEntity> items = new ArrayList<>();
+        for (GameEntity juego : juegos) {
+            BigDecimal precio = conDescuento
+                    ? juego.getPrice().multiply(BigDecimal.ONE.subtract(BusinessRules.DISCOUNT_PERCENTAGE))
+                            .setScale(2, RoundingMode.HALF_UP)
+                    : juego.getPrice().setScale(2, RoundingMode.HALF_UP);
+
+            SaleItemEntity item = new SaleItemEntity();
+            item.setSale(venta);
+            item.setGame(juego);
+            item.setPriceAtSale(precio);
+            items.add(item);
+        }
+
+        BigDecimal total = items.stream()
+                .map(SaleItemEntity::getPriceAtSale)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        venta.setItems(items);
+        venta.setTotalPrice(total);
+        venta.setEarnedPoints(total.multiply(BusinessRules.REWARD_POINTS_PERCENTAGE)
+                .setScale(0, RoundingMode.FLOOR)
+                .intValue());
+
+        return venta;
     }
 }

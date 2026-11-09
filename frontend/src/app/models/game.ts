@@ -9,6 +9,7 @@ export interface Game {
     ageRange: string;
     genres: string[];
     statusBlocked: boolean;
+    needRevision?: boolean;
     discountPercentage?: number; //prueba para tabla de ofertas en home
     finalPrice?: number;
 }

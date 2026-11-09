@@ -11,6 +11,7 @@ import { GameCard } from '../../components/game-card/game-card';
 import { GameFilterPanel } from '../../components/game-filter-panel/game-filter-panel';
 import { GameSort } from '../../components/game-sort/game-sort';
 import { GameSortOptions } from '../../models/game-sort-options';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   imports: [CommonModule, RouterLink, Pagination, GameCard, GameFilterPanel, GameSort],
@@ -21,6 +22,7 @@ import { GameSortOptions } from '../../models/game-sort-options';
 })
 export class Catalog implements OnInit {
   private gameService = inject(GameService);
+  private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   
   cartService = inject(CartService)
@@ -37,6 +39,10 @@ export class Catalog implements OnInit {
   sort = signal<GameSortOptions>({ sortBy: 'name', sortDirection: 'asc'});
 
   showFilters = signal(false);
+
+  isClient(): boolean{
+    return this.authService.isClient();
+  }
 
   toggleFilters() {
     this.showFilters.update(v => !v);

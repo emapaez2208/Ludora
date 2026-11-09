@@ -1,0 +1,66 @@
+<div class="filters-panel">
+
+  <label>
+    Estado
+
+    <select
+      [value]="filters().status ?? ''"
+      (change)="update('status', $any($event.target).value)">
+      <option value="">Todos</option>
+      <option value="PENDING">Pendiente</option>
+      <option value="APPROVED">Aprobada</option>
+      <option value="REJECTED">Rechazada</option>
+    </select>
+
+  </label>
+
+  <label>
+    Precio mínimo
+
+    <input type="number" min="0" placeholder="0"
+      [value]="filters().minPrice ?? ''"
+      (input)="update('minPrice', $any($event.target).value)" />
+
+  </label>
+
+  <label>
+    Precio máximo
+
+    <input type="number" min="0" placeholder="Sin límite"
+      [value]="filters().maxPrice ?? ''"
+      (input)="update('maxPrice', $any($event.target).value)" />
+
+  </label>
+
+  @if (priceInvalid) {
+    <p class="filter-error">El precio mínimo no puede ser mayor que el máximo.</p>
+  }
+
+  <label>
+    Vendido desde
+
+    <input type="date" [max]="today"
+      [value]="filters().minDate ?? ''"
+      (input)="update('minDate', $any($event.target).value)" />
+
+  </label>
+
+  <label>
+    Vendido hasta
+
+    <input type="date" [max]="today"
+      [value]="filters().maxDate ?? ''"
+      (input)="update('maxDate', $any($event.target).value)" />
+
+  </label>
+
+  @if (dateInvalid) {
+    <p class="filter-error">La fecha inicial no puede ser posterior a la final.</p>
+  }
+
+  <div class="filter-actions">
+    <button class="btn" (click)="submit()">Aplicar</button>
+    <button class="btn btn-secondary" (click)="reset()">Limpiar</button>
+  </div>
+
+</div>

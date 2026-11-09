@@ -34,6 +34,8 @@ export class FormGame {
 
   isUploading = false; //booleano para marcar cuando la foto de portada se está subiendo
 
+  gameAgeRangeName = '' 
+
   constructor(){
     this.loadAgeRange()
     this.loadGenres()
@@ -58,11 +60,23 @@ export class FormGame {
       this.gameService.getGame(this.gameId).subscribe({
         next: data => {
           this.form.patchValue(data)
+          this.form.patchValue({ genreNames: data.genres })
+          this.gameAgeRangeName = data.ageRange
+          this.selectAgeRange()
         },
         error: e => {
           console.error('Hubo un error al obtener el juego', e)
           alert('El juego que desea editar no se cargo con exito')
         }
+      })
+    }
+  }
+
+  selectAgeRange(){
+    const range = this.ageRanges().find(r => r.rangeName === this.gameAgeRangeName)
+    if(range){
+      this.form.patchValue({ 
+        ageRangeExternalId: range.externalId 
       })
     }
   }
@@ -91,7 +105,11 @@ export class FormGame {
 
   loadAgeRange(){
     this.ageRangeService.getAgeRanges().subscribe({
-      next: data => this.ageRanges.set([...data].sort((a, b) => a.minAge - b.minAge)),
+      next: data => {
+        this.ageRanges.set([...data].sort((a, b) => a.minAge - b.minAge))
+        this.selectAgeRange()
+      },
+
       error: e => console.error('Error al cargar AgeRanges:', e)
     })
   }
@@ -99,7 +117,7 @@ export class FormGame {
   loadGenres(){
     this.genreService.getGenres().subscribe({
       next: data => this.genres.set([...data].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))),
-      error: e => console.error('error al cargar los Genres.. ', e)
+      error: e => console.error('Error al cargar los géneros.. ', e)
     })
   }
 
@@ -131,8 +149,8 @@ export class FormGame {
 
       this.gameService.editGame(this.gameId, this.form.value).subscribe({
         next: () => {
-          alert('Juego actualizado con exito')
-          this.router.navigate(['/catalog']) // CAMBIAR A JUEGOS DEL DESARROLLADOR O DETALLE DEL JUEGO
+          alert('Juego actualizado con exito. Queda en revisión hasta que un administrador lo apruebe')
+          this.router.navigate(['/catalog', this.gameId])
         },
         error: e => {
           console.error('Error al actualizar el juego', e)
@@ -143,9 +161,9 @@ export class FormGame {
     }else{
 
       this.gameService.createGame(this.form.value).subscribe({
-        next: () => {
-          alert('Juego creado con exito')
-          this.router.navigate(['/catalog']) // CAMBIAR A JUEGOS DEL DESARROLLADOR O DETALLE DEL JUEGO
+        next: (game) => {
+          alert('Juego creado con exito. Queda en revisión hasta que un administrador lo apruebe')
+          this.router.navigate(['/catalog', game.externalId])
         },
         error: e => {
           console.error('Error al crear el juego', e)

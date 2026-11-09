@@ -21,16 +21,18 @@
     <div class="games-grid">
       @for (game of games(); track game.externalId) {
         <app-game-card [game]="game">
-          @if (cartService.has(game.externalId)) {
-                  <a routerLink="/cart" class="btn btn-in-cart">
-                    <span>Ya está en tu carrito</span>
-                  </a>
-                } @else {
-                  <button class="btn" (click)="cartService.add({ externalId: game.externalId, name: game.name })">
-                    <img src="/cart.svg" alt="Carrito" class="cart-icon" />
-                    <span>Agregar al carrito</span>
-                  </button>
-                }
+          @if (!authService.isLoggedIn() || isClient()) {
+            @if (cartService.has(game.externalId)) {
+              <a routerLink="/cart" class="btn btn-in-cart">
+                <span>Ya está en tu carrito</span>
+              </a>
+            } @else {
+              <button class="btn" (click)="cartService.add({ externalId: game.externalId, name: game.name })">
+                <img src="/cart.svg" alt="Carrito" class="cart-icon" />
+                <span>Agregar al carrito</span>
+              </button>
+            }
+          }
         </app-game-card>       
     } @empty {
         <p>No hay videojuegos disponibles en este momento.</p>

@@ -69,6 +69,29 @@ public class GameController {
                 sortDirection));
     }
 
+     /// --------------------------- ADMIN: TODOS LOS JUEGOS POR ESTADO -----------------------------
+    @Operation(summary = "Get all games (admin)", description = "Admin view of games. Filter by status: all, blocked or needRevision.")
+    @GetMapping("/admin")
+    ResponseEntity<Page<GameDTOResponse>> getAllForAdmin(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate minReleaseDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate maxReleaseDate,
+            @RequestParam(required = false) List<String> genreNames,
+            @RequestParam(required = false) String rangeName,
+            @RequestParam(required = false) String developerCompany,
+            @RequestParam(required = false, defaultValue = "name") String sortBy,
+            @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+            @RequestParam(required = false, defaultValue = "all") String status
+    ) {
+        return ResponseEntity.ok(gameService.getAdminGames(
+                page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                genreNames, rangeName, developerCompany, sortBy, sortDirection, status));
+    }
+
     /// -------------------- TRAEMOS UN JUEGO EXTERNAL----------------------
     @Operation(summary = "Get a game by its external ID", description = "Returns the details of a single video game using its UUID.")
     @ApiResponses(value = {
