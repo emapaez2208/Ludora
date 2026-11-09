@@ -5,8 +5,8 @@ import { ReviewService } from '../../services/review-service';
 import { Review, ReviewRequest } from '../../models/review';
 import { AuthService } from '../../services/auth-service';
 import { ReviewDetailModalComponent } from './components/review-detail-modal/review-detail-modal';
-import { UserStateService } from '../../services/user-state-service';
 import { GameService } from '../../services/game-service';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   selector: 'app-reviews',
@@ -20,7 +20,7 @@ export class Reviews {
 
   private reviewService = inject(ReviewService);
   private authService = inject(AuthService);
-  private userStateService = inject(UserStateService);
+  private toastService = inject(ToastService);
   private gameService = inject(GameService);
 
   reviews = signal<Review[]>([]);
@@ -44,10 +44,10 @@ export class Reviews {
 
   // id del usuario logueado desde el token
   currentUserId = computed(() => this.authService.getClientExternalId());
-  isClient = computed(() => !!this.userStateService.client());
-  isDeveloper = computed(() => !!this.userStateService.developer());
-  isAdmin = computed(() => !!this.userStateService.admin());
-  
+  isClient = computed(() => this.authService.isClient());
+  isDeveloper = computed(() => this.authService.isDeveloper());
+  isAdmin = computed(() => this.authService.isAdmin());
+
   canWriteReview = computed(() => {
   return this.isClient() && this.ownsGame() && !this.userHasReviewed();
   });
@@ -90,10 +90,9 @@ export class Reviews {
       }
     });
     effect(() => {
-    this.isClient();   // dependencias: el rol y el juego
     this.gameId();
     untracked(() => this.checkOwnerShips());
-});
+    });
   }
 
   fetchReviews(): void {
@@ -184,7 +183,6 @@ export class Reviews {
 
   onDeleteReviewFromModal(externalId: string): void {
     this.deleteReview(externalId);
-    this.closeReviewDetail();
   }
 
   deleteReview(externalId: string): void {
@@ -192,8 +190,10 @@ export class Reviews {
       next: () => {
         this.reviews.update(list => list.filter(r => r.externalId !== externalId));
         this.totalElements.update(total => Math.max(0, total - 1));
+        this.closeReviewDetail();
+        this.toastService.show("Reseña eliminada")
       },
-      error: (err) => console.error('Error deleting review:', err)
+      error: (err) => this.toastService.show("Error al eliminar reseña", err)
     });
   }
 }
