@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOUpdate;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;

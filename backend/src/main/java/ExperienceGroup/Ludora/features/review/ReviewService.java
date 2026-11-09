@@ -15,6 +15,7 @@ import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOUpdate;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -203,8 +204,7 @@ public class ReviewService implements IReviewService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));  ///compruebo si es admin
 
         if (!isAdmin) {
-            UUID currentUser = ((CredentialsEntity) SecurityContextHolder.getContext()         ///  si no es admin
-                    .getAuthentication().getPrincipal()).getExternalId();
+            UUID currentUser = authenticatedUser.getCurrentUser().externalId();
 
             if (!review.getClient().getExternalId().equals(currentUser)) {                        /// compruebo , es o no su review?
                 throw new AccessDeniedException("without sufficient permissions");   /// si no es largo excepcion

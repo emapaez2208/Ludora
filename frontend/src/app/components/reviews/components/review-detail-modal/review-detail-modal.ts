@@ -2,11 +2,12 @@ import { Component, computed, inject, input, output, signal } from '@angular/cor
 import { DatePipe } from '@angular/common';
 import { Review } from '../../../../models/review';
 import { AuthService } from '../../../../services/auth-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-review-detail-modal',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule],
   templateUrl: './review-detail-modal.html',
   styleUrl: './review-detail-modal.css',
 })

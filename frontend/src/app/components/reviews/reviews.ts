@@ -208,7 +208,7 @@ export class Reviews {
         this.closeReviewDetail();
         this.toastService.show("Reseña eliminada")
       },
-      error: (err) => this.toastService.show("Error al eliminar reseña", err)
+      error: () => this.toastService.show('No se pudo eliminar la reseña', 'error')
     });
   }
 }

@@ -130,17 +130,6 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-    @Operation(
-            summary = "Delete review log entry",
-            description = "Permanently drops a review entry from the database system registry using its unique tracking UUID."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Review log entry deleted successfully (No Content)."),
-            @ApiResponse(responseCode = "400", description = "Invalid review identifier.", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
-            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "No review data found matching the given UUID.", content = @Content)
-    })
 
     @Operation(
             summary = "Update a review",
@@ -160,6 +149,18 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.update(reviewId, reviewDTOUpdate));
     }
 
+
+    @Operation(
+            summary = "Delete review log entry",
+            description = "Permanently drops a review entry from the database system registry using its unique tracking UUID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Review log entry deleted successfully (No Content)."),
+            @ApiResponse(responseCode = "400", description = "Invalid review identifier.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No review data found matching the given UUID.", content = @Content)
+    })
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> delete (@Parameter(description = "Unique UUID of the target review to purge", required = true) @PathVariable UUID reviewId){
         reviewService.delete(reviewId);

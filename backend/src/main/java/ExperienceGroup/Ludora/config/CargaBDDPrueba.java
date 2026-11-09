@@ -1228,6 +1228,7 @@ public class CargaBDDPrueba {
                 gameRepository.save(mhw);
             }
             System.out.println("====== Catálogo de juegos verificado y cargado ======");
+            dbGames = gameRepository.findAll();
 
            // ==========================================================
             // BIBLIOTECA DE PRUEBA (juegos "comprados" por cada cliente)
@@ -1265,6 +1266,7 @@ public class CargaBDDPrueba {
             // ==========================================================
             // REVIEWS
             // ==========================================================
+            List<ReviewEntity> dbReviews = reviewRepository.findAll();
                 // ------------------------------------------------------
                 // REVIEWS EN: GTA V
                 // ------------------------------------------------------
@@ -1406,7 +1408,7 @@ public class CargaBDDPrueba {
 
 
                 System.out.println("====== Matriz de reviews cruzadas verificadas y cargadas ======");
-            }
+
 
             // ==========================================================
             // CARRITOS DE PRUEBA
