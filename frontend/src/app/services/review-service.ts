@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Review, ReviewRequest } from '../models/review';
+import { Review, ReviewRequest, ReviewUpdate } from '../models/review';
 import { PageResponse } from '../models/page-response';
 
 export interface ReviewFilterParams {
@@ -47,6 +47,10 @@ export class ReviewService {
   createReview(review : ReviewRequest): Observable<Review> {
     return this.http.post<Review>(this.baseUrl, review);
   }
+
+  updateReview(reviewId: string, body: ReviewUpdate): Observable<Review> {
+  return this.http.put<Review>(`${this.baseUrl}/${reviewId}`, body);
+}
 
   deleteReview(reviewId: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${reviewId}`);

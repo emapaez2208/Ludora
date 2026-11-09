@@ -2,6 +2,7 @@ package ExperienceGroup.Ludora.features.review;
 
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOUpdate;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -140,6 +141,24 @@ public class ReviewController {
             @ApiResponse(responseCode = "403", description = "You do not have permission to perform this action.", content = @Content),
             @ApiResponse(responseCode = "404", description = "No review data found matching the given UUID.", content = @Content)
     })
+
+    @Operation(
+            summary = "Update a review",
+            description = "Allows the author of a review to modify its rating and comment."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Review updated successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid payload or validation constraints failed.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication required or invalid authentication credentials.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "You can only edit your own reviews.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No review found matching the given UUID.", content = @Content)
+    })
+    @PutMapping("/{reviewId}")
+    public ResponseEntity<ReviewDTOResponse> update(
+            @Parameter(description = "Unique UUID of the review to update", required = true) @PathVariable UUID reviewId,
+            @Valid @RequestBody ReviewDTOUpdate reviewDTOUpdate) {
+        return ResponseEntity.ok(reviewService.update(reviewId, reviewDTOUpdate));
+    }
 
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> delete (@Parameter(description = "Unique UUID of the target review to purge", required = true) @PathVariable UUID reviewId){

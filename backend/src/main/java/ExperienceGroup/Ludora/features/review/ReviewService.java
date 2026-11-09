@@ -169,7 +169,26 @@ public class ReviewService implements IReviewService {
                 .map(responseMapper::toDTO);
     }
 
+    @Transactional
+    @Override
+    @PreAuthorize("hasRole('CLIENT')")
+    public ReviewDTOResponse update(UUID reviewId, ReviewDTOUpdate reviewDTOUpdate) {
 
+    ReviewEntity review = reviewRepository.findByExternalId(reviewId)
+            .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
+
+    UUID currentUser = authenticatedUser.getCurrentUser().externalId();
+
+    // solo el autor puede editar su reseña (el admin solo puede eliminar)
+    if (!review.getClient().getExternalId().equals(currentUser)) {
+        throw new AccessDeniedException("You can only edit your own reviews.");
+    }
+
+    review.setRating(reviewDTOUpdate.rating());
+    review.setComment(reviewDTOUpdate.comment());
+
+    return responseMapper.toDTO(reviewRepository.save(review));
+    }
 
     @Transactional
     @Override

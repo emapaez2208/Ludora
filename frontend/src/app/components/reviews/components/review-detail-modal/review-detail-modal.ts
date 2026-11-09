@@ -16,10 +16,14 @@ export class ReviewDetailModalComponent {
   review = input.required<Review>();
 
   close = output<void>();
-  edit = output<Review>();
+  save = output<{ externalId: string; rating: number; comment: string }>();
   delete = output<string>();
 
   confirmingDelete = signal(false);
+
+  isEditing = signal(false);
+  editRating = 5;
+  editComment = '';
 
   // Evalúa si el usuario autenticado es el autor
   isOwner = computed(() => {
@@ -35,10 +39,32 @@ export class ReviewDetailModalComponent {
     this.close.emit();
   }
 
-  onEdit(): void {
-    this.edit.emit(this.review());
+  //editar review
+  startEdit(): void{
+    this.confirmingDelete.set(false);
+    this.editRating = this.review().rating;
+    this.editComment = this.review().comment;
+    this.isEditing.set(true);
   }
 
+  cancelEdit(): void{
+    this.isEditing.set(false);
+  }
+
+  setEditRating(value : number): void{
+    this.editRating = value;
+  }
+
+  saveEdit(): void{
+    if(!this.editComment.trim()) return;
+    this.save.emit({
+      externalId: this.review().externalId,
+      rating: this.editRating,
+      comment: this.editComment
+    })
+  }
+
+  //eliminar review
   askDelete(): void{
     this.confirmingDelete.set(true);
   }

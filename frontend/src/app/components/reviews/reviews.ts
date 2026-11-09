@@ -177,8 +177,23 @@ export class Reviews {
     this.selectedReview.set(null);
   }
 
-  onEditReview(review: Review): void {
-    console.log('Modificar reseña:', review);
+  onSaveReview(data: { externalId: string; rating: number; comment: string }): void {
+  this.reviewService.updateReview(data.externalId, {
+    rating: data.rating,
+    comment: data.comment
+  }).subscribe({
+    next: (updated) => {
+      // reemplazo la reseña editada en la lista, sin volver a pedir todo
+      this.reviews.update(list =>
+        list.map(r => r.externalId === updated.externalId ? updated : r)
+      );
+      this.closeReviewDetail();
+      this.toastService.show('Reseña actualizada');
+    },
+    error: () => {
+      this.toastService.show('No se pudo actualizar la reseña', 'error');
+    }
+  });
   }
 
   onDeleteReviewFromModal(externalId: string): void {

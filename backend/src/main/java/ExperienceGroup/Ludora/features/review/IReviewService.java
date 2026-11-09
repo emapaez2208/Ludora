@@ -26,6 +26,8 @@ public interface IReviewService {
 
     Page<ReviewDTOResponse> getAllReviewsByGameIdAndClientId(int page, int size, UUID gameId, UUID clientId);
 
+    ReviewDTOResponse update(UUID reviewId, ReviewDTOUpdate reviewDTOUpdate);
+
     void delete(UUID reviewID);
 
 }
