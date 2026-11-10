@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.features.review;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOUpdate;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOSummary;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -64,9 +65,12 @@ public class ReviewController {
             @Parameter(description = "Minimum rating value boundary") @RequestParam(required = false) Integer minRating,
             @Parameter(description = "Maximum rating value boundary") @RequestParam(required = false) Integer maxRating,
             @Parameter(description = "Initial timestamp boundary (ISO format: YYYY-MM-DDTHH:mm:ss)") @RequestParam(required = false) LocalDateTime minDate,
-            @Parameter(description = "Final timestamp boundary (ISO format: YYYY-MM-DDTHH:mm:ss)") @RequestParam(required = false) LocalDateTime maxDate) {
+            @Parameter(description = "Final timestamp boundary (ISO format: YYYY-MM-DDTHH:mm:ss)") @RequestParam(required = false) LocalDateTime maxDate,
+            @Parameter(description = "Text contained in the author's username (case-insensitive)") @RequestParam(required = false) String userName,
+            @Parameter(description = "Sort field: date or rating") @RequestParam(required = false, defaultValue = "date") String sortBy,
+            @Parameter(description = "Sort direction: asc or desc") @RequestParam(required = false, defaultValue = "desc") String sortDirection) {
 
-        Page<ReviewDTOResponse> reviews = reviewService.getAllReviews(page, size, gameId, clientId, minRating, maxRating, minDate, maxDate);
+        Page<ReviewDTOResponse> reviews = reviewService.getAllReviews(page, size, gameId, clientId, minRating, maxRating, minDate, maxDate, userName, sortBy, sortDirection);
         return ResponseEntity.ok(reviews);
     }
 
@@ -87,6 +91,20 @@ public class ReviewController {
                                                                          @Parameter(description = "Unique UUID of the game", required = true) @PathVariable UUID gameId) {
         Page<ReviewDTOResponse> reviews = reviewService.getAllReviewsByGameId(page, size, gameId);
         return ResponseEntity.ok(reviews);
+    }
+
+    @Operation(
+            summary = "Get the rating summary of a game",
+            description = "Returns the average rating and the total number of reviews of a game."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Summary retrieved successfully."),
+            @ApiResponse(responseCode = "404", description = "No game found matching the provided UUID.", content = @Content)
+    })
+    @GetMapping("/games/{gameId}/summary")
+    public ResponseEntity<ReviewDTOSummary> getSummaryByGameId(
+            @Parameter(description = "Unique UUID of the game", required = true) @PathVariable UUID gameId) {
+        return ResponseEntity.ok(reviewService.getSummaryByGameId(gameId));
     }
 
     @Operation(

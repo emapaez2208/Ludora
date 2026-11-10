@@ -1,0 +1,62 @@
+<div class="filters-panel">
+
+  @if (canSearchUser()) {
+    <label>
+      Usuario
+      <input
+        type="text"
+        placeholder="Nombre de usuario..."
+        [value]="filters().userName ?? ''"
+        (input)="update('userName', $any($event.target).value)"
+        (keydown.enter)="submit()" />
+    </label>
+  }
+
+  <label>
+    Estrellas desde
+    <select (change)="updateRating('minRating', $any($event.target).value)">
+      <option value="">Cualquiera</option>
+      @for (r of ratings; track r) {
+        <option [value]="r" [selected]="filters().minRating === r">{{ r }} ★</option>
+      }
+    </select>
+  </label>
+
+  <label>
+    Estrellas hasta
+    <select (change)="updateRating('maxRating', $any($event.target).value)">
+      <option value="">Cualquiera</option>
+      @for (r of ratings; track r) {
+        <option [value]="r" [selected]="filters().maxRating === r">{{ r }} ★</option>
+      }
+    </select>
+  </label>
+
+  @if (ratingInvalid) {
+    <p class="filter-error">Las estrellas mínimas no pueden ser mayores que las máximas.</p>
+  }
+
+  <label>
+    Desde
+    <input type="date" [max]="today"
+      [value]="filters().minDate ?? ''"
+      (input)="update('minDate', $any($event.target).value)" />
+  </label>
+
+  <label>
+    Hasta
+    <input type="date" [max]="today"
+      [value]="filters().maxDate ?? ''"
+      (input)="update('maxDate', $any($event.target).value)" />
+  </label>
+
+  @if (dateInvalid) {
+    <p class="filter-error">La fecha inicial no puede ser posterior a la final.</p>
+  }
+
+  <div class="filter-actions">
+    <button class="btn" (click)="submit()">Aplicar</button>
+    <button class="btn btn-secondary" (click)="reset()">Limpiar</button>
+  </div>
+
+</div>

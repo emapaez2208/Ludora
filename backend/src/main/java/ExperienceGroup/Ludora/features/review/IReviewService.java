@@ -3,6 +3,7 @@ package ExperienceGroup.Ludora.features.review;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOUpdate;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOSummary;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,10 @@ public interface IReviewService {
                                           Integer minRating,
                                           Integer maxRating,
                                           LocalDateTime minDate,
-                                          LocalDateTime maxDate);
+                                          LocalDateTime maxDate,
+                                          String userName,
+                                          String sortBy,
+                                          String sortDirection);
 
     ReviewDTOResponse save(ReviewDTORequest reviewDTORequest);
 
@@ -30,5 +34,7 @@ public interface IReviewService {
     ReviewDTOResponse update(UUID reviewId, ReviewDTOUpdate reviewDTOUpdate);
 
     void delete(UUID reviewID);
+
+    ReviewDTOSummary getSummaryByGameId(UUID gameId);
 
 }

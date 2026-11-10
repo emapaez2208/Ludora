@@ -19,3 +19,8 @@ export interface ReviewUpdate {
   rating: number;
   comment: string;
 }
+
+export interface ReviewSummary {
+  average: number;
+  total: number;
+}

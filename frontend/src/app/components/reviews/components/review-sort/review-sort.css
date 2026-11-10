@@ -1,0 +1,61 @@
+.sort {
+  position: relative;
+  display: flex;
+}
+
+.btn-sort {
+  background-color: transparent;
+  color: var(--color-texto-muted, #a0a0a0);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sort-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    z-index: 10;
+    min-width: 230px;
+    margin: 0;
+    padding: 0.4rem;
+    list-style: none;
+    background-color: var(--color-secundario);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.sort-option {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    color: var(--color-texto);
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sort-option:hover {
+    background-color: color-mix(in srgb, var(--color-principal) 15%, transparent);
+    color: var(--color-principal);
+}
+
+.sort-option.active {
+    color: var(--color-principal);
+    font-weight: 700;
+}
+
+.btn-sort:hover,
+.btn-sort.active {
+  color: var(--color-principal);
+  border-color: var(--color-principal);
+  background-color: color-mix(in srgb, var(--color-principal) 12%, transparent);
+}

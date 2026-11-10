@@ -5,6 +5,8 @@ import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -23,4 +25,9 @@ public interface IReviewRepository extends JpaRepository <ReviewEntity, Long>, J
     Page<ReviewEntity> findByGameAndClient(GameEntity game, ClientEntity client, Pageable pageable);
 
     boolean existsByClientAndGame(ClientEntity client, GameEntity game);
+
+    @Query("select avg(r.rating) from ReviewEntity r where r.game = :game")
+    Double findAverageRatingByGame(@Param("game") GameEntity game);
+
+    long countByGame(GameEntity game);
 }
