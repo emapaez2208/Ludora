@@ -67,5 +67,12 @@ public class ReviewSpecification {
                 ? cb.conjunction()
                 : cb.equal(root.join("client").get("externalId"), client);
     }
+
+    public static PredicateSpecification<ReviewEntity> userNameContains(String userName) {
+    return (root, cb) -> (userName == null || userName.isBlank())
+            ? cb.conjunction()
+            : cb.like(cb.lower(root.join("client").<String>get("userName")),
+                      "%" + userName.trim().toLowerCase() + "%");
+}
 }
 

@@ -1,44 +1,43 @@
 <div class="container">
   <div class="reseñas">
     
-    <div class="navbar">
+        <div class="navbar">
       <div class="titulo-seccion">
         <h3>Reseñas de la comunidad</h3>
         <div class="promedio-general">
           <span class="promedio-numero">★ {{ averageRating() }}</span>
-          <span class="total-reseñas">({{ totalElements() }} reseñas)</span>
+          <span class="total-reseñas">({{ summary().total }} reseñas)</span>
         </div>
       </div>
-      
+
       <div class="opc">
-        <button 
-          type="button" 
-          class="btn-filtro" 
-          [class.active]="ratingFilter() === null && !onlyMineFilter()"
-          (click)="filterAll()">
-          Todas
+        <button
+          type="button"
+          class="btn-filtro"
+          [class.active]="showFilters() || hasActiveFilters()"
+          (click)="toggleFilters()">
+          Filtros {{ showFilters() ? '▲' : '▼' }}
         </button>
-        
-        <select name="rating" id="ratingSelect" (change)="onSelectRating($event)">
-          <option value="">Calificación</option>
-          <option value="5">★★★★★ (5)</option>
-          <option value="4">★★★★ (4)</option>
-          <option value="3">★★★ (3)</option>
-          <option value="2">★★ (2)</option>
-          <option value="1">★ (1)</option>
-        </select>
+
+        <app-review-sort [sort]="sort()" (sortChange)="onSortChange($event)" />
 
         @if (canWriteReview()) {
-    <button type="button" class="btn-nueva-reseña" (click)="toggleForm()">
-      {{ showForm() ? 'Cerrar formulario' : '+ Escribir reseña' }}
-    </button>
-  } @else if (!isLoggedIn()) {
-    <span class="aviso-sesion">Inicia sesión para opinar</span>
-  } @else if (userHasReviewed()) {
-    <span class="aviso-sesion">Ya publicaste una reseña</span>
-  }
-</div>
-</div>
+          <button type="button" class="btn-nueva-reseña" (click)="toggleForm()">
+            {{ showForm() ? 'Cerrar formulario' : '+ Escribir reseña' }}
+          </button>
+        } @else if (!isLoggedIn()) {
+          <span class="aviso-sesion">Inicia sesión para opinar</span>
+        } @else if (isClient() && userHasReviewed()) {
+          <span class="aviso-sesion">Ya publicaste una reseña</span>
+        } @else if (isClient() && !ownsGame()) {
+          <span class="aviso-sesion">Comprá este juego para poder opinar</span>
+        }
+      </div>
+    </div>
+
+    @if (showFilters()) {
+      <app-review-filter-panel [initial]="filters()" [canSearchUser]="isAdmin()" (apply)="onApplyFilters($event)" />
+    }
 
     <!-- Formulario para crear reseña -->
     @if (showForm()) {
@@ -48,13 +47,7 @@
           <span>Tu puntuación:</span>
           <div class="estrellas-selector">
             @for (star of [1, 2, 3, 4, 5]; track star) {
-              <button 
-                type="button" 
-                class="estrella-btn"
-                [class.active]="star <= newRating"
-                (click)="setRating(star)">
-                ★
-              </button>
+              <button type="button" class="estrella-btn"[class.active]="star <= newRating" (click)="setRating(star)">★</button>
             }
           </div>
         </div>
@@ -75,8 +68,35 @@
       </div>
     }
 
+        @if (myReview(); as mine) {
+      <div class="tu-resena">
+        <span class="tu-resena-titulo">Tu reseña</span>
+        <div class="reseñaIndividual">
+          <div class="headerReseña">
+            <div class="usuario">
+              <span class="avatar">{{ mine.userName ? mine.userName.charAt(0).toUpperCase() : 'U' }}</span>
+              <div class="meta-usuario">
+                <span class="nombreUsuario">{{ mine.userName }}</span>
+                <span class="fecha">{{ mine.date | date:'dd/MM/yyyy' }}</span>
+              </div>
+            </div>
+            <div class="valoracion-acciones">
+              <span class="estrellas">★ {{ mine.rating }} / 5</span>
+              <button class="btn-info" title="Ver detalle de reseña" (click)="openReviewDetail(mine)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <p class="comentario">{{ mine.comment }}</p>
+        </div>
+      </div>
+    }
+
     <!-- Lista de reseñas -->
     <div class="listaReseñas">
+              <span class="tu-resena-titulo">Todas las reseñas</span>
       @for (review of reviews(); track review.externalId) {
         <div class="reseñaIndividual">
           <div class="headerReseña">
@@ -104,10 +124,19 @@
         </div>
       } @empty {
         @if (!isLoading()) {
-          <p class="fin-reseñas">Aún no hay reseñas para este juego. ¡Sé el primero en opinar!</p>
+          @if (hasActiveFilters()) {
+            <p class="fin-reseñas">No hay reseñas que coincidan con los filtros.</p>
+          } @else {
+            <p class="fin-reseñas">Aún no hay reseñas para este juego. ¡Sé el primero en opinar!</p>
+          }
         }
       }
     </div>
+
+    <app-pagination
+      [page]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="goToPage($event)" />
 
   </div>
 </div>
@@ -117,7 +146,7 @@
   <app-review-detail-modal
     [review]="review"
     (close)="closeReviewDetail()"
-    (edit)="onEditReview($event)"
+    (save)="onSaveReview($event)"
     (delete)="onDeleteReviewFromModal($event)">
   </app-review-detail-modal>
 }
