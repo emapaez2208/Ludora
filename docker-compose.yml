@@ -38,7 +38,7 @@ services:
 
       MERCADOPAGO_ACCESS: ${MERCADOPAGO_ACCESS}
       APP_BASE_URL: ${APP_BASE_URL}
-    restart: always
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
@@ -47,7 +47,20 @@ services:
       - app
     ports:
       - "80:80"
-    restart: always
+    restart: unless-stopped
+
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: Ludora-ngrok
+    depends_on:
+      - frontend
+    command: http frontend:80
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports:
+      - "4040:4040"
+    restart: unless-stopped
 
 volumes:
   mysql_data:
