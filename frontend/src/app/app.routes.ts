@@ -38,6 +38,7 @@ export const routes: Routes = [
     {path: 'catalog/:id', component: GameDetail},
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
     {path: 'games/edit/:id', component: FormGame, canActivate: [developerGuard]},
+    {path: 'sales', component: Sales, canActivate: [clientGuard]},
     {path: 'sales/:id', component: SalesDetails, canActivate: [clientGuard]},
     {path: 'cart', component: Cart,canActivate: [clientGuard]},
     {path: 'library', component: Library, canActivate: [clientOrDeveloperGuard]},
