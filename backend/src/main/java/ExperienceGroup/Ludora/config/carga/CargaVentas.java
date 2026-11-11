@@ -40,21 +40,41 @@ public class CargaVentas implements CargaDatos {
 
     // Fechas repartidas en ~45 días, con estados mezclados
     private static final List<VentaPrueba> VENTAS = List.of(
-            new VentaPrueba("cosmejuega",      ESaleStatus.APPROVED, Duration.ofDays(45), List.of("God of War Ragnarok", "Elden Ring")),
-            new VentaPrueba("estebanquito",    ESaleStatus.APPROVED, Duration.ofDays(38), List.of("GTA V", "Red Dead Redemption 2", "Cyberpunk 2077")),
-            new VentaPrueba("alanbrito",       ESaleStatus.APPROVED, Duration.ofDays(30), List.of("Super Mario Odyssey")),
-            new VentaPrueba("luciafernandez",  ESaleStatus.APPROVED, Duration.ofDays(27), List.of("The Witcher 3: Wild Hunt", "Phantom Liberty")),
-            new VentaPrueba("martingomez",     ESaleStatus.APPROVED, Duration.ofDays(21), List.of("Resident Evil 4 Remake", "Devil May Cry 5")),
-            new VentaPrueba("camilarodriguez", ESaleStatus.REJECTED, Duration.ofDays(18), List.of("Mario Kart 8 Deluxe")),
-            new VentaPrueba("valentinasosa",   ESaleStatus.APPROVED, Duration.ofDays(15), List.of("Animal Crossing: New Horizons", "Super Smash Bros. Ultimate")),
-            new VentaPrueba("nicolasacosta",   ESaleStatus.APPROVED, Duration.ofDays(12), List.of("Dark Souls III", "Dark Souls Remastered", "Sekiro: Shadows Die Twice")),
-            new VentaPrueba("sofiabenitez",    ESaleStatus.PENDING,  Duration.ofDays(9),  List.of("Spider-Man 2")),
-            new VentaPrueba("joaquinmolina",   ESaleStatus.APPROVED, Duration.ofDays(7),  List.of("The Last of Us Part I", "God of War", "Uncharted: Legacy of Thieves")),
-            new VentaPrueba("agustinaramirez", ESaleStatus.APPROVED, Duration.ofDays(5),  List.of("Armored Core VI", "Monster Hunter: World")),
-            new VentaPrueba("cosmejuega",      ESaleStatus.REJECTED, Duration.ofDays(3),  List.of("GTA IV")),
-            new VentaPrueba("estebanquito",    ESaleStatus.APPROVED, Duration.ofDays(2),  List.of("Resident Evil Village", "Resident Evil 2 Remake")),
-            new VentaPrueba("alanbrito",       ESaleStatus.PENDING,  Duration.ofDays(1),  List.of("The Witcher 2", "The Witcher 1", "L.A. Noire")),
-            new VentaPrueba("luciafernandez",  ESaleStatus.APPROVED, Duration.ofHours(2), List.of("Max Payne 3"))
+            // Ventas históricas (30 a 60 días atrás)
+        new VentaPrueba("cosmejuega",      ESaleStatus.APPROVED, Duration.ofDays(58), List.of("God of War Ragnarok", "Elden Ring")),
+        new VentaPrueba("estebanquito",    ESaleStatus.APPROVED, Duration.ofDays(52), List.of("GTA V", "Red Dead Redemption 2", "Cyberpunk 2077")),
+        new VentaPrueba("facundorios",     ESaleStatus.APPROVED, Duration.ofDays(48), List.of("The Elder Scrolls V: Skyrim", "Fallout 4")),
+        new VentaPrueba("alanbrito",       ESaleStatus.APPROVED, Duration.ofDays(45), List.of("Super Mario Odyssey")),
+        new VentaPrueba("marianodiaz",     ESaleStatus.APPROVED, Duration.ofDays(41), List.of("Final Fantasy VII Remake", "NieR: Automata")),
+        new VentaPrueba("luciafernandez",  ESaleStatus.APPROVED, Duration.ofDays(37), List.of("The Witcher 3: Wild Hunt", "Phantom Liberty")),
+        new VentaPrueba("julietalopez",    ESaleStatus.APPROVED, Duration.ofDays(33), List.of("Fortnite", "Fall Guys")),
+        new VentaPrueba("martingomez",     ESaleStatus.APPROVED, Duration.ofDays(30), List.of("Resident Evil 4 Remake", "Devil May Cry 5")),
+
+        // Ventas intermedias (15 a 30 días atrás)
+        new VentaPrueba("gonzalosilva",    ESaleStatus.APPROVED, Duration.ofDays(28), List.of("EA SPORTS FC 24", "Need for Speed Unbound")),
+        new VentaPrueba("camilarodriguez", ESaleStatus.REJECTED, Duration.ofDays(26), List.of("Mario Kart 8 Deluxe")),
+        new VentaPrueba("florenciarossi",  ESaleStatus.APPROVED, Duration.ofDays(24), List.of("Half-Life 2", "Portal 2", "Counter-Strike 2")),
+        new VentaPrueba("valentinasosa",   ESaleStatus.APPROVED, Duration.ofDays(22), List.of("Animal Crossing: New Horizons", "Super Smash Bros. Ultimate")),
+        new VentaPrueba("nicolasacosta",   ESaleStatus.APPROVED, Duration.ofDays(19), List.of("Dark Souls III", "Dark Souls Remastered", "Sekiro: Shadows Die Twice")),
+        new VentaPrueba("lucasmendoza",    ESaleStatus.REJECTED, Duration.ofDays(17), List.of("DOOM Eternal")),
+        new VentaPrueba("sofiabenitez",    ESaleStatus.APPROVED, Duration.ofDays(16), List.of("Spider-Man 2", "Rocket League")),
+
+        // Ventas recientes (1 a 14 días atrás)
+        new VentaPrueba("joaquinmolina",   ESaleStatus.APPROVED, Duration.ofDays(14), List.of("The Last of Us Part I", "God of War", "Uncharted: Legacy of Thieves")),
+        new VentaPrueba("facundorios",     ESaleStatus.APPROVED, Duration.ofDays(12), List.of("League of Legends", "Valorant")),
+        new VentaPrueba("agustinaramirez", ESaleStatus.APPROVED, Duration.ofDays(10), List.of("Armored Core VI", "Monster Hunter: World")),
+        new VentaPrueba("marianodiaz",     ESaleStatus.APPROVED, Duration.ofDays(8),  List.of("Mass Effect Legendary Edition", "Starfield")),
+        new VentaPrueba("cosmejuega",      ESaleStatus.REJECTED, Duration.ofDays(7),  List.of("GTA IV")),
+        new VentaPrueba("florenciarossi",  ESaleStatus.APPROVED, Duration.ofDays(5),  List.of("Overwatch 2", "The Sims 4")),
+        new VentaPrueba("estebanquito",    ESaleStatus.APPROVED, Duration.ofDays(4),  List.of("Resident Evil Village", "Resident Evil 2 Remake")),
+        new VentaPrueba("gonzalosilva",    ESaleStatus.PENDING,  Duration.ofDays(3),  List.of("Street Fighter 6", "eFootball 2024")),
+        new VentaPrueba("julietalopez",    ESaleStatus.APPROVED, Duration.ofDays(2),  List.of("Brawlhalla")),
+
+        // Ventas del día (Últimas horas)
+        new VentaPrueba("alanbrito",       ESaleStatus.PENDING,  Duration.ofHours(18), List.of("The Witcher 2", "The Witcher 1", "L.A. Noire")),
+        new VentaPrueba("luciafernandez",  ESaleStatus.APPROVED, Duration.ofHours(12), List.of("Max Payne 3")),
+        new VentaPrueba("facundorios",     ESaleStatus.APPROVED, Duration.ofHours(5),  List.of("Helldivers 2", "Apex Legends")),
+        new VentaPrueba("marianodiaz",     ESaleStatus.PENDING,  Duration.ofHours(1),  List.of("Final Fantasy XVI", "Kingdom Hearts III"))
     );
 
     @Override

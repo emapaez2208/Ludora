@@ -31,12 +31,36 @@ public class CargaBibliotecas implements CargaDatos {
     //   estebanquito -> B: tiene God of War Ragnarok y NO lo reseñó (puede escribir)
     //   alanbrito    -> C: NO tiene GTA V (debe comprarlo para opinar)
     private static final List<Biblioteca> BIBLIOTECAS = List.of(
-            new Biblioteca("cosmejuega", List.of(
-                    "God of War Ragnarok", "GTA V", "Elden Ring", "Resident Evil 4 Remake")),
-            new Biblioteca("estebanquito", List.of(
-                    "GTA V", "Super Mario Odyssey", "God of War Ragnarok", "Red Dead Redemption 2", "Cyberpunk 2077")),
-            new Biblioteca("alanbrito", List.of(
-                    "God of War Ragnarok", "Super Mario Odyssey", "Elden Ring", "Dark Souls Remastered"))
+new Biblioteca("cosmejuega", List.of(
+                "God of War Ragnarok", "Elden Ring", "GTA V", "Resident Evil 4 Remake", "Cyberpunk 2077", "The Last of Us Part I", "Half-Life 2", "Street Fighter 6")),
+        new Biblioteca("estebanquito", List.of(
+                "GTA V", "Red Dead Redemption 2", "Cyberpunk 2077", "Resident Evil Village", "Resident Evil 2 Remake", "God of War Ragnarok", "Super Mario Odyssey", "The Witcher 3: Wild Hunt", "Elden Ring", "Dead Space Remake")),
+        new Biblioteca("facundorios", List.of(
+                "The Elder Scrolls V: Skyrim", "Fallout 4", "League of Legends", "Valorant", "Helldivers 2", "Apex Legends", "DOOM Eternal", "Fallout: New Vegas", "Starfield")),
+        new Biblioteca("alanbrito", List.of(
+                "Super Mario Odyssey", "God of War", "Portal 2", "Half-Life 2", "Resident Evil 4 Remake", "Dark Souls Remastered", "Elden Ring")),
+        new Biblioteca("marianodiaz", List.of(
+                "Final Fantasy VII Remake", "NieR: Automata", "Mass Effect Legendary Edition", "Starfield", "Final Fantasy XVI", "The Witcher 3: Wild Hunt", "Cyberpunk 2077", "Kingdom Hearts III")),
+        new Biblioteca("luciafernandez", List.of(
+                "The Witcher 3: Wild Hunt", "Phantom Liberty", "Max Payne 3", "L.A. Noire", "Red Dead Redemption 2", "The Last of Us Part I", "Bloodborne")),
+        new Biblioteca("julietalopez", List.of(
+                "Fortnite", "Fall Guys", "Brawlhalla", "The Sims 4", "Animal Crossing: New Horizons", "Mario Kart 8 Deluxe")),
+        new Biblioteca("martingomez", List.of(
+                "Resident Evil 4 Remake", "Devil May Cry 5", "Resident Evil 2 Remake", "Monster Hunter: World", "Street Fighter 6", "God of War Ragnarok", "Sekiro: Shadows Die Twice")),
+        new Biblioteca("gonzalosilva", List.of(
+                "EA SPORTS FC 24", "Need for Speed Unbound", "eFootball 2024", "Rocket League", "GTA V", "Battlefield 1")),
+        new Biblioteca("florenciarossi", List.of(
+                "Half-Life 2", "Portal 2", "Counter-Strike 2", "Overwatch 2", "The Sims 4", "Left 4 Dead 2", "Dishonored 2")),
+        new Biblioteca("valentinasosa", List.of(
+                "Animal Crossing: New Horizons", "Super Smash Bros. Ultimate", "The Legend of Zelda: BotW", "The Legend of Zelda: TotK", "Super Mario Bros. Wonder")),
+        new Biblioteca("nicolasacosta", List.of(
+                "Dark Souls III", "Dark Souls Remastered", "Sekiro: Shadows Die Twice", "Elden Ring", "Bloodborne", "Armored Core VI", "Dark Souls II: Scholar of the First Sin")),
+        new Biblioteca("sofiabenitez", List.of(
+                "Spider-Man 2", "Rocket League", "Overwatch 2", "Fall Guys", "Hearthstone")),
+        new Biblioteca("joaquinmolina", List.of(
+                "The Last of Us Part I", "God of War", "Uncharted: Legacy of Thieves", "God of War III Remastered", "Red Dead Redemption")),
+        new Biblioteca("agustinaramirez", List.of(
+                "Armored Core VI", "Monster Hunter: World", "Monster Hunter Wilds", "Cyberpunk 2077", "NieR: Automata"))
     );
 
     @Override

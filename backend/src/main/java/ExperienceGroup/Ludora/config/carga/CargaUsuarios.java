@@ -57,7 +57,17 @@ public class CargaUsuarios implements CargaDatos {
             new DatosDeveloper("shigeruDev", "Shigeru", "Miyamoto", "miyamoto@nintendo.com", "Nintendo", "Shigeru123"),
             new DatosDeveloper("cdpDev", "Marcin", "Iwinski", "contact@cdprojektred.com", "CD Projekt Red", "Cdp123"),
             new DatosDeveloper("hidetakaDev", "Hidetaka", "Miyazaki", "miyazaki@fromsoftware.com", "FromSoftware", "Miyazaki123"),
-            new DatosDeveloper("capcomDev", "Kenzo", "Tsujimoto", "kenzo@capcom.com", "Capcom", "Capcom123")
+            new DatosDeveloper("capcomDev", "Kenzo", "Tsujimoto", "kenzo@capcom.com", "Capcom", "Capcom123"),
+            new DatosDeveloper("valveDev", "Gabe", "Newell", "gabe@valvesoftware.com", "Valve", "Gabe123"),
+            new DatosDeveloper("bethesdaDev", "Todd", "Howard", "todd@bethesdagame-studios.com", "Bethesda", "Todd123"),
+            new DatosDeveloper("eaDev", "Andrew", "Wilson", "awilson@ea.com", "Electronic Arts", "Ea123"),
+            new DatosDeveloper("squareDev", "Takashi", "Kiryu", "kiryu@square-enix.com", "Square Enix", "Square123"),
+            new DatosDeveloper("epicDev", "Tim", "Sweeney", "tim@epicgames.com", "Epic Games", "Epic123"),
+            new DatosDeveloper("riotDev", "Brandon", "Beck", "ryze@riotgames.com", "Riot Games", "Riot123"),
+            new DatosDeveloper("konamiDev", "Hideki", "Hayakawa", "contact@konami.com", "Konami", "Konami123"),
+            new DatosDeveloper("blizzardDev", "Mike", "Ybarra", "contact@blizzard.com", "Blizzard Entertainment", "Blizzard123"),
+            new DatosDeveloper("ubisoftDev", "Yves", "Guillemot", "yves@ubisoft.com", "Ubisoft", "Ubisoft123")
+            
     );
 
     // CLIENTES  (para agregar uno: una línea nueva)
@@ -73,7 +83,13 @@ public class CargaUsuarios implements CargaDatos {
             new DatosCliente("nicolasacosta", "Nicolás", "Acosta", "nicolas.acosta@gmail.com", 2234678901L, "Luro", 4050, "1993-02-12", 12300, false, "Nicolas123"),
             new DatosCliente("sofiabenitez", "Sofía", "Benítez", "sofia.benitez@gmail.com", 2235789012L, "Av. Constitución", 5600, "2001-06-25", 560, false, "Sofia123"),
             new DatosCliente("joaquinmolina", "Joaquín", "Molina", "joaquin.molina@gmail.com", 2236890123L, "Belgrano", 3345, "1985-12-01", 31000, false, "Joaquin123"),
-            new DatosCliente("agustinaramirez", "Agustina", "Ramírez", "agustina.ramirez@gmail.com", 2234901234L, "Falucho", 1120, "1998-08-19", 77500, false, "Agustina123")
+            new DatosCliente("agustinaramirez", "Agustina", "Ramírez", "agustina.ramirez@gmail.com", 2234901234L, "Falucho", 1120, "1998-08-19", 77500, false, "Agustina123"),
+            new DatosCliente("facundorios", "Facundo", "Ríos", "facundo.rios@gmail.com", 2234112233L, "La Rioja", 2150, "1994-10-14", 8500, false, "Facundo123"),
+            new DatosCliente("marianodiaz", "Mariano", "Díaz", "mariano.diaz@gmail.com", 2235223344L, "Mitre", 1820, "1991-03-05", 45000, false, "Mariano123"),
+            new DatosCliente("julietalopez", "Julieta", "López", "julieta.lopez@gmail.com", 2236334455L, "Santa Fe", 3410, "2003-07-19", 120, false, "Julieta123"),
+            new DatosCliente("gonzalosilva", "Gonzalo", "Silva", "gonzalo.silva@gmail.com", 2234445566L, "San Luis", 950, "1989-11-02", 15400, false, "Gonzalo123"),
+            new DatosCliente("florenciarossi", "Florencia", "Rossi", "florencia.rossi@gmail.com", 2235556677L, "Córdoba", 2780, "1996-01-28", 6800, false, "Florencia123"),
+            new DatosCliente("lucasmendoza", "Lucas", "Mendoza", "lucas.mendoza@gmail.com", 2236667788L, "Entre Ríos", 1240, "2002-09-15", 0, true, "Lucas123")
     );
 
     @Override
