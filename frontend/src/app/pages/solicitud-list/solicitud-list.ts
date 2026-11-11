@@ -42,7 +42,11 @@ export class SolicitudList implements OnInit {
     this.error.set('');
 
     this.sSolicitud.getAdminGames(status , this.page() , this.size()).subscribe({
-      next: (data) =>{this.games.set(data.content);
+      next: (data) =>{
+
+                      const ordeGames = data.content.sort((a,b)=>
+                      a.developer.localeCompare(b.developer,'es',{ sensitivity: 'accent' }));
+                      this.games.set(ordeGames);
                       this.totalPages.set(data.totalPages);
                       this.loading.set(false);
         },

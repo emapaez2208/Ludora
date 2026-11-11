@@ -19,7 +19,10 @@
       <tbody>
         @for (game of games(); track game.externalId) {
           <tr>
-            <td><strong>{{ game.name }}</strong></td>
+            <td class="nom-dev">
+            <p><strong>Juego:</strong>{{game.name}}</p>
+            <p><strong>Desarrolladora:</strong>{{game.developer}}</p>
+            </td>
             <td>
               <span class="badge" [class.bg-danger]="game.statusBlocked" [class.bg-success]="!game.statusBlocked">
                 {{ game.statusBlocked ? 'Bloqueado' : 'Activo' }}
