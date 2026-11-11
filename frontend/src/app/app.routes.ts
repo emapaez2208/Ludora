@@ -47,7 +47,7 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'games' },
-            { path: 'games', component: GameManagement },
+            { path: 'games', component: SolicitudList},
             { path: 'users', component: UserList },
             { path: 'sales', component: SalesList }
         ],
