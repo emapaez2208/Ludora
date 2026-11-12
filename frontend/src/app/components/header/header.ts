@@ -104,7 +104,12 @@ export class Header {
     this.adminOpen.set(false);
     this.developerOpen.set(false);
 
-    if (!this.el.nativeElement.contains(e.target)) {
+    const target = e.target as HTMLElement;
+
+    const clickedCart = target.closest('.cart-preview');
+    const clickedCartButton = target.closest('.cart-button');
+
+    if (!clickedCart && !clickedCartButton) {
       this.cartOpen.set(false);
     }
     
