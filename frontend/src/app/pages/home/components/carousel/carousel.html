@@ -34,7 +34,7 @@
             <p class="descripcion">{{ game.description }}</p>
             <div class="slideBajo">
               <div class="containerPrecio">
-                <span class="precio">${{ game.price }}</span>
+                <span class="precio">{{ game.price === 0 ? 'Gratis' : '$' + game.price }}</span>
               </div>
             </div>
           </div>
