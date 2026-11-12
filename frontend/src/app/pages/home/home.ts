@@ -10,6 +10,7 @@ import { CompanySlide } from './components/company-slide/company-slide';
 import { DeveloperService } from '../../services/developer-service';
 import { GameTabs } from './components/game-tabs/game-tabs';
 import { RouterLink } from '@angular/router';
+import { Search } from './components/search/search';
 
 export interface FilterChip {
   id: string;
@@ -20,7 +21,7 @@ export interface FilterChip {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, Carousel, CategorySlide, GameTabs, CompanySlide, RouterLink],
+  imports: [CommonModule, Search, Carousel, CategorySlide, GameTabs, CompanySlide, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

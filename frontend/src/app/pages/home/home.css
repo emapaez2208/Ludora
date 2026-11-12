@@ -1,9 +1,5 @@
-:host {
-  display: block;
-  width: 100%;
-}
 .columna {
-    width: 100%;
+  width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     background-color: var(--color-base);
@@ -11,6 +7,9 @@
     flex-direction: column;
     align-items: center;
     
+}
+app-search {
+  width: 100%;
 }
 app-search,
 app-carousel,
@@ -36,25 +35,6 @@ app-game-tabs {
   margin: 3%;
 }
 
-.bienvenida {
-  width: 100%;
-  max-width: 1000px;
-  margin: 16px auto 12px auto;
-  padding: 0 16px;
-  display: flex;
-  align-items: stretch;
-  justify-content: left;
-  gap: 12px;
-  box-sizing: border-box;
-  border-bottom: 3px solid var(--color-principal);
-}
-
-h2 {
-  color: var(--color-texto);
-  margin: 0;
-  font-size: 1.8rem;
-  text-align: center;
-}
 @media (min-width: 768px) {
   .columna {
     padding: 0 24px;
