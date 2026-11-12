@@ -46,8 +46,11 @@ onSubmit() {
   this.userService.addAdmin(formattedData as AdminRequest)
   .subscribe({
     next: (data) => { console.log('Usuario cargado con exito',data),
+                     alert('El admin fue cargado con exito')
                       this.router.navigate(['/']);},
-    error: (e) => console.log('Error al registrar un administrador', e)
+    error: (e) => { console.log('Error al registrar un administrador', e),
+                   alert('Falla en cargar un Admin')
+    }
   });
 
 }

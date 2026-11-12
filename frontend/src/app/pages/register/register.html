@@ -8,6 +8,13 @@
     </select>
 </div>
 
+@if (alerta(); as info) {
+    <div class="alerta" [class.exito]="info.tipo === 'exito'" [class.error]="info.tipo === 'error'">
+      <span>{{ info.mensaje }}</span>
+      <button type="button" class="btn-cerrar" (click)="alerta.set(null)">✕</button>
+    </div>
+  }
+
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
     <fieldset>

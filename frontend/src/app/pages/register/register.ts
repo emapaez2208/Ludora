@@ -18,6 +18,9 @@ export class Register  {
   user = signal<'client' | 'develop' >('client');
   role!: string
 
+  // Signal para controlar la alerta visual
+  alerta = signal<{ tipo: 'exito' | 'error'; mensaje: string } | null>(null);
+
 
   private fb = inject(FormBuilder)
   private router = inject(Router)
@@ -77,10 +80,18 @@ export class Register  {
 
     this.userService.addUser(formattedData as ClientRequest).subscribe({
       next: (data)=> {
+        this.alerta.set({
+          tipo: 'exito',
+          mensaje: 'Usted se a registrado con exito'
+        });
         console.log('usuario cargado con exito',data);
         this.router.navigate(['/']);},
       error: (err) => {
         console.error('Error al registrar el usuario', err);
+       this.alerta.set({
+          tipo: 'error',
+          mensaje: err.error?.message || 'Ocurrió un error al registrarse.'
+        });
       }
     })
   }else{
@@ -89,10 +100,18 @@ export class Register  {
     
     this.userService.addDevelop(developData as DeveloperRequest).subscribe({
       next: (data)=> {
+         this.alerta.set({
+          tipo: 'exito',
+          mensaje: 'Usted se a registrado con exito'
+        });
         console.log('usuario cargado con exito',data);
         this.router.navigate(['/']);},
       error: (err) => {
         console.error('Error al registrar el usuario', err);
+        this.alerta.set({
+          tipo: 'error',
+          mensaje: err.error?.message || 'Ocurrió un error al registrarse.'
+        });
       }
   })
 }
