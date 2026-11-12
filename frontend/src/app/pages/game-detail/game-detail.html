@@ -33,7 +33,15 @@
           <li><span>Clasificación</span> {{ g.ageRange }}</li>
         </ul>
 
-        <p class="price">${{ g.price }}</p>
+        
+        <p class="price" [class.free-price]="g.price === 0">
+          @if (g.price === 0) {
+            Gratis
+          } @else {
+            ${{ g.price }}
+          }
+        </p>
+
         
         @if (isAdmin()) {
 
