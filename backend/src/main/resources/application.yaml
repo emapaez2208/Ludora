@@ -23,4 +23,4 @@ server:
     # false -> carga desactivada. Si se borra algo, queda borrado hasta una nueva carga en TRUE.
 app:
   carga:
-    activa: true 
+    activa: true
