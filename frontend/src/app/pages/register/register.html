@@ -8,12 +8,7 @@
     </select>
 </div>
 
-@if (alerta(); as info) {
-    <div class="alerta" [class.exito]="info.tipo === 'exito'" [class.error]="info.tipo === 'error'">
-      <span>{{ info.mensaje }}</span>
-      <button type="button" class="btn-cerrar" (click)="alerta.set(null)">✕</button>
-    </div>
-  }
+
 
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
@@ -129,6 +124,8 @@
         <input class="input" type="date" name="birthdate" id="birthdate" formControlName="birthDate">
         @if (userForm.get('birthDate')?.hasError('required') && userForm.get('birthDate')?.touched) {
             <p>*Este campo es obligatorio</p>
+        }@else if (userForm.get('birthDate')?.hasError('maxDateError') && userForm.get('birthDate')?.touched) {
+        <p>*La fecha de nacimiento no puede ser en el futuro</p>
         }
     </fieldset>
     }@else {
@@ -136,10 +133,19 @@
     <fieldset>
         <label for="company">Compania:</label>
         <textarea class="input" name="company" id="company" formControlName="company"></textarea>
-        @if (userForm.get('company')?.hasError('required') && userForm.get('company')?.touched) {}
+        @if (userForm.get('company')?.hasError('required') && userForm.get('company')?.touched) {
+            <p>*Este campo es obligatorio</p>
+        }
     </fieldset>
 }
 
+@if (alerta(); as info) {
+    <div class="alerta" [class.exito]="info.tipo === 'exito'" [class.error]="info.tipo === 'error'">
+      <span>{{ info.mensaje }}</span>
+      <button type="button" class="btn-cerrar" (click)="alerta.set(null)">✕</button>
+    </div>
+  }
+  
     <button class="btn" type="submit" [disabled]="userForm.invalid">Registrarse</button>
 
 </form>

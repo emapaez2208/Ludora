@@ -12,7 +12,9 @@ import { UserService } from '../../services/user-service';
 })
 export class FormAdmin {
 
-  adminForm! : FormGroup
+  adminForm! : FormGroup;
+   // Signal para controlar la alerta visual
+  alerta = signal<{ tipo: 'exito' | 'error'; mensaje: string } | null>(null);
 
   admin = signal<AdminRequest>
 
@@ -45,11 +47,18 @@ onSubmit() {
 
   this.userService.addAdmin(formattedData as AdminRequest)
   .subscribe({
-    next: (data) => { console.log('Usuario cargado con exito',data),
-                     alert('El admin fue cargado con exito')
-                      this.router.navigate(['/']);},
+    next: (data) => { console.log('Admin cargado con exito',data),
+                      this.alerta.set({
+                          tipo: 'exito',
+                          mensaje: 'Admin se a registrado con exito'
+                          });
+                      setTimeout(()=>
+                      this.router.navigate(['/']),3000)},
     error: (e) => { console.log('Error al registrar un administrador', e),
-                   alert('Falla en cargar un Admin')
+                     this.alerta.set({
+                        tipo: 'error',
+                        mensaje: e.error?.message || 'Ocurrió un error al registrar.'
+                        });
     }
   });
 
