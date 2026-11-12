@@ -46,9 +46,30 @@
         }
       </div>
       
-    } @else if (isClient() || isDeveloper()) {
-      <a class="item" routerLink="/library" (click)="closeMenu()"><p>Mis juegos</p></a>
-    }
+    } @else if (isDeveloper()) {
+
+    <div class="admin-wrapper">
+      <a
+        class="item"
+        [class.open]="developerOpen()"
+        (click)="toggleDeveloper($event)">
+        <p>Mis juegos</p>
+      </a>
+
+      @if (developerOpen()) {
+        <div class="admin-dropdown">
+          <a routerLink="/library" (click)="closeMenu()">Biblioteca</a>
+          <a routerLink="/games/new" (click)="closeMenu()">Crear juego</a>
+        </div>
+      }
+    </div>
+
+  } @else if (isClient()) {
+    <a class="item" routerLink="/library" (click)="closeMenu()">
+      <p>Mis juegos</p>
+    </a>
+  }
+      
     @if (isLogged()) {
       
       <a class="item" routerLink="/profile" (click)="closeMenu()"><p>Mi perfil</p></a>
