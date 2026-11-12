@@ -1,109 +1,161 @@
-:host{
-    grid-area: footer;
+:host {
+  grid-area: footer;
+  display: block;
+  width: 100%;
 }
+
 .container {
-  height: 20vh;
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: var(--color-base);
   border-top: 1px solid var(--color-secundario);
-}
-.seccion{
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  color: var(--color-texto);
+  padding: 40px 48px 24px;
+  box-sizing: border-box;
 }
 
-.p3 a {
-    height: 70%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.content {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto 32px auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 48px;
 }
 
-.icono{
-    height: 100%;
-    width: auto;
-    object-fit: contain;
-    transition: transform 0.3s ease;
+.footer-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.p2{
-    color: var(--color-texto);
-    align-items: end;
-    padding-bottom: 1%;
+.brand-col {
+  flex: 1.5;
 }
 
-.p1{
-    display: flex;
-    flex-direction: column;
+/* columna derecha del logo centrada verticalmente */
+.footer-col:last-child {
+  align-items: center;
+  justify-content: center;
+  align-self: center;
 }
 
-.red {
-    margin: 3px;
-    background-color: transparent;
-    color: var(--color-texto);
-    text-decoration: none;
-    position: relative;
-    transition: background-color 0.25s ease, color 0.25s ease;
+.footer-col h4 {
+  margin: 0 0 6px 0;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.3px;
 }
 
-.red:hover {
-    color: var(--color-principal);
-    background-color: color-mix(in srgb, var(--color-principal) 8%, transparent);
-    transform: scale(1.2);
+.footer-col a {
+  color: var(--color-texto);
+  text-decoration: none;
+  font-size: 0.88rem;
+  opacity: 0.8;
+  width: fit-content;
+  transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.footer-col a:hover {
+  color: var(--color-principal);
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+.logo-link:hover {
+  transform: scale(1.04) !important;
+}
+
+/* logo y Redes */
+.icono {
+  height: 130px;
+  width: auto;
+  object-fit: contain;
+}
+
+.tagline {
+  margin: 0 0 10px 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  opacity: 0.72;
+  max-width: 340px;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.social-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-texto);
+  transition: all 0.2s ease !important;
+  padding: 3%;
+}
+
+.social-btn:hover {
+  background-color: color-mix(in srgb, var(--color-principal) 15%, transparent);
+  border-color: var(--color-principal);
+  color: var(--color-principal);
+  transform: translateY(-3px) !important;
+}
+
+.footer-bottom {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  opacity: 0.65;
+}
+
+.footer-bottom p {
+  margin: 0;
 }
 
 @media (max-width: 768px) {
   .container {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
+    padding: 32px 20px 20px;
+  }
+
+  .content {
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-    padding: 24px 16px;
-    box-sizing: border-box;
+    text-align: center;
+    gap: 28px;
+    margin-bottom: 24px;
   }
 
-  .seccion {
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: center;
+  .footer-col {
     align-items: center;
   }
 
-  .p3 {
-    order: 1;
+  .footer-col:last-child {
+    order: -1;
   }
 
-  .icono {
-    width: 48px;
-    height: 48px;
-    object-fit: contain;
-  }
-
-  .p1 {
-    order: 2;
-    flex-wrap: wrap;
-    gap: 14px;
-  }
-
-  .red {
-    font-size: 0.95rem;
-    padding: 6px 10px;
-    text-decoration: none;
-  }
-
-  .p2 {
-    order: 3;
-    font-size: 0.85rem;
-    opacity: 0.8;
-  }
-
-  .p2 p {
-    margin: 0;
+  .footer-bottom {
+    flex-direction: column;
+    gap: 8px;
     text-align: center;
   }
 }
