@@ -1,20 +1,21 @@
-import { Component, ElementRef, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { CartService } from '../../services/cart-service';
 import { ToastService } from '../../services/toast-service';
-import { Search } from '../../pages/home/components/search/search';
+import { UserStateService } from '../../services/user-state-service';
 
 @Component({
-  imports: [RouterLink, Search],
+  imports: [RouterLink],
   selector: 'app-header',
   styleUrl: './header.css',
   templateUrl: './header.html',
 })
 export class Header {
   isMenuOpen: boolean = false;
-  authService = inject(AuthService)
-  router = inject(Router)
+  authService = inject(AuthService);
+  userStateService = inject(UserStateService);
+  router = inject(Router);
   cartService = inject(CartService);
   toastService = inject(ToastService);
 
@@ -23,21 +24,24 @@ export class Header {
   isLogged = this.authService.isLoggedIn$;
   cartOpen = signal(false);
   adminOpen = signal(false);
-  searchQuery = signal('');
 
-  get userAvatar(): string {
-    const user: any = this.authService.getClientExternalId?.();
-    return user?.avatarUrl || user?.profileImage || user?.image || 'default-avatar.png';
-  }
+  userAvatar = computed(() => {
+    const user =
+      this.userStateService.client() ||
+      this.userStateService.developer() ||
+      this.userStateService.admin();
 
-  onSearch(event: Event): void {
-    event.preventDefault();
-    const term = this.searchQuery().trim();
-    this.closeMenu();
-    this.router.navigate(['/catalog'], {
-      queryParams: term ? { name: term } : {}
-    });
-  }
+    return user?.avatarUrl || 'images/profile-base.jpeg';
+  });
+
+  userName = computed(() => {
+    const user =
+      this.userStateService.client() ||
+      this.userStateService.developer() ||
+      this.userStateService.admin();
+
+    return user?.userName || this.authService.getUsername() || 'Usuario';
+  });
 
   isClient(): boolean {
     return this.authService.isClient();
@@ -56,36 +60,35 @@ export class Header {
   }
 
   toggleAdmin(event: MouseEvent): void {
-    event.stopPropagation();   
+    event.stopPropagation();
     this.cartOpen.set(false);
     this.adminOpen.update(v => !v);
   }
 
   onRemoveGame(game: { externalId: string; name: string }, event: MouseEvent) {
-  event.stopPropagation();
+    event.stopPropagation();
 
-  this.cartService.remove(game.externalId).subscribe({
-    next: () => {
-      this.toastService.show(
-        `Se eliminó "${game.name}" del carrito.`, 
-        'info', 
-        5000, 
-        undefined, 
-        {
-          label: 'Deshacer',
-          fn: () => {
-            this.cartService.add(game);
+    this.cartService.remove(game.externalId).subscribe({
+      next: () => {
+        this.toastService.show(
+          `Se eliminó "${game.name}" del carrito.`,
+          'info',
+          5000,
+          undefined,
+          {
+            label: 'Deshacer',
+            fn: () => {
+              this.cartService.add(game);
+            }
           }
-        }
-      );
-    },
-    error: () => {
-      this.toastService.show('No se pudo eliminar el juego', 'error');
-    }
-  });
-}
+        );
+      },
+      error: () => {
+        this.toastService.show('No se pudo eliminar el juego', 'error');
+      }
+    });
+  }
 
-  // cierra el desplegable al hacer click afuera del header
   @HostListener('document:click', ['$event'])
   onDocClick(e: MouseEvent): void {
     this.adminOpen.set(false);
@@ -108,6 +111,4 @@ export class Header {
   closeMenu(): void {
     this.isMenuOpen = false;
   }
-
-  
 }
