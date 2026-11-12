@@ -22,7 +22,7 @@ public class ClientEntity extends UserEntity {
     @Column(nullable = false)
     private Long phone;
 
-    @Column(nullable = false , length = 20)
+    @Column(nullable = false , length = 25)
     private String street;
 
     @Column(nullable = false)

@@ -100,7 +100,7 @@
         <input class="input" type="text" name="street" id="street" formControlName="street">
         @if (userForm.get('street')?.hasError('required') && userForm.get('street')?.touched) {
             <p>*Este campo es obligatorio</p>
-        }@else if (userForm.get('street')?.hasError('maxlenght')) {
+        }@else if (userForm.get('street')?.hasError('maxlength')) {
             <p>*El nombre de la calle no puede tener mas de 25 caracteres</p>
         }
     </fieldset>
