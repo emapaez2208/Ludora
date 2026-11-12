@@ -20,7 +20,7 @@ export class Carousel implements OnDestroy {
   withTransition: boolean = true;
   private isAnimating: boolean = false;
   private autoPlayTimer: any;
-  readonly intervalMs: number = 3500;
+  readonly intervalMs: number = 2000;
 
   private touchStartX: number = 0;
   private touchEndX: number = 0;
@@ -61,6 +61,7 @@ export class Carousel implements OnDestroy {
     if (this.items().length <= 1) return;
 
     this.autoPlayTimer = setInterval(() => {
+      this.cdr.detectChanges();
       this.next();
     }, this.intervalMs);
   }

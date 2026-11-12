@@ -202,4 +202,21 @@ ResponseEntity<Page<GameDTOResponse>> getGamesNeedRevision(
         return ResponseEntity.ok(gameService.askForReviewGame(gameExternalId));
     }
 
+        /// --------------------------- HOME: MÁS POPULARES -----------------------------
+    @Operation(summary = "Get the most popular games", description = "Visible games ordered by the number of clients that own them.")
+    @GetMapping("/popular")
+    ResponseEntity<List<GameDTOResponse>> getMostPopular(
+            @Parameter(description = "Maximum number of games to return") @RequestParam(required = false, defaultValue = "10") int size) {
+        return ResponseEntity.ok(gameService.getMostPopular(size));
+    }
+
+    /// --------------------------- HOME: MEJOR PUNTUADOS -----------------------------
+    @Operation(summary = "Get the top rated games", description = "Visible games ordered by average review rating. Only games with at least minReviews reviews are included.")
+    @GetMapping("/top-rated")
+    ResponseEntity<List<GameDTOResponse>> getTopRated(
+            @Parameter(description = "Maximum number of games to return") @RequestParam(required = false, defaultValue = "10") int size,
+            @Parameter(description = "Minimum number of reviews a game needs to be ranked") @RequestParam(required = false, defaultValue = "3") int minReviews) {
+        return ResponseEntity.ok(gameService.getTopRated(size, minReviews));
+    }
+
 }

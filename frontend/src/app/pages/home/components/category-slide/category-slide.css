@@ -22,7 +22,7 @@
   display: flex;
   width: max-content;
   flex-wrap: nowrap;
-  animation: scrollInfinito 28s linear infinite;
+  animation: scrollInfinito 150s linear infinite;
   will-change: transform;
 }
 

@@ -43,6 +43,18 @@ export class GameService {
 
       return this.http.get<PageResponse<Game>>(this.url, { params });
     } 
+    
+        getPopular(size: number = 10): Observable<Game[]> {
+      const params = new HttpParams().set('size', size.toString());
+      return this.http.get<Game[]>(`${this.url}/popular`, { params });
+    }
+
+    getTopRated(size: number = 10, minReviews: number = 3): Observable<Game[]> {
+      const params = new HttpParams()
+        .set('size', size.toString())
+        .set('minReviews', minReviews.toString());
+      return this.http.get<Game[]>(`${this.url}/top-rated`, { params });
+    }
 
     getAdminGames(
       page: number,

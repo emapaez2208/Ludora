@@ -48,8 +48,7 @@ public class GameService implements IGameService{
     private final IGenreRepository genreRepository;
     private final AuthenticatedUserProvider authenticatedUserProvider;
 
-    private static final List<String> SORT_FIELDS = List.of("name", "price", "releaseDate");
-
+    private static final List<String> SORT_FIELDS = List.of("id", "name", "price", "releaseDate");
 
     /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) ------------------------------
     
@@ -138,7 +137,7 @@ public class GameService implements IGameService{
         }
 
         if (sortBy == null || !SORT_FIELDS.contains(sortBy)) {
-            throw new IllegalArgumentException("Invalid sort field. Allowed: name, price, releaseDate.");
+            throw new IllegalArgumentException("Invalid sort field. Allowed: id, name, price, releaseDate.");
         }
 
         Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection)
@@ -345,5 +344,38 @@ public class GameService implements IGameService{
         game.setNeedRevision(true);
         GameEntity saved = gameRepository.save(game);
         return responseMapper.toDTO(saved);
+    }
+
+    /// --------------------------- HOME: MÁS POPULARES ------------------------------
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<GameDTOResponse> getMostPopular(int size) {
+        validateHomeSize(size);
+
+        return gameRepository.findMostPopular(PageRequest.of(0, size)).stream()
+                .map(responseMapper::toDTO)
+                .toList();
+    }
+
+    /// --------------------------- HOME: MEJOR PUNTUADOS ------------------------------
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<GameDTOResponse> getTopRated(int size, int minReviews) {
+        validateHomeSize(size);
+        if (minReviews < 1) {
+            throw new IllegalArgumentException("The minimum number of reviews must be at least 1.");
+        }
+
+        return gameRepository.findTopRated(minReviews, PageRequest.of(0, size)).stream()
+                .map(responseMapper::toDTO)
+                .toList();
+    }
+
+    private void validateHomeSize(int size) {
+        if (size < 1 || size > 50) {
+            throw new IllegalArgumentException("The size must be between 1 and 50.");
+        }
     }
 }
