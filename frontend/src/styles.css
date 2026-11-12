@@ -30,7 +30,7 @@ html, body {
     padding: 0;
     background-color: var(--color-base);
     color: var(--color-texto);
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 .btn{

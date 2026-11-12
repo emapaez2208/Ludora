@@ -32,3 +32,27 @@ footer {
   grid-area: footer;
   background-color: var(--color-base);
 }
+.scroll-top-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--color-principal) 45%, transparent);
+  background-color: var(--color-base);
+  color: var(--color-principal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.scroll-top-btn:hover {
+  background-color: var(--color-principal);
+  color: var(--color-base);
+  transform: translateY(-3px);
+}
