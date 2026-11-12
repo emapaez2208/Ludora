@@ -32,7 +32,7 @@
           <p><strong>Puntos Acumulados:</strong> {{client.points}}</p>
 
           <div class="actions">
-            <button class="btn" [routerLink]="['/users', client.externalId, 'edit']">Editar</button>
+            <button class="btn" [routerLink]="['/userEdit', client.externalId]">Editar</button>
             <button type="button" class="btn" [class.danger]="!client.statusBlocked"
                     [disabled]="busyId() === client.externalId" (click)="toggleBlock(client)">
               {{ client.statusBlocked ? 'Desbloquear' : 'Bloquear' }}
@@ -59,7 +59,7 @@
           <p><strong>Representante:</strong> {{dev.name}} {{dev.lastName}}</p>
 
           <div class="actions">
-            <button class="btn" [routerLink]="['/users', dev.externalId, 'edit']">Editar</button>
+            <button class="btn" [routerLink]="['/userEdit', dev.externalId]">Editar</button>
             <button type="button" class="btn" [class.danger]="!dev.statusBlocked"
                     [disabled]="busyId() === dev.externalId" (click)="toggleBlock(dev)">
               {{ dev.statusBlocked ? 'Desbloquear' : 'Bloquear' }}
