@@ -110,13 +110,6 @@ export class Header {
     
   }
 
-  logout() {
-    this.closeMenu();
-    this.cartOpen.set(false);
-    this.authService.logout();
-    this.router.navigate(['/']);
-  }
-
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }

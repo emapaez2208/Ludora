@@ -52,9 +52,9 @@
           <div class="admin-dropdown">
             <a routerLink="/management/sales" (click)="closeMenu()">Ventas</a>
             <a routerLink="/management/games" (click)="closeMenu()">Juegos</a>
-            <a routerLink="/management/requests" (click)="closeMenu()">Solicitudes</a>
+            <a routerLink="/management/requests" (click)="closeMenu()">Solicitudes de revisión</a>
             <a routerLink="/management/users" (click)="closeMenu()">Usuarios</a>
-            <a routerLink="/management/newadmin" (click)="closeMenu()">Crear Admin</a>
+            <a routerLink="/management/newadmin" (click)="closeMenu()">Crear administrador</a>
           </div>
         }
       </div>
@@ -101,7 +101,7 @@
         />
         <p>Mi perfil</p>
       </a>
-      
+
     } @else {
 
       <a class="item" routerLink="/login" (click)="closeMenu()"><p>Iniciar sesión</p></a>
