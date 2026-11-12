@@ -75,3 +75,48 @@ p{
     display: block;
     margin: 0 15%; 
 }
+
+
+.alerta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  animation: aparecer 0.25s ease-out;
+}
+
+.alerta.exito {
+  background-color: rgba(40, 160, 80, 0.15);
+  border: 1px solid var(--color-principal);
+  color: #4ade80;
+}
+
+.alerta.error {
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid #ef4444;
+  color: #f87171;
+}
+
+.btn-cerrar {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
