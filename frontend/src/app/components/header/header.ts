@@ -127,4 +127,13 @@ export class Header {
 
   }
 
+  logout(): void {
+  
+    this.closeMenu();
+    this.cartOpen.set(false);
+    this.authService.logout();
+    this.router.navigate(['/']);
+  
+  }
+
 }

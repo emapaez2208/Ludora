@@ -85,10 +85,6 @@
       <p>Mis juegos</p>
     </a>
 
-    <a class="item" routerLink="/sales" (click)="closeMenu()">
-      <p>Mis compras</p>
-    </a>
-
   }
     
     @if (isLogged()) {
@@ -101,6 +97,16 @@
         />
         <p>Mi perfil</p>
       </a>
+
+
+      <button
+        class="item logout-button"
+        type="button"
+        (click)="logout()"
+        aria-label="Cerrar sesión"
+        title="Cerrar sesión">
+        <img src="cerrar-sesion.png" alt="" class="logout-icon">
+      </button>
 
     } @else {
 
