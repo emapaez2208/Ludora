@@ -178,9 +178,15 @@ public class GameController {
     })
 
     @GetMapping("/needRevision")
-    ResponseEntity<List<GameDTOResponse>> getGamesNeedRevision(){
-        return ResponseEntity.ok(gameService.getGamesNeedRevision());
-    }
+ResponseEntity<Page<GameDTOResponse>> getGamesNeedRevision(
+        @RequestParam int page,
+        @RequestParam int size,
+        @RequestParam(required = false) String sortBy,
+        @RequestParam(required = false, defaultValue = "asc") String sortDirection
+){
+    return ResponseEntity.ok(gameService.getAdminGames(
+            page, size, null, null, null, null, null, null, null, null, sortBy, sortDirection, "needRevision"));
+}
 
     @Operation(summary = "Request revision for a game", description = "Allows sending a specific video game to the review queue.")
     @ApiResponses(value = {
