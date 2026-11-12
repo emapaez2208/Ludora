@@ -13,6 +13,12 @@
           [class.status-active]="!client.statusBlocked">
           {{ client.statusBlocked ? 'Bloqueado' : 'Activo' }}
         </span>
+
+        <button class="btn-logout" (click)="logout()">
+          <span>↪</span>
+          Cerrar sesión
+        </button>
+
       </div>
     </div>
 
@@ -152,6 +158,12 @@
           [class.status-active]="!developer.statusBlocked">
           {{ developer.statusBlocked ? 'Bloqueado' : 'Activo' }}
         </span>
+
+        <button class="btn-logout" (click)="logout()">
+          <span>↪</span>
+          Cerrar sesión
+        </button>
+
       </div>
     </div>
 
@@ -191,6 +203,12 @@
       <div class="profile-heading">
         <span class="profile-role">Cuenta de administrador</span>
         <h2>{{ admin.userName }}</h2>
+
+        <button class="btn-logout" (click)="logout()">
+          <span>↪</span>
+          Cerrar sesión
+        </button>
+
       </div>
     </div>
 

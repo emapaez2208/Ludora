@@ -114,7 +114,7 @@ export class Header {
     this.closeMenu();
     this.cartOpen.set(false);
     this.authService.logout();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 
   toggleMenu(): void {
@@ -122,6 +122,11 @@ export class Header {
   }
 
   closeMenu(): void {
+
     this.isMenuOpen = false;
+    this.adminOpen.set(false);
+    this.developerOpen.set(false);
+
   }
+
 }

@@ -3,7 +3,8 @@ import { DatePipe } from '@angular/common';
 import { UserStateService } from '../../services/user-state-service';
 import { SaleService } from '../../services/sale-service';
 import { SaleResponse } from '../../models/sale-response';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   imports: [RouterLink, DatePipe],
@@ -14,14 +15,25 @@ import { RouterLink } from '@angular/router';
 export class Profile {
 
   userStateService = inject(UserStateService);
+  
+  private authService = inject(AuthService);
+  private router = inject(Router);
   private saleService = inject(SaleService);
 
   recentSales = signal<SaleResponse[]>([]);
   salesLoading = signal(false);
   salesError = signal(false);
 
+  logout(): void {
+
+    this.authService.logout();
+    this.router.navigate(['/']);
+
+  }
+
   constructor() {
     effect(() => {
+
       const client = this.userStateService.client();
 
       if (!client) {
