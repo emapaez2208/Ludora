@@ -7,9 +7,15 @@ import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
 import ExperienceGroup.Ludora.features.client.IClientRepository;
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
+import ExperienceGroup.Ludora.features.user.domain.UserEntity;
 import ExperienceGroup.Ludora.features.developer.IDeveloperRepository;
 import ExperienceGroup.Ludora.features.user.exception.*;
+import ExperienceGroup.Ludora.common.utils.AdminChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.AdminChangePasswordDTO;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.common.utils.Password;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
@@ -207,6 +213,48 @@ public class AdminService implements IAdminService{
 
     }
 
+    /// ------------------- ADMIN CAMBIA EL EMAIL DE UN CLIENT / DEVELOPER ------------------
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void changeUserEmail(UUID externalId, AdminChangeEmailDTO emailDTO) {
+
+        UserEntity user = findClientOrDeveloper(externalId);
+        Email newEmail = emailDTO.newEmail();
+
+        // Si es el mismo email que ya tiene, no hay nada que cambiar
+        if (user.getEmail().equals(newEmail)) {
+            return;
+        }
+
+        if (adminRepository.existsByEmail(newEmail) ||
+                clientRepository.existsByEmail(newEmail) ||
+                developerRepository.existsByEmail(newEmail)) {
+            throw new UserExistsWithEmailException("User exists with this email");
+        }
+
+        user.setEmail(newEmail);
+        saveClientOrDeveloper(user);
+    }
+
+    /// ------------------- ADMIN CAMBIA LA PASSWORD DE UN CLIENT / DEVELOPER ------------------
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void changeUserPassword(UUID externalId, AdminChangePasswordDTO passwordDTO) {
+
+        UserEntity user = findClientOrDeveloper(externalId);
+        CredentialsEntity credentials = searchCredentials(user.getUserName());
+
+        // Valida el formato (8-16 caracteres, mayúscula, minúscula y número)
+        Password newPassword = new Password(passwordDTO.newPass());
+
+        credentials.setPassword(passwordEncoder.encode(newPassword.value()));
+        credentialsRepository.save(credentials);
+    }
+
     /// ----------------------------------BANEAR UN USUARIO O DEVELOPER
 
     @Override
@@ -245,6 +293,22 @@ public class AdminService implements IAdminService{
        credentials.setEnabled(true);
        credentialsRepository.save(credentials);
    }
+
+    // Solo clients y developers: esta operación NO sirve para tocar cuentas de otros admins
+    private UserEntity findClientOrDeveloper(UUID externalId) {
+        return clientRepository.findByExternalId(externalId)
+                .<UserEntity>map(client -> client)
+                .or(() -> developerRepository.findByExternalId(externalId))
+                .orElseThrow(() -> new UserNotFoundException("User not found, UserID: " + externalId));
+    }
+
+    private void saveClientOrDeveloper(UserEntity user) {
+        if (user instanceof ClientEntity client) {
+            clientRepository.save(client);
+        } else if (user instanceof DeveloperEntity developer) {
+            developerRepository.save(developer);
+        }
+    }
 
     private CredentialsEntity searchCredentials(String username){
         return credentialsRepository.findByUsername(username)

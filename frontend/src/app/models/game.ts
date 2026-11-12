@@ -10,7 +10,5 @@ export interface Game {
     genres: string[];
     statusBlocked: boolean;
     needRevision?: boolean;
-    discountPercentage?: number; //prueba para tabla de ofertas en home
-    finalPrice?: number;
 }
 

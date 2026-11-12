@@ -2,9 +2,9 @@
   <h2 class="titulloh2">Gestión de Solicitudes y Revisiones</h2>
 
   <div class="filtros">
-    <button class="btn" (click)="loadSolicitudes(undefined)">Todos</button>
-    <button class="btn" (click)="loadSolicitudes(true)">Bloqueados</button>
-    <button class="btn" (click)="loadGamesNeedRevision()">Necesitan Revisión</button>
+    <button class="btn" (click)="loadSolicitudes('all')">Todos</button>
+    <button class="btn" (click)="loadSolicitudes('blocked')">Bloqueados</button>
+    <button class="btn" (click)="loadSolicitudes('needRevision')">Necesitan Revisión</button>
   </div>
 
   <div class="table-responsive">
@@ -19,7 +19,10 @@
       <tbody>
         @for (game of games(); track game.externalId) {
           <tr>
-            <td><strong>{{ game.name }}</strong></td>
+            <td class="nom-dev">
+            <p><strong>Juego:</strong>{{game.name}}</p>
+            <p><strong>Desarrolladora:</strong>{{game.developer}}</p>
+            </td>
             <td>
               <span class="badge" [class.bg-danger]="game.statusBlocked" [class.bg-success]="!game.statusBlocked">
                 {{ game.statusBlocked ? 'Bloqueado' : 'Activo' }}

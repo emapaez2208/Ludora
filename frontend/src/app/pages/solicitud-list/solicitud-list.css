@@ -166,3 +166,18 @@
     box-shadow: 0 0 15px rgba(40, 160, 80, 0.3);
     transform: translateY(-2px);
 }
+
+.nom-dev{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    p{
+        display: flex;
+        gap: 5px;
+    }
+
+    strong{
+        color: var(--color-principal);
+    }
+    
+}

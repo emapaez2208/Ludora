@@ -178,9 +178,15 @@ public class GameController {
     })
 
     @GetMapping("/needRevision")
-    ResponseEntity<List<GameDTOResponse>> getGamesNeedRevision(){
-        return ResponseEntity.ok(gameService.getGamesNeedRevision());
-    }
+ResponseEntity<Page<GameDTOResponse>> getGamesNeedRevision(
+        @RequestParam int page,
+        @RequestParam int size,
+        @RequestParam(required = false) String sortBy,
+        @RequestParam(required = false, defaultValue = "asc") String sortDirection
+){
+    return ResponseEntity.ok(gameService.getAdminGames(
+            page, size, null, null, null, null, null, null, null, null, sortBy, sortDirection, "needRevision"));
+}
 
     @Operation(summary = "Request revision for a game", description = "Allows sending a specific video game to the review queue.")
     @ApiResponses(value = {
@@ -194,6 +200,23 @@ public class GameController {
     @PostMapping("/askRevision/{gameExternalId}")
     ResponseEntity<GameDTOResponse> askForRevisionGame(@Parameter(description = "Unique UUID of the game requesting revision", required = true) @PathVariable UUID gameExternalId){
         return ResponseEntity.ok(gameService.askForReviewGame(gameExternalId));
+    }
+
+        /// --------------------------- HOME: MÁS POPULARES -----------------------------
+    @Operation(summary = "Get the most popular games", description = "Visible games ordered by the number of clients that own them.")
+    @GetMapping("/popular")
+    ResponseEntity<List<GameDTOResponse>> getMostPopular(
+            @Parameter(description = "Maximum number of games to return") @RequestParam(required = false, defaultValue = "10") int size) {
+        return ResponseEntity.ok(gameService.getMostPopular(size));
+    }
+
+    /// --------------------------- HOME: MEJOR PUNTUADOS -----------------------------
+    @Operation(summary = "Get the top rated games", description = "Visible games ordered by average review rating. Only games with at least minReviews reviews are included.")
+    @GetMapping("/top-rated")
+    ResponseEntity<List<GameDTOResponse>> getTopRated(
+            @Parameter(description = "Maximum number of games to return") @RequestParam(required = false, defaultValue = "10") int size,
+            @Parameter(description = "Minimum number of reviews a game needs to be ranked") @RequestParam(required = false, defaultValue = "3") int minReviews) {
+        return ResponseEntity.ok(gameService.getTopRated(size, minReviews));
     }
 
 }

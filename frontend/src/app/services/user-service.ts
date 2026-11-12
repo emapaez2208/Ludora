@@ -11,6 +11,8 @@ import { DeveloperRequest } from '../models/developer-request';
 import { PageResponse } from '../models/page-response';
 import { ChangePassword } from '../models/change-password';
 import { ChangeEmail } from '../models/change-email';
+import { AdminChangeEmail } from '../models/admin-change-email';
+import { AdminChangePassword } from '../models/admin-change-password';
 import { AdminRequest } from '../models/admin-request';
 
 
@@ -26,6 +28,14 @@ export class UserService {
 
     getDevelopers(page: number, size: number) {
         return this.http.get<PageResponse<Developer>>(`${this.url}/developers`, { params: { page, size } })
+    }
+
+    getClientById(externalId: string) {
+        return this.http.get<ClientResponse>(`${this.url}/clients/${externalId}`)
+    }
+
+    getDeveloperById(externalId: string) {
+        return this.http.get<Developer>(`${this.url}/developers/${externalId}`)
     }
 
     blockAccount(externalId: string) {
@@ -88,6 +98,15 @@ export class UserService {
 
     adminChangeEmail(email : ChangeEmail){
         return this.http.put<void>(`${this.url}/admins/profile/changeEmail`, email)
+    }
+
+    // El admin cambia email / password de OTRO usuario (client o developer), no pide valor anterior 
+    adminChangeUserEmail(externalId : string, email : AdminChangeEmail){
+        return this.http.put<void>(`${this.url}/admins/users/${externalId}/email`, email)
+    }
+
+    adminChangeUserPassword(externalId : string, password : AdminChangePassword){
+        return this.http.put<void>(`${this.url}/admins/users/${externalId}/password`, password)
     }
 
     // --------------------------------------------------------------------------------------//

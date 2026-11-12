@@ -127,22 +127,6 @@
   flex-shrink: 0;
 }
 
-.discount-badge {
-  background: var(--color-base);
-  color: var(--color-principal);
-  border: 2px solid var(--color-principal);
-  font-weight: 700;
-  font-size: 0.9rem;
-  padding: 0.2rem 0.4rem;
-  border-radius: 15px;
-}
-
-.original-price {
-  text-decoration: line-through;
-  font-size: 0.85rem;
-  color: #718292;
-}
-
 .final-price {
   font-size: 0.95rem;
   font-weight: 600;
@@ -296,17 +280,28 @@
     gap: 0.35rem;
   }
 
-  .discount-badge {
-    font-size: 0.75rem;
-    padding: 0.15rem 0.35rem;
-    border-radius: 8px;
-  }
-
-  .original-price {
-    font-size: 0.75rem;
-  }
-
   .final-price {
     font-size: 0.85rem;
   }
+}
+.rating-badge strong.mixed {
+  color: #e0b341;
+  margin-left: 0.4rem;
+}
+
+.rating-badge strong.negative {
+  color: #e5484d;
+  margin-left: 0.4rem;
+}
+
+.rating-badge strong.neutral {
+  color: #718292;
+  margin-left: 0.4rem;
+}
+
+.rating-detail {
+  display: block;
+  margin-top: 0.2rem;
+  color: #718292;
+  font-size: 0.78rem;
 }

@@ -1,4 +1,4 @@
 export interface GameSortOptions {
-    sortBy: 'name' | 'price' | 'releaseDate';
+    sortBy:  'id' | 'name' | 'price' | 'releaseDate';
     sortDirection: 'asc' | 'desc';
 }

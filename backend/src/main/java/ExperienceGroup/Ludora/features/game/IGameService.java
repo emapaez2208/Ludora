@@ -31,6 +31,10 @@ public interface IGameService {
     List<GameDTOResponse> getGamesNeedRevision();
     GameDTOResponse askForReviewGame(UUID gameId);
 
+    List<GameDTOResponse> getMostPopular(int size);
+
+    List<GameDTOResponse> getTopRated(int size, int minReviews);
+
     Page<GameDTOResponse> getAdminGames(int page,
                                         int size,
                                         String name,

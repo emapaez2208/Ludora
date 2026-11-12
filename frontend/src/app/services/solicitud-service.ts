@@ -9,39 +9,18 @@ export class SolicitudService {
   private http : HttpClient = inject(HttpClient);
   private readonly url = "/api/games";
 
-    // Probar si anda
-  getGamesStatusBloked(statusBlocked?: boolean , page: number = 0, size: number = 18){
-        let params = new HttpParams();
-
-        if(statusBlocked !== undefined){
-            params = params.set('statusBlocked',statusBlocked.toString());
-            
-        }
-
-        params = params.set('page', page.toString());
-        params = params.set('size', size.toString());
-        return this.http.get<PageResponse<Game>>(this.url ,{ params })
-    }
-
-    
-   //Obtiene los juegos que necesitan revisión (/api/games/needRevision)
-   
-  getGamesNeedRevision(page: number=0 , size: number=18){
-
+ // Usar el endpoint de admin para filtrar por estado: 'all', 'blocked', 'needRevision'
+  getAdminGames(status?: string, page: number = 0, size: number = 18) {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.get<PageResponse<Game>>(`${this.url}/needRevision`,{params});
+    if (status) {
+      params = params.set('status', status);
+    }
+
+    return this.http.get<PageResponse<Game>>(`${this.url}/admin`, { params });
   }
-
-
-  // Actualización general (para developers)
-  
-  putGames(game: Game){
-    return this.http.put<Game>(`${this.url}/${game.externalId}`, game);
-  }
-
   
    // Autoriza / Desbloquea el juego (Endpoint exclusivo de Admin para poner statusBlocked y needRevision en false)
    
