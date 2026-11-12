@@ -3,8 +3,13 @@
       @if (isLoading()) {
     <div class="loading">Cargando tienda...</div>
   } @else {
-    <!-- buscador -->
-    <app-search></app-search>
+
+    <div class="bienvenida">
+      <h2>¡Bienvenido a Ludora!</h2>
+    </div>
+
+    
+
     
     <!-- carrusel -->
     <app-carousel [items]="featuredGames()"></app-carousel>

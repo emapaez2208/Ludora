@@ -3,9 +3,10 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { CartService } from '../../services/cart-service';
 import { ToastService } from '../../services/toast-service';
+import { Search } from '../../pages/home/components/search/search';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Search],
   selector: 'app-header',
   styleUrl: './header.css',
   templateUrl: './header.html',
@@ -22,6 +23,21 @@ export class Header {
   isLogged = this.authService.isLoggedIn$;
   cartOpen = signal(false);
   adminOpen = signal(false);
+  searchQuery = signal('');
+
+  get userAvatar(): string {
+    const user: any = this.authService.getClientExternalId?.();
+    return user?.avatarUrl || user?.profileImage || user?.image || 'default-avatar.png';
+  }
+
+  onSearch(event: Event): void {
+    event.preventDefault();
+    const term = this.searchQuery().trim();
+    this.closeMenu();
+    this.router.navigate(['/catalog'], {
+      queryParams: term ? { name: term } : {}
+    });
+  }
 
   isClient(): boolean {
     return this.authService.isClient();

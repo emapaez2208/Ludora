@@ -20,11 +20,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  gap: 16px; 
+  width: 35%;
+  padding-left: 16px;
+  box-sizing: border-box;
 }
 
 .m2 {
-  width: 70%;
+  width: 65%;
   display: flex;
 }
 
@@ -323,6 +326,9 @@
     align-items: center;
     position: relative;
     justify-content: flex-start;
+  }
+  .m1 app-search {
+    display: none;
   }
 
   .hamburger {
