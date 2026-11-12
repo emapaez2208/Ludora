@@ -5,6 +5,7 @@ import ExperienceGroup.Ludora.auth.filters.RestAuthenticationEntryPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -21,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
-///@EnableMethodSecurity       ----------VOLVER A ACTIVAR ------------------- <-----
+@EnableMethodSecurity
 @AllArgsConstructor
 public class SecurityConfig {
 
@@ -50,8 +51,11 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**"
                         ).permitAll()
-
-                        .anyRequest().permitAll()) // change for .anyRequest().authenticated())
+                        .requestMatchers(HttpMethod.GET,"/games/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/genres").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/developers/companies").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reviews/**").permitAll()
+                        .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers

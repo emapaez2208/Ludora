@@ -30,11 +30,9 @@ export const routes: Routes = [
     {path: '', component: Home},
     {path: 'login', component: Login, canActivate: [loginGuard]},
     {path: 'register', component: Register, canActivate: [loginGuard]},
-    {path: 'registerAdmin' , component: FormAdmin, canActivate: [authGuard]},
     {path: 'profile', component: Profile, canActivate: [authGuard]},
     {path: 'profile/edit', component: ProfileEdit, canActivate: []},
     {path: 'catalog', component: Catalog},
-    {path: 'application', component: SolicitudList , canActivate:[adminGuard]},
     {path: 'about', component: Know},
     {path: 'catalog/:id', component: GameDetail},
     {path: 'games/new', component: FormGame, canActivate: [developerGuard]},
@@ -49,9 +47,11 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'games' },
-            { path: 'games', component: SolicitudList},
+            { path: 'games', component: GameManagement},
             { path: 'users', component: UserList },
-            { path: 'sales', component: SalesList }
+            { path: 'sales', component: SalesList },
+            {path: 'requests', component: SolicitudList},
+            {path: 'newadmin', component: FormAdmin}
         ],
     },
     {path: 'pay/:type', component: Payment},
