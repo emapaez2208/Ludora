@@ -129,10 +129,18 @@
                 <strong>${{ sale.totalPrice }}</strong>
 
                 <span class="sale-status"
+
                   [class.approved]="sale.status === 'APPROVED'"
                   [class.pending]="sale.status === 'PENDING'"
                   [class.rejected]="sale.status === 'REJECTED'">
-                  {{ sale.status }}
+                  
+                  {{
+                    sale.status === 'APPROVED' ? 'Aprobada' :
+                    sale.status === 'REJECTED' ? 'Rechazada' :
+                    sale.status === 'PENDING' ? 'Pendiente' :
+                    sale.status
+                  }}
+                  
                 </span>
               </div>
             </div>
