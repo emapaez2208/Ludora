@@ -18,18 +18,31 @@
     </button>
 
     <a class="logo" routerLink="/" (click)="closeMenu()">
-        <img src="logo-modo-oscuro.png" alt="">
+      <img src="logo-modo-oscuro.png" alt="Ludora">
     </a>
-
   </div>
 
   <nav class="mitad m2" [class.active]="isMenuOpen">
+    @if (isLogged()) {
+      <a class="mobile-user-card" routerLink="/profile" (click)="closeMenu()">
+        <img 
+          [src]="userAvatar()" 
+          (error)="$any($event.target).src = 'images/profile-base.jpeg'" 
+          alt="Avatar" 
+          class="mobile-avatar" 
+        />
+        <div class="mobile-user-info">
+          <span class="mobile-user-name">{{ userName() }}</span>
+          <span class="mobile-user-sub">Ver mi perfil →</span>
+        </div>
+      </a>
+    }
+
     <a class="item" routerLink="/" (click)="closeMenu()"><p>Inicio</p></a>
     <a class="item" routerLink="/catalog" (click)="closeMenu()"><p>Tienda</p></a>
     <a class="item" routerLink="/about" (click)="closeMenu()"><p>Conocenos</p></a>
     
     @if (isAdmin()) {
-      
       <div class="admin-wrapper">
         <a class="item" [class.open]="adminOpen()" (click)="toggleAdmin($event)">
           <p>Administración</p>
@@ -69,61 +82,68 @@
       <p>Mis juegos</p>
     </a>
   }
-      
-    @if (isLogged()) {
-      
-      <a class="item" routerLink="/profile" (click)="closeMenu()"><p>Mi perfil</p></a>
-      <a class="item" (click)="logout()"><p>Cerrar sesión</p></a>
+    
 
-    }@else {
+    @if (isLogged()) {
+      <a class="item profile-item" routerLink="/profile" (click)="closeMenu()">
+        <img 
+          [src]="userAvatar()" 
+          (error)="$any($event.target).src = 'images/profile-base.jpeg'" 
+          alt="Foto de perfil" 
+          class="profile-avatar" 
+        />
+        <p>Mi perfil</p>
+      </a>
+      <a class="item logout-item" (click)="logout()"><p>Cerrar sesión</p></a>
+    } @else {
       <a class="item" routerLink="/login" (click)="closeMenu()"><p>Iniciar sesión</p></a>
     }
   </nav>
 
   @if (isClient()) {
-      <div class="cart-wrapper">
-        <button
-          class="cart-button"
-          type="button"
-          (click)="toggleCart()"
-          aria-label="Ver carrito"
-          [attr.aria-expanded]="cartOpen()">
-          <img src="/cart.svg" alt="" class="cart-icon" />
-          @if (cartService.count() > 0) {
-            <span class="cart-badge">{{ cartService.count() }}</span>
-          }
-        </button>
-
-        @if (cartOpen()) {
-          <div class="cart-preview">
-            <h4>Tu carrito</h4>
-
-            @if (cartService.count() === 0) {
-              <p class="cart-empty">Todavía no agregaste juegos.</p>
-            } @else {
-              <ul>
-                @for (g of cartService.cart()!.games; track g.externalId) {
-                  <li>
-                    <span class="cart-name">{{ g.name }}</span>
-                    <span class="cart-price">${{ g.discountedPrice ?? g.price }}</span>
-                    <button 
-                      type="button" 
-                      class="cart-remove-btn" 
-                      (click)="onRemoveGame(g, $event)"
-                      aria-label="Eliminar {{ g.name }}">
-                      <img src="/eliminar.png" alt="" class="remove-icon" />
-                    </button>
-                  </li>
-                }
-              </ul>
-              <div class="cart-total">
-                <span>Total</span>
-                <strong>${{ cartService.total() }}</strong>
-              </div>
-              <a routerLink="/cart" class="btn" (click)="cartOpen.set(false)">Ir al carrito</a>
-            }
-          </div>
+    <div class="cart-wrapper">
+      <button
+        class="cart-button"
+        type="button"
+        (click)="toggleCart()"
+        aria-label="Ver carrito"
+        [attr.aria-expanded]="cartOpen()">
+        <img src="/cart.svg" alt="" class="cart-icon" />
+        @if (cartService.count() > 0) {
+          <span class="cart-badge">{{ cartService.count() }}</span>
         }
-      </div>
-    }
+      </button>
+
+      @if (cartOpen()) {
+        <div class="cart-preview">
+          <h4>Tu carrito</h4>
+
+          @if (cartService.count() === 0) {
+            <p class="cart-empty">Todavía no agregaste juegos.</p>
+          } @else {
+            <ul>
+              @for (g of cartService.cart()!.games; track g.externalId) {
+                <li>
+                  <span class="cart-name">{{ g.name }}</span>
+                  <span class="cart-price">${{ g.discountedPrice ?? g.price }}</span>
+                  <button 
+                    type="button" 
+                    class="cart-remove-btn" 
+                    (click)="onRemoveGame(g, $event)"
+                    aria-label="Eliminar {{ g.name }}">
+                    <img src="/eliminar.png" alt="" class="remove-icon" />
+                  </button>
+                </li>
+              }
+            </ul>
+            <div class="cart-total">
+              <span>Total</span>
+              <strong>${{ cartService.total() }}</strong>
+            </div>
+            <a routerLink="/cart" class="btn" (click)="cartOpen.set(false)">Ir al carrito</a>
+          }
+        </div>
+      }
+    </div>
+  }
 </div>

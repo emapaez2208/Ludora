@@ -84,9 +84,16 @@
         }
 
     </fieldset>
+
+    @if (alerta(); as info) {
+    <div class="alerta" [class.exito]="info.tipo === 'exito'" [class.error]="info.tipo === 'error'">
+      <span>{{ info.mensaje }}</span>
+      <button type="button" class="btn-cerrar" (click)="alerta.set(null)">✕</button>
+    </div>
+   }
  
 
-    <button class="btn" type="submit" [disabled]="adminForm.invalid">Registrarse</button>
+    <button class="btn" type="submit" [disabled]="adminForm.invalid">Crear</button>
 
 </form>
 </div>

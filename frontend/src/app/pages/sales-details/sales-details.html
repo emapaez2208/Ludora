@@ -128,7 +128,7 @@
             @if (isPaying()) {
               Generando pago...
             } @else {
-              <span>Pagar con Mercado Pago</span>
+              <span>{{isFree() ? 'Obtener gratis' : 'Pagar con Mercado Pago'}}</span>
               <span class="pay-arrow">→</span>
             }
           </button>

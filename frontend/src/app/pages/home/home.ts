@@ -6,11 +6,11 @@ import { GameService } from '../../services/game-service';
 import { CategorySlide } from './components/category-slide/category-slide';
 import { Genre } from '../../models/genre';
 import { GenreService } from '../../services/genre-service'; 
-import { Search } from './components/search/search';
 import { CompanySlide } from './components/company-slide/company-slide';
 import { DeveloperService } from '../../services/developer-service';
 import { GameTabs } from './components/game-tabs/game-tabs';
 import { RouterLink } from '@angular/router';
+import { Search } from './components/search/search';
 
 export interface FilterChip {
   id: string;
