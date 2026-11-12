@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { SaleService } from '../../services/sale-service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SaleResponse } from '../../models/sale-response';
 import { CommonModule } from '@angular/common';
 
@@ -14,10 +14,13 @@ export class SalesDetails {
 
   private saleService = inject(SaleService)
   private route = inject(ActivatedRoute)
+  private Router = inject(Router)
 
   sale = signal<SaleResponse | null>(null)
   isPaying = signal(false)
   msjError = signal('')
+
+  isFree = signal(false)
 
 
   constructor(){
@@ -28,7 +31,12 @@ export class SalesDetails {
     const id = this.route.snapshot.params['id']
     
     this.saleService.getSale(id).subscribe({
-      next: data => this.sale.set(data),
+      next: data => {
+        if(data.totalPrice === 0){
+          this.isFree.set(true)
+        }
+        this.sale.set(data)
+      },
       error: e => {
         console.error('Erorr al cargar la sale: ', e)
         this.msjError.set('La compra a la que quiere acceder no existe..')
@@ -44,7 +52,9 @@ export class SalesDetails {
 
     this.saleService.paySale(this.sale()!.externalId).subscribe({
       next: url => {
-        if(url){
+        if(url === 'success'){
+          this.Router.navigate(['/library'])
+        }else if(url){
           window.location.href = url
         }
         this.isPaying.set(false)

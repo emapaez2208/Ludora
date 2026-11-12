@@ -1,5 +1,6 @@
 package ExperienceGroup.Ludora.features.sale;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.mercadoPago.MercadoPagoService;
 import ExperienceGroup.Ludora.features.sale.domain.SaleItemEntity;
 import ExperienceGroup.Ludora.features.sale.exception.SaleNotFoundException;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,6 +114,25 @@ public class SaleService  implements ISaleService{
 
         if (sale.getStatus() == ESaleStatus.APPROVED) {
             throw new IllegalStateException("Only pending sales can be paid.");
+        }
+
+        if(sale.getTotalPrice().compareTo(BigDecimal.ZERO) == 0){
+            ClientEntity client = clientRepository.findByExternalId(sale.getClient().getExternalId())
+                    .orElseThrow(UserNotFoundException::new);
+
+            sale.setStatus(ESaleStatus.APPROVED);
+
+            List<GameEntity> gamesBought = sale.getItems().stream()
+                    .map(item -> item.getGame())
+                    .toList();
+
+            List<GameEntity> clientGames = new ArrayList<>(client.getGames());
+            clientGames.addAll(gamesBought);
+            client.setGames(clientGames);
+
+            clientRepository.save(client);
+            saleRepository.save(sale);
+            return "success";
         }
         
         return mercadoPago.createPay(sale.getItems(), sale.getExternalId());
