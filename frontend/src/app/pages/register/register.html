@@ -86,7 +86,7 @@
 
     <fieldset>
         <label for="phone">Telefono:</label>
-        <input class="input" type="tel" name="phone" id="phone" placeholder="+34 612 34 56 78" formControlName="phone" >
+        <input class="input" type="tel" name="phone" id="phone" placeholder="22365815" formControlName="phone" >
         @if(userForm.get('phone')?.hasError('required') && userForm.get('phone')?.touched){
             <p>*El telefono es obligatorio</p>
         }@else if (userForm.get('phone')?.hasError('min') && userForm.get('phone')?.touched || userForm.get('phone')?.hasError('max') && userForm.get('phone')?.touched) {

@@ -72,9 +72,6 @@ export class Register  {
 }
 
 
-
- 
-
   onSubmit(){
     if(this.user() ==='client'){
     const {password2, ...clientData} = this.userForm.value;
@@ -133,7 +130,7 @@ export class Register  {
 
   }
 
-  // Tu metodo privado de validacion de fecha
+  // Tu metodo de validacion de fecha
   private pastDateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
