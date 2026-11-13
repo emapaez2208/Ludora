@@ -128,13 +128,13 @@ textarea.input {
 }
 
 
-input:focus 
+.input:focus, 
 select:focus {
     border-color: var(--color-principal);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 25%, transparent);
 }
 
-input::placeholder {
+.input::placeholder {
     color: rgba(252, 252, 252, 0.45);
 }
 

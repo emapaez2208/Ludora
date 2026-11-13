@@ -2,7 +2,7 @@
 <h2>Únete a Ludora</h2>
 <div class="select">
     <label for="seleccion">Registrarse como :</label>
-    <select [value]="user()" (change)="elegirRole($any($event.target).value)">
+    <select id="seleccion" [value]="user()" (change)="elegirRole($any($event.target).value)">
       <option value="client">Cliente</option>
       <option value="develop">Desarrollador</option>
     </select>
@@ -75,8 +75,8 @@
         <input class="input" type="password" name="password2" id="password2" placeholder="Repetí tu contraseña" formControlName="password2">
          @if(userForm.get('password2')?.hasError('required') && userForm.get('password2')?.touched){
             <p>*La contraseña es obligatoria</p>
-        }@else if (userForm.get('password')?.value !== userForm.get('password2')?.value) {
-            <p>*Las contrasñeas tienen que ser iguales</p>
+        }@else if (userForm.get('password2')?.touched && userForm.get('password')?.value !== userForm.get('password2')?.value) {
+            <p>*Las contraseñas tienen que ser iguales</p>
         }
         
     </fieldset>
@@ -146,7 +146,11 @@
     </div>
   }
   
-    <button class="btn" type="submit" [disabled]="userForm.invalid">Registrarse</button>
+    <button class="btn" type="submit" [disabled]="userForm.invalid || enviando()">
+
+        {{ enviando() ? 'Registrando...' : 'Registrarse' }}
+
+    </button>
 
 </form>
 </div>
