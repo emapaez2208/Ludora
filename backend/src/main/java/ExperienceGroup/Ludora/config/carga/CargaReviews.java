@@ -138,7 +138,7 @@ public class CargaReviews implements CargaDatos {
         new Resena("Kingdom Hearts III", "marianodiaz", 3, "Visualmente parece una película de Pixar, aunque la historia se vuelve enredada.", Duration.ofDays(4)),
 
         // --- EA & SPORTS ---
-        new Resena("EA SPORTS FC 24", "gonzalosilva", 2, "Pocos cambios respecto a entregas anteriores y foco excesivo en sobres.", Duration.ofDays(27)),
+        new Resena("EA SPORTS FC 26", "gonzalosilva", 2, "Pocos cambios respecto a entregas anteriores y foco excesivo en sobres.", Duration.ofDays(27)),
         new Resena("Need for Speed Unbound", "gonzalosilva", 4, "El estilo visual tipo grafiti le da mucha personalidad y el manejo es fluido.", Duration.ofDays(26)),
         new Resena("eFootball 2024", "gonzalosilva", 3, "Jugabilidad táctica interesante para ser gratis, aunque le faltan licencias.", Duration.ofDays(20)),
         new Resena("Battlefield 1", "gonzalosilva", 5, "La ambientación de la Primera Guerra Mundial y el sonido de las armas impacta.", Duration.ofDays(9)),
