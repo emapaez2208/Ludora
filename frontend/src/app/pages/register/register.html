@@ -131,7 +131,7 @@
     }@else {
 
     <fieldset>
-        <label for="company">Compania:</label>
+        <label for="company">Compañía:</label>
         <textarea class="input" name="company" id="company" placeholder="Ingresá el nombre de tu compañía" formControlName="company"></textarea>
         @if (userForm.get('company')?.hasError('required') && userForm.get('company')?.touched) {
             <p>*Este campo es obligatorio</p>
