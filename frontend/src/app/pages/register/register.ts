@@ -7,6 +7,12 @@ import { DeveloperRequest } from '../../models/developer-request';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
 
+function passwordsIguales(group: AbstractControl): ValidationErrors | null {
+  return group.get('password')?.value === group.get('password2')?.value
+    ? null
+    : { passwordsDistintas: true };
+}
+
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-register',
@@ -23,7 +29,7 @@ export class Register  {
 
   // Signal para controlar la alerta visual
   alerta = signal<{ tipo: 'exito' | 'error'; mensaje: string } | null>(null);
-
+  enviando = signal(false);
 
   private fb = inject(FormBuilder)
   private router = inject(Router)
@@ -55,7 +61,7 @@ export class Register  {
       street: ['',[ Validators.required , Validators.maxLength(25)]],
       numberStreet: ['', [Validators.required , Validators.min(1) , Validators.max(99999) , Validators.pattern('^[0-9]+$')]],
       birthDate: ['',[Validators.required, this.pastDateValidator()] ]
-    });
+    }, { validators: passwordsIguales });
   } else{
        this.userForm = this.fb.group({
       name:  ['', [Validators.required , Validators.maxLength(32), Validators.minLength(3)]],
@@ -66,13 +72,17 @@ export class Register  {
                        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/)]],
       password2: ['', Validators.required],
       company: ['' , Validators.required]
-    });
+    }, { validators: passwordsIguales });
   }
 
 }
 
 
   onSubmit(){
+
+    if (this.enviando() || this.userForm.invalid) return;
+    this.enviando.set(true);
+
     if(this.user() ==='client'){
     const {password2, ...clientData} = this.userForm.value;
 
@@ -86,9 +96,9 @@ export class Register  {
       next: (data)=> {
         this.alerta.set({
           tipo: 'exito',
-          mensaje: 'Usted se a registrado con exito'
+          mensaje: 'Usted se ha registrado con éxito'
         });
-        console.log('usuario cargado con exito',data);
+        console.log('Usuario cargado con éxito', data);
 
         setTimeout(()=>
         this.router.navigate(['/login']),3000)},
@@ -98,6 +108,7 @@ export class Register  {
           tipo: 'error',
           mensaje: err.error?.message || 'Ocurrió un error al registrarse.'
         });
+        this.enviando.set(false);
       }
     })
   }else{
@@ -108,9 +119,9 @@ export class Register  {
       next: (data)=> {
          this.alerta.set({
           tipo: 'exito',
-          mensaje: 'Usted se a registrado con exito'
+          mensaje: 'Usted se ha registrado con éxito'
         });
-        console.log('usuario cargado con exito',data);
+        console.log('Usuario cargado con éxito',data);
         setTimeout(()=>
         this.router.navigate(['/login']),3000)},
       error: (err) => {
@@ -119,6 +130,7 @@ export class Register  {
           tipo: 'error',
           mensaje: err.error?.message || 'Ocurrió un error al registrarse.'
         });
+        this.enviando.set(false);
       }
   })
 }
@@ -130,7 +142,7 @@ export class Register  {
 
   }
 
-  // Tu metodo de validacion de fecha
+  // Metodo de validacion de fecha
   private pastDateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;

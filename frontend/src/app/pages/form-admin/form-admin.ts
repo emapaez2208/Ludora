@@ -1,8 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AdminRequest } from '../../models/admin-request';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user-service';
+
+function passwordsIguales(group: AbstractControl): ValidationErrors | null {
+  return group.get('password')?.value === group.get('password2')?.value
+    ? null
+    : { passwordsDistintas: true };
+}
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -15,8 +21,7 @@ export class FormAdmin {
   adminForm! : FormGroup;
    // Signal para controlar la alerta visual
   alerta = signal<{ tipo: 'exito' | 'error'; mensaje: string } | null>(null);
-
-  admin = signal<AdminRequest>
+  enviando = signal(false);
 
   private fb = inject(FormBuilder)
   private router = inject(Router)
@@ -34,23 +39,28 @@ export class FormAdmin {
                        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/)]],
     password2: ['', Validators.required],
     employeeId: ['', [Validators.required, Validators.min(1) ]]
-});
+}, { validators: passwordsIguales });
 }
 
 onSubmit() {
+  
+  // Evita doble envío (también protege si se dispara Enter dos veces)
+  if (this.enviando() || this.adminForm.invalid) return;
+  this.enviando.set(true);
+
   const {password2 , ...adminData} = this.adminForm.value;
 
   const formattedData = { ...adminData,
-                         employeeId : Number ( adminData.employeeId)
+                         employeeId : Number (adminData.employeeId)
   
-  }
+  };
 
   this.userService.addAdmin(formattedData as AdminRequest)
   .subscribe({
-    next: (data) => { console.log('Admin cargado con exito',data),
+    next: (data) => { console.log('Administrador cargado con éxito',data),
                       this.alerta.set({
                           tipo: 'exito',
-                          mensaje: 'Admin se a registrado con exito'
+                          mensaje: 'El administrador se ha registrado con éxito'
                           });
                       setTimeout(()=>
                       this.router.navigate(['/']),3000)},
@@ -59,6 +69,7 @@ onSubmit() {
                         tipo: 'error',
                         mensaje: e.error?.message || 'Ocurrió un error al registrar.'
                         });
+                        this.enviando.set(false); 
     }
   });
 
