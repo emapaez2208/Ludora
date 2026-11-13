@@ -20,6 +20,7 @@ public record GameDTORequest(
     @Schema(description = "Game price", example = "110.70", required = true)
     @NotNull(message = "The price cannot be null")
     @PositiveOrZero(message = "The price cannot be negative")
+    @Digits(integer = 8, fraction = 2, message = "The price must have up to 8 integer digits and 2 decimal places")
     BigDecimal price,
 
     @Schema(description = "Game description", example = "Life simulation game where you design homes, manage relationships, and fulfill aspirations.")
