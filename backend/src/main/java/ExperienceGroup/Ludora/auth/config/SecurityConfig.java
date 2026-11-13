@@ -53,6 +53,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET,"/games/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/genres").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/ageRanges/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/developers/companies").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reviews/**").permitAll()
                         .anyRequest().authenticated())
