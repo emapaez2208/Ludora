@@ -176,6 +176,9 @@
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 .modal-confirmacion {
   border: 1px solid rgba(255, 90, 90, 0.4);
