@@ -49,7 +49,7 @@ export class FormGame {
     this.form = this.fb.group({
       name : ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       frontPage: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+      price: ['', [Validators.required, Validators.min(0), Validators.max(99999999.99), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
       description: ['', Validators.maxLength(200)],
       releaseDate: ['', Validators.required],
       ageRangeExternalId: ['', Validators.required],
