@@ -51,7 +51,7 @@ public class CargaVentas implements CargaDatos {
         new VentaPrueba("martingomez",     ESaleStatus.APPROVED, Duration.ofDays(30), List.of("Resident Evil 4 Remake", "Devil May Cry 5")),
 
         // Ventas intermedias (15 a 30 días atrás)
-        new VentaPrueba("gonzalosilva",    ESaleStatus.APPROVED, Duration.ofDays(28), List.of("EA SPORTS FC 24", "Need for Speed Unbound")),
+        new VentaPrueba("gonzalosilva",    ESaleStatus.APPROVED, Duration.ofDays(28), List.of("EA SPORTS FC 26", "Need for Speed Unbound")),
         new VentaPrueba("camilarodriguez", ESaleStatus.REJECTED, Duration.ofDays(26), List.of("Mario Kart 8 Deluxe")),
         new VentaPrueba("florenciarossi",  ESaleStatus.APPROVED, Duration.ofDays(24), List.of("Half-Life 2", "Portal 2", "Counter-Strike 2")),
         new VentaPrueba("valentinasosa",   ESaleStatus.APPROVED, Duration.ofDays(22), List.of("Animal Crossing: New Horizons", "Super Smash Bros. Ultimate")),

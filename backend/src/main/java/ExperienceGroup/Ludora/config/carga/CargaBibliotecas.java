@@ -48,7 +48,7 @@ new Biblioteca("cosmejuega", List.of(
         new Biblioteca("martingomez", List.of(
                 "Resident Evil 4 Remake", "Devil May Cry 5", "Resident Evil 2 Remake", "Monster Hunter: World", "Street Fighter 6", "God of War Ragnarok", "Sekiro: Shadows Die Twice")),
         new Biblioteca("gonzalosilva", List.of(
-                "EA SPORTS FC 24", "Need for Speed Unbound", "eFootball 2024", "Rocket League", "GTA V", "Battlefield 1")),
+                "EA SPORTS FC 26", "Need for Speed Unbound", "eFootball 2024", "Rocket League", "GTA V", "Battlefield 1")),
         new Biblioteca("florenciarossi", List.of(
                 "Half-Life 2", "Portal 2", "Counter-Strike 2", "Overwatch 2", "The Sims 4", "Left 4 Dead 2", "Dishonored 2")),
         new Biblioteca("valentinasosa", List.of(
