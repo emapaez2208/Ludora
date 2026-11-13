@@ -154,7 +154,7 @@ export class FormGame {
         },
         error: e => {
           console.error('Error al actualizar el juego', e)
-          alert('El juego no se puedo actualizar')
+          alert('El juego no se pudo actualizar, verifique los campos')
         }
       })
 
