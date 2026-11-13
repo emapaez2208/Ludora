@@ -79,3 +79,27 @@
     cursor: not-allowed;
     transform: none;
 }
+@media (max-width: 600px) {
+    .pagination-container {
+        gap: 0.75rem;
+        margin-top: 2rem;
+    }
+
+    .pagination-numbers {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.35rem;
+    }
+
+    .page-number-btn {
+        min-width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.9rem;
+        height: 34px;
+        font-size: 0.85rem;
+    }
+}
