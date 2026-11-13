@@ -1,10 +1,11 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserService } from '../../services/user-service';
 import { ClientRequest } from '../../models/client-request';
 import { DeveloperRequest } from '../../models/developer-request';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -26,8 +27,7 @@ export class Register  {
 
   private fb = inject(FormBuilder)
   private router = inject(Router)
-  private route = inject(ActivatedRoute)
-  private userService = inject(UserService)
+  private authService = inject(AuthService)
 
   constructor(){
 
@@ -82,7 +82,7 @@ export class Register  {
       numberStreet: Number(clientData.numberStreet)
     };
 
-    this.userService.addUser(formattedData as ClientRequest).subscribe({
+    this.authService.addUser(formattedData as ClientRequest).subscribe({
       next: (data)=> {
         this.alerta.set({
           tipo: 'exito',
@@ -104,7 +104,7 @@ export class Register  {
     const{password2, ...developData }= this.userForm.value;
 
     
-    this.userService.addDevelop(developData as DeveloperRequest).subscribe({
+    this.authService.addDevelop(developData as DeveloperRequest).subscribe({
       next: (data)=> {
          this.alerta.set({
           tipo: 'exito',
