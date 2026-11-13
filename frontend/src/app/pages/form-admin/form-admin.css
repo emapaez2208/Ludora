@@ -1,0 +1,155 @@
+:host{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+}
+
+/* TARJETA PRINCIPAL */
+
+.contenedor{
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  background: var(--color-secundario);
+  color: var(--color-texto);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+  animation: aparecer 0.3s ease;
+}
+
+h2 {
+  margin: 0 0 1.5rem;
+  color: var(--color-texto);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-left: 4px solid var(--color-principal);
+  padding-left: 0.75rem;
+}
+
+/* FORMULARIO */
+
+fieldset{
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  min-width: 0;
+  padding: 0 0 1.6rem;
+  border: none;
+}
+
+label{
+  color: var(--color-texto);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-texto);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  color-scheme: dark;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+
+input:focus {
+    border-color: var(--color-principal);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 25%, transparent);
+}
+
+input::placeholder {
+    color: rgba(252, 252, 252, 0.45);
+}
+
+.input.ng-invalid.ng-touched {
+  border-color: var(--color-peligro);
+}
+
+.input.ng-invalid.ng-touched:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-peligro) 25%, transparent);
+}
+
+p{
+  position: absolute;
+  bottom: 0.2rem;
+  color: color-mix(in srgb, var(--color-peligro) 70%, white);
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.btn {
+  width: 100%;
+}
+
+
+.alerta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1.2rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  animation: aparecer 0.25s ease-out;
+}
+
+.alerta.exito {
+  background-color: rgba(40, 160, 80, 0.15);
+  border: 1px solid var(--color-principal);
+  color: #4ade80;
+}
+
+.alerta.error {
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid #ef4444;
+  color: #f87171;
+}
+
+.btn-cerrar {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+
+@media screen and (max-width: 600px) {
+  :host {
+    padding: 1rem;
+  }
+
+  .contenedor {
+    padding: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}

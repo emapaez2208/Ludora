@@ -2,8 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { ClientRequest } from '../models/client-request';
 import { ClientResponse } from '../models/client-response';
-import { Developer, Page } from '../models/developer';
+import { Developer } from '../models/developer';
 import { AdminResponse } from '../models/admin-response';
+import { ClientUpdate } from '../models/client-update';
+import { DeveloperUpdate } from '../models/developer-update';
+import { AdminUpdate } from '../models/admin-update';
+import { DeveloperRequest } from '../models/developer-request';
+import { PageResponse } from '../models/page-response';
+import { ChangePassword } from '../models/change-password';
+import { ChangeEmail } from '../models/change-email';
+import { AdminChangeEmail } from '../models/admin-change-email';
+import { AdminChangePassword } from '../models/admin-change-password';
+import { AdminRequest } from '../models/admin-request';
+
 
 @Service()
 export class UserService {
@@ -12,11 +23,19 @@ export class UserService {
     http = inject(HttpClient)
 
     getClients(page: number, size: number) {
-        return this.http.get<Page<ClientResponse>>(`${this.url}/clients`, { params: { page, size } })
+        return this.http.get<PageResponse<ClientResponse>>(`${this.url}/clients`, { params: { page, size } })
     }
 
     getDevelopers(page: number, size: number) {
-        return this.http.get<Page<Developer>>(`${this.url}/developers`, { params: { page, size } })
+        return this.http.get<PageResponse<Developer>>(`${this.url}/developers`, { params: { page, size } })
+    }
+
+    getClientById(externalId: string) {
+        return this.http.get<ClientResponse>(`${this.url}/clients/${externalId}`)
+    }
+
+    getDeveloperById(externalId: string) {
+        return this.http.get<Developer>(`${this.url}/developers/${externalId}`)
     }
 
     blockAccount(externalId: string) {
@@ -28,7 +47,7 @@ export class UserService {
     }
 
     
-     //-------------------------------------------------------------------------------------------//
+    //---------------------------------- GET PROFILE -------------------------------------//
 
 
     clientProfile(){
@@ -43,10 +62,70 @@ export class UserService {
         return this.http.get<AdminResponse>(`${this.url}/admins/profile`)
     }
     
+    //---------------------------------- UPDATE PROFILE -------------------------------------//
+
+    clientUpdate(id : string, client : ClientUpdate){
+        return this.http.put<ClientResponse>(`${this.url}/clients/${id}`, client)
+    }
+
+    developerUpdate(id : string, developer : DeveloperUpdate){
+        return this.http.put<Developer>(`${this.url}/developers/${id}`, developer)
+    }
+
+    adminUpdate(id : string, admin : AdminUpdate){
+        return this.http.put<AdminResponse>(`${this.url}/admins/${id}`, admin)
+    }
+
+    clientChangePassword(password : ChangePassword){
+        return this.http.put<void>(`${this.url}/clients/profile/changePassword`, password)
+    }
+
+    developerChangePassword(password : ChangePassword){
+        return this.http.put<void>(`${this.url}/developers/profile/changePassword`, password)
+    }
+
+    adminChangePassword(password : ChangePassword){
+        return this.http.put<void>(`${this.url}/admins/profile/changePassword`, password)
+    }
+
+    clientChangeEmail(email : ChangeEmail){
+        return this.http.put<void>(`${this.url}/clients/profile/changeEmail`, email)
+    }
+
+    developerChangeEmail(email : ChangeEmail){
+        return this.http.put<void>(`${this.url}/developers/profile/changeEmail`, email)
+    }
+
+    adminChangeEmail(email : ChangeEmail){
+        return this.http.put<void>(`${this.url}/admins/profile/changeEmail`, email)
+    }
+
+    // El admin cambia email / password de OTRO usuario (client o developer), no pide valor anterior 
+    adminChangeUserEmail(externalId : string, email : AdminChangeEmail){
+        return this.http.put<void>(`${this.url}/admins/users/${externalId}/email`, email)
+    }
+
+    adminChangeUserPassword(externalId : string, password : AdminChangePassword){
+        return this.http.put<void>(`${this.url}/admins/users/${externalId}/password`, password)
+    }
+
+    // --------------------------------------------------------------------------------------//
 
     // client user
     addUser(clientRequest : ClientRequest){
-        return this.http.post<ClientRequest>(this.url,clientRequest)
+        return this.http.post<ClientResponse>(`${this.url}/clients`,clientRequest)
+    }
+
+    // develop user
+
+    addDevelop ( developerRequest : DeveloperRequest){
+        return this.http.post<Developer>(`${this.url}/developers`, developerRequest)
+    }
+
+    //
+
+    addAdmin ( AdminRequest : AdminRequest){
+        return this.http.post<AdminResponse>(`${this.url}/admins`,AdminRequest)
     }
 
 }

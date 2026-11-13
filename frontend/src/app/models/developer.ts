@@ -1,4 +1,5 @@
 export interface Developer {
+  avatarUrl?: string
   externalId: string;
   name: string;
   lastName: string;
@@ -8,18 +9,3 @@ export interface Developer {
   statusBlocked: boolean;
 }
  
-//paginacion 
-
-export interface Page<T> {
-  content: T[];
-  totalPages?: number;
-  totalElements?: number;
-  number?: number;
-  size?: number;
-  page?: {
-    totalPages: number;
-    totalElements: number;
-    number: number;
-    size: number;
-  };
-}

@@ -58,6 +58,8 @@
     letter-spacing: 0.5px;
     border-left: 4px solid var(--color-principal);
     padding-left: 0.75rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .genres {
@@ -81,6 +83,9 @@
     margin: 0;
     line-height: 1.6;
     color: var(--color-texto);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: pre-wrap;
 }
 
 .meta {
@@ -98,6 +103,9 @@
     grid-template-columns: 150px 1fr;
     align-items: baseline;
     gap: 0.75rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: pre-wrap;
 }
 
 .meta span {
@@ -106,6 +114,7 @@
     color: var(--color-texto-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    
 }
 
 .price {
@@ -127,6 +136,141 @@
     width: 18px;
     height: 18px;
     object-fit: contain;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-texto);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-principal);
+    color: var(--color-principal);
+}
+
+.btn-in-cart {
+    background-color: transparent;
+    color: var(--color-principal);
+    border: 1px solid var(--color-principal);
+    text-decoration: none;
+}
+
+.btn-in-cart:hover,
+.btn-in-cart:focus-visible {
+    background-color: color-mix(in srgb, var(--color-principal) 15%, transparent);
+    box-shadow: none;
+}
+
+.admin-panel,
+.owner-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.admin-panel {
+    align-items: stretch; 
+}
+
+.admin-panel > .btn.btn-action {
+    width: 100%;
+    flex: 0 0 auto;
+}
+
+.status-tag {
+    align-self: flex-start;
+    padding: 0.25rem 0.7rem;
+    border: 1px solid currentColor;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.tag-available { 
+    color: var(--color-principal); 
+}
+
+.tag-blocked { 
+    color: var(--color-peligro); 
+}
+
+.tag-revision { 
+    color: #e6b422; 
+}
+
+.btn-edit {
+    text-decoration: none;
+}
+
+.btn-danger {
+    background-color: transparent;
+    color: var(--color-peligro);
+    border: 1px solid var(--color-peligro);
+}
+
+.btn-danger:hover,
+.btn-danger:focus-visible {
+    background-color: color-mix(in srgb, var(--color-peligro) 15%, transparent);
+    border-color: var(--color-peligro);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-peligro) 35%, transparent);
+    outline: none;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.btn-action {
+    flex: 1 1 140px;
+    width: auto;
+    background-color: var(--color-base);
+    border: 1px solid var(--action-color);
+    color: var(--action-color);
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-approve { 
+    --action-color: var(--color-principal); 
+}
+
+.btn-reject { 
+    --action-color: var(--color-peligro); 
+}
+
+.btn-action:hover:not(:disabled),
+.btn-action:focus-visible {
+    background-color: var(--action-color);
+    color: #000000;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--action-color) 35%, transparent);
+    outline: none;
+}
+
+.btn-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.free-price {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    width: fit-content;
+    padding: 0.2rem 0.8rem;
+
+    border: 1px solid rgba(40, 160, 80, 0.4);
+    border-radius: 8px;
+    background: rgba(40, 160, 80, 0.12);
+
+    color: var(--color-principal);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.3px;
 }
 
 @media (max-width: 900px) {

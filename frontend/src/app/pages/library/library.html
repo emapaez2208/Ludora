@@ -1,0 +1,72 @@
+<div class="container">
+
+  <h2>Mi biblioteca</h2>
+
+  @if (isDeveloper()) {
+    <div class="tabs">
+      <button class="tab tab-all" [class.active]="tab() === 'all'" (click)="selectTab('all')">
+        Todos mis juegos
+      </button>
+      <button class="tab tab-revision" [class.active]="tab() === 'needRevision'" (click)="selectTab('needRevision')">
+        En revisión
+      </button>
+      <button class="tab tab-blocked" [class.active]="tab() === 'blocked'" (click)="selectTab('blocked')">
+        Bloqueados
+      </button>
+    </div>
+  }
+
+  <div class="filters-bar">
+
+    <button class="btn btn-filters" (click)="toggleFilters()">
+      Filtros {{ showFilters() ? '▲' : '▼' }}
+    </button>
+
+    @if (showFilters()) {
+      <app-game-filter-panel
+        [initial]="filters()"
+        [libraryMode]="true"
+        (apply)="onApply($event)"
+      />
+    }
+
+  </div>
+
+  @if (isLoading()) {
+
+    <p>Cargando biblioteca...</p>
+
+  } @else if (msjError()) {
+
+    <p class="error-message">{{ msjError() }}</p>
+
+  } @else {
+
+    <div class="games-grid">
+
+      @for (game of games(); track game.externalId) {
+
+        <app-game-card [game]="game" [showStatus]="isDeveloper()" [developerView]="isDeveloper()">
+        </app-game-card>
+
+      } @empty {
+
+        <p class="empty-message">
+          {{ isDeveloper() && tab() !== 'all' ? 'No hay juegos en esta categoría.' : 'No se encontraron juegos en tu biblioteca.' }}
+        </p>
+
+      }
+
+    </div>
+
+    @if (totalPages() > 1) {
+      <app-pagination
+        [page]="page()"
+        [totalPages]="totalPages()"
+        (pageChange)="goToPage($event)"
+      />
+    }
+
+  }
+
+</div>

@@ -1,0 +1,157 @@
+<div class="container">
+
+  @if (sale(); as currentSale) {
+
+    <div class="page-header">
+      <h2>Detalle de compra</h2>
+      <p>Consultá los datos y el estado de tu compra.</p>
+    </div>
+
+    <section class="sale-card">
+
+      <div class="sale-header">
+        <div>
+          <span class="section-label">Compra</span>
+          <h3>#{{ currentSale.externalId }}</h3>
+        </div>
+
+        @if (currentSale.status === 'APPROVED') {
+          <span class="status approved">
+            <span class="status-dot"></span>
+            Aprobada
+          </span>
+        } @else if (currentSale.status === 'REJECTED') {
+          <span class="status rejected">
+            <span class="status-dot"></span>
+            Rechazada
+          </span>
+        } @else {
+          <span class="status pending">
+            <span class="status-dot"></span>
+            Pendiente de pago
+          </span>
+        }
+      </div>
+
+      @if (currentSale.status === 'APPROVED') {
+        <div class="status-message success-message">
+          <span class="message-icon">✓</span>
+          <div>
+            <strong>¡Compra aprobada!</strong>
+            <p>Tu pago fue confirmado. Ya podés disfrutar de tus juegos.</p>
+          </div>
+        </div>
+      } @else if (currentSale.status === 'REJECTED') {
+        <div class="status-message error-message">
+          <span class="message-icon">!</span>
+          <div>
+            <strong>El pago fue rechazado</strong>
+            <p>El pago no pudo completarse. Podés volver a intentarlo utilizando el botón de pago.</p>
+          </div>
+        </div>
+      } @else {
+        <div class="status-message pending-message">
+          <span class="message-icon">i</span>
+          <div>
+            <strong>Compra pendiente</strong>
+            <p>Tu compra todavía no fue abonada. Completá el pago para finalizarla.</p>
+          </div>
+        </div>
+      }
+
+      <div class="sale-info">
+        <div class="info-item">
+          <span>Fecha de compra</span>
+          <strong>{{ currentSale.date | date:'dd/MM/yyyy HH:mm' }}</strong>
+        </div>
+
+        <div class="info-item">
+          <span>Usuario</span>
+          <strong>{{ currentSale.userName }}</strong>
+        </div>
+
+        <div class="info-item">
+          <span>Descuento aplicado</span>
+          <strong>{{ currentSale.hasDiscount ? 'Sí' : 'No' }}</strong>
+        </div>
+
+        <div class="info-item">
+          <span>Puntos obtenidos</span>
+          <strong class="points-value">+{{ currentSale.earnedPoints }}</strong>
+        </div>
+      </div>
+
+      <div class="items-section">
+        <h3>Juegos de la compra</h3>
+
+        <div class="items-table-wrapper">
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th>Videojuego</th>
+                <th>Desarrolladora</th>
+                <th>Precio abonado</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (item of currentSale.items; track $index) {
+                <tr>
+                  <td class="game-name">{{ item.gameName }}</td>
+                  <td>{{ item.company }}</td>
+                  <td class="price">${{ item.pricePaid | number:'1.2-2' }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="3" class="empty-items">
+                    No hay juegos asociados a esta compra.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sale-footer">
+        <div class="total-container">
+          <span>Total de la compra</span>
+          <strong>${{ currentSale.totalPrice | number:'1.2-2' }}</strong>
+        </div>
+
+        @if (currentSale.status !== 'APPROVED') {
+          <button
+            class="btn-pay"
+            (click)="paySale()"
+            [disabled]="isPaying()"
+          >
+            @if (isPaying()) {
+              Generando pago...
+            } @else {
+              <span>{{isFree() ? 'Obtener gratis' : 'Pagar con Mercado Pago'}}</span>
+              <span class="pay-arrow">→</span>
+            }
+          </button>
+        }
+      </div>
+
+    </section>
+
+    <a routerLink="/sales" class="back-link">
+      ← Volver a mis compras
+    </a>
+
+  }@else if(msjError()) {
+
+    <div class="loading-container">
+      <p>{{ msjError() }}</p>
+    </div>
+   
+  } @else {
+    <div class="loading-container">
+      <div class="loader"></div>
+      <p>Cargando detalle de compra...</p>
+    </div>
+  }
+
+</div>

@@ -1,0 +1,83 @@
+<div class="container">
+  <h2>Ventas</h2>
+
+  <div class="filters-bar">
+    <button class="btn btn-filters" (click)="toggleFilters()">
+      Filtros {{ showFilters() ? '▲' : '▼' }}
+    </button>
+  </div>
+
+
+  @if (showFilters()) {
+    <app-sale-filter-panel [initial]="filters()" (apply)="onApply($event)" />
+  }
+
+
+  @if (isLoading()) {
+    <p>Cargando ventas...</p>
+  } @else {
+    <div class="table-wrapper">
+      <table class="sales-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Juegos</th>
+            <th>Total</th>
+            <th>Descuento</th>
+            <th>Puntos</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sale of sales(); track sale.externalId) {
+            <tr>
+              <td>{{ sale.date | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ sale.userName }}</td>
+              <td>{{ sale.items.length }}</td>
+              <td>${{ sale.totalPrice | number:'1.2-2' }}</td>
+              <td>{{ sale.hasDiscount ? 'Sí' : 'No' }}</td>
+              <td>{{ sale.earnedPoints }}</td>
+              <td>
+                <span [class]="'badge ' + sale.status.toLowerCase()">
+                  {{ statusLabels[sale.status] ?? sale.status }}
+                </span>
+              </td>
+              <td>
+                <button class="link-btn" (click)="toggleDetail(sale.externalId)">
+                  {{ expandedId() === sale.externalId ? 'Ocultar' : 'Ver detalle' }}
+                </button>
+              </td>
+            </tr>
+
+            @if (expandedId() === sale.externalId) {
+              <tr class="detail-row">
+                <td colspan="8">
+                  <p class="sale-id">ID de venta: {{ sale.externalId }}</p>
+                  <ul>
+                    @for (item of sale.items; track $index) {
+                      <li>
+                        <span>{{ item.gameName }} <small>({{ item.company }})</small></span>
+                        <span>${{ item.pricePaid | number:'1.2-2' }}</span>
+                      </li>
+                    }
+                  </ul>
+                </td>
+              </tr>
+            }
+          } @empty {
+            <tr>
+              <td colspan="8" class="empty">No hay ventas disponibles en este momento.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <app-pagination
+    [page]="page()"
+    [totalPages]="totalPages()"
+    (pageChange)="goToPage($event)" />
+</div>

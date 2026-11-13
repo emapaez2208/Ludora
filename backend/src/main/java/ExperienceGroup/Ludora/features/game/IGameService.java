@@ -20,7 +20,9 @@ public interface IGameService {
                                       LocalDate maxReleaseDate,
                                       List<String> genreNames,
                                       String rangeName,
-                                      String developerCompany);
+                                      String developerCompany,
+                                      String sortBy,
+                                      String sortDirection);
     GameDTOResponse getByExternalId (UUID externalId);
     GameDTOResponse save (GameDTORequest gameDTORequest);
     GameDTOResponse update (UUID externalId, GameDTORequest gameDTORequest);
@@ -28,5 +30,23 @@ public interface IGameService {
     void desauthorized(UUID externalId);
     List<GameDTOResponse> getGamesNeedRevision();
     GameDTOResponse askForReviewGame(UUID gameId);
+
+    List<GameDTOResponse> getMostPopular(int size);
+
+    List<GameDTOResponse> getTopRated(int size, int minReviews);
+
+    Page<GameDTOResponse> getAdminGames(int page,
+                                        int size,
+                                        String name,
+                                        BigDecimal maxPrice,
+                                        BigDecimal minPrice,
+                                        LocalDate minReleaseDate,
+                                        LocalDate maxReleaseDate,
+                                        List<String> genreNames,
+                                        String rangeName,
+                                        String developerCompany,
+                                        String sortBy,
+                                        String sortDirection,
+                                        String status);
 
 }

@@ -1,208 +1,323 @@
 :host {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-    min-height: 100%;
-    box-sizing: border-box;
-    color: var(--color-texto);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+  color: var(--color-texto);
+}
+
+/* TARJETA PRINCIPAL */
+
+.contenedor {
+  width: 100%;
+  max-width: 700px;
+  padding: 2rem;
+  box-sizing: border-box;
+  background: var(--color-secundario);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+  animation: aparecer 0.3s ease;
 }
 
 h2 {
-    color: var(--color-principal);
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-align: center;
+  margin: 0 0 1.5rem;
+  color: var(--color-texto);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-left: 4px solid var(--color-principal);
+  padding-left: 0.75rem;
 }
 
 h3 {
-    color: var(--color-texto-muted);
-    font-size: 1.2rem;
-    text-align: center;
+  color: var(--color-texto);
+  font-size: 1.2rem;
+  text-align: center;
 }
 
-form {
-    border: 1px solid var(--color-principal);
-    border-radius: 20px;
-    padding: 2.5rem;
-    background-color: var(--color-secundario);
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-    width: 100%;
-    max-width: 840px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    box-sizing: border-box;
-}
+
+/* FORMULARIO */
 
 fieldset {
-    border: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    position: relative;
-    padding-bottom: 1.8rem;
-
-
-    > label:not(:has(input[type="checkbox"])) {
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: var(--color-texto);
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  min-width: 0;
+  padding: 0 0 1.6rem;
+  border: none;
 }
 
-input, textarea, select {
-    background-color: var(--color-base);
-    border: none;
-    outline: none;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    color: var(--color-texto);
-    font-size: 0.95rem;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+label {
+  color: var(--color-texto);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
 
-    &::placeholder {
-        color: var(--color-texto-muted);
-        opacity: 0.8;
-    }
+input,
+textarea,
+select {
+  padding: 0.7rem 0.9rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  color: var(--color-texto);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  color-scheme: dark;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
 
-    &:focus {
-        outline: 1px solid var(--color-principal);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 20%, transparent);
-    }
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-principal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 25%, transparent);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(252, 252, 252, 0.45);
+}
+
+/* Campo inválido que el usuario ya tocó (clases de Angular) */
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched {
+  border-color: var(--color-peligro);
+}
+
+input.ng-invalid.ng-touched:focus,
+textarea.ng-invalid.ng-touched:focus,
+select.ng-invalid.ng-touched:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-peligro) 25%, transparent);
 }
 
 textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-
-fieldset:has(input[type="checkbox"]) {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 0.75rem 1rem;
-    align-items: center;
-
-
-    > label:first-child {
-        grid-column: 1 / -1;
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: var(--color-texto-muted);
-        margin-bottom: 0.2rem;
-    }
-
-
-    label:has(input[type="checkbox"]) {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        cursor: pointer;
-        font-size: 0.95rem;
-        color: var(--color-texto);
-        user-select: none;
-    }
-
-    input[type="checkbox"] {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 1.25rem;
-        height: 1.25rem;
-        background-color: var(--color-base);
-        border-radius: 6px;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-        margin: 0;
-
-        &:checked {
-            background-color: var(--color-principal);
-            border-color: var(--color-principal);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23101414' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
-            background-size: 75%;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        &:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 20%, transparent);
-        }
-    }
-
-
-    .msj-error {
-        grid-column: 1 / -1;
-    }
-}
-
-.msj-error {
-    color: #ff6b6b;
-    font-size: 0.85rem;
-    position: absolute;
-    bottom: 2px;
-    left: 2px;
-    font-weight: 500;
-}
-
-.btn {
-    width: 100%;
-    margin-top: 0.5rem;
-}
-
-.btn:disabled {
-    background-color: var(--color-secundario);
-    border: 1px solid var(--color-texto-muted);
-    color: var(--color-texto-muted);
-}
-
-
-.input-with-prefix {
-    display: flex;
-    align-items: center;
-    background-color: var(--color-base);
-    border-radius: 8px;
-    padding-left: 0.8rem;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-
-  
-    .prefix {
-        color: var(--color-texto);
-        font-size: 0.95rem;
-        font-weight: 600;
-        user-select: none;
-    }
-
-
-    input {
-        background-color: transparent;
-        border: none;
-        outline: none;
-        padding: 0.75rem 1rem 0.75rem 0.5rem;
-        width: 100%;
-        color: var(--color-texto);
-        font-size: 0.95rem;
-        box-shadow: none !important;
-    }
-
-
-    &:focus-within {
-        outline: 1px solid var(--color-principal);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 20%, transparent);
-    }
-}
-
-select {
-    cursor: pointer;
+  resize: vertical;
+  min-height: 100px;
 }
 
 input[type="date"] {
-    color-scheme: dark;
-    cursor: text;
+  cursor: text;
+}
+
+/* SELECT (rango de edad) */
+
+select {
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2328a050' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  appearance: none;
+  cursor: pointer;
+}
+
+select option {
+  background-color: var(--color-secundario);
+  color: var(--color-texto);
+}
+
+select option:checked {
+  background-color: var(--color-secundario);
+  color: var(--color-principal);
+  font-weight: 700;
+}
+
+/* GÉNEROS (checkboxes) */
+
+fieldset:has(input[type="checkbox"]) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem 1rem;
+  align-items: center;
+}
+
+fieldset:has(input[type="checkbox"]) > label:first-child {
+  grid-column: 1 / -1;
+  margin-bottom: 0.2rem;
+}
+
+fieldset:has(input[type="checkbox"]) label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  cursor: pointer;
+  user-select: none;
+}
+
+fieldset:has(input[type="checkbox"]) .msj-error {
+  grid-column: 1 / -1;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--color-principal);
+  border-color: var(--color-principal);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23101414' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+input[type="checkbox"]:focus-visible {
+  border-color: var(--color-principal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 25%, transparent);
+}
+
+/* PORTADA */
+
+.file-input-hidden {
+  display: none;
+}
+
+.custom-file-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 0.7rem 1.2rem;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-texto);
+  border: 1px solid var(--color-principal);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.custom-file-upload:hover {
+  background: var(--color-principal);
+  color: var(--color-base);
+}
+
+.marco {
+  display: flex;
+  margin-top: 0.5rem;
+}
+
+.prevista {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--color-principal);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.avisoSubida {
+  margin-top: 0.5rem;
+  color: rgba(252, 252, 252, 0.7);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* PRECIO (input con prefijo $) */
+
+.input-with-prefix {
+  display: flex;
+  align-items: center;
+  padding-left: 0.9rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-with-prefix .prefix {
+  color: var(--color-texto);
+  font-size: 0.95rem;
+  font-weight: 600;
+  user-select: none;
+}
+
+.input-with-prefix input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.7rem 0.9rem 0.7rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none !important;
+}
+
+.input-with-prefix:focus-within {
+  border-color: var(--color-principal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 25%, transparent);
+}
+
+.input-with-prefix:has(input.ng-invalid.ng-touched) {
+  border-color: var(--color-peligro);
+}
+
+.input-with-prefix:has(input.ng-invalid.ng-touched):focus-within {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-peligro) 25%, transparent);
+}
+
+/* MENSAJES DE ERROR */
+
+.msj-error {
+  position: absolute;
+  bottom: 0.2rem;
+  left: 0;
+  color: color-mix(in srgb, var(--color-peligro) 70%, white);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* BOTÓN (el resto del estilo viene de styles.css) */
+
+.btn {
+  width: 100%;
+}
+
+/* ANIMACIONES */
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+
+@media screen and (max-width: 600px) {
+  :host {
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .contenedor {
+    padding: 1.3rem;
+  }
 }

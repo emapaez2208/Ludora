@@ -1,0 +1,100 @@
+<div class="contenedor">
+<h2>Registrar un administrador</h2>
+
+<form [formGroup]="adminForm" (ngSubmit)="onSubmit()">
+
+    <fieldset>
+        <label for="name">Nombre:</label>
+        <input class="input" type="text" name="name" id="name" placeholder="Ingresá su nombre" formControlName="name">
+        @if (adminForm.get('name')?.hasError('required') && adminForm.get('name')?.touched) {
+            <p>*El nombre es obligatorio</p>
+        }@else if (adminForm.get('name')?.hasError('minlength') || adminForm.get('name')?.hasError('maxlength')) {
+            <p>*El nombre debe tener entre 3 y 32 caracteres</p>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="lastName">Apellido:</label>
+        <input class="input" type="text" name="lastName" id="lastName" placeholder="Ingresá su apellido" formControlName="lastName" >
+         @if (adminForm.get('lastName')?.hasError('required') && adminForm.get('lastName')?.touched) {
+            <p>*El apellido es obligatorio</p>
+        }@else if (adminForm.get('lastName')?.hasError('minlength') || adminForm.get('lastName')?.hasError('maxlength')) {
+            <p>*El apellido debe tener entre 3 y 32 caracteres</p>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="userName">Nombre de usuario:</label>
+        <input class="input" type="text" name="userName" id="userName" placeholder="Ingresá su nombre de usuario" formControlName="userName" >
+        @if( adminForm.get('userName')?.hasError('required') && adminForm.get('userName')?.touched){
+            <p>*El nombre de usuario es obligatorio</p>
+        }@else if (adminForm.get('userName')?.hasError('minlength') || adminForm.get('userName')?.hasError('maxlength')) {
+            <p>*El nombre de usuario debe tener un mínimo de 5 caracteres y un máximo de 20</p>
+        }
+    </fieldset>
+
+   <fieldset>
+    <label for="email">Email:</label>
+    <input class="input" type="text" name="email" id="email" placeholder="Ingresá su email" formControlName="email">
+    
+    @if (adminForm.get('email')?.hasError('required') && adminForm.get('email')?.touched) {
+        <p>*El email es obligatorio</p>
+    }
+    @else if ((adminForm.get('email')?.hasError('email') || adminForm.get('email')?.hasError('pattern')) && adminForm.get('email')?.touched) {
+        <p>*Por favor, introduce un correo electrónico válido == ej: usuario@email.com</p>
+    }
+</fieldset>
+
+    <fieldset>
+        <label for="password">Contraseña:</label>
+        <input class="input" type="password" name="password" id="password" placeholder="Ingresá su contraseña" formControlName="password">
+        
+        @if(adminForm.get('password')?.hasError('required') && adminForm.get('password')?.touched){
+            <p>*La contraseña es obligatoria</p>
+        }
+        @else if((adminForm.get('password')?.hasError('minlength') || adminForm.get('password')?.hasError('maxlength')) && adminForm.get('password')?.touched){
+            <p>*La contraseña debe tener entre 8 y 16 caracteres</p>
+        }
+        @else if(adminForm.get('password')?.hasError('pattern') && adminForm.get('password')?.touched){
+            <p>*Debe incluir al menos una minúscula, una mayúscula y un número</p>
+        }
+    </fieldset>
+
+    @if(adminForm.get('password')?.valid){
+    <fieldset>
+        <label for="password2">Confirmar contraseña:</label>
+        <input class="input" type="password" name="password2" id="password2" placeholder="Repetí la contraseña" formControlName="password2">
+         @if(adminForm.get('password2')?.hasError('required') && adminForm.get('password2')?.touched){
+            <p>*La contraseña es obligatoria</p>
+        }@else if (adminForm.get('password2')?.touched && adminForm.get('password')?.value !== adminForm.get('password2')?.value) {
+            <p>*Las contraseñas tienen que ser iguales</p>
+        }
+        
+    </fieldset>
+    }
+
+    <fieldset>
+        <label for="employeeId">ID de empleado:</label>
+        <input class="input" type="number" name="employeeId" id="employeeId" placeholder="Legajo, ej: '611305'" formControlName="employeeId">
+        
+        @if(adminForm.get('employeeId')?.hasError('required') && adminForm.get('employeeId')?.touched){
+            <p>*El ID del empleado o legajo es obligatorio</p>
+        }@else if (adminForm.get('employeeId')?.hasError('min')) {
+            <p>*El ID del empleado o legajo tiene que ser positivo</p>
+        }
+
+    </fieldset>
+
+    @if (alerta(); as info) {
+    <div class="alerta" [class.exito]="info.tipo === 'exito'" [class.error]="info.tipo === 'error'">
+      <span>{{ info.mensaje }}</span>
+      <button type="button" class="btn-cerrar" (click)="alerta.set(null)">✕</button>
+    </div>
+   }
+ 
+
+    <button class="btn" type="submit" [disabled]="adminForm.invalid || enviando()">{{ enviando() ? 'Creando...' : 'Crear' }}</button>
+
+</form>
+</div>
+

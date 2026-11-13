@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record ClientDTOResponse (UUID externalId,
+                                String avatarUrl,
                                  String name,
                                  String lastName,
                                  String userName,

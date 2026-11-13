@@ -1,5 +1,7 @@
 package ExperienceGroup.Ludora.features.admin;
 
+import ExperienceGroup.Ludora.common.utils.AdminChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.AdminChangePasswordDTO;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
@@ -268,6 +270,49 @@ public class AdminController {
     @PutMapping("/profile/changeEmail")
     ResponseEntity<Void> changeEmail(@Valid @RequestBody ChangeEmailDTO emailDTO){
         adminService.changeEmail(emailDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    /// ------------------- ADMIN CAMBIA EL EMAIL DE UN CLIENT / DEVELOPER ------------------
+
+    @Operation(
+            summary = "Change a user's email (admin)",
+            description = "Allows an administrator to change the email address of a client or developer. The previous email is not required."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Email address updated successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid payload.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Only administrators can perform this action.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client or developer not found.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Conflict. Email address already exists.", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity. Invalid email format.", content = @Content)
+    })
+    @PutMapping("/users/{id}/email")
+    ResponseEntity<Void> changeUserEmail(@Parameter(description = "UUID of the client or developer", required = true) @PathVariable UUID id,
+                                         @Valid @RequestBody AdminChangeEmailDTO emailDTO){
+        adminService.changeUserEmail(id, emailDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    /// ------------------- ADMIN CAMBIA LA PASSWORD DE UN CLIENT / DEVELOPER ------------------
+
+    @Operation(
+            summary = "Change a user's password (admin)",
+            description = "Allows an administrator to set a new password for a client or developer. The previous password is not required."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Password updated successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid payload.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized. Authentication is required.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden. Only administrators can perform this action.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client or developer not found.", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity. Password does not meet the required format.", content = @Content)
+    })
+    @PutMapping("/users/{id}/password")
+    ResponseEntity<Void> changeUserPassword(@Parameter(description = "UUID of the client or developer", required = true) @PathVariable UUID id,
+                                            @Valid @RequestBody AdminChangePasswordDTO passwordDTO){
+        adminService.changeUserPassword(id, passwordDTO);
         return ResponseEntity.ok().build();
     }
 

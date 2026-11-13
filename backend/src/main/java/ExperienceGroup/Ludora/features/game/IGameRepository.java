@@ -6,6 +6,9 @@ import ExperienceGroup.Ludora.features.genre.domain.GenreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,7 +27,7 @@ public interface IGameRepository extends JpaRepository<GameEntity, Long>, JpaSpe
 
     List<GameEntity> findByAgeRange_RangeNameIgnoreCase(String ageRange);
 
-    Optional<List<GameEntity>> findAllByClients_ExternalId(UUID externalId);
+    List<GameEntity> findAllByClients_ExternalId(UUID externalId);
 
     List<GameEntity> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
 
@@ -37,5 +40,25 @@ public interface IGameRepository extends JpaRepository<GameEntity, Long>, JpaSpe
     boolean existsByGenresContaining(GenreEntity genre);
 
     boolean existsByAgeRange(AgeRangeEntity ageRange);
+
+        // Juegos visibles ordenados por cantidad de clientes que los tienen en su biblioteca
+    @Query("""
+            select g from GameEntity g
+            left join g.clients c
+            where g.statusBlocked = false and g.needRevision = false
+            group by g
+            order by count(c) desc, g.name asc
+            """)
+    List<GameEntity> findMostPopular(Pageable pageable);
+
+    // Juegos visibles con al menos :minReviews reseñas, ordenados por promedio y luego por cantidad
+    @Query("""
+            select r.game from ReviewEntity r
+            where r.game.statusBlocked = false and r.game.needRevision = false
+            group by r.game
+            having count(r) >= :minReviews
+            order by avg(r.rating) desc, count(r) desc
+            """)
+    List<GameEntity> findTopRated(@Param("minReviews") long minReviews, Pageable pageable);
 
 }

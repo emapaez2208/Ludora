@@ -6,11 +6,11 @@ import { GameService } from '../../services/game-service';
 import { CategorySlide } from './components/category-slide/category-slide';
 import { Genre } from '../../models/genre';
 import { GenreService } from '../../services/genre-service'; 
-import { Search } from './components/search/search';
 import { CompanySlide } from './components/company-slide/company-slide';
 import { DeveloperService } from '../../services/developer-service';
 import { GameTabs } from './components/game-tabs/game-tabs';
 import { RouterLink } from '@angular/router';
+import { Search } from './components/search/search';
 
 export interface FilterChip {
   id: string;
@@ -31,46 +31,29 @@ export class Home implements OnInit {
   private devService = inject(DeveloperService)
 
   featuredGames = signal<Game[]>([]);
-  tabGames = signal<Game[]>([]);
   genres = signal<Genre[]>([]);
   isLoading = signal<boolean>(true);
   companies = signal<string[]>([]);
 
   ngOnInit(): void {
     this.loadFeaturedGames();
-    this.loadTabGames();
     this.loadGenres(); 
     this.loadCompanies();
   }
 
-  loadFeaturedGames(): void {
+    loadFeaturedGames(): void {
     this.isLoading.set(true);
-    this.gameService.getGames(0, 8).subscribe({
+    this.gameService.getGames(0, 8, {}, { sortBy: 'releaseDate', sortDirection: 'desc' }).subscribe({
       next: (data) => {
         this.featuredGames.set(data.content);
         this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Error al cargar juegos destacados para el home', err);
+        console.error('Error al cargar los últimos juegos para el home', err);
         this.isLoading.set(false);
       }
     });
   }
-
-  loadTabGames(): void {
-    // Pedimos 30 o 40 juegos para tener variedad de precios y géneros
-    this.gameService.getGames(0, 30).subscribe({
-      next: (data) => {
-        this.tabGames.set(data.content);
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        console.error('Error al cargar juegos para tabs', err);
-        this.isLoading.set(false);
-      }
-    });
-  }
-
   loadGenres(): void {
     this.genreService.getGenres().subscribe({
       next: (data) => {

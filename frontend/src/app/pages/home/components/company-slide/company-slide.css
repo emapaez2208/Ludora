@@ -23,7 +23,7 @@
   display: flex;
   width: max-content;
   flex-wrap: nowrap;
-  animation: scrollReverso 32s linear infinite;
+  animation: scrollReverso 100s linear infinite;
   will-change: transform;
 }
 

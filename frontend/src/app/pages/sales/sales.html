@@ -1,0 +1,127 @@
+<div class="container">
+
+  <div class="page-header">
+    <h2>Mis compras</h2>
+    <p>Consultá el historial y el estado de tus compras.</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loader"></div>
+      <p>Cargando compras...</p>
+    </div>
+
+  } @else if (msjError()) {
+    <div class="message-container error-message">
+      {{ msjError() }}
+    </div>
+
+  } @else if (sales().length === 0) {
+    <div class="empty-container">
+      <span class="empty-icon">🛒</span>
+      <h3>Todavía no tenés compras</h3>
+      <p>Cuando realices una compra, vas a poder consultar su detalle desde acá.</p>
+      <a routerLink="/catalog" class="btn-catalog">
+        Explorar juegos
+      </a>
+    </div>
+
+  } @else {
+
+    <div class="sales-summary">
+      <span>
+        {{ sales().length }} compras en esta página
+      </span>
+    </div>
+
+    <div class="sales-list">
+
+      @for (sale of sales(); track sale.externalId) {
+
+        <a
+          class="sale-card"
+          [routerLink]="['/sales', sale.externalId]"
+        >
+
+          <div class="sale-main">
+
+            <div class="sale-icon">
+              <span>▤</span>
+            </div>
+
+            <div class="sale-info">
+              <span class="sale-reference">
+                Compra #{{ sale.externalId }}
+              </span>
+
+                <h3>
+                    {{ sale.items.length }}
+                    {{ sale.items.length === 1 ? 'videojuego' : 'videojuegos' }}
+                </h3>
+
+                <div class="game-preview">
+                    @for (item of sale.items.slice(0, 3); track $index) {
+                        <span>{{ item.gameName }}</span>
+                    }
+
+                    @if (sale.items.length > 3) {
+                        <span class="more-games">
+                        +{{ sale.items.length - 3 }} más
+                        </span>
+                    }
+                </div>
+
+              <span class="sale-date">
+                {{ sale.date | date:'dd/MM/yyyy HH:mm' }}
+              </span>
+            </div>
+
+          </div>
+
+          <div class="sale-details">
+
+            <div class="sale-total">
+              <span>Total</span>
+              <strong>${{ sale.totalPrice | number:'1.2-2' }}</strong>
+            </div>
+
+            <div class="sale-status">
+              @if (sale.status === 'APPROVED') {
+                <span class="status approved">
+                  <span class="status-dot"></span>
+                  Aprobada
+                </span>
+              } @else if (sale.status === 'REJECTED') {
+                <span class="status rejected">
+                  <span class="status-dot"></span>
+                  Rechazada
+                </span>
+              } @else {
+                <span class="status pending">
+                  <span class="status-dot"></span>
+                  Pendiente
+                </span>
+              }
+            </div>
+
+            <span class="sale-arrow">→</span>
+
+          </div>
+
+        </a>
+
+      }
+
+    </div>
+
+    @if (totalPages() > 1) {
+      <app-pagination
+        [page]="page()"
+        [totalPages]="totalPages()"
+        (pageChange)="goToPage($event)"
+      />
+    }
+
+  }
+
+</div>

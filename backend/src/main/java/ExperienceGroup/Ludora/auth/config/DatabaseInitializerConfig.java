@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class DatabaseInitializerConfig {
 
     @Bean
+    @Order(1)
     @Transactional
     public CommandLineRunner initDatabase(
             PermitRepository permitRepository,     // Asumiendo que tenés estos repositorios

@@ -316,6 +316,9 @@
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
+  overflow-wrap: anywhere;
+word-break: break-word;
+white-space: pre-wrap;
 }
 
 .fin-reseñas {
@@ -338,4 +341,23 @@
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
   font-size: 0.85rem;
+}
+
+.tu-resena {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tu-resena-titulo {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-principal);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tu-resena .reseñaIndividual {
+  border: 1px solid var(--color-principal);
+  background-color: color-mix(in srgb, var(--color-principal) 8%, var(--color-secundario));
 }

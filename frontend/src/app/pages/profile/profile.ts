@@ -1,57 +1,60 @@
-import { Component, inject, signal } from '@angular/core';
-import { UserService } from '../../services/user-service';
-import { RouterLink } from '@angular/router';
-import { ClientResponse } from '../../models/client-response';
-import { Developer } from '../../models/developer';
-import { AdminResponse } from '../../models/admin-response';
+import { Component, effect, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { UserStateService } from '../../services/user-state-service';
+import { SaleService } from '../../services/sale-service';
+import { SaleResponse } from '../../models/sale-response';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe],
   selector: 'app-profile',
   styleUrl: './profile.css',
   templateUrl: './profile.html',
 })
-export class Profile{
+export class Profile {
 
-  client = signal<ClientResponse | null>(null)
-  developer = signal<Developer | null>(null)
-  admin = signal<AdminResponse | null>(null)
-  msjError = signal('')
+  userStateService = inject(UserStateService);
+  
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private saleService = inject(SaleService);
 
-  userService = inject(UserService)
-  authService = inject(AuthService)
+  recentSales = signal<SaleResponse[]>([]);
+  salesLoading = signal(false);
+  salesError = signal(false);
 
-  constructor(){
-    this.loadUser()
+  logout(): void {
+
+    this.authService.logout();
+    this.router.navigate(['/']);
+
   }
 
-  loadUser(){
-    if(this.authService.hasRole('ROLE_ADMIN')){
-      this.userService.adminProfile().subscribe({
-        next: data => this.admin.set(data),
-        error: e => {
-          console.error('Error al traer al admin', e)
-          this.msjError.set('No se pudo cargar el perfil de Administrador')
-        }
-      })
-    }else if(this.authService.hasRole('ROLE_DEVELOPER')){
-      this.userService.developerProfile().subscribe({
-        next: data => this.developer.set(data),
-        error: e => {
-          console.error('Error al traer al desarrollador', e)
-          this.msjError.set('No se pudo cargar el perfil de Desarrollador')
-        }
-      })
-    }else if(this.authService.hasRole('ROLE_CLIENT')){
-      this.userService.clientProfile().subscribe({
-        next: data => this.client.set(data),
-        error: e => {
-          console.error('Error al traer al cliente', e)
-          this.msjError.set('No se pudo cargar el perfil de Usuario')
-        }
-      })
-    }
-  }
+  constructor() {
+    effect(() => {
 
+      const client = this.userStateService.client();
+
+      if (!client) {
+        this.recentSales.set([]);
+        return;
+      }
+
+      this.salesLoading.set(true);
+      this.salesError.set(false);
+
+      this.saleService.getSalesByClient(0, 3, client.externalId).subscribe({
+        next: data => {
+          this.recentSales.set(data.content);
+          this.salesLoading.set(false);
+        },
+        error: error => {
+          console.error('Error al cargar las compras recientes:', error);
+          this.salesError.set(true);
+          this.salesLoading.set(false);
+        }
+      });
+    });
+  }
 }

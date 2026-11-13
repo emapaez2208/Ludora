@@ -12,6 +12,7 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto 20px auto;
+  padding: 6px 0;
   box-sizing: border-box;
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
@@ -22,7 +23,7 @@
   display: flex;
   width: max-content;
   flex-wrap: nowrap;
-  animation: scrollInfinito 28s linear infinite;
+  animation: scrollInfinito 150s linear infinite;
   will-change: transform;
 }
 

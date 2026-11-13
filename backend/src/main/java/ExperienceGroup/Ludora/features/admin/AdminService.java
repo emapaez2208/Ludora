@@ -6,14 +6,19 @@ import ExperienceGroup.Ludora.auth.credentials.exceptions.CredentialsNotFoundExc
 import ExperienceGroup.Ludora.auth.permissions.RoleRepository;
 import ExperienceGroup.Ludora.auth.permissions.RolesEnum;
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
-import ExperienceGroup.Ludora.features.user.exception.PasswordInvalidException;
+import ExperienceGroup.Ludora.features.client.IClientRepository;
+import ExperienceGroup.Ludora.features.client.domain.ClientEntity;
+import ExperienceGroup.Ludora.features.developer.domain.DeveloperEntity;
+import ExperienceGroup.Ludora.features.user.domain.UserEntity;
+import ExperienceGroup.Ludora.features.developer.IDeveloperRepository;
+import ExperienceGroup.Ludora.features.user.exception.*;
+import ExperienceGroup.Ludora.common.utils.AdminChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.AdminChangePasswordDTO;
 import ExperienceGroup.Ludora.common.utils.ChangeEmailDTO;
+import ExperienceGroup.Ludora.common.utils.Email;
 import ExperienceGroup.Ludora.common.utils.ChangePasswordDTO;
+import ExperienceGroup.Ludora.common.utils.Password;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminUpdateRequest;
-import ExperienceGroup.Ludora.features.user.exception.IllegalEmailException;
-import ExperienceGroup.Ludora.features.user.exception.UserExistsWithEmailException;
-import ExperienceGroup.Ludora.features.user.exception.UserExistsWithUsernameException;
-import ExperienceGroup.Ludora.features.user.exception.UserNotFoundException;
 import ExperienceGroup.Ludora.common.utils.IMapper;
 import ExperienceGroup.Ludora.features.admin.domain.AdminEntity;
 import ExperienceGroup.Ludora.features.admin.domain.dto.AdminDTORequest;
@@ -39,6 +44,8 @@ import java.util.UUID;
 public class AdminService implements IAdminService{
 
     private final IAdminRepository adminRepository;
+    private final IClientRepository clientRepository;
+    private final IDeveloperRepository developerRepository;
     private final IMapper<AdminEntity, AdminDTOResponse> responseMapper;
     private final IMapper<AdminEntity, AdminDTORequest> requestMapper;
     private final CredentialsRepository credentialsRepository;
@@ -100,7 +107,9 @@ public class AdminService implements IAdminService{
     @Transactional
     public AdminDTOResponse save(AdminDTORequest adminDTO) {
 
-        if(adminRepository.existsByEmail(adminDTO.email())){
+        if(adminRepository.existsByEmail(adminDTO.email()) ||
+            clientRepository.existsByEmail(adminDTO.email()) ||
+            developerRepository.existsByEmail(adminDTO.email())){
             throw new UserExistsWithEmailException("User with this email exists");
         }
 
@@ -136,6 +145,7 @@ public class AdminService implements IAdminService{
         entity.setName(adminDTO.name());
         entity.setLastName(adminDTO.lastName());
         entity.setEmployeeId(adminDTO.employeeId());
+        entity.setAvatarUrl(adminDTO.avatarUrl());
 
         AdminEntity saved = adminRepository.save(entity);
 
@@ -164,12 +174,17 @@ public class AdminService implements IAdminService{
     public void changePassword(ChangePasswordDTO passwordDTO) {
         CredentialsEntity credentials = searchCredentials(authenticatedUser.getCurrentUser().username());
 
-        if(passwordEncoder.matches(passwordDTO.oldPass().value(), credentials.getPassword())){ // verifica si son la misma password
-            credentials.setPassword(passwordEncoder.encode(passwordDTO.newPass().value()));
-            credentialsRepository.save(credentials);
-        }else{
-            throw new PasswordInvalidException("The old password is invalid");
+        // 1. Verificar contraseña actual
+        if (!passwordEncoder.matches(passwordDTO.oldPass(), credentials.getPassword())) {
+            throw new IlegalPasswordChangeException("The old password is invalid");
         }
+
+        // 2. Validar formato de la nueva contraseña
+        Password newPassword = new Password(passwordDTO.newPass());
+
+        // 3. Actualizar
+        credentials.setPassword(passwordEncoder.encode(newPassword.value()));
+        credentialsRepository.save(credentials);
     }
 
     /// -----------------------------------CAMBIO DE PASSWORD ------------------------
@@ -180,7 +195,9 @@ public class AdminService implements IAdminService{
     @Transactional
     public void changeEmail(ChangeEmailDTO emailDTO) {
 
-        if(adminRepository.existsByEmail(emailDTO.newEmail())){
+        if(adminRepository.existsByEmail(emailDTO.newEmail()) ||
+                clientRepository.existsByEmail(emailDTO.newEmail()) ||
+                developerRepository.existsByEmail(emailDTO.newEmail())){
             throw new UserExistsWithEmailException("User exists with this email");
         }
 
@@ -194,6 +211,48 @@ public class AdminService implements IAdminService{
             throw new IllegalEmailException("The old email is incorrect");
         }
 
+    }
+
+    /// ------------------- ADMIN CAMBIA EL EMAIL DE UN CLIENT / DEVELOPER ------------------
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void changeUserEmail(UUID externalId, AdminChangeEmailDTO emailDTO) {
+
+        UserEntity user = findClientOrDeveloper(externalId);
+        Email newEmail = emailDTO.newEmail();
+
+        // Si es el mismo email que ya tiene, no hay nada que cambiar
+        if (user.getEmail().equals(newEmail)) {
+            return;
+        }
+
+        if (adminRepository.existsByEmail(newEmail) ||
+                clientRepository.existsByEmail(newEmail) ||
+                developerRepository.existsByEmail(newEmail)) {
+            throw new UserExistsWithEmailException("User exists with this email");
+        }
+
+        user.setEmail(newEmail);
+        saveClientOrDeveloper(user);
+    }
+
+    /// ------------------- ADMIN CAMBIA LA PASSWORD DE UN CLIENT / DEVELOPER ------------------
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void changeUserPassword(UUID externalId, AdminChangePasswordDTO passwordDTO) {
+
+        UserEntity user = findClientOrDeveloper(externalId);
+        CredentialsEntity credentials = searchCredentials(user.getUserName());
+
+        // Valida el formato (8-16 caracteres, mayúscula, minúscula y número)
+        Password newPassword = new Password(passwordDTO.newPass());
+
+        credentials.setPassword(passwordEncoder.encode(newPassword.value()));
+        credentialsRepository.save(credentials);
     }
 
     /// ----------------------------------BANEAR UN USUARIO O DEVELOPER
@@ -234,6 +293,22 @@ public class AdminService implements IAdminService{
        credentials.setEnabled(true);
        credentialsRepository.save(credentials);
    }
+
+    // Solo clients y developers: esta operación NO sirve para tocar cuentas de otros admins
+    private UserEntity findClientOrDeveloper(UUID externalId) {
+        return clientRepository.findByExternalId(externalId)
+                .<UserEntity>map(client -> client)
+                .or(() -> developerRepository.findByExternalId(externalId))
+                .orElseThrow(() -> new UserNotFoundException("User not found, UserID: " + externalId));
+    }
+
+    private void saveClientOrDeveloper(UserEntity user) {
+        if (user instanceof ClientEntity client) {
+            clientRepository.save(client);
+        } else if (user instanceof DeveloperEntity developer) {
+            developerRepository.save(developer);
+        }
+    }
 
     private CredentialsEntity searchCredentials(String username){
         return credentialsRepository.findByUsername(username)

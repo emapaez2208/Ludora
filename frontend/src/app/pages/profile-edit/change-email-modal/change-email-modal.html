@@ -1,0 +1,116 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h4>Cambiar email</h4>
+
+      <button type="button" class="btn-cerrar-modal" (click)="onClose()">
+        &times;
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <p class="modal-description">
+        Actualizá la dirección de correo de tu cuenta.
+      </p>
+      @if(errorMessage()) {
+        <div class="error-backend">
+            <span>{{errorMessage()}}</span>
+        </div>
+      }  
+
+      <form [formGroup]="emailForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <label for="oldEmail">Email actual</label>
+
+          <input
+            id="oldEmail"
+            type="email"
+            formControlName="oldEmail"
+            placeholder="Ingresá tu email actual"
+            autocomplete="email"
+          />
+
+          @if (emailForm.get('oldEmail')?.touched &&
+               emailForm.get('oldEmail')?.hasError('required')) {
+            <span class="msj-error">
+              El email actual es obligatorio.
+            </span>
+          } @else if (emailForm.get('oldEmail')?.hasError('pattern')) {
+              <span class="msj-error">
+                Ingresá una dirección de email válida.
+              </span>
+            }
+        </div>
+
+        <div class="form-group">
+          <label for="newEmail">Nuevo email</label>
+
+          <input
+            id="newEmail"
+            type="email"
+            formControlName="newEmail"
+            placeholder="Ingresá tu nuevo email"
+            autocomplete="new-email"
+          />
+
+          @if (emailForm.get('newEmail')?.touched) {
+            @if (emailForm.get('newEmail')?.hasError('required')) {
+              <span class="msj-error">
+                El nuevo email es obligatorio.
+              </span>
+            } @else if (emailForm.get('newEmail')?.hasError('pattern')) {
+              <span class="msj-error">
+                Ingresá una dirección de email válida.
+              </span>
+            }
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="confirmEmail">Confirmar nuevo email</label>
+
+          <input
+            id="confirmEmail"
+            type="email"
+            formControlName="confirmEmail"
+            placeholder="Repetí tu nuevo email"
+            autocomplete="off"
+          />
+
+          @if (emailForm.get('confirmEmail')?.touched &&
+               emailForm.get('confirmEmail')?.hasError('required')) {
+            <span class="msj-error">
+              Debés confirmar el nuevo email.
+            </span>
+          } @else if (emailForm.get('confirmEmail')?.touched &&
+                      !emailsMatch()) {
+            <span class="msj-error">
+              Los emails no coinciden.
+            </span>
+          }
+        </div>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="btn-cancelar"
+            (click)="onClose()">
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="btn-confirmar"
+            [disabled]="emailForm.invalid || !emailsMatch()">
+            Cambiar email
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

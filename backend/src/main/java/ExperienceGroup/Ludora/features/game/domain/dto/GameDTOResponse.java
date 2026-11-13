@@ -17,5 +17,6 @@ public record GameDTOResponse(
         LocalDate releaseDate,
         String ageRange,
         List<String> genres,
-        Boolean statusBlocked
+        Boolean statusBlocked,
+        Boolean needRevision
 ) {}

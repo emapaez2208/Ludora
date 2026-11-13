@@ -1,0 +1,79 @@
+<div class="container">
+  <h2>Mi carrito</h2>
+
+  @if (errorMsg()) {
+    <p class="cart-error" role="alert">{{ errorMsg() }}</p>
+  }
+
+  @if (isLoading()) {
+    <p>Cargando carrito...</p>
+  } @else if (games().length === 0) {
+    <div class="empty">
+      <p>Tu carrito está vacío.</p>
+      <a routerLink="/catalog" class="btn btn-link">Ir a la tienda</a>
+    </div>
+  } @else {
+    <div class="cart-layout">
+
+      <section class="cart-items">
+        @for (game of games(); track game.externalId) {
+          <article class="cart-item">
+            <a [routerLink]="['/catalog', game.externalId]" class="item-image">
+              @if (game.frontPage) {
+                <img [src]="game.frontPage" [alt]="game.name" />
+              }
+            </a>
+
+            <div class="item-info">
+              <h3>
+                <a [routerLink]="['/catalog', game.externalId]" class="game-link">{{ game.name }}</a>
+              </h3>
+              <p class="company">{{ game.company }}</p>
+            </div>
+
+            <div class="item-side">
+              <div class="item-prices">
+                @if (game.discountedPrice !== null) {
+                  <span class="old-price">${{ game.price }}</span>
+                  <span class="price">${{ game.discountedPrice }}</span>
+                } @else {
+                  <span class="price">${{ game.price }}</span>
+                }
+              </div>
+
+              <button
+                type="button"
+                class="btn-remove"
+                [disabled]="removingId() === game.externalId"
+                (click)="remove(game.externalId)">
+                {{ removingId() === game.externalId ? 'Quitando...' : 'Quitar' }}
+              </button>
+            </div>
+          </article>
+        }
+      </section>
+
+      <aside class="summary">
+        <h3>Resumen</h3>
+
+        <ul class="summary-lines">
+          <li><span>Juegos</span> {{ games().length }}</li>
+          <li><span>Subtotal</span> ${{ subtotal().toFixed(2) }}</li>
+          @if (hasDiscount()) {
+            <li class="discount"><span>Descuento por puntos</span> -${{ savings().toFixed(2) }}</li>
+          }
+        </ul>
+
+        <p class="total"><span>Total</span> ${{ total().toFixed(2) }}</p>
+
+        <button class="btn" (click)="payCart()">Comprar</button>
+
+      </aside>
+
+      <div class="btn-container">
+        
+      </div>
+
+    </div>
+  }
+</div>

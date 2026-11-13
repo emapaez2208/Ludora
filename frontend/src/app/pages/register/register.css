@@ -3,79 +3,228 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    
-}
-h2{
-    margin-top: 10px;
-    color: var(--color-texto-muted);
-    font-size:xx-large
+    padding: 2rem 1.5rem;
+    box-sizing: border-box;
 }
 
-form{
-    width: 400px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    padding: 30px;
-    gap: 3px;
-    border-radius: 30px;
-    border: 2px solid var(--color-principal);
-    background-color: var(--color-base);
+/* TARJETA PRINCIPAL */
 
+.contenedor {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  background: var(--color-secundario);
+  color: var(--color-texto);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+  animation: aparecer 0.3s ease;
 }
+
+h2 {
+  margin: 0 0 1.5rem;
+  color: var(--color-texto);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-left: 4px solid var(--color-principal);
+  padding-left: 0.75rem;
+}
+
+h3.direccion {
+  margin: 0.5rem 0 1rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-principal);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Calle y número: agrupados bajo "Dirección" con una línea verde a la izquierda */
+fieldset:has(#street),
+fieldset:has(#numberStreet) {
+  padding-left: 1rem;
+  border-left: 2px solid color-mix(in srgb, var(--color-principal) 60%, transparent);
+}
+
+/* Fecha de nacimiento: queda separada, ya no es parte de la dirección */
+fieldset:has(#birthdate) {
+  margin-top: 0.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* SELECTOR DE ROL */
+
+.select {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* FORMULARIO */
+
 fieldset{
     display: flex;
     flex-direction: column;
-    border: none;
+    gap: 0.4rem;
     position: relative;
-    padding-bottom: 32px;
+    min-width: 0;
+    padding: 0 0 1.6rem;
+    border: none;
 }
+
 label{
-    color : var(--color-texto-muted);
-    font-style: oblique;
-}
-input {
-    background-color: var(--color-secundario);
-    color: var(--color-texto);
-    border: 1px solid var(--color-texto-muted);
-    border-radius: 8px;
-    padding: 0.7rem 0.9rem;
-    font-size: 0.95rem;
-    outline: none;
-    transition: all 0.15s ease-in-out;
-    width: 100%;
-    box-sizing: border-box;           
-    color-scheme: dark;
+    color : var(--color-texto);
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
-input:focus {
+.input,
+select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-texto);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  color-scheme: dark;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.select select {
+  width: auto;
+  min-width: 180px;
+  padding-right: 2.5rem;
+  background-color: var(--color-base);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2328a050' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  appearance: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.select select option {
+  background-color: var(--color-secundario);
+  color: var(--color-texto);
+}
+
+.select select option:checked {
+  background-color: var(--color-secundario);
+  color: var(--color-principal);
+  font-weight: 700;
+}
+
+textarea.input {
+  min-height: 100px;
+  resize: vertical;
+}
+
+
+.input:focus, 
+select:focus {
     border-color: var(--color-principal);
-    box-shadow: 0 0 0 3px rgba(40, 160, 80, 0.2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 25%, transparent);
 }
 
-input::placeholder {
-    color: var(--color-texto-muted);
+.input::placeholder {
+    color: rgba(252, 252, 252, 0.45);
 }
+
+.input.ng-invalid.ng-touched {
+  border-color: var(--color-peligro);
+}
+
+.input.ng-invalid.ng-touched:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-peligro) 25%, transparent);
+}
+
 p{
-    
-    color: red;
     position: absolute;
+    color: color-mix(in srgb, var(--color-peligro) 70%, white);
+    line-height: 1.2;
     bottom: 4px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
 
 }
 
-.direccion{
-    color: var(--color-texto-muted);
-    margin-top: 5px;
-    
+.btn {
+  width: 100%;
 }
 
+.alerta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1.2rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  animation: aparecer 0.25s ease-out;
+}
 
-.btn{
-    border-radius: 100px;
-    font-style: oblique;
-    width: 75%;
-    align-self: center;
+.alerta.exito {
+  background-color: rgba(40, 160, 80, 0.15);
+  border: 1px solid var(--color-principal);
+  color: #4ade80;
+}
+
+.alerta.error {
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid #ef4444;
+  color: #f87171;
+}
+
+.btn-cerrar {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+
+@media screen and (max-width: 600px) {
+  :host {
+    padding: 1rem;
+  }
+
+  .contenedor {
+    padding: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .select {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .select select {
+    width: 100%;
+  }
 }

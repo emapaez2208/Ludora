@@ -3,6 +3,10 @@ import { inject, Service, signal } from '@angular/core';
 import { Auth } from '../models/auth';
 import { AuthResponse } from '../models/auth-response';
 import { tap } from 'rxjs';
+import { DeveloperRequest } from '../models/developer-request';
+import { Developer } from '../models/developer';
+import { ClientRequest } from '../models/client-request';
+import { ClientResponse } from '../models/client-response';
 
 @Service()
 export class AuthService {
@@ -72,5 +76,25 @@ export class AuthService {
     getUsername(): string | null {
     return this.getPayload()?.sub ?? null;
     }
+    
+    isClient(): boolean {
+        return this.hasRole('ROLE_CLIENT');
+    }
 
+    isDeveloper(): boolean {
+        return this.hasRole('ROLE_DEVELOPER');
+    }
+
+    isAdmin(): boolean {
+        return this.hasRole('ROLE_ADMIN');
+    }
+
+
+    addDevelop ( developerRequest : DeveloperRequest){
+        return this.http.post<Developer>(`${this.url}/register/developer`, developerRequest)
+    }
+
+    addUser(clientRequest : ClientRequest){
+        return this.http.post<ClientResponse>(`${this.url}/register/client`,clientRequest)
+    }
 }

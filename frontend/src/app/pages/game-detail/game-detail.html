@@ -1,5 +1,12 @@
 <div class="container">
-  <a routerLink="/catalog" class="back-link">← Volver a la tienda</a>
+  <a [routerLink]="
+    isAdmin() ? '/management/games' : 
+    (isOwner() ? '/library' : '/catalog')" 
+    class="back-link">
+    ← {{ isAdmin() ? 'Volver a la gestión de juegos' : 
+        (isOwner() ? 'Volver a mis juegos' : 'Volver a la tienda') 
+      }}
+  </a>
     @if (isLoading()) {
         <p>Cargando juego...</p>
     } @else if (notFound() || !game()) {
@@ -26,16 +33,87 @@
           <li><span>Clasificación</span> {{ g.ageRange }}</li>
         </ul>
 
-        <p class="price">${{ g.price }}</p>
+        
+        <p class="price" [class.free-price]="g.price === 0">
+          @if (g.price === 0) {
+            Gratis
+          } @else {
+            ${{ g.price }}
+          }
+        </p>
 
-        <button class="btn btn-buy">
-          <img src="/cart.svg" alt="Carrito" class="cart-icon" />
-          <span>Agregar al carrito</span>
-        </button>
+        
+        @if (isAdmin()) {
+
+          <div class="admin-panel">
+
+            @if (g.needRevision) {
+              <span class="status-tag tag-revision">Necesita revisión</span>
+              
+              <div class="admin-actions">
+                <button class="btn btn-action btn-approve" [disabled]="isActing()" (click)="approve()">
+                  Aprobar juego
+                </button>
+                <button class="btn btn-action btn-reject" [disabled]="isActing()" (click)="block('El juego fue desaprobado.')">
+                  Desaprobar juego
+                </button>
+              </div>
+
+            } @else if (g.statusBlocked) {
+              <span class="status-tag tag-blocked">Bloqueado</span>
+              <button class="btn btn-action btn-approve" [disabled]="isActing()" (click)="approve()">
+                Desbloquear juego
+              </button>
+
+            } @else {
+              <span class="status-tag tag-available">Disponible</span>
+              <button class="btn btn-action btn-reject" [disabled]="isActing()" (click)="block('El juego fue bloqueado.')">
+                Bloquear juego
+              </button>
+            }
+
+          </div>
+
+        } @else if (isOwner()) {
+
+          <div class="owner-panel">
+
+            @if (g.needRevision) {
+              <span class="status-tag tag-revision">En revisión</span>
+            } @else if (g.statusBlocked) {
+              <span class="status-tag tag-blocked">Bloqueado</span>
+            } @else {
+              <span class="status-tag tag-available">Disponible</span>
+            }
+
+            <a [routerLink]="['/games/edit', g.externalId]" class="btn btn-buy btn-edit">
+              Editar juego
+            </a>
+
+          </div>
+
+        } @else if (!authService.isLoggedIn() || isClient()) {
+
+          @if (cartService.has(g.externalId)) {
+            <a routerLink="/cart" class="btn btn-buy btn-in-cart">
+              <span>Ya está en tu carrito</span>
+            </a>
+
+          } @else {
+
+            <button class="btn btn-buy" (click)="cartService.add(g)">
+              <img src="/cart.svg" alt="Carrito" class="cart-icon" />
+              <span>Agregar al carrito</span>
+            </button>
+
+          }
+        }
       </div>
     </div>
+    
+    <app-reviews [gameId] = "gameId()"></app-reviews>
+
     }
 
-    <app-reviews [gameId] = "gameId()"></app-reviews>
 
 </div>

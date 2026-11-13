@@ -1,6 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
+import { CartService } from '../../services/cart-service';
+import { ToastService } from '../../services/toast-service';
+import { UserStateService } from '../../services/user-state-service';
 
 @Component({
   imports: [RouterLink],
@@ -10,15 +13,106 @@ import { AuthService } from '../../services/auth-service';
 })
 export class Header {
   isMenuOpen: boolean = false;
-  authService = inject(AuthService)
-  router = inject(Router)
+  authService = inject(AuthService);
+  userStateService = inject(UserStateService);
+  router = inject(Router);
+  cartService = inject(CartService);
+  toastService = inject(ToastService);
+
+  private el = inject(ElementRef);
 
   isLogged = this.authService.isLoggedIn$;
+  cartOpen = signal(false);
+  adminOpen = signal(false);
+  developerOpen = signal(false);
 
-  logout() {
-    this.closeMenu()
-    this.authService.logout();
-    this.router.navigate(['/home']);
+  userAvatar = computed(() => {
+    const user =
+      this.userStateService.client() ||
+      this.userStateService.developer() ||
+      this.userStateService.admin();
+
+    return user?.avatarUrl || 'images/profile-base.jpeg';
+  });
+
+  userName = computed(() => {
+    const user =
+      this.userStateService.client() ||
+      this.userStateService.developer() ||
+      this.userStateService.admin();
+
+    return user?.userName || this.authService.getUsername() || 'Usuario';
+  });
+
+  isClient(): boolean {
+    return this.authService.isClient();
+  }
+
+  isDeveloper(): boolean {
+    return this.authService.isDeveloper();
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
+  toggleCart(): void {
+    this.cartOpen.update(v => !v);
+  }
+
+  toggleAdmin(event: MouseEvent): void {
+    event.stopPropagation();
+    this.cartOpen.set(false);
+    this.developerOpen.set(false);
+    this.adminOpen.update(v => !v);
+  }
+
+  toggleDeveloper(event: MouseEvent): void {
+    event.stopPropagation();
+    this.cartOpen.set(false);
+    this.adminOpen.set(false);
+    this.developerOpen.update(v => !v);
+  }
+
+  onRemoveGame(game: { externalId: string; name: string }, event: MouseEvent) {
+    event.stopPropagation();
+
+    this.cartService.remove(game.externalId).subscribe({
+      next: () => {
+        this.toastService.show(
+          `Se eliminó "${game.name}" del carrito.`,
+          'info',
+          5000,
+          undefined,
+          {
+            label: 'Deshacer',
+            fn: () => {
+              this.cartService.add(game);
+            }
+          }
+        );
+      },
+      error: () => {
+        this.toastService.show('No se pudo eliminar el juego', 'error');
+      }
+    });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocClick(e: MouseEvent): void {
+
+    this.adminOpen.set(false);
+    this.developerOpen.set(false);
+
+    const target = e.target as HTMLElement;
+
+    const clickedCart = target.closest('.cart-preview');
+    const clickedCartButton = target.closest('.cart-button');
+
+    if (!clickedCart && !clickedCartButton) {
+      this.cartOpen.set(false);
+    }
+    
   }
 
   toggleMenu(): void {
@@ -26,8 +120,20 @@ export class Header {
   }
 
   closeMenu(): void {
+
     this.isMenuOpen = false;
+    this.adminOpen.set(false);
+    this.developerOpen.set(false);
+
   }
 
+  logout(): void {
   
+    this.closeMenu();
+    this.cartOpen.set(false);
+    this.authService.logout();
+    this.router.navigate(['/']);
+  
+  }
+
 }

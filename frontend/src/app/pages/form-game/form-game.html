@@ -1,4 +1,5 @@
-<h2>{{gameId? 'Editar juego' : 'Cargar Nuevo Juego' }}</h2>
+<div class="contenedor">
+<h2>{{gameId? 'Editar juego' : 'Cargar un nuevo juego' }}</h2>
 
 @if (genres().length > 0 && ageRanges().length > 0) {
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -14,8 +15,19 @@
         </fieldset>
 
         <fieldset>
-            <label for="image">Enlace a imagen</label>
-            <input type="text" id="image" placeholder="https://www.imagen.com/myimage" formControlName="frontPage">
+            <label for="image">Portada</label>
+            <input type="file" id="image" accept="image/*" class="file-input-hidden" (change)="onFileSelected($event)">
+            
+            <label for="image" class="custom-file-upload">Seleccionar imagen</label>
+
+            @if(form.get('frontPage')?.value){
+                <div class="marco">
+                    <img [src]="form.get('frontPage')?.value" alt="Vista previa de portada" class="prevista">
+                </div>
+            }
+            @if (isUploading) {
+                <p class="avisoSubida">Subiendo portada...</p>
+            }
         </fieldset>
 
         <fieldset>
@@ -27,30 +39,32 @@
             @if (form.get('price')?.hasError('required') && form.get('price')?.touched) {
                 <p class="msj-error">El precio es obligatorio</p>
             }@else if (form.get('price')?.hasError('pattern') && form.get('price')?.touched) {
-                <p class="msj-error">El precio debe ser numerico y contener 2 decimales maximo</p>
+                <p class="msj-error">El precio debe ser numérico y contener 2 decimales máximo</p>
             }@else if (form.get('price')?.hasError('min') && form.get('price')?.touched) {
                 <p class="msj-error">El precio debe ser positivo</p>
+            }@else if (form.get('price')?.hasError('max') && form.get('price')?.touched) {
+                <p class="msj-error">El precio no puede superar los 8 dígitos y 2 decimales</p>
             }
         </fieldset>
 
         <fieldset>
-            <label for="description">Descripcion</label>
-            <textarea id="description" placeholder="Breve descripcion del producto" formControlName="description"></textarea>
+            <label for="description">Descripción</label>
+            <textarea id="description" placeholder="Breve descripción del producto" formControlName="description"></textarea>
             @if (form.get('description')?.hasError('maxlength') && form.get('description')?.touched) {
-                <p class="msj-error">* La descripcion no puede superar los 200 caracteres</p>
+                <p class="msj-error">* La descripción no puede superar los 200 caracteres</p>
             }
         </fieldset>
 
         <fieldset>
-            <label for="releaseDate">Fecha de Lanzamiento</label>
+            <label for="releaseDate">Fecha de lanzamiento</label>
             <input type="date" [max]="today" id="releaseDate" formControlName="releaseDate">
             @if (form.get('releaseDate')?.hasError('required') && form.get('releaseDate')?.touched) {
-                <p class="msj-error">* la fecha es obligatoria</p>
+                <p class="msj-error">* La fecha es obligatoria</p>
             }
         </fieldset>
 
         <fieldset>
-            <label for="ageRange">Rango de Edad</label>
+            <label for="ageRange">Rango de edad</label>
             <select id="ageRange" formControlName="ageRangeExternalId">
                 @for (range of ageRanges(); track $index) {
                     <option [value]="range.externalId">{{range.rangeName}}</option>
@@ -62,7 +76,7 @@
         </fieldset>
 
         <fieldset>
-            <label for="genre">Generos</label>
+            <label for="genre">Géneros</label>
             @for (genre of genres(); track $index) {
                 <label>
                 <input
@@ -75,12 +89,13 @@
                 </label>
             }
             @if (form.get('genreNames')?.hasError('required') && form.get('genreNames')?.touched) {
-                <p class="msj-error">* Por lo menos un genero es obligatorio</p>
+                <p class="msj-error">* Por lo menos un género es obligatorio</p>
             }
         </fieldset>
 
-        <button type="submit" class="btn" [disabled]="form.invalid">{{gameId? 'Actualizar' : 'Crear' }}</button>
+        <button type="submit" class="btn" [disabled]="form.invalid || isUploading">{{gameId? 'Actualizar' : 'Crear' }}</button>
     </form>
 }@else {
     <h3>Cargando...</h3>
 }
+</div>

@@ -1,0 +1,205 @@
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    color: var(--color-texto);
+    background-color: var(--color-base);
+    min-height: 90vh;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: var(--color-texto);
+    letter-spacing: 0.5px;
+    border-left: 4px solid var(--color-principal);
+    padding-left: 12px;
+}
+
+p {
+    color: var(--color-texto-muted);
+    font-size: 16px;
+}
+
+.filters-bar {
+    margin-bottom: 16px;
+}
+
+.btn-filters {
+    width: auto;
+    padding: 10px 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    background-color: var(--color-secundario);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.sales-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.sales-table th,
+.sales-table td {
+    text-align: left;
+    padding: 14px 16px;
+    white-space: nowrap;
+}
+
+.sales-table thead th {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-principal);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sales-table tbody tr:not(.detail-row):hover {
+    background-color: color-mix(in srgb, var(--color-principal) 8%, transparent);
+}
+
+.empty {
+    text-align: center;
+    color: var(--color-texto-muted);
+}
+
+.badge {
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.badge.pending  { background-color: #b8860b; }
+.badge.approved { background-color: var(--color-principal); }
+.badge.rejected { background-color: var(--color-peligro); }
+
+.link-btn {
+    background: none;
+    border: none;
+    color: var(--color-principal);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.detail-row td {
+    background-color: var(--color-base);
+    white-space: normal;
+}
+
+.sale-id {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.detail-row ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.detail-row li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 24px 16px;
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .table-wrapper {
+        background-color: transparent;
+        border: none;
+        overflow-x: visible;
+    }
+
+    .sales-table,
+    .sales-table tbody,
+    .sales-table tr,
+    .sales-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .sales-table thead {
+        display: none;
+    }
+
+    .sales-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .sales-table tbody tr:not(.detail-row) {
+        background-color: var(--color-secundario);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 14px 16px;
+    }
+
+    .sales-table tbody tr:not(.detail-row) td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        white-space: normal;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .sales-table tbody tr:not(.detail-row) td:last-child {
+        border-bottom: none;
+        padding-top: 10px;
+        justify-content: flex-end;
+    }
+
+    /* Etiquetas automáticas para cada columna sin tocar el HTML */
+    .sales-table tbody tr:not(.detail-row) td:nth-child(1)::before { content: "Fecha"; }
+    .sales-table tbody tr:not(.detail-row) td:nth-child(2)::before { content: "Cliente"; }
+    .sales-table tbody tr:not(.detail-row) td:nth-child(3)::before { content: "Juegos"; }
+    .sales-table tbody tr:not(.detail-row) td:nth-child(4)::before { content: "Total"; }
+    .sales-table tbody tr:not(.detail-row) td:nth-child(5)::before { content: "Descuento"; }
+    .sales-table tbody tr:not(.detail-row) td:nth-child(6)::before { content: "Puntos"; }
+    .sales-table tbody tr:not(.detail-row) td:nth-child(7)::before { content: "Estado"; }
+
+    .sales-table tbody tr:not(.detail-row) td::before {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--color-texto-muted);
+        text-transform: uppercase;
+    }
+
+    /* Fila desplegable de detalle */
+    .sales-table tbody tr.detail-row {
+        margin-top: -8px;
+    }
+
+    .sales-table tbody tr.detail-row td {
+        border-radius: 0 0 12px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: none;
+        padding: 12px 16px;
+    }
+
+    .detail-row li {
+        font-size: 13px;
+    }
+}

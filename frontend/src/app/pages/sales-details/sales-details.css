@@ -1,0 +1,385 @@
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  min-height: calc(100vh - 10vh);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  color: var(--color-texto);
+  background-color: var(--color-base);
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  border-left: 4px solid var(--color-principal);
+  padding-left: 0.75rem;
+}
+
+.page-header p {
+  color: var(--color-texto-muted);
+  margin: 0.75rem 0 0 0.75rem;
+}
+
+.sale-card {
+  background-color: var(--color-secundario);
+  border: 1px solid #3b4140;
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.sale-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #454b49;
+}
+
+.section-label {
+  color: var(--color-texto-muted);
+  font-size: 0.85rem;
+}
+
+.sale-header h3 {
+  font-size: 1.15rem;
+  margin: 0.4rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.approved {
+  color: #55d989;
+  background: rgba(40, 160, 80, 0.15);
+}
+
+.rejected {
+  color: #ff7777;
+  background: rgba(217, 56, 56, 0.15);
+}
+
+.pending {
+  color: #e8c66c;
+  background: rgba(232, 198, 108, 0.12);
+}
+
+.status-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+}
+
+.status-message strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.status-message p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-texto-muted);
+}
+
+.message-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.success-message {
+  background: rgba(40, 160, 80, 0.12);
+  border: 1px solid rgba(40, 160, 80, 0.35);
+}
+
+.success-message strong,
+.success-message .message-icon {
+  color: #55d989;
+}
+
+.error-message {
+  background: rgba(217, 56, 56, 0.1);
+  border: 1px solid rgba(217, 56, 56, 0.3);
+}
+
+.error-message strong,
+.error-message .message-icon {
+  color: #ff7777;
+}
+
+.pending-message {
+  background: rgba(232, 198, 108, 0.08);
+  border: 1px solid rgba(232, 198, 108, 0.25);
+}
+
+.pending-message strong,
+.pending-message .message-icon {
+  color: #e8c66c;
+}
+
+/* Información general */
+
+.sale-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #454b49;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.info-item span {
+  color: var(--color-texto-muted);
+  font-size: 0.85rem;
+}
+
+.info-item strong {
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.points-value {
+  color: var(--color-principal);
+}
+
+/* Tabla de juegos */
+
+.items-section {
+  padding: 1.75rem 0;
+}
+
+.items-section h3 {
+  font-size: 1.15rem;
+  margin: 0 0 1.25rem;
+}
+
+.items-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.items-table th {
+  color: var(--color-texto-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #454b49;
+  white-space: nowrap;
+}
+
+.items-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #3e4442;
+  font-size: 0.9rem;
+}
+
+.items-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.game-name {
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.price {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.empty-items {
+  text-align: center;
+  color: var(--color-texto-muted);
+}
+
+/* Total y pago */
+
+.sale-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #454b49;
+}
+
+.total-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.total-container span {
+  color: var(--color-texto-muted);
+  font-size: 0.9rem;
+}
+
+.total-container strong {
+  font-size: 1.8rem;
+  color: var(--color-principal);
+}
+
+.btn-pay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  border: none;
+  border-radius: 7px;
+  background-color: var(--color-principal);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-pay:hover:not(:disabled) {
+  background-color: #218542;
+  transform: translateY(-2px);
+}
+
+.btn-pay:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pay-arrow {
+  font-size: 1.2rem;
+}
+
+/* Navegación */
+
+.back-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--color-principal);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #55d989;
+}
+
+/* Carga */
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 350px;
+  gap: 1rem;
+  color: var(--color-texto-muted);
+}
+
+.loader {
+  width: 35px;
+  height: 35px;
+  border: 3px solid #454b49;
+  border-top-color: var(--color-principal);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .sale-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sale-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .sale-card {
+    padding: 1.1rem;
+  }
+
+  .sale-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sale-info {
+    gap: 1.25rem;
+  }
+
+  .sale-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .btn-pay {
+    width: 100%;
+  }
+
+  .total-container strong {
+    font-size: 1.6rem;
+  }
+
+  .items-table th,
+  .items-table td {
+    padding: 0.8rem;
+  }
+}

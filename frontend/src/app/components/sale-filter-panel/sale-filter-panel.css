@@ -1,0 +1,75 @@
+.filters-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    align-items: end;
+    margin: 0.75rem 0 2rem;
+    padding: 1.25rem;
+    background-color: var(--color-secundario);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.filters-panel label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-principal);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filters-panel input[type="number"],
+.filters-panel input[type="date"],
+.filters-panel select {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--color-base);
+    color: var(--color-texto);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.95rem;
+    color-scheme: dark;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filters-panel input[type="number"]:focus,
+.filters-panel input[type="date"]:focus,
+.filters-panel select:focus {
+    outline: none;
+    border-color: var(--color-principal);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-principal) 20%, transparent);
+}
+
+.filter-error {
+    grid-column: 1 / -1;
+    color: var(--color-peligro);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.filter-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.filter-actions .btn {
+    width: auto;
+    padding: 0.6rem 1.5rem;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-texto);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-principal);
+    color: var(--color-principal);
+}

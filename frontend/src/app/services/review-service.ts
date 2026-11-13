@@ -1,18 +1,21 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable, Service } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PageResponse } from '../models/game';
-import { Review, ReviewRequest } from '../models/review';
+import { Review, ReviewRequest, ReviewSummary, ReviewUpdate } from '../models/review';
+import { PageResponse } from '../models/page-response';
 
 export interface ReviewFilterParams {
   page: number;
   size: number;
   gameId?: string;
   clientId?: string;
+  userName?: string;
   minRating?: number;
   maxRating?: number;
   minDate?: string;
   maxDate?: string;
+  sortBy?: string;
+  sortDirection?: string;
 }
 @Injectable({
   providedIn: 'root'
@@ -33,6 +36,9 @@ export class ReviewService {
     if (filters.maxRating != null) params = params.set('maxRating', filters.maxRating.toString());
     if (filters.minDate) params = params.set('minDate', filters.minDate);
     if (filters.maxDate) params = params.set('maxDate', filters.maxDate);
+    if (filters.userName) params = params.set('userName', filters.userName);
+    if (filters.sortBy) params = params.set('sortBy', filters.sortBy);
+    if (filters.sortDirection) params = params.set('sortDirection', filters.sortDirection);
 
     return this.http.get<PageResponse<Review>>(this.baseUrl, { params });
   }
@@ -48,7 +54,15 @@ export class ReviewService {
     return this.http.post<Review>(this.baseUrl, review);
   }
 
+  updateReview(reviewId: string, body: ReviewUpdate): Observable<Review> {
+  return this.http.put<Review>(`${this.baseUrl}/${reviewId}`, body);
+}
+
   deleteReview(reviewId: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${reviewId}`);
   }
+
+  getSummary(gameId: string): Observable<ReviewSummary> {
+  return this.http.get<ReviewSummary>(`${this.baseUrl}/games/${gameId}/summary`);
+}
 }

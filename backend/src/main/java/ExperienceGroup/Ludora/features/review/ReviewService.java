@@ -15,6 +15,8 @@ import ExperienceGroup.Ludora.features.game.domain.GameEntity;
 import ExperienceGroup.Ludora.features.review.domain.ReviewEntity;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTORequest;
 import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOResponse;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOUpdate;
+import ExperienceGroup.Ludora.features.review.domain.dto.ReviewDTOSummary;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,10 +32,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class ReviewService implements IReviewService {
+    private static final List<String> SORT_FIELDS = List.of("date", "rating");
     private final IReviewRepository reviewRepository;
     private final IMapper<ReviewEntity, ReviewDTOResponse> responseMapper;
     private final IMapper<ReviewEntity, ReviewDTORequest> requestMapper;
@@ -50,7 +54,10 @@ public class ReviewService implements IReviewService {
                                                  Integer minRating,
                                                  Integer maxRating,
                                                  LocalDateTime minDate,
-                                                 LocalDateTime maxDate) {
+                                                 LocalDateTime maxDate,
+                                                 String userName,
+                                                 String sortBy,
+                                                 String sortDirection) {
 
         if (minRating != null && (minRating < 1 || minRating > 5)) {
             throw new IllegalArgumentException("Minimum rating must be between 1 and 5.");
@@ -74,20 +81,48 @@ public class ReviewService implements IReviewService {
         if (maxDate != null && maxDate.isAfter(now)) {
             throw new IllegalArgumentException("The maximum date cannot be in the future.");
         }
+        if (sortBy == null || !SORT_FIELDS.contains(sortBy)) {
+            throw new IllegalArgumentException("Invalid sort field. Allowed: date, rating.");
+        }
 
         PredicateSpecification<ReviewEntity> spec = PredicateSpecification.allOf(
                 ReviewSpecification.gameEquals(gameId),
                 ReviewSpecification.clientEquals(clientId),
                 ReviewSpecification.ratingBetween(minRating, maxRating),
-                ReviewSpecification.dateBetween(minDate, maxDate)
+                ReviewSpecification.dateBetween(minDate, maxDate),
+                ReviewSpecification.userNameContains(userName)
         );
+        
+        Sort.Direction direction = "asc".equalsIgnoreCase(sortDirection)
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Sort sort = Sort.by(direction, sortBy);
+        if (!sortBy.equals("date")) {
+            // desempate: ante igual calificación, la más reciente primero
+            sort = sort.and(Sort.by(Sort.Direction.DESC, "date"));
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<ReviewEntity> reviews = reviewRepository.findAll(Specification.where(spec), pageable);
 
         return reviews
                 .map(responseMapper::toDTO);
+    }
+
+    @Override
+    public ReviewDTOSummary getSummaryByGameId(UUID gameId) {
+        GameEntity game = gameRepository.findByExternalId(gameId)
+                .orElseThrow(() -> new GameNotFoundException("Game not found"));
+
+        Double average = reviewRepository.findAverageRatingByGame(game);
+        long total = reviewRepository.countByGame(game);
+
+        //si el juego no tiene reseñas, 0.0
+        double rounded = (average == null) ? 0.0 : Math.round(average * 10.0) / 10.0;
+
+        return new ReviewDTOSummary(rounded, total);
     }
 
     @Transactional
@@ -169,7 +204,26 @@ public class ReviewService implements IReviewService {
                 .map(responseMapper::toDTO);
     }
 
+    @Transactional
+    @Override
+    @PreAuthorize("hasRole('CLIENT')")
+    public ReviewDTOResponse update(UUID reviewId, ReviewDTOUpdate reviewDTOUpdate) {
 
+    ReviewEntity review = reviewRepository.findByExternalId(reviewId)
+            .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
+
+    UUID currentUser = authenticatedUser.getCurrentUser().externalId();
+
+    // solo el autor puede editar su reseña (el admin solo puede eliminar)
+    if (!review.getClient().getExternalId().equals(currentUser)) {
+        throw new AccessDeniedException("You can only edit your own reviews.");
+    }
+
+    review.setRating(reviewDTOUpdate.rating());
+    review.setComment(reviewDTOUpdate.comment());
+
+    return responseMapper.toDTO(reviewRepository.save(review));
+    }
 
     @Transactional
     @Override
@@ -184,8 +238,7 @@ public class ReviewService implements IReviewService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));  ///compruebo si es admin
 
         if (!isAdmin) {
-            UUID currentUser = ((CredentialsEntity) SecurityContextHolder.getContext()         ///  si no es admin
-                    .getAuthentication().getPrincipal()).getExternalId();
+            UUID currentUser = authenticatedUser.getCurrentUser().externalId();
 
             if (!review.getClient().getExternalId().equals(currentUser)) {                        /// compruebo , es o no su review?
                 throw new AccessDeniedException("without sufficient permissions");   /// si no es largo excepcion

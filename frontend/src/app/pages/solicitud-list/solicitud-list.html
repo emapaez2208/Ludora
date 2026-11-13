@@ -1,0 +1,52 @@
+<div class="contenedor">
+  <h2 class="titulloh2">Gestión de Solicitudes y Revisiones</h2>
+
+  <div class="filtros">
+    <button class="btn" (click)="loadSolicitudes('all')">Todos</button>
+    <button class="btn" (click)="loadSolicitudes('blocked')">Bloqueados</button>
+    <button class="btn" (click)="loadSolicitudes('needRevision')">Necesitan Revisión</button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table ">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Estado Bloqueado</th>
+          <th class="textCenter">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (game of games(); track game.externalId) {
+          <tr>
+            <td class="nom-dev">
+            <p><strong>Juego:</strong>{{game.name}}</p>
+            <p><strong>Desarrolladora:</strong>{{game.developer}}</p>
+            </td>
+            <td>
+              <span class="badge" [class.bg-danger]="game.statusBlocked" [class.bg-success]="!game.statusBlocked">
+                {{ game.statusBlocked ? 'Bloqueado' : 'Activo' }}
+              </span>
+            </td>
+            <td class="textCenter">
+              @if (game.statusBlocked) {
+                <button class="btn " (click)="authorizeGame(game.externalId)"> Aprobar / Desbloquear</button>
+              } @else {
+                <button class="btn" (click)="desautorizedGame(game.externalId)"> Desautorizar</button>
+              }
+            </td>
+          } @empty {
+          <tr>
+            <td colspan="3" class="textCenter">
+              No hay juegos para mostrar.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <app-pagination 
+    [page]="page()" 
+    [totalPages]="totalPages()" 
+    (pageChange)="goToPage($event)" />
+</div>

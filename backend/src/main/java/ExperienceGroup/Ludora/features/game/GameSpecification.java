@@ -77,6 +77,12 @@ public class GameSpecification {
                 : cb.equal(root.get("statusBlocked"), status);
     }
 
+    public static PredicateSpecification<GameEntity> needRevisionEquals(Boolean needRevision){
+        return (root, cb) -> needRevision == null
+                ? cb.conjunction()
+                : cb.equal(root.get("needRevision"), needRevision);
+    }
+
     public static Specification<GameEntity> hasGenreNames(List<String> genreNames) {
         return (root, query, cb) -> {
         if (genreNames == null || genreNames.isEmpty()) {
@@ -102,5 +108,7 @@ public class GameSpecification {
                 ? cb.conjunction()
                 : cb.equal(cb.lower(root.get("developer").get("company")), developerCompany.toLowerCase());
     }
+
+    
 
 }

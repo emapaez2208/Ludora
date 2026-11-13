@@ -1,6 +1,7 @@
 package ExperienceGroup.Ludora.features.game;
 
 import ExperienceGroup.Ludora.auth.providers.AuthenticatedUserProvider;
+import ExperienceGroup.Ludora.auth.dto.AuthUser;
 import ExperienceGroup.Ludora.features.ageRange.exception.AgeRangeNotFoundException;
 import ExperienceGroup.Ludora.features.game.exception.GameIsNotFromTheDevException;
 import ExperienceGroup.Ludora.features.game.exception.GameNotFoundException;
@@ -24,6 +25,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,10 +48,57 @@ public class GameService implements IGameService{
     private final IGenreRepository genreRepository;
     private final AuthenticatedUserProvider authenticatedUserProvider;
 
+    private static final List<String> SORT_FIELDS = List.of("id", "name", "price", "releaseDate");
 
     /// --------------------------- TRAEMOS TODOS LOS JUEGOS  ( CON FILTROS ) ------------------------------
+    
     @Override
-    public Page<GameDTOResponse> getAllGames(int page,
+    public Page<GameDTOResponse> getAllGames(int page, 
+                                            int size, 
+                                            String name,
+                                            BigDecimal maxPrice, 
+                                            BigDecimal minPrice,
+                                            LocalDate minReleaseDate, 
+                                            LocalDate maxReleaseDate,
+                                            List<String> genreNames, 
+                                            String rangeName,
+                                            String developerCompany, 
+                                            String sortBy, 
+                                            String sortDirection) {
+
+        return searchGames(page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                genreNames, rangeName, developerCompany, sortBy, sortDirection,
+                false, false);
+    }
+
+     @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<GameDTOResponse> getAdminGames(int page, 
+                                                int size, 
+                                                String name,
+                                                BigDecimal maxPrice, 
+                                                BigDecimal minPrice,
+                                                LocalDate minReleaseDate, 
+                                                LocalDate maxReleaseDate,
+                                                List<String> genreNames, 
+                                                String rangeName,
+                                                String developerCompany, 
+                                                String sortBy,
+                                                String sortDirection, 
+                                                String status) {
+        return switch (status == null ? "all" : status) {
+            case "all" -> searchGames(page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                    genreNames, rangeName, developerCompany, sortBy, sortDirection, null, null);
+            case "blocked" -> searchGames(page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                    genreNames, rangeName, developerCompany, sortBy, sortDirection, true, false);
+            case "needRevision" -> searchGames(page, size, name, maxPrice, minPrice, minReleaseDate, maxReleaseDate,
+                    genreNames, rangeName, developerCompany, sortBy, sortDirection, null, true);
+            default -> throw new IllegalArgumentException("Invalid status. Allowed: all, blocked, needRevision.");
+        };
+    }
+
+    
+    private Page<GameDTOResponse> searchGames(int page,
                                              int size,
                                              String name,
                                              BigDecimal maxPrice,
@@ -57,7 +107,11 @@ public class GameService implements IGameService{
                                              LocalDate maxReleaseDate,
                                              List<String> genreNames,
                                              String rangeName,
-                                             String developerCompany) {
+                                             String developerCompany,
+                                             String sortBy,
+                                             String sortDirection,
+                                             Boolean statusBlocked,
+                                             Boolean needRevision) {
 
         if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("The minimum price cannot be negative.");
@@ -82,18 +136,32 @@ public class GameService implements IGameService{
             throw new IllegalArgumentException("The end date cannot be in the future.");
         }
 
+        if (sortBy == null || !SORT_FIELDS.contains(sortBy)) {
+            throw new IllegalArgumentException("Invalid sort field. Allowed: id, name, price, releaseDate.");
+        }
+
+        Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection)
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        Sort sort = Sort.by(direction, sortBy);
+        if (!sortBy.equals("name")) {
+            sort = sort.and(Sort.by(Sort.Direction.ASC, "name"));
+        }
+
         PredicateSpecification<GameEntity> spec = PredicateSpecification.allOf(
                 GameSpecification.nameContains(name),
                 GameSpecification.priceLesserThan(maxPrice),
                 GameSpecification.priceGreaterThan(minPrice),
                 GameSpecification.releaseDateAfter(minReleaseDate),
                 GameSpecification.releaseDateBefore(maxReleaseDate),
-                GameSpecification.statusBlockedEquals(false),
+                GameSpecification.statusBlockedEquals(statusBlocked),
+                GameSpecification.needRevisionEquals(needRevision),
                 GameSpecification.hasAgeRangeName(rangeName),
                 GameSpecification.hasDeveloperCompany(developerCompany)
         );
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Specification<GameEntity> finalSpec = Specification.where(spec)
             .and(GameSpecification.hasGenreNames(genreNames));
@@ -108,9 +176,34 @@ public class GameService implements IGameService{
 
     @Override
     public GameDTOResponse getByExternalId(UUID externalId) {
-        return gameRepository.findByExternalId(externalId)
-                .map(responseMapper::toDTO)
-                .orElseThrow(() -> new GameNotFoundException("Game not found"));
+        GameEntity game = gameRepository.findByExternalId(externalId)
+            .orElseThrow(() -> new GameNotFoundException("Game not found"));
+
+        boolean restricted = Boolean.TRUE.equals(game.getStatusBlocked())
+            || Boolean.TRUE.equals(game.getNeedRevision());
+
+        if (restricted && !canSeeRestricted(game)) {
+            throw new GameNotFoundException("Game not found");
+        }
+
+        return responseMapper.toDTO(game);
+    }
+
+
+
+    private boolean canSeeRestricted(GameEntity game) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        // sin sesión
+        if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof AuthUser user)) {
+            return false;
+        }
+
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (isAdmin) return true;
+
+        return game.getDeveloper().getExternalId().equals(user.externalId());
     }
 
     /// -------------------CREACION DE JUEGO PARA DEVELOPERS ---------------------
@@ -197,14 +290,14 @@ public class GameService implements IGameService{
     @PreAuthorize("hasRole('ADMIN')")
     public GameDTOResponse authorized(UUID externalId) {
 
-        GameEntity habilitarGame= gameRepository.findByExternalId(externalId)
+        GameEntity game= gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
-        habilitarGame.setStatusBlocked(false);
-        habilitarGame.setNeedRevision(false);
-        gameRepository.save(habilitarGame);
+        game.setStatusBlocked(false);
+        game.setNeedRevision(false);
+        gameRepository.save(game);
 
-        return responseMapper.toDTO(habilitarGame);
+        return responseMapper.toDTO(game);
     }
 
 
@@ -214,11 +307,12 @@ public class GameService implements IGameService{
     @PreAuthorize("hasRole('ADMIN')")
     public void desauthorized(UUID externalId) {
 
-        GameEntity habilitarGame= gameRepository.findByExternalId(externalId)
+        GameEntity game = gameRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new GameNotFoundException("Game not found"));
 
-        habilitarGame.setStatusBlocked(true);
-        gameRepository.save(habilitarGame);
+        game.setStatusBlocked(true);
+        game.setNeedRevision(false);
+        gameRepository.save(game);
 
     }
 
@@ -250,5 +344,38 @@ public class GameService implements IGameService{
         game.setNeedRevision(true);
         GameEntity saved = gameRepository.save(game);
         return responseMapper.toDTO(saved);
+    }
+
+    /// --------------------------- HOME: MÁS POPULARES ------------------------------
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<GameDTOResponse> getMostPopular(int size) {
+        validateHomeSize(size);
+
+        return gameRepository.findMostPopular(PageRequest.of(0, size)).stream()
+                .map(responseMapper::toDTO)
+                .toList();
+    }
+
+    /// --------------------------- HOME: MEJOR PUNTUADOS ------------------------------
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<GameDTOResponse> getTopRated(int size, int minReviews) {
+        validateHomeSize(size);
+        if (minReviews < 1) {
+            throw new IllegalArgumentException("The minimum number of reviews must be at least 1.");
+        }
+
+        return gameRepository.findTopRated(minReviews, PageRequest.of(0, size)).stream()
+                .map(responseMapper::toDTO)
+                .toList();
+    }
+
+    private void validateHomeSize(int size) {
+        if (size < 1 || size > 50) {
+            throw new IllegalArgumentException("The size must be between 1 and 50.");
+        }
     }
 }

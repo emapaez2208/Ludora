@@ -1,0 +1,53 @@
+<div class="game-card"
+    [class.card-revision]="showStatus() && game().needRevision"
+    [class.card-blocked]="showStatus() && !game().needRevision && game().statusBlocked"
+    [class.card-available]="showStatus() && !game().needRevision && !game().statusBlocked">
+
+    @if (showStatus()) {
+      @if (game().needRevision) {
+        <span class="status-tag tag-revision">
+          {{ developerView() ? 'En revisión' : 'Necesita revisión' }}
+        </span>
+      } @else if (game().statusBlocked) {
+        <span class="status-tag tag-blocked">Bloqueado</span>
+      } @else {
+        <span class="status-tag tag-available">
+          {{ developerView() ? 'Publicado' : 'Disponible' }}
+        </span>
+      }
+    }
+
+  <a [routerLink]="['/catalog', game().externalId]" class="game-image-container">
+    <img [src]="game().frontPage" [alt]="game().name" class="game-cover" />
+  </a>
+
+  <div class="game-info">
+    <h3>
+      <a [routerLink]="['/catalog', game().externalId]" class="game-link">{{ game().name }}</a>
+    </h3>
+    
+    <p class="price" [class.free-price]="game().price === 0">
+
+      @if (game().price === 0) {
+        Gratis
+
+      } @else {
+
+        ${{ game().price }}
+      }
+
+    </p>
+
+    <p class="age">Edad: {{ game().ageRange }}</p>
+
+    <div class="genres">
+      @for (genre of game().genres; track genre) {
+        <span class="badge">{{ genre }}</span>
+      }
+    </div>
+
+    <div class="card-actions">
+      <ng-content />   <!-- acá van los botones de cada pantalla -->
+    </div>
+  </div>
+</div>
