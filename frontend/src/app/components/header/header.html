@@ -52,16 +52,41 @@
           <div class="admin-dropdown">
             <a routerLink="/management/sales" (click)="closeMenu()">Ventas</a>
             <a routerLink="/management/games" (click)="closeMenu()">Juegos</a>
-            <a routerLink="/management/requests" (click)="closeMenu()">Solicitudes</a>
+            <a routerLink="/management/requests" (click)="closeMenu()">Solicitudes de revisión</a>
             <a routerLink="/management/users" (click)="closeMenu()">Usuarios</a>
-            <a routerLink="/management/newadmin" (click)="closeMenu()">Crear Admin</a>
+            <a routerLink="/management/newadmin" (click)="closeMenu()">Crear administrador</a>
           </div>
         }
       </div>
-    } @else if (isClient() || isDeveloper()) {
-      <a class="item" routerLink="/library" (click)="closeMenu()"><p>Mis juegos</p></a>
-    }
+      
+    } @else if (isDeveloper()) {
 
+    <div class="admin-wrapper">
+      <a
+        class="item"
+        [class.open]="developerOpen()"
+        (click)="toggleDeveloper($event)">
+        <p>Mis juegos</p>
+      </a>
+
+      @if (developerOpen()) {
+
+        <div class="admin-dropdown">
+          <a routerLink="/library" (click)="closeMenu()">Biblioteca</a>
+          <a routerLink="/games/new" (click)="closeMenu()">Crear juego</a>
+        </div>
+      }
+
+    </div>
+
+  } @else if (isClient()) {
+
+    <a class="item" routerLink="/library" (click)="closeMenu()">
+      <p>Mis juegos</p>
+    </a>
+
+  }
+    
     @if (isLogged()) {
       <a class="item profile-item" routerLink="/profile" (click)="closeMenu()">
         <img 
@@ -72,9 +97,21 @@
         />
         <p>Mi perfil</p>
       </a>
-      <a class="item logout-item" (click)="logout()"><p>Cerrar sesión</p></a>
+
+
+      <button
+        class="item logout-button"
+        type="button"
+        (click)="logout()"
+        aria-label="Cerrar sesión"
+        title="Cerrar sesión">
+        <img src="cerrar-sesion.png" alt="" class="logout-icon">
+      </button>
+
     } @else {
+
       <a class="item" routerLink="/login" (click)="closeMenu()"><p>Iniciar sesión</p></a>
+    
     }
   </nav>
 

@@ -43,7 +43,7 @@ export class Home implements OnInit {
 
     loadFeaturedGames(): void {
     this.isLoading.set(true);
-    this.gameService.getGames(0, 8, {}, { sortBy: 'id', sortDirection: 'desc' }).subscribe({
+    this.gameService.getGames(0, 8, {}, { sortBy: 'releaseDate', sortDirection: 'desc' }).subscribe({
       next: (data) => {
         this.featuredGames.set(data.content);
         this.isLoading.set(false);

@@ -13,6 +13,12 @@
           [class.status-active]="!client.statusBlocked">
           {{ client.statusBlocked ? 'Bloqueado' : 'Activo' }}
         </span>
+
+        <button class="btn-logout" (click)="logout()">
+          <span>↪</span>
+          Cerrar sesión
+        </button>
+
       </div>
     </div>
 
@@ -123,10 +129,18 @@
                 <strong>${{ sale.totalPrice }}</strong>
 
                 <span class="sale-status"
+
                   [class.approved]="sale.status === 'APPROVED'"
                   [class.pending]="sale.status === 'PENDING'"
                   [class.rejected]="sale.status === 'REJECTED'">
-                  {{ sale.status }}
+                  
+                  {{
+                    sale.status === 'APPROVED' ? 'Aprobada' :
+                    sale.status === 'REJECTED' ? 'Rechazada' :
+                    sale.status === 'PENDING' ? 'Pendiente' :
+                    sale.status
+                  }}
+                  
                 </span>
               </div>
             </div>
@@ -152,6 +166,12 @@
           [class.status-active]="!developer.statusBlocked">
           {{ developer.statusBlocked ? 'Bloqueado' : 'Activo' }}
         </span>
+
+        <button class="btn-logout" (click)="logout()">
+          <span>↪</span>
+          Cerrar sesión
+        </button>
+
       </div>
     </div>
 
@@ -191,6 +211,12 @@
       <div class="profile-heading">
         <span class="profile-role">Cuenta de administrador</span>
         <h2>{{ admin.userName }}</h2>
+
+        <button class="btn-logout" (click)="logout()">
+          <span>↪</span>
+          Cerrar sesión
+        </button>
+
       </div>
     </div>
 

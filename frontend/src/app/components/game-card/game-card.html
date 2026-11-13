@@ -25,7 +25,19 @@
     <h3>
       <a [routerLink]="['/catalog', game().externalId]" class="game-link">{{ game().name }}</a>
     </h3>
-    <p class="price">${{ game().price }}</p>
+    
+    <p class="price" [class.free-price]="game().price === 0">
+
+      @if (game().price === 0) {
+        Gratis
+
+      } @else {
+
+        ${{ game().price }}
+      }
+
+    </p>
+
     <p class="age">Edad: {{ game().ageRange }}</p>
 
     <div class="genres">

@@ -24,6 +24,7 @@ export class Header {
   isLogged = this.authService.isLoggedIn$;
   cartOpen = signal(false);
   adminOpen = signal(false);
+  developerOpen = signal(false);
 
   userAvatar = computed(() => {
     const user =
@@ -62,7 +63,15 @@ export class Header {
   toggleAdmin(event: MouseEvent): void {
     event.stopPropagation();
     this.cartOpen.set(false);
+    this.developerOpen.set(false);
     this.adminOpen.update(v => !v);
+  }
+
+  toggleDeveloper(event: MouseEvent): void {
+    event.stopPropagation();
+    this.cartOpen.set(false);
+    this.adminOpen.set(false);
+    this.developerOpen.update(v => !v);
   }
 
   onRemoveGame(game: { externalId: string; name: string }, event: MouseEvent) {
@@ -91,17 +100,19 @@ export class Header {
 
   @HostListener('document:click', ['$event'])
   onDocClick(e: MouseEvent): void {
+
     this.adminOpen.set(false);
-    if (!this.el.nativeElement.contains(e.target)) {
+    this.developerOpen.set(false);
+
+    const target = e.target as HTMLElement;
+
+    const clickedCart = target.closest('.cart-preview');
+    const clickedCartButton = target.closest('.cart-button');
+
+    if (!clickedCart && !clickedCartButton) {
       this.cartOpen.set(false);
     }
-  }
-
-  logout() {
-    this.closeMenu();
-    this.cartOpen.set(false);
-    this.authService.logout();
-    this.router.navigate(['/home']);
+    
   }
 
   toggleMenu(): void {
@@ -109,6 +120,20 @@ export class Header {
   }
 
   closeMenu(): void {
+
     this.isMenuOpen = false;
+    this.adminOpen.set(false);
+    this.developerOpen.set(false);
+
   }
+
+  logout(): void {
+  
+    this.closeMenu();
+    this.cartOpen.set(false);
+    this.authService.logout();
+    this.router.navigate(['/']);
+  
+  }
+
 }
